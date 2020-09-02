@@ -33,6 +33,10 @@ compileJava {
     sourceCompatibility = targetCompatibility = '1.8'
 }
 
+sourceSets.main.resources {
+    srcDir 'src/generated/resources'
+}
+
 minecraft {
     mappings channel: 'snapshot', version: '20200723-1.16.1'
     runs {
@@ -50,6 +54,14 @@ minecraft {
             // recommended logging level for the console
             properties 'forge.logging.console.level': 'debug'
             workingDirectory project.file('run').canonicalPath
+            source sourceSets.main
+        }
+        data = {
+            workingDirectory project.file('run')
+            property 'forge.logging.markers', 'SCAN,REGISTRIES,REGISTRYDUMP'
+            property 'forge.logging.console.level', 'info'
+            args '--mod', 'sushigocrafting', '--all', '--output', file('src/generated/resources/'), '--existing', file('src/main/resources/')
+            environment 'target', 'fmluserdevdata'
             source sourceSets.main
         }
     }

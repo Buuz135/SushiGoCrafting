@@ -1,5 +1,7 @@
 package com.buuz135.sushigocrafting;
 
+import com.buuz135.sushigocrafting.datagen.SushiBlockstateProvider;
+import com.buuz135.sushigocrafting.datagen.SushiItemModelProvider;
 import com.buuz135.sushigocrafting.proxy.SushiContent;
 import com.buuz135.sushigocrafting.recipe.CombineAmountItemRecipe;
 import com.hrznstudio.titanium.event.handler.EventManager;
@@ -22,6 +24,7 @@ import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
+import net.minecraftforge.fml.event.lifecycle.GatherDataEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 
 @Mod(SushiGoCrafting.MOD_ID)
@@ -45,6 +48,7 @@ public class SushiGoCrafting {
         SushiContent.Features.REGISTRY.register(FMLJavaModLoadingContext.get().getModEventBus());
         EventManager.mod(FMLClientSetupEvent.class).process(this::fmlClient).subscribe();
         EventManager.mod(FMLCommonSetupEvent.class).process(this::fmlCommon).subscribe();
+        EventManager.mod(GatherDataEvent.class).process(this::dataGen).subscribe();
         EventManager.modGeneric(RegistryEvent.Register.class, IRecipeSerializer.class).process(register -> ((RegistryEvent.Register) register).getRegistry().register(CombineAmountItemRecipe.SERIALIZER.setRegistryName(new ResourceLocation(MOD_ID, "amount_combine_recipe")))).subscribe();
     }
 
@@ -58,6 +62,12 @@ public class SushiGoCrafting {
     @OnlyIn(Dist.CLIENT)
     public void fmlClient(FMLClientSetupEvent event) {
         RenderTypeLookup.setRenderLayer(SushiContent.Blocks.RICE_CROP.get(), RenderType.getCutout());
+    }
+
+    public void dataGen(GatherDataEvent event) {
+        //event.getGenerator().addProvider(new SushiModelProvider(event.getGenerator(), MOD_ID, event.getExistingFileHelper()));
+        event.getGenerator().addProvider(new SushiBlockstateProvider(event.getGenerator(), MOD_ID, event.getExistingFileHelper()));
+        event.getGenerator().addProvider(new SushiItemModelProvider(event.getGenerator(), MOD_ID, event.getExistingFileHelper()));
     }
 
 }
