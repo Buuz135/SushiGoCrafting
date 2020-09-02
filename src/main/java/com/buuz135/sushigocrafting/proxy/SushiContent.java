@@ -3,11 +3,19 @@ package com.buuz135.sushigocrafting.proxy;
 import com.buuz135.sushigocrafting.SushiGoCrafting;
 import com.buuz135.sushigocrafting.block.crop.CustomCropBlock;
 import com.buuz135.sushigocrafting.block.crop.WaterCropBlock;
+import com.buuz135.sushigocrafting.block.seaweed.SeaWeedBlock;
+import com.buuz135.sushigocrafting.block.seaweed.SeaWeedTopBlock;
 import com.buuz135.sushigocrafting.item.AmountItem;
+import com.buuz135.sushigocrafting.world.SeaWeedFeature;
 import net.minecraft.block.AbstractBlock;
 import net.minecraft.block.Block;
+import net.minecraft.block.SoundType;
+import net.minecraft.block.material.Material;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
+import net.minecraft.world.gen.feature.Feature;
+import net.minecraft.world.gen.feature.IFeatureConfig;
+import net.minecraft.world.gen.feature.NoFeatureConfig;
 import net.minecraftforge.fml.RegistryObject;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
@@ -32,6 +40,10 @@ public class SushiContent {
         return Items.REGISTRY.register(id, () -> new BlockItem(sup.get(), new Item.Properties().group(SushiGoCrafting.TAB)));
     }
 
+    public static <T extends IFeatureConfig> RegistryObject<Feature<T>> feature(String id, Supplier<Feature<T>> featureSupplier) {
+        return Features.REGISTRY.register(id, featureSupplier);
+    }
+
     public static class Blocks {
 
         public static final DeferredRegister<Block> REGISTRY = DeferredRegister.create(ForgeRegistries.BLOCKS, SushiGoCrafting.MOD_ID);
@@ -41,19 +53,32 @@ public class SushiContent {
         public static final RegistryObject<Block> SOY_CROP = block("soy_crop", () -> new CustomCropBlock(AbstractBlock.Properties.from(net.minecraft.block.Blocks.WHEAT), Items.SOY_SEED, state -> state.isIn(net.minecraft.block.Blocks.FARMLAND)));
         public static final RegistryObject<Block> HORSERADISH_CROP = block("horseradish_crop", () -> new CustomCropBlock(AbstractBlock.Properties.from(net.minecraft.block.Blocks.WHEAT), Items.HORSERADISH_SEED, state -> state.isIn(net.minecraft.block.Blocks.FARMLAND)));
 
+        public static final RegistryObject<Block> SEAWEED = block("seaweed", () -> new SeaWeedTopBlock(AbstractBlock.Properties.create(Material.OCEAN_PLANT).doesNotBlockMovement().tickRandomly().zeroHardnessAndResistance().sound(SoundType.WET_GRASS)));
+        public static final RegistryObject<Block> SEAWEED_PLANT = block("seaweed_plant", () -> new SeaWeedBlock(AbstractBlock.Properties.create(Material.OCEAN_PLANT).doesNotBlockMovement().tickRandomly().zeroHardnessAndResistance().sound(SoundType.WET_GRASS)));
+
     }
 
     public static class Items {
 
         public static final DeferredRegister<Item> REGISTRY = DeferredRegister.create(ForgeRegistries.ITEMS, SushiGoCrafting.MOD_ID);
 
-        public static final RegistryObject<BlockItem> RICE_SEED = blockItem("rice_seed", Blocks.RICE_CROP);
-        public static final RegistryObject<BlockItem> CUCUMBER_SEED = blockItem("cucumber_seed", Blocks.CUCUMBER_CROP);
-        public static final RegistryObject<BlockItem> SOY_SEED = blockItem("soy_seed", Blocks.SOY_CROP);
-        public static final RegistryObject<BlockItem> HORSERADISH_SEED = blockItem("horseradish_seed", Blocks.HORSERADISH_CROP);
+        public static final RegistryObject<BlockItem> RICE_SEED = blockItem("rice_crop", Blocks.RICE_CROP);
+        public static final RegistryObject<BlockItem> CUCUMBER_SEED = blockItem("cucumber_crop", Blocks.CUCUMBER_CROP);
+        public static final RegistryObject<BlockItem> SOY_SEED = blockItem("soy_crop", Blocks.SOY_CROP);
+        public static final RegistryObject<BlockItem> HORSERADISH_SEED = blockItem("horseradish_crop", Blocks.HORSERADISH_CROP);
+
+        public static final RegistryObject<BlockItem> SEAWEED = blockItem("seaweed", Blocks.SEAWEED);
 
         public static final RegistryObject<Item> RAW_TUNA = basicItem("raw_tuna");
         public static final RegistryObject<Item> RAW_TUNA_FILLET = amountItem("raw_tuna_fillet", 1000, 3000, 6000);
         public static final RegistryObject<Item> RAW_SALMON_FILLET = amountItem("raw_salmon_fillet", 500, 2000, 4000);
+    }
+
+    public static class Features {
+
+        public static final DeferredRegister<Feature<?>> REGISTRY = DeferredRegister.create(ForgeRegistries.FEATURES, SushiGoCrafting.MOD_ID);
+
+        public static final RegistryObject<Feature<NoFeatureConfig>> SEAWEED = feature("seaweed", () -> new SeaWeedFeature(NoFeatureConfig.field_236558_a_));
+
     }
 }
