@@ -25,11 +25,12 @@ public class FoodHelper {
                 items.add(item);
             }
         } else {
-            items.addAll(generate(type, foodIngredients.subList(1, foodIngredients.size())));
             for (IFoodIngredient iFoodIngredient : foodIngredients.get(0)) {
-                for (FoodItem item : items) {
+                List<FoodItem> all = generate(type, foodIngredients.subList(1, foodIngredients.size()));
+                for (FoodItem item : all) {
                     if (item != null) item.getIngredientList().add(0, iFoodIngredient);
                 }
+                items.addAll(all);
             }
         }
         return items;
