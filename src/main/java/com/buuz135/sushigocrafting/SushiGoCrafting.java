@@ -1,5 +1,7 @@
 package com.buuz135.sushigocrafting;
 
+import com.buuz135.sushigocrafting.api.FoodHelper;
+import com.buuz135.sushigocrafting.api.FoodType;
 import com.buuz135.sushigocrafting.datagen.SushiBlockstateProvider;
 import com.buuz135.sushigocrafting.datagen.SushiItemModelProvider;
 import com.buuz135.sushigocrafting.proxy.SushiContent;
@@ -50,6 +52,9 @@ public class SushiGoCrafting {
         EventManager.mod(FMLCommonSetupEvent.class).process(this::fmlCommon).subscribe();
         EventManager.mod(GatherDataEvent.class).process(this::dataGen).subscribe();
         EventManager.modGeneric(RegistryEvent.Register.class, IRecipeSerializer.class).process(register -> ((RegistryEvent.Register) register).getRegistry().register(CombineAmountItemRecipe.SERIALIZER.setRegistryName(new ResourceLocation(MOD_ID, "amount_combine_recipe")))).subscribe();
+        for (FoodType value : FoodType.values()) {
+            FoodHelper.generateFood(value).forEach(item -> SushiContent.Items.REGISTRY.register(FoodHelper.getName(item), () -> item));
+        }
     }
 
     public void fmlCommon(FMLCommonSetupEvent event) {

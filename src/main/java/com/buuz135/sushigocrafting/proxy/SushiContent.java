@@ -68,10 +68,13 @@ public class SushiContent {
         public static final RegistryObject<BlockItem> HORSERADISH_SEED = blockItem("horseradish_crop", Blocks.HORSERADISH_CROP);
 
         public static final RegistryObject<BlockItem> SEAWEED = blockItem("seaweed", Blocks.SEAWEED);
+        public static final RegistryObject<Item> DRY_SEAWEED = basicItem("dry_seaweed");
 
         public static final RegistryObject<Item> RAW_TUNA = basicItem("raw_tuna");
         public static final RegistryObject<Item> RAW_TUNA_FILLET = amountItem("raw_tuna_fillet", 1000, 3000, 6000);
         public static final RegistryObject<Item> RAW_SALMON_FILLET = amountItem("raw_salmon_fillet", 500, 2000, 4000);
+
+        public static final RegistryObject<Item> AVOCADO = basicItem("avocado");
     }
 
     public static class Features {
@@ -81,4 +84,5 @@ public class SushiContent {
         public static final RegistryObject<Feature<NoFeatureConfig>> SEAWEED = feature("seaweed", () -> new SeaWeedFeature(NoFeatureConfig.field_236558_a_));
 
     }
+
 }
