@@ -28,7 +28,7 @@ public class FoodHelper {
             items.addAll(generate(type, foodIngredients.subList(1, foodIngredients.size())));
             for (IFoodIngredient iFoodIngredient : foodIngredients.get(0)) {
                 for (FoodItem item : items) {
-                    item.getIngredientList().add(0, iFoodIngredient);
+                    if (item != null) item.getIngredientList().add(0, iFoodIngredient);
                 }
             }
         }
@@ -36,7 +36,10 @@ public class FoodHelper {
     }
 
     public static String getName(FoodItem item) {
-        System.out.println(item.getIngredientList().get(item.getType().getNameIndex()).getName() + "_" + item.getType().getName());
-        return item.getIngredientList().get(item.getType().getNameIndex()).getName() + "_" + item.getType().getName();
+        List<String> names = new ArrayList<>();
+        for (int nameIndex : item.getType().getNameIndex()) {
+            names.add(item.getIngredientList().get(nameIndex).getName());
+        }
+        return String.join("_", names) + "_" + item.getType().getName();
     }
 }

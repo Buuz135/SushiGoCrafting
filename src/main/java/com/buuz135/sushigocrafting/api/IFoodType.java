@@ -6,7 +6,7 @@ public interface IFoodType {
 
     List<IFoodIngredient[]> getFoodIngredients();
 
-    int getNameIndex();
+    int[] getNameIndex();
 
     String getName();
 

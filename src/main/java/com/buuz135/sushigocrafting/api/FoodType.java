@@ -5,16 +5,16 @@ import java.util.List;
 
 public enum FoodType implements IFoodType {
 
-    MAKI("maki", 2,
+    MAKI("maki", new int[]{2},
             of(FoodIngredient.DRY_SEAWEED),
             of(FoodIngredient.RICE),
             of(FoodIngredient.SALMON_FILLET, FoodIngredient.TUNA_FILLET, FoodIngredient.AVOCADO, FoodIngredient.CUCUMBER, FoodIngredient.CRAB));
 
-    private final int index;
+    private final int[] index;
     private final String name;
     private List<IFoodIngredient[]> ingredients;
 
-    FoodType(String name, int index, IFoodIngredient[]... ingredients) {
+    FoodType(String name, int[] index, IFoodIngredient[]... ingredients) {
         this.index = index;
         this.name = name;
         this.ingredients = new ArrayList<>();
@@ -35,7 +35,7 @@ public enum FoodType implements IFoodType {
     }
 
     @Override
-    public int getNameIndex() {
+    public int[] getNameIndex() {
         return index;
     }
 
