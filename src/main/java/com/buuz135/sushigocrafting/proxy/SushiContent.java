@@ -52,6 +52,7 @@ public class SushiContent {
         public static final RegistryObject<Block> CUCUMBER_CROP = block("cucumber_crop", () -> new CustomCropBlock(AbstractBlock.Properties.from(net.minecraft.block.Blocks.WHEAT), Items.CUCUMBER_SEED, state -> state.isIn(net.minecraft.block.Blocks.FARMLAND)));
         public static final RegistryObject<Block> SOY_CROP = block("soy_crop", () -> new CustomCropBlock(AbstractBlock.Properties.from(net.minecraft.block.Blocks.WHEAT), Items.SOY_SEED, state -> state.isIn(net.minecraft.block.Blocks.FARMLAND)));
         public static final RegistryObject<Block> HORSERADISH_CROP = block("horseradish_crop", () -> new CustomCropBlock(AbstractBlock.Properties.from(net.minecraft.block.Blocks.WHEAT), Items.HORSERADISH_SEED, state -> state.isIn(net.minecraft.block.Blocks.FARMLAND)));
+        public static final RegistryObject<Block> SESAME_CROP = block("sesame_crop", () -> new CustomCropBlock(AbstractBlock.Properties.from(net.minecraft.block.Blocks.WHEAT), Items.SESAME_SEED, state -> state.isIn(net.minecraft.block.Blocks.FARMLAND)));
 
         public static final RegistryObject<Block> SEAWEED = block("seaweed", () -> new SeaWeedTopBlock(AbstractBlock.Properties.create(Material.OCEAN_PLANT).doesNotBlockMovement().tickRandomly().zeroHardnessAndResistance().sound(SoundType.WET_GRASS)));
         public static final RegistryObject<Block> SEAWEED_PLANT = block("seaweed_plant", () -> new SeaWeedBlock(AbstractBlock.Properties.create(Material.OCEAN_PLANT).doesNotBlockMovement().tickRandomly().zeroHardnessAndResistance().sound(SoundType.WET_GRASS)));
@@ -66,11 +67,13 @@ public class SushiContent {
         public static final RegistryObject<BlockItem> CUCUMBER_SEED = blockItem("cucumber_crop", Blocks.CUCUMBER_CROP);
         public static final RegistryObject<BlockItem> SOY_SEED = blockItem("soy_crop", Blocks.SOY_CROP);
         public static final RegistryObject<BlockItem> HORSERADISH_SEED = blockItem("horseradish_crop", Blocks.HORSERADISH_CROP);
+        public static final RegistryObject<BlockItem> SESAME_SEED = blockItem("sesame_seed", Blocks.SESAME_CROP);
 
         public static final RegistryObject<BlockItem> SEAWEED = blockItem("seaweed", Blocks.SEAWEED);
         public static final RegistryObject<Item> DRY_SEAWEED = basicItem("dry_seaweed");
 
         public static final RegistryObject<Item> RAW_TUNA = basicItem("raw_tuna");
+        public static final RegistryObject<Item> CRAB = basicItem("crab");
         public static final RegistryObject<Item> RAW_TUNA_FILLET = amountItem("raw_tuna_fillet", 1000, 3000, 6000);
         public static final RegistryObject<Item> RAW_SALMON_FILLET = amountItem("raw_salmon_fillet", 500, 2000, 4000);
 

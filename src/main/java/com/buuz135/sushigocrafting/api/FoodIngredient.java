@@ -11,7 +11,8 @@ public enum FoodIngredient implements IFoodIngredient {
     TUNA_FILLET("tuna", SushiContent.Items.RAW_TUNA_FILLET),
     SALMON_FILLET("salmon", SushiContent.Items.RAW_SALMON_FILLET),
     AVOCADO("avocado", SushiContent.Items.AVOCADO),
-    CUCUMBER("cucumber", SushiContent.Items.CUCUMBER_SEED);
+    CUCUMBER("cucumber", SushiContent.Items.CUCUMBER_SEED),
+    CRAB("crab", SushiContent.Items.CRAB);
 
     private final Supplier<? extends Item> item;
     private final String name;
