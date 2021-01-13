@@ -6,7 +6,9 @@ import com.buuz135.sushigocrafting.datagen.SushiBlockstateProvider;
 import com.buuz135.sushigocrafting.datagen.SushiItemModelProvider;
 import com.buuz135.sushigocrafting.proxy.SushiContent;
 import com.buuz135.sushigocrafting.recipe.CombineAmountItemRecipe;
+import com.buuz135.sushigocrafting.tile.machinery.RollerTile;
 import com.hrznstudio.titanium.event.handler.EventManager;
+import com.hrznstudio.titanium.nbthandler.NBTManager;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.RenderTypeLookup;
 import net.minecraft.item.ItemGroup;
@@ -14,15 +16,15 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipeSerializer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.biome.Biome;
-import net.minecraft.world.biome.Biomes;
 import net.minecraft.world.gen.GenerationStage;
-import net.minecraft.world.gen.Heightmap;
+import net.minecraft.world.gen.feature.Features;
 import net.minecraft.world.gen.feature.IFeatureConfig;
 import net.minecraft.world.gen.placement.Placement;
 import net.minecraft.world.gen.placement.TopSolidWithNoiseConfig;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.event.RegistryEvent;
+import net.minecraftforge.event.world.BiomeLoadingEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
@@ -48,6 +50,7 @@ public class SushiGoCrafting {
         SushiContent.Blocks.REGISTRY.register(FMLJavaModLoadingContext.get().getModEventBus());
         SushiContent.Items.REGISTRY.register(FMLJavaModLoadingContext.get().getModEventBus());
         SushiContent.Features.REGISTRY.register(FMLJavaModLoadingContext.get().getModEventBus());
+        SushiContent.TileEntities.REGISTRY.register(FMLJavaModLoadingContext.get().getModEventBus());
         EventManager.mod(FMLClientSetupEvent.class).process(this::fmlClient).subscribe();
         EventManager.mod(FMLCommonSetupEvent.class).process(this::fmlCommon).subscribe();
         EventManager.mod(GatherDataEvent.class).process(this::dataGen).subscribe();
@@ -55,13 +58,16 @@ public class SushiGoCrafting {
         for (FoodType value : FoodType.values()) {
             FoodHelper.generateFood(value).forEach(item -> SushiContent.Items.REGISTRY.register(FoodHelper.getName(item), () -> item));
         }
+        NBTManager.getInstance().scanTileClassForAnnotations(RollerTile.class);
+        EventManager.forge(BiomeLoadingEvent.class).filter(biomeLoadingEvent -> biomeLoadingEvent.getCategory() == Biome.Category.OCEAN).process(biomeLoadingEvent -> {
+            biomeLoadingEvent.getGeneration().getFeatures(GenerationStage.Decoration.VEGETAL_DECORATION).add(() ->
+                    SushiContent.Features.SEAWEED.get().withConfiguration(IFeatureConfig.NO_FEATURE_CONFIG)
+                            .withPlacement(Features.Placements.KELP_PLACEMENT.func_242728_a().withPlacement(Placement.field_242901_e.configure(new TopSolidWithNoiseConfig(80, 80.0D, 0.0D)))));
+        }).subscribe();
     }
 
     public void fmlCommon(FMLCommonSetupEvent event) {
-        Biome[] biomes = new Biome[]{Biomes.OCEAN, Biomes.DEEP_COLD_OCEAN, Biomes.DEEP_OCEAN, Biomes.COLD_OCEAN};
-        for (Biome biome : biomes) {
-            biome.addFeature(GenerationStage.Decoration.VEGETAL_DECORATION, SushiContent.Features.SEAWEED.get().withConfiguration(IFeatureConfig.NO_FEATURE_CONFIG).withPlacement(Placement.TOP_SOLID_HEIGHTMAP_NOISE_BIASED.configure(new TopSolidWithNoiseConfig(120, 80.0D, 0.0D, Heightmap.Type.OCEAN_FLOOR_WG))));
-        }
+
     }
 
     @OnlyIn(Dist.CLIENT)

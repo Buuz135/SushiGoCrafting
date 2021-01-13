@@ -11,8 +11,8 @@ public class SeaWeedTopBlock extends KelpTopBlock {
     }
 
     @Override
-    protected Block func_230330_d_() {
+    protected Block getBodyPlantBlock() {
         return SushiContent.Blocks.SEAWEED_PLANT.get();
-    }
+    } //func_230330_d_
 
 }

@@ -1,18 +1,19 @@
 package com.buuz135.sushigocrafting.api;
 
-import net.minecraft.item.Food;
+import org.apache.commons.lang3.tuple.Pair;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Function;
 
 public enum FoodType implements IFoodType {
 
     MAKI("maki", new int[]{2},
-            of(FoodIngredient.DRY_SEAWEED),
+            integer -> Pair.of(integer * 20, 20), of(FoodIngredient.DRY_SEAWEED),
             of(FoodIngredient.RICE),
             of(FoodIngredient.SALMON_FILLET, FoodIngredient.TUNA_FILLET, FoodIngredient.AVOCADO, FoodIngredient.CUCUMBER, FoodIngredient.CRAB)),
     URAMAKI("uramaki", new int[]{0, 4},
-            of(FoodIngredient.SALMON_FILLET, FoodIngredient.SESAME),
+            integer -> Pair.of(20, integer * 20), of(FoodIngredient.SALMON_FILLET, FoodIngredient.SESAME),
             of(FoodIngredient.RICE),
             of(FoodIngredient.DRY_SEAWEED),
             of(FoodIngredient.AVOCADO),
@@ -21,10 +22,12 @@ public enum FoodType implements IFoodType {
     private final int[] index;
     private final String name;
     private List<IFoodIngredient[]> ingredients;
+    private final Function<Integer, Pair<Integer, Integer>> slotPos;
 
-    FoodType(String name, int[] index, IFoodIngredient[]... ingredients) {
+    FoodType(String name, int[] index, Function<Integer, Pair<Integer, Integer>> slotPos, IFoodIngredient[]... ingredients) {
         this.index = index;
         this.name = name;
+        this.slotPos = slotPos;
         this.ingredients = new ArrayList<>();
         if (ingredients != null) {
             for (IFoodIngredient[] ingredient : ingredients) {
@@ -50,5 +53,10 @@ public enum FoodType implements IFoodType {
     @Override
     public String getName() {
         return name;
+    }
+
+    @Override
+    public Function<Integer, Pair<Integer, Integer>> getSlotPosition() {
+        return slotPos;
     }
 }

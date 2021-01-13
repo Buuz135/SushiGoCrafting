@@ -4,15 +4,17 @@ import com.buuz135.sushigocrafting.SushiGoCrafting;
 import com.buuz135.sushigocrafting.item.FoodItem;
 import net.minecraft.item.Item;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 public class FoodHelper {
+
+    public static HashMap<String, List<FoodItem>> REGISTERED = new LinkedHashMap<>();
 
     public static List<FoodItem> generateFood(IFoodType type) {
         List<FoodItem> items = new ArrayList<>();
         items.addAll(generate(type, type.getFoodIngredients()));
         items.forEach(item -> System.out.println(item.getIngredientList()));
+        REGISTERED.put(type.getName(), items);
         return items;
     }
 
@@ -42,5 +44,9 @@ public class FoodHelper {
             names.add(item.getIngredientList().get(nameIndex).getName());
         }
         return String.join("_", names) + "_" + item.getType().getName();
+    }
+
+    public static List<IFoodType> getAllFoodTypes() {
+        return Arrays.asList(FoodType.values());
     }
 }

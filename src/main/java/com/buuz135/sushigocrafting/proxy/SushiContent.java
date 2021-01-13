@@ -3,9 +3,11 @@ package com.buuz135.sushigocrafting.proxy;
 import com.buuz135.sushigocrafting.SushiGoCrafting;
 import com.buuz135.sushigocrafting.block.crop.CustomCropBlock;
 import com.buuz135.sushigocrafting.block.crop.WaterCropBlock;
+import com.buuz135.sushigocrafting.block.machinery.RollerBlock;
 import com.buuz135.sushigocrafting.block.seaweed.SeaWeedBlock;
 import com.buuz135.sushigocrafting.block.seaweed.SeaWeedTopBlock;
 import com.buuz135.sushigocrafting.item.AmountItem;
+import com.buuz135.sushigocrafting.tile.machinery.RollerTile;
 import com.buuz135.sushigocrafting.world.SeaWeedFeature;
 import net.minecraft.block.AbstractBlock;
 import net.minecraft.block.Block;
@@ -13,6 +15,8 @@ import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.world.gen.feature.Feature;
 import net.minecraft.world.gen.feature.IFeatureConfig;
 import net.minecraft.world.gen.feature.NoFeatureConfig;
@@ -24,7 +28,7 @@ import java.util.function.Supplier;
 
 public class SushiContent {
 
-    public static RegistryObject<Block> block(String id, Supplier<Block> block) {
+    public static <T extends Block> RegistryObject<T> block(String id, Supplier<T> block) {
         return Blocks.REGISTRY.register(id, block);
     }
 
@@ -36,12 +40,16 @@ public class SushiContent {
         return Items.REGISTRY.register(id, () -> new AmountItem(new Item.Properties().group(SushiGoCrafting.TAB).maxStackSize(1), minAmount, maxAmount, maxCombine));
     }
 
-    public static RegistryObject<BlockItem> blockItem(String id, Supplier<Block> sup) {
+    public static RegistryObject<BlockItem> blockItem(String id, Supplier<? extends Block> sup) {
         return Items.REGISTRY.register(id, () -> new BlockItem(sup.get(), new Item.Properties().group(SushiGoCrafting.TAB)));
     }
 
     public static <T extends IFeatureConfig> RegistryObject<Feature<T>> feature(String id, Supplier<Feature<T>> featureSupplier) {
         return Features.REGISTRY.register(id, featureSupplier);
+    }
+
+    public static <T extends TileEntity> RegistryObject<TileEntityType<?>> tile(String id, Supplier<T> supplier, Supplier<? extends Block> sup) {
+        return TileEntities.REGISTRY.register(id, () -> TileEntityType.Builder.create(supplier, sup.get()).build(null));
     }
 
     public static class Blocks {
@@ -56,6 +64,8 @@ public class SushiContent {
 
         public static final RegistryObject<Block> SEAWEED = block("seaweed", () -> new SeaWeedTopBlock(AbstractBlock.Properties.create(Material.OCEAN_PLANT).doesNotBlockMovement().tickRandomly().zeroHardnessAndResistance().sound(SoundType.WET_GRASS)));
         public static final RegistryObject<Block> SEAWEED_PLANT = block("seaweed_plant", () -> new SeaWeedBlock(AbstractBlock.Properties.create(Material.OCEAN_PLANT).doesNotBlockMovement().tickRandomly().zeroHardnessAndResistance().sound(SoundType.WET_GRASS)));
+
+        public static final RegistryObject<RollerBlock> ROLLER = block("roller", RollerBlock::new);
 
     }
 
@@ -78,7 +88,18 @@ public class SushiContent {
         public static final RegistryObject<Item> RAW_SALMON_FILLET = amountItem("raw_salmon_fillet", 500, 2000, 4000);
 
         public static final RegistryObject<Item> AVOCADO = basicItem("avocado");
+
+        public static final RegistryObject<BlockItem> ROLLER = blockItem("roller", Blocks.ROLLER);
     }
+
+    public static class TileEntities {
+
+        public static final DeferredRegister<TileEntityType<?>> REGISTRY = DeferredRegister.create(ForgeRegistries.TILE_ENTITIES, SushiGoCrafting.MOD_ID);
+
+        public static RegistryObject<TileEntityType<?>> ROLLER = tile("roller", RollerTile::new, Blocks.ROLLER);
+
+    }
+
 
     public static class Features {
 
