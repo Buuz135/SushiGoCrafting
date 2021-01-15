@@ -49,4 +49,31 @@ public class FoodHelper {
     public static List<IFoodType> getAllFoodTypes() {
         return Arrays.asList(FoodType.values());
     }
+
+    public static Optional<IFoodType> getTypeFromName(String name) {
+        for (IFoodType foodType : FoodHelper.getAllFoodTypes()) {
+            if (foodType.getName().equalsIgnoreCase(name)) {
+                return Optional.of(foodType);
+            }
+        }
+        return Optional.empty();
+    }
+
+    public static FoodItem getFoodFromIngredients(String type, List<IFoodIngredient> foodIngredients) {
+        for (FoodItem foodItem : REGISTERED.get(type)) {
+            if (foodIngredients.size() == foodItem.getIngredientList().size()) {
+                boolean allMatch = true;
+                for (int i = 0; i < foodIngredients.size(); i++) {
+                    if (!foodIngredients.get(i).equals(foodItem.getIngredientList().get(i))) {
+                        allMatch = false;
+                    }
+                }
+                if (allMatch) {
+                    return foodItem;
+                }
+            }
+        }
+        return null;
+    }
+
 }

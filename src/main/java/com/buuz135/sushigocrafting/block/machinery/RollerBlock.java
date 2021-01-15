@@ -47,4 +47,8 @@ public class RollerBlock extends BasicTileBlock<RollerTile> {
         });
     }
 
+    @Override
+    public void onBlockClicked(BlockState state, World worldIn, BlockPos pos, PlayerEntity player) {
+        this.getTile(worldIn, pos).ifPresent(rollerTile -> rollerTile.onClick(player));
+    }
 }

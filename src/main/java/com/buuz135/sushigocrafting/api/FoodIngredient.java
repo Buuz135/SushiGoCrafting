@@ -3,6 +3,7 @@ package com.buuz135.sushigocrafting.api;
 import com.buuz135.sushigocrafting.proxy.SushiContent;
 import net.minecraft.item.Item;
 
+import javax.annotation.Nullable;
 import java.util.function.Supplier;
 
 public enum FoodIngredient implements IFoodIngredient {
@@ -31,5 +32,13 @@ public enum FoodIngredient implements IFoodIngredient {
     @Override
     public String getName() {
         return name;
+    }
+
+    @Nullable
+    public static FoodIngredient fromItem(Item item) {
+        for (FoodIngredient value : values()) {
+            if (value.getItem().equals(item)) return value;
+        }
+        return null;
     }
 }

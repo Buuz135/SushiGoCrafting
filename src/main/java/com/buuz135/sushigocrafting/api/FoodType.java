@@ -9,11 +9,19 @@ import java.util.function.Function;
 public enum FoodType implements IFoodType {
 
     MAKI("maki", new int[]{2},
-            integer -> Pair.of(integer * 20, 20), of(FoodIngredient.DRY_SEAWEED),
+            integer -> {
+                if (integer > 2)
+                    return Pair.of(-Integer.MAX_VALUE, -Integer.MAX_VALUE);
+                return Pair.of(70 + integer * 10, 76 - integer * 28);
+            }, of(FoodIngredient.DRY_SEAWEED),
             of(FoodIngredient.RICE),
             of(FoodIngredient.SALMON_FILLET, FoodIngredient.TUNA_FILLET, FoodIngredient.AVOCADO, FoodIngredient.CUCUMBER, FoodIngredient.CRAB)),
     URAMAKI("uramaki", new int[]{0, 4},
-            integer -> Pair.of(20, integer * 20), of(FoodIngredient.SALMON_FILLET, FoodIngredient.SESAME),
+            integer -> {
+                if (integer > 2)
+                    return Pair.of(66 + integer * 10, 40 - (integer - 3) * 22);
+                return Pair.of(55 + integer * 25, 60 + integer * 8);
+            }, of(FoodIngredient.SALMON_FILLET, FoodIngredient.SESAME),
             of(FoodIngredient.RICE),
             of(FoodIngredient.DRY_SEAWEED),
             of(FoodIngredient.AVOCADO),
