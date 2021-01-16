@@ -83,4 +83,10 @@ public class AmountItem extends Item {
     public int getMaxCombineAmount() {
         return maxCombineAmount;
     }
+
+    public ItemStack withAmount(int amount) {
+        ItemStack stack = new ItemStack(this);
+        stack.getOrCreateTag().putInt(NBT_AMOUNT, amount);
+        return stack;
+    }
 }

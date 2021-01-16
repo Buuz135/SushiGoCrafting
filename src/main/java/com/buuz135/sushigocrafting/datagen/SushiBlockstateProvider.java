@@ -1,6 +1,7 @@
 package com.buuz135.sushigocrafting.datagen;
 
 import com.buuz135.sushigocrafting.proxy.SushiContent;
+import net.minecraft.block.Block;
 import net.minecraft.block.CropsBlock;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.util.ResourceLocation;
@@ -21,8 +22,10 @@ public class SushiBlockstateProvider extends BlockStateProvider {
         crop((CropsBlock) SushiContent.Blocks.RICE_CROP.get());
         crop((CropsBlock) SushiContent.Blocks.HORSERADISH_CROP.get());
         crop((CropsBlock) SushiContent.Blocks.SOY_CROP.get());
-        simpleBlock(SushiContent.Blocks.SEAWEED.get(), new ModelFile.UncheckedModelFile(SushiContent.Blocks.SEAWEED.get().getRegistryName()));
-        simpleBlock(SushiContent.Blocks.SEAWEED_PLANT.get(), new ModelFile.UncheckedModelFile(SushiContent.Blocks.SEAWEED_PLANT.get().getRegistryName()));
+        simpleBlockUn(SushiContent.Blocks.SEAWEED.get());
+        simpleBlockUn(SushiContent.Blocks.SEAWEED_PLANT.get());
+        simpleBlockUn(SushiContent.Blocks.ROLLER.get());
+        horizontalBlock(SushiContent.Blocks.RICE_COOKER.get());
     }
 
     private void crop(CropsBlock block) {
@@ -30,6 +33,14 @@ public class SushiBlockstateProvider extends BlockStateProvider {
             int age = blockState.get(block.getAgeProperty());
             return ConfiguredModel.builder().modelFile(new ModelFile.UncheckedModelFile(new ResourceLocation(block.getRegistryName().toString() + "_" + age))).build();
         });
+    }
+
+    private void simpleBlockUn(Block block) {
+        simpleBlock(block, new ModelFile.UncheckedModelFile(block.getRegistryName()));
+    }
+
+    private void horizontalBlock(Block block) {
+        horizontalBlock(block, new ModelFile.UncheckedModelFile(block.getRegistryName()));
     }
 
 }

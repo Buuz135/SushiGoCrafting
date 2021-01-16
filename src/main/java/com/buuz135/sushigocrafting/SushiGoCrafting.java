@@ -6,6 +6,7 @@ import com.buuz135.sushigocrafting.datagen.SushiBlockstateProvider;
 import com.buuz135.sushigocrafting.datagen.SushiItemModelProvider;
 import com.buuz135.sushigocrafting.proxy.SushiContent;
 import com.buuz135.sushigocrafting.recipe.CombineAmountItemRecipe;
+import com.buuz135.sushigocrafting.tile.machinery.RiceCookerTile;
 import com.buuz135.sushigocrafting.tile.machinery.RollerTile;
 import com.hrznstudio.titanium.event.handler.EventManager;
 import com.hrznstudio.titanium.nbthandler.NBTManager;
@@ -59,6 +60,7 @@ public class SushiGoCrafting {
             FoodHelper.generateFood(value).forEach(item -> SushiContent.Items.REGISTRY.register(FoodHelper.getName(item), () -> item));
         }
         NBTManager.getInstance().scanTileClassForAnnotations(RollerTile.class);
+        NBTManager.getInstance().scanTileClassForAnnotations(RiceCookerTile.class);
         EventManager.forge(BiomeLoadingEvent.class).filter(biomeLoadingEvent -> biomeLoadingEvent.getCategory() == Biome.Category.OCEAN).process(biomeLoadingEvent -> {
             biomeLoadingEvent.getGeneration().getFeatures(GenerationStage.Decoration.VEGETAL_DECORATION).add(() ->
                     SushiContent.Features.SEAWEED.get().withConfiguration(IFeatureConfig.NO_FEATURE_CONFIG)

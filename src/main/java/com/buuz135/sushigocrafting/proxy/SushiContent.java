@@ -3,10 +3,12 @@ package com.buuz135.sushigocrafting.proxy;
 import com.buuz135.sushigocrafting.SushiGoCrafting;
 import com.buuz135.sushigocrafting.block.crop.CustomCropBlock;
 import com.buuz135.sushigocrafting.block.crop.WaterCropBlock;
+import com.buuz135.sushigocrafting.block.machinery.RiceCookerBlock;
 import com.buuz135.sushigocrafting.block.machinery.RollerBlock;
 import com.buuz135.sushigocrafting.block.seaweed.SeaWeedBlock;
 import com.buuz135.sushigocrafting.block.seaweed.SeaWeedTopBlock;
 import com.buuz135.sushigocrafting.item.AmountItem;
+import com.buuz135.sushigocrafting.tile.machinery.RiceCookerTile;
 import com.buuz135.sushigocrafting.tile.machinery.RollerTile;
 import com.buuz135.sushigocrafting.world.SeaWeedFeature;
 import net.minecraft.block.AbstractBlock;
@@ -36,7 +38,7 @@ public class SushiContent {
         return Items.REGISTRY.register(id, () -> new Item(new Item.Properties().group(SushiGoCrafting.TAB)));
     }
 
-    public static RegistryObject<Item> amountItem(String id, int minAmount, int maxAmount, int maxCombine) {
+    public static RegistryObject<AmountItem> amountItem(String id, int minAmount, int maxAmount, int maxCombine) {
         return Items.REGISTRY.register(id, () -> new AmountItem(new Item.Properties().group(SushiGoCrafting.TAB).maxStackSize(1), minAmount, maxAmount, maxCombine));
     }
 
@@ -66,6 +68,7 @@ public class SushiContent {
         public static final RegistryObject<Block> SEAWEED_PLANT = block("seaweed_plant", () -> new SeaWeedBlock(AbstractBlock.Properties.create(Material.OCEAN_PLANT).doesNotBlockMovement().tickRandomly().zeroHardnessAndResistance().sound(SoundType.WET_GRASS)));
 
         public static final RegistryObject<RollerBlock> ROLLER = block("roller", RollerBlock::new);
+        public static final RegistryObject<RiceCookerBlock> RICE_COOKER = block("rice_cooker", RiceCookerBlock::new);
 
     }
 
@@ -74,6 +77,8 @@ public class SushiContent {
         public static final DeferredRegister<Item> REGISTRY = DeferredRegister.create(ForgeRegistries.ITEMS, SushiGoCrafting.MOD_ID);
 
         public static final RegistryObject<BlockItem> RICE_SEED = blockItem("rice_crop", Blocks.RICE_CROP);
+        public static final RegistryObject<Item> RICE = basicItem("rice");
+        public static final RegistryObject<AmountItem> COOKED_RICE = amountItem("cooked_rice", 50, 500, 2000);
         public static final RegistryObject<BlockItem> CUCUMBER_SEED = blockItem("cucumber_crop", Blocks.CUCUMBER_CROP);
         public static final RegistryObject<BlockItem> SOY_SEED = blockItem("soy_crop", Blocks.SOY_CROP);
         public static final RegistryObject<BlockItem> HORSERADISH_SEED = blockItem("horseradish_crop", Blocks.HORSERADISH_CROP);
@@ -84,12 +89,13 @@ public class SushiContent {
 
         public static final RegistryObject<Item> RAW_TUNA = basicItem("raw_tuna");
         public static final RegistryObject<Item> CRAB = basicItem("crab");
-        public static final RegistryObject<Item> RAW_TUNA_FILLET = amountItem("raw_tuna_fillet", 1000, 3000, 6000);
-        public static final RegistryObject<Item> RAW_SALMON_FILLET = amountItem("raw_salmon_fillet", 500, 2000, 4000);
+        public static final RegistryObject<AmountItem> RAW_TUNA_FILLET = amountItem("raw_tuna_fillet", 1000, 3000, 6000);
+        public static final RegistryObject<AmountItem> RAW_SALMON_FILLET = amountItem("raw_salmon_fillet", 500, 2000, 4000);
 
         public static final RegistryObject<Item> AVOCADO = basicItem("avocado");
 
         public static final RegistryObject<BlockItem> ROLLER = blockItem("roller", Blocks.ROLLER);
+        public static final RegistryObject<BlockItem> RICE_COOKER = blockItem("rice_cooker", Blocks.RICE_COOKER);
     }
 
     public static class TileEntities {
@@ -97,7 +103,7 @@ public class SushiContent {
         public static final DeferredRegister<TileEntityType<?>> REGISTRY = DeferredRegister.create(ForgeRegistries.TILE_ENTITIES, SushiGoCrafting.MOD_ID);
 
         public static RegistryObject<TileEntityType<?>> ROLLER = tile("roller", RollerTile::new, Blocks.ROLLER);
-
+        public static RegistryObject<TileEntityType<?>> RICE_COOKER = tile("rice_cooker", RiceCookerTile::new, Blocks.RICE_COOKER);
     }
 
 
