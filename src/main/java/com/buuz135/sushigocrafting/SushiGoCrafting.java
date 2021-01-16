@@ -4,6 +4,7 @@ import com.buuz135.sushigocrafting.api.FoodHelper;
 import com.buuz135.sushigocrafting.api.FoodType;
 import com.buuz135.sushigocrafting.datagen.SushiBlockstateProvider;
 import com.buuz135.sushigocrafting.datagen.SushiItemModelProvider;
+import com.buuz135.sushigocrafting.datagen.SushiLangProvider;
 import com.buuz135.sushigocrafting.proxy.SushiContent;
 import com.buuz135.sushigocrafting.recipe.CombineAmountItemRecipe;
 import com.buuz135.sushigocrafting.tile.machinery.RiceCookerTile;
@@ -81,6 +82,7 @@ public class SushiGoCrafting {
         //event.getGenerator().addProvider(new SushiModelProvider(event.getGenerator(), MOD_ID, event.getExistingFileHelper()));
         event.getGenerator().addProvider(new SushiBlockstateProvider(event.getGenerator(), MOD_ID, event.getExistingFileHelper()));
         event.getGenerator().addProvider(new SushiItemModelProvider(event.getGenerator(), MOD_ID, event.getExistingFileHelper()));
+        event.getGenerator().addProvider(new SushiLangProvider(event.getGenerator(), MOD_ID, "en_us"));
     }
 
 }

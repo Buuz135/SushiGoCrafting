@@ -76,12 +76,12 @@ public class SushiContent {
 
         public static final DeferredRegister<Item> REGISTRY = DeferredRegister.create(ForgeRegistries.ITEMS, SushiGoCrafting.MOD_ID);
 
-        public static final RegistryObject<BlockItem> RICE_SEED = blockItem("rice_crop", Blocks.RICE_CROP);
+        public static final RegistryObject<BlockItem> RICE_SEED = blockItem("rice_seed", Blocks.RICE_CROP);
         public static final RegistryObject<Item> RICE = basicItem("rice");
         public static final RegistryObject<AmountItem> COOKED_RICE = amountItem("cooked_rice", 50, 500, 2000);
-        public static final RegistryObject<BlockItem> CUCUMBER_SEED = blockItem("cucumber_crop", Blocks.CUCUMBER_CROP);
-        public static final RegistryObject<BlockItem> SOY_SEED = blockItem("soy_crop", Blocks.SOY_CROP);
-        public static final RegistryObject<BlockItem> HORSERADISH_SEED = blockItem("horseradish_crop", Blocks.HORSERADISH_CROP);
+        public static final RegistryObject<BlockItem> CUCUMBER_SEED = blockItem("cucumber_seed", Blocks.CUCUMBER_CROP);
+        public static final RegistryObject<BlockItem> SOY_SEED = blockItem("soy_seed", Blocks.SOY_CROP);
+        public static final RegistryObject<BlockItem> HORSERADISH_SEED = blockItem("horseradish_seed", Blocks.HORSERADISH_CROP);
         public static final RegistryObject<BlockItem> SESAME_SEED = blockItem("sesame_seed", Blocks.SESAME_CROP);
 
         public static final RegistryObject<BlockItem> SEAWEED = blockItem("seaweed", Blocks.SEAWEED);

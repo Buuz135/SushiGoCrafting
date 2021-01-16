@@ -1,6 +1,7 @@
 package com.buuz135.sushigocrafting.datagen;
 
 import com.buuz135.sushigocrafting.proxy.SushiContent;
+import com.hrznstudio.titanium.block.RotatableBlock;
 import net.minecraft.block.Block;
 import net.minecraft.block.CropsBlock;
 import net.minecraft.data.DataGenerator;
@@ -40,7 +41,13 @@ public class SushiBlockstateProvider extends BlockStateProvider {
     }
 
     private void horizontalBlock(Block block) {
-        horizontalBlock(block, new ModelFile.UncheckedModelFile(block.getRegistryName()));
+        ModelFile file = new ModelFile.UncheckedModelFile(block.getRegistryName());
+        getVariantBuilder(block)
+                .forAllStates(state -> ConfiguredModel.builder()
+                        .modelFile(file)
+                        .rotationY(((int) state.get(RotatableBlock.FACING_HORIZONTAL).getHorizontalAngle()) % 360)
+                        .build()
+                );
     }
 
 }
