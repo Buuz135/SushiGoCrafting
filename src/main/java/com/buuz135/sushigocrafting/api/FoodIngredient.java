@@ -7,8 +7,8 @@ import javax.annotation.Nullable;
 import java.util.function.Supplier;
 
 public enum FoodIngredient implements IFoodIngredient {
-    RICE("rice", SushiContent.Items.RICE_SEED),
-    DRY_SEAWEED("seaweed", SushiContent.Items.DRY_SEAWEED),
+    RICE("rice", SushiContent.Items.COOKED_RICE),
+    NORI("nori", SushiContent.Items.NORI_SHEET),
     TUNA_FILLET("tuna", SushiContent.Items.RAW_TUNA_FILLET),
     SALMON_FILLET("salmon", SushiContent.Items.RAW_SALMON_FILLET),
     AVOCADO("avocado", SushiContent.Items.AVOCADO),

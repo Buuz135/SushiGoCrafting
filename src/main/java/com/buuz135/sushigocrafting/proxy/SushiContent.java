@@ -1,6 +1,7 @@
 package com.buuz135.sushigocrafting.proxy;
 
 import com.buuz135.sushigocrafting.SushiGoCrafting;
+import com.buuz135.sushigocrafting.block.SushiGoCraftingBlock;
 import com.buuz135.sushigocrafting.block.crop.CustomCropBlock;
 import com.buuz135.sushigocrafting.block.crop.WaterCropBlock;
 import com.buuz135.sushigocrafting.block.machinery.RiceCookerBlock;
@@ -66,6 +67,7 @@ public class SushiContent {
 
         public static final RegistryObject<Block> SEAWEED = block("seaweed", () -> new SeaWeedTopBlock(AbstractBlock.Properties.create(Material.OCEAN_PLANT).doesNotBlockMovement().tickRandomly().zeroHardnessAndResistance().sound(SoundType.WET_GRASS)));
         public static final RegistryObject<Block> SEAWEED_PLANT = block("seaweed_plant", () -> new SeaWeedBlock(AbstractBlock.Properties.create(Material.OCEAN_PLANT).doesNotBlockMovement().tickRandomly().zeroHardnessAndResistance().sound(SoundType.WET_GRASS)));
+        public static final RegistryObject<Block> SEAWEED_BLOCK = block("dry_seaweed_block", () -> new SushiGoCraftingBlock(AbstractBlock.Properties.from(net.minecraft.block.Blocks.WHEAT)));
 
         public static final RegistryObject<RollerBlock> ROLLER = block("roller", RollerBlock::new);
         public static final RegistryObject<RiceCookerBlock> RICE_COOKER = block("rice_cooker", RiceCookerBlock::new);
@@ -86,6 +88,8 @@ public class SushiContent {
 
         public static final RegistryObject<BlockItem> SEAWEED = blockItem("seaweed", Blocks.SEAWEED);
         public static final RegistryObject<Item> DRY_SEAWEED = basicItem("dry_seaweed");
+        public static final RegistryObject<BlockItem> SEAWEED_BLOCK = blockItem("dry_seaweed_block", Blocks.SEAWEED_BLOCK);
+        public static final RegistryObject<Item> NORI_SHEET = basicItem("nori_sheet");
 
         public static final RegistryObject<Item> RAW_TUNA = basicItem("raw_tuna");
         public static final RegistryObject<Item> CRAB = basicItem("crab");

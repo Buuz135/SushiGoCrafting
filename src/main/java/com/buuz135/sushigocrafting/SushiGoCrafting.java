@@ -11,12 +11,16 @@ import com.buuz135.sushigocrafting.tile.machinery.RiceCookerTile;
 import com.buuz135.sushigocrafting.tile.machinery.RollerTile;
 import com.hrznstudio.titanium.event.handler.EventManager;
 import com.hrznstudio.titanium.nbthandler.NBTManager;
+import net.minecraft.block.Blocks;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.RenderTypeLookup;
+import net.minecraft.inventory.InventoryHelper;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipeSerializer;
+import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.gen.GenerationStage;
 import net.minecraft.world.gen.feature.Features;
@@ -27,6 +31,7 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.event.world.BiomeLoadingEvent;
+import net.minecraftforge.event.world.PistonEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
@@ -66,6 +71,14 @@ public class SushiGoCrafting {
             biomeLoadingEvent.getGeneration().getFeatures(GenerationStage.Decoration.VEGETAL_DECORATION).add(() ->
                     SushiContent.Features.SEAWEED.get().withConfiguration(IFeatureConfig.NO_FEATURE_CONFIG)
                             .withPlacement(Features.Placements.KELP_PLACEMENT.func_242728_a().withPlacement(Placement.field_242901_e.configure(new TopSolidWithNoiseConfig(80, 80.0D, 0.0D)))));
+        }).subscribe();
+        EventManager.forge(PistonEvent.Pre.class).process(pre -> {
+            if (pre.getWorld().getBlockState(pre.getFaceOffsetPos()).getBlock().equals(SushiContent.Blocks.SEAWEED_BLOCK.get()) && pre.getWorld().getBlockState(pre.getPos().offset(pre.getDirection(), 2)).getBlock().equals(Blocks.IRON_BLOCK)) {
+                pre.getWorld().destroyBlock(pre.getFaceOffsetPos(), false);
+                NonNullList<ItemStack> list = NonNullList.create();
+                list.add(new ItemStack(SushiContent.Items.NORI_SHEET.get(), 3));
+                InventoryHelper.dropItems((World) pre.getWorld(), pre.getFaceOffsetPos().add(0.5, 0.5, 0.5), list);
+            }
         }).subscribe();
     }
 

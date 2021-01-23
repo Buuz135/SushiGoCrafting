@@ -13,7 +13,7 @@ public enum FoodType implements IFoodType {
                 if (integer > 2)
                     return Pair.of(-Integer.MAX_VALUE, -Integer.MAX_VALUE);
                 return Pair.of(70 + integer * 10, 76 - integer * 28);
-            }, of(FoodIngredient.DRY_SEAWEED),
+            }, of(FoodIngredient.NORI),
             of(FoodIngredient.RICE),
             of(FoodIngredient.SALMON_FILLET, FoodIngredient.TUNA_FILLET, FoodIngredient.AVOCADO, FoodIngredient.CUCUMBER, FoodIngredient.CRAB)),
     URAMAKI("uramaki", new int[]{0, 4},
@@ -23,7 +23,7 @@ public enum FoodType implements IFoodType {
                 return Pair.of(55 + integer * 25, 60 + integer * 8);
             }, of(FoodIngredient.SALMON_FILLET, FoodIngredient.SESAME),
             of(FoodIngredient.RICE),
-            of(FoodIngredient.DRY_SEAWEED),
+            of(FoodIngredient.NORI),
             of(FoodIngredient.AVOCADO),
             of(FoodIngredient.TUNA_FILLET, FoodIngredient.SALMON_FILLET, FoodIngredient.CRAB));
 

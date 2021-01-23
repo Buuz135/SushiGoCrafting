@@ -6,7 +6,6 @@ import com.hrznstudio.titanium.api.IFactory;
 import com.hrznstudio.titanium.block.BasicTileBlock;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
-import net.minecraft.block.material.PushReaction;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
@@ -39,10 +38,5 @@ public class RollerBlock extends BasicTileBlock<RollerTile> {
     @Override
     public void onBlockClicked(BlockState state, World worldIn, BlockPos pos, PlayerEntity player) {
         this.getTile(worldIn, pos).ifPresent(rollerTile -> rollerTile.onClick(player));
-    }
-
-    @Override
-    public PushReaction getPushReaction(BlockState state) {
-        return super.getPushReaction(state);
     }
 }
