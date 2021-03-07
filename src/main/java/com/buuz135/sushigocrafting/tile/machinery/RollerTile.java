@@ -20,10 +20,12 @@ import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.ActionResultType;
 import net.minecraft.util.Direction;
 import net.minecraft.util.Hand;
+import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.common.util.INBTSerializable;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 public class RollerTile extends ActiveTile<RollerTile> {
 
@@ -77,38 +79,45 @@ public class RollerTile extends ActiveTile<RollerTile> {
     }
 
     public void onClick(PlayerEntity player) {
-        FoodHelper.getTypeFromName(selected).ifPresent(iFoodType -> {
-            boolean allFull = true;
-            for (int i1 = 0; i1 < slots.getSlots(); i1++) {
-                if (i1 < iFoodType.getFoodIngredients().size() && slots.getStackInSlot(i1).isEmpty()) {
-                    allFull = false;
-                    break;
+        if (isServer()) {
+            FoodHelper.getTypeFromName(selected).ifPresent(iFoodType -> {
+                boolean allFull = true;
+                for (int i1 = 0; i1 < slots.getSlots(); i1++) {
+                    if (i1 < iFoodType.getFoodIngredients().size() && slots.getStackInSlot(i1).isEmpty()) {
+                        allFull = false;
+                        break;
+                    }
                 }
-            }
-            if (allFull) {
-                ++craftProgress;
-                if (craftProgress >= 4) {
-                    craftProgress = 0;
-                    List<IFoodIngredient> foodIngredients = new ArrayList<>();
-                    for (int i1 = 0; i1 < slots.getSlots(); i1++) {
-                        if (i1 < iFoodType.getFoodIngredients().size()) {
-                            foodIngredients.add(FoodIngredient.fromItem(slots.getStackInSlot(i1).getItem()));
+                if (allFull) {
+                    ++craftProgress;
+                    if (craftProgress >= 4) {
+                        Random random = new Random(((ServerWorld) this.world).getSeed() + selected.hashCode());
+                        craftProgress = 0;
+                        List<IFoodIngredient> foodIngredients = new ArrayList<>();
+                        List<Integer> weightValues = new ArrayList<>();
+                        for (int i1 = 0; i1 < slots.getSlots(); i1++) {
+                            if (i1 < iFoodType.getFoodIngredients().size()) {
+                                foodIngredients.add(FoodIngredient.fromItem(slots.getStackInSlot(i1).getItem()));
+                                weightValues.add(random.nextInt(5) - weightTracker.weights.get(i1));
+                            }
+                        }
+                        FoodItem item = FoodHelper.getFoodFromIngredients(selected, foodIngredients);
+                        if (item != null) {
+                            ItemStack stack = new ItemStack(item);
+                            stack.getOrCreateTag().putIntArray(FoodItem.WEIGHTS_TAG, weightValues);
+                            InventoryHelper.spawnItemStack(this.world, this.pos.getX(), this.getPos().getY(), this.getPos().getZ(), stack);
                         }
                     }
-                    FoodItem item = FoodHelper.getFoodFromIngredients(selected, foodIngredients);
-                    if (item != null) {
-                        InventoryHelper.spawnItemStack(this.world, this.pos.getX(), this.getPos().getY(), this.getPos().getZ(), new ItemStack(item));
-                    }
                 }
-            }
-        });
-
+            });
+        }
     }
 
     @Override
     public void handleButtonMessage(int id, PlayerEntity playerEntity, CompoundNBT compound) {
         super.handleButtonMessage(id, playerEntity, compound);
         if (compound.contains("Type")) {
+            //Random random = new Random(((ServerWorld) this.world).getSeed() + compound.getString("Type").hashCode());
             FoodHelper.getTypeFromName(compound.getString("Type")).ifPresent(iFoodType -> {
                 slots.setSlotPosition(iFoodType.getSlotPosition());
                 for (int i1 = 0; i1 < slots.getSlots(); i1++) {
