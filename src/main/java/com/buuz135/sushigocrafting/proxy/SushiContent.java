@@ -9,6 +9,7 @@ import com.buuz135.sushigocrafting.block.machinery.RollerBlock;
 import com.buuz135.sushigocrafting.block.seaweed.SeaWeedBlock;
 import com.buuz135.sushigocrafting.block.seaweed.SeaWeedTopBlock;
 import com.buuz135.sushigocrafting.item.AmountItem;
+import com.buuz135.sushigocrafting.item.SushiItem;
 import com.buuz135.sushigocrafting.tile.machinery.RiceCookerTile;
 import com.buuz135.sushigocrafting.tile.machinery.RollerTile;
 import com.buuz135.sushigocrafting.world.SeaWeedFeature;
@@ -35,12 +36,12 @@ public class SushiContent {
         return Blocks.REGISTRY.register(id, block);
     }
 
-    public static RegistryObject<Item> basicItem(String id) {
-        return Items.REGISTRY.register(id, () -> new Item(new Item.Properties().group(SushiGoCrafting.TAB)));
+    public static RegistryObject<Item> basicItem(String id, String category) {
+        return Items.REGISTRY.register(id, () -> new SushiItem(new Item.Properties().group(SushiGoCrafting.TAB), category));
     }
 
-    public static RegistryObject<AmountItem> amountItem(String id, int minAmount, int maxAmount, int maxCombine) {
-        return Items.REGISTRY.register(id, () -> new AmountItem(new Item.Properties().group(SushiGoCrafting.TAB).maxStackSize(1), minAmount, maxAmount, maxCombine));
+    public static RegistryObject<AmountItem> amountItem(String id, String category, int minAmount, int maxAmount, int maxCombine) {
+        return Items.REGISTRY.register(id, () -> new AmountItem(new Item.Properties().group(SushiGoCrafting.TAB).maxStackSize(1), category, minAmount, maxAmount, maxCombine));
     }
 
     public static RegistryObject<BlockItem> blockItem(String id, Supplier<? extends Block> sup) {
@@ -79,27 +80,36 @@ public class SushiContent {
         public static final DeferredRegister<Item> REGISTRY = DeferredRegister.create(ForgeRegistries.ITEMS, SushiGoCrafting.MOD_ID);
 
         public static final RegistryObject<BlockItem> RICE_SEED = blockItem("rice_seed", Blocks.RICE_CROP);
-        public static final RegistryObject<Item> RICE = basicItem("rice");
-        public static final RegistryObject<AmountItem> COOKED_RICE = amountItem("cooked_rice", 50, 500, 2000);
+        public static final RegistryObject<Item> RICE = basicItem("rice", "plant");
+
         public static final RegistryObject<BlockItem> CUCUMBER_SEED = blockItem("cucumber_seed", Blocks.CUCUMBER_CROP);
         public static final RegistryObject<BlockItem> SOY_SEED = blockItem("soy_seed", Blocks.SOY_CROP);
         public static final RegistryObject<BlockItem> HORSERADISH_SEED = blockItem("horseradish_seed", Blocks.HORSERADISH_CROP);
         public static final RegistryObject<BlockItem> SESAME_SEED = blockItem("sesame_seed", Blocks.SESAME_CROP);
 
         public static final RegistryObject<BlockItem> SEAWEED = blockItem("seaweed", Blocks.SEAWEED);
-        public static final RegistryObject<Item> DRY_SEAWEED = basicItem("dry_seaweed");
+        public static final RegistryObject<Item> DRY_SEAWEED = basicItem("dry_seaweed", "");
         public static final RegistryObject<BlockItem> SEAWEED_BLOCK = blockItem("dry_seaweed_block", Blocks.SEAWEED_BLOCK);
-        public static final RegistryObject<Item> NORI_SHEET = basicItem("nori_sheet");
 
-        public static final RegistryObject<Item> RAW_TUNA = basicItem("raw_tuna");
-        public static final RegistryObject<Item> CRAB = basicItem("crab");
-        public static final RegistryObject<AmountItem> RAW_TUNA_FILLET = amountItem("raw_tuna_fillet", 1000, 3000, 6000);
-        public static final RegistryObject<AmountItem> RAW_SALMON_FILLET = amountItem("raw_salmon_fillet", 500, 2000, 4000);
+        public static final RegistryObject<Item> RAW_TUNA = basicItem("raw_tuna", "");
+        public static final RegistryObject<Item> CRAB = basicItem("crab", "");
 
-        public static final RegistryObject<Item> AVOCADO = basicItem("avocado");
+        public static final RegistryObject<Item> AVOCADO = basicItem("avocado", "plant");
 
         public static final RegistryObject<BlockItem> ROLLER = blockItem("roller", Blocks.ROLLER);
         public static final RegistryObject<BlockItem> RICE_COOKER = blockItem("rice_cooker", Blocks.RICE_COOKER);
+
+        public static final RegistryObject<AmountItem> AVOCADO_SLICES = amountItem("avocado_slices", "ingredient", 100, 500, 1000);
+        public static final RegistryObject<AmountItem> RAW_TUNA_FILLET = amountItem("tuna_fillet", "ingredient", 1000, 3000, 6000);
+        public static final RegistryObject<AmountItem> RAW_SALMON_FILLET = amountItem("salmon_fillet", "ingredient", 500, 2000, 4000);
+        public static final RegistryObject<Item> NORI_SHEET = basicItem("nori_sheets", "ingredient");
+        public static final RegistryObject<AmountItem> COOKED_RICE = amountItem("cooked_rice", "ingredient", 50, 500, 2000);
+        public static final RegistryObject<AmountItem> CUCUMBER_SLICES = amountItem("cucumber_slices", "ingredient", 50, 200, 400);
+        public static final RegistryObject<AmountItem> IMITATION_CRAB = amountItem("imitation_crab", "ingredient", 50, 200, 400);
+        public static final RegistryObject<AmountItem> SESAME_SEEDS = amountItem("sesame_seeds", "ingredient", 10, 100, 200);
+        public static final RegistryObject<AmountItem> TOBIKO = amountItem("tobiko", "ingredient", 10, 50, 100);
+        public static final RegistryObject<AmountItem> CHEESE = amountItem("cheese", "ingredient", 50, 250, 500);
+
     }
 
     public static class TileEntities {

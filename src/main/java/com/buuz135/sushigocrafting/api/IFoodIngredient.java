@@ -7,4 +7,6 @@ public interface IFoodIngredient {
     Item getItem();
 
     String getName();
+
+    boolean isEmpty();
 }

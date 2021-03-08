@@ -7,14 +7,18 @@ import javax.annotation.Nullable;
 import java.util.function.Supplier;
 
 public enum FoodIngredient implements IFoodIngredient {
+    EMPTY("empty", null),
     RICE("rice", SushiContent.Items.COOKED_RICE),
     NORI("nori", SushiContent.Items.NORI_SHEET),
     TUNA_FILLET("tuna", SushiContent.Items.RAW_TUNA_FILLET),
     SALMON_FILLET("salmon", SushiContent.Items.RAW_SALMON_FILLET),
-    AVOCADO("avocado", SushiContent.Items.AVOCADO),
-    CUCUMBER("cucumber", SushiContent.Items.CUCUMBER_SEED),
+    AVOCADO("avocado", SushiContent.Items.AVOCADO_SLICES),
+    CUCUMBER("cucumber", SushiContent.Items.CUCUMBER_SLICES),
     SESAME("sesame", SushiContent.Items.SESAME_SEED),
-    CRAB("crab", SushiContent.Items.CRAB);
+    CRAB("crab", SushiContent.Items.IMITATION_CRAB),
+    WAKAME("wakame", SushiContent.Items.IMITATION_CRAB),
+    TOBIKO("tobiko", SushiContent.Items.TOBIKO),
+    CHEESE("cheese", SushiContent.Items.CHEESE);
 
     private final Supplier<? extends Item> item;
     private final String name;
@@ -32,6 +36,10 @@ public enum FoodIngredient implements IFoodIngredient {
     @Override
     public String getName() {
         return name;
+    }
+
+    public boolean isEmpty() {
+        return this == EMPTY;
     }
 
     @Nullable

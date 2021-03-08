@@ -1,6 +1,6 @@
 {
   "parent": "minecraft:item/generated",
   "textures": {
-    "layer0": "sushigocrafting:item/cooked_rice"
+    "layer0": "sushigocrafting:item/ingredient/cooked_rice"
   }
 }

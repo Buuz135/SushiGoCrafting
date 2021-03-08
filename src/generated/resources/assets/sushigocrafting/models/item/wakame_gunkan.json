@@ -1,6 +1,6 @@
 {
   "parent": "minecraft:item/generated",
   "textures": {
-    "layer0": "sushigocrafting:item/salmon_tuna_uramaki"
+    "layer0": "sushigocrafting:item/gunkan/wakame_gunkan"
   }
 }

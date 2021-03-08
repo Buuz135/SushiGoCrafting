@@ -2,7 +2,6 @@ package com.buuz135.sushigocrafting.item;
 
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
@@ -14,7 +13,7 @@ import net.minecraft.world.World;
 import java.awt.*;
 import java.util.List;
 
-public class AmountItem extends Item {
+public class AmountItem extends SushiItem {
 
     public static final String NBT_AMOUNT = "Amount";
 
@@ -22,8 +21,8 @@ public class AmountItem extends Item {
     private final int maxAmount;
     private final int maxCombineAmount;
 
-    public AmountItem(Properties properties, int minAmount, int maxAmount, int maxCombineAmount) {
-        super(properties);
+    public AmountItem(Properties properties, String category, int minAmount, int maxAmount, int maxCombineAmount) {
+        super(properties, category);
         this.minAmount = minAmount;
         this.maxAmount = maxAmount;
         this.maxCombineAmount = maxCombineAmount;

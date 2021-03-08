@@ -1,6 +1,6 @@
 {
   "parent": "minecraft:item/generated",
   "textures": {
-    "layer0": "sushigocrafting:item/cucumber_maki"
+    "layer0": "sushigocrafting:item/maki/cucumber_maki"
   }
 }

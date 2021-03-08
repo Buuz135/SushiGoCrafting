@@ -1,6 +1,6 @@
 {
   "parent": "minecraft:item/generated",
   "textures": {
-    "layer0": "sushigocrafting:item/tuna_maki"
+    "layer0": "sushigocrafting:item/maki/tuna_maki"
   }
 }

@@ -1,6 +1,6 @@
 {
   "parent": "minecraft:item/generated",
   "textures": {
-    "layer0": "sushigocrafting:item/nori_sheet"
+    "layer0": "sushigocrafting:item/gunkan/salmon_gunkan"
   }
 }

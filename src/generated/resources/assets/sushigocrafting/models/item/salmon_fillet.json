@@ -1,6 +1,6 @@
 {
   "parent": "minecraft:item/generated",
   "textures": {
-    "layer0": "sushigocrafting:item/salmon_crab_uramaki"
+    "layer0": "sushigocrafting:item/ingredient/salmon_fillet"
   }
 }

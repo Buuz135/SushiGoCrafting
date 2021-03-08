@@ -4,7 +4,6 @@ import com.buuz135.sushigocrafting.api.IFoodIngredient;
 import com.buuz135.sushigocrafting.api.IFoodType;
 import com.buuz135.sushigocrafting.util.TextUtil;
 import net.minecraft.client.util.ITooltipFlag;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
@@ -15,7 +14,7 @@ import net.minecraft.world.World;
 import java.util.ArrayList;
 import java.util.List;
 
-public class FoodItem extends Item {
+public class FoodItem extends SushiItem {
 
     public static final String WEIGHTS_TAG = "Weights";
 
@@ -23,9 +22,9 @@ public class FoodItem extends Item {
     private final IFoodType type;
 
     public FoodItem(Properties properties, IFoodType type) {
-        super(properties);
+        super(properties, type.getName());
         this.type = type;
-        ingredientList = new ArrayList<>();
+        this.ingredientList = new ArrayList<>();
     }
 
     public List<IFoodIngredient> getIngredientList() {
@@ -67,11 +66,13 @@ public class FoodItem extends Item {
         super.addInformation(stack, worldIn, tooltip, flagIn);
         tooltip.add(new StringTextComponent(TextFormatting.GRAY + "Ingredients: "));
         for (int i = 0; i < ingredientList.size(); i++) {
-            String line = TextFormatting.GRAY + " - " + new TranslationTextComponent(ingredientList.get(i).getItem().getTranslationKey()).getString();
-            if (stack.hasTag()) {
-                line += " " + getWeightText(stack.getTag().getIntArray(WEIGHTS_TAG)[i]);
+            if (!ingredientList.get(i).isEmpty()) {
+                String line = TextFormatting.GRAY + " - " + new TranslationTextComponent(ingredientList.get(i).getItem().getTranslationKey()).getString();
+                if (stack.hasTag()) {
+                    line += " " + getWeightText(stack.getTag().getIntArray(WEIGHTS_TAG)[i]);
+                }
+                tooltip.add(new StringTextComponent(line));
             }
-            tooltip.add(new StringTextComponent(line));
         }
         if (stack.hasTag()) {
             int negative = 0;

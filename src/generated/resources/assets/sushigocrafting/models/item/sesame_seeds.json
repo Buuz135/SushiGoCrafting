@@ -1,6 +1,6 @@
 {
   "parent": "minecraft:item/generated",
   "textures": {
-    "layer0": "sushigocrafting:item/sesame_salmon_uramaki"
+    "layer0": "sushigocrafting:item/ingredient/sesame_seeds"
   }
 }

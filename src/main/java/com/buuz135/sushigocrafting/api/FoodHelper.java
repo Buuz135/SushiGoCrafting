@@ -41,7 +41,8 @@ public class FoodHelper {
     public static String getName(FoodItem item) {
         List<String> names = new ArrayList<>();
         for (int nameIndex : item.getType().getNameIndex()) {
-            names.add(item.getIngredientList().get(nameIndex).getName());
+            if (!item.getIngredientList().get(nameIndex).isEmpty())
+                names.add(item.getIngredientList().get(nameIndex).getName());
         }
         return String.join("_", names) + "_" + item.getType().getName();
     }

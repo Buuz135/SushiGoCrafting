@@ -1,6 +1,6 @@
 {
   "parent": "minecraft:item/generated",
   "textures": {
-    "layer0": "sushigocrafting:item/crab_maki"
+    "layer0": "sushigocrafting:item/maki/crab_maki"
   }
 }

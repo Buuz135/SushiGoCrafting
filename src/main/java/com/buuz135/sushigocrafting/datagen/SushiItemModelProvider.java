@@ -1,5 +1,6 @@
 package com.buuz135.sushigocrafting.datagen;
 
+import com.buuz135.sushigocrafting.item.SushiItem;
 import com.buuz135.sushigocrafting.proxy.SushiContent;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.item.BlockItem;
@@ -24,7 +25,7 @@ public class SushiItemModelProvider extends ItemModelProvider {
         SushiContent.Items.REGISTRY.getEntries().stream().map(RegistryObject::get).filter(item -> !(item instanceof BlockItem)).forEach(item -> {
             getBuilder(item.getRegistryName().getPath())
                     .parent(new ModelFile.UncheckedModelFile("item/generated"))
-                    .texture("layer0", modLoc("item/" + item.getRegistryName().getPath()));
+                    .texture("layer0", modLoc("item/" + (item instanceof SushiItem ? (((SushiItem) item).getCategory().isEmpty() ? "" : ((SushiItem) item).getCategory() + "/") : "") + item.getRegistryName().getPath()));
         });
     }
 

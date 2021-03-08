@@ -1,6 +1,6 @@
 {
   "parent": "minecraft:item/generated",
   "textures": {
-    "layer0": "sushigocrafting:item/raw_tuna_fillet"
+    "layer0": "sushigocrafting:item/ingredient/tobiko"
   }
 }

@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "sushigocrafting:item/california/tobiko_crab_cucumber_california"
+  }
+}
