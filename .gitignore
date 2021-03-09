@@ -22,3 +22,7 @@ eclipse
 run
 classes
 
+/logs/debug.log
+/java_pid18568.hprof
+/java_pid24300.hprof
+/logs/latest.log
