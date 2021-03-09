@@ -44,7 +44,8 @@ public class FoodHelper {
             if (!item.getIngredientList().get(nameIndex).isEmpty())
                 names.add(item.getIngredientList().get(nameIndex).getName());
         }
-        return String.join("_", names) + "_" + item.getType().getName();
+        names.add(item.getType().getName());
+        return String.join("_", names);
     }
 
     public static List<IFoodType> getAllFoodTypes() {

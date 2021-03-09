@@ -2,6 +2,7 @@ package com.buuz135.sushigocrafting.api;
 
 import com.buuz135.sushigocrafting.proxy.SushiContent;
 import net.minecraft.item.Item;
+import net.minecraft.item.Items;
 
 import javax.annotation.Nullable;
 import java.util.function.Supplier;
@@ -18,7 +19,9 @@ public enum FoodIngredient implements IFoodIngredient {
     CRAB("crab", SushiContent.Items.IMITATION_CRAB),
     WAKAME("wakame", SushiContent.Items.IMITATION_CRAB),
     TOBIKO("tobiko", SushiContent.Items.TOBIKO),
-    CHEESE("cheese", SushiContent.Items.CHEESE);
+    CHEESE("cheese", SushiContent.Items.CHEESE),
+    SHRIMP("shrimp", SushiContent.Items.SHRIMP),
+    CHICKEN("chicken", () -> Items.COOKED_CHICKEN);
 
     private final Supplier<? extends Item> item;
     private final String name;

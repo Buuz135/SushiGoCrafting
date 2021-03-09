@@ -109,6 +109,7 @@ public class SushiContent {
         public static final RegistryObject<AmountItem> SESAME_SEEDS = amountItem("sesame_seeds", "ingredient", 10, 100, 200);
         public static final RegistryObject<AmountItem> TOBIKO = amountItem("tobiko", "ingredient", 10, 50, 100);
         public static final RegistryObject<AmountItem> CHEESE = amountItem("cheese", "ingredient", 50, 250, 500);
+        public static final RegistryObject<AmountItem> SHRIMP = amountItem("shrimp", "ingredient", 10, 50, 100);
 
     }
 

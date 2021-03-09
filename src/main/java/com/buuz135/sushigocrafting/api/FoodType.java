@@ -32,7 +32,36 @@ public enum FoodType implements IFoodType {
             of(FoodIngredient.NORI),
             of(FoodIngredient.AVOCADO),
             of(FoodIngredient.TUNA_FILLET, FoodIngredient.SALMON_FILLET, FoodIngredient.CRAB),
-            of(FoodIngredient.CUCUMBER, FoodIngredient.EMPTY, FoodIngredient.CHEESE));
+            of(FoodIngredient.CUCUMBER, FoodIngredient.EMPTY, FoodIngredient.CHEESE)),
+    NIGIRI("nigiri", new int[]{1},
+            integer -> {
+                if (integer > 2)
+                    return Pair.of(66 + integer * 10, 40 - (integer - 3) * 22);
+                return Pair.of(55 + integer * 25, 60 + integer * 8);
+            },
+            of(FoodIngredient.RICE),
+            of(FoodIngredient.SALMON_FILLET, FoodIngredient.TUNA_FILLET, FoodIngredient.SHRIMP),
+            of(FoodIngredient.NORI)),
+    ONIGIRI("onigiri", new int[]{1},
+            integer -> {
+                if (integer > 2)
+                    return Pair.of(66 + integer * 10, 40 - (integer - 3) * 22);
+                return Pair.of(55 + integer * 25, 60 + integer * 8);
+            },
+            of(FoodIngredient.RICE),
+            of(FoodIngredient.EMPTY),
+            of(FoodIngredient.NORI)),
+    TEMAKI("temaki", new int[]{3},
+            integer -> {
+                if (integer > 2)
+                    return Pair.of(66 + integer * 10, 40 - (integer - 3) * 22);
+                return Pair.of(55 + integer * 25, 60 + integer * 8);
+            },
+            of(FoodIngredient.NORI),
+            of(FoodIngredient.AVOCADO),
+            of(FoodIngredient.RICE),
+            of(FoodIngredient.SALMON_FILLET, FoodIngredient.TUNA_FILLET, FoodIngredient.SHRIMP, FoodIngredient.CHICKEN)
+    );
 
     private final int[] index;
     private final String name;
