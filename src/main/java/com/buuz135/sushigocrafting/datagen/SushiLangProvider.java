@@ -15,11 +15,15 @@ public class SushiLangProvider extends LanguageProvider {
 
     @Override
     protected void addTranslations() {
+        add("itemGroup.sushigocrafting", "Sushi Go Crafting");
         SushiContent.Items.REGISTRY.getEntries().stream().map(RegistryObject::get).filter(item -> item instanceof BlockItem).map(item -> (BlockItem) item).forEach(blockItem -> {
             add(blockItem, WordUtils.capitalize(blockItem.getRegistryName().getPath().replaceAll("_", " ")));
         });
         SushiContent.Items.REGISTRY.getEntries().stream().map(RegistryObject::get).filter(item -> !(item instanceof BlockItem)).forEach(item -> {
             add(item, WordUtils.capitalize(item.getRegistryName().getPath().replaceAll("_", " ")));
+        });
+        SushiContent.Effects.REGISTRY.getEntries().stream().map(RegistryObject::get).forEach(effect -> {
+            add(effect, WordUtils.capitalize(effect.getRegistryName().getPath().replaceAll("_", " ")));
         });
     }
 }

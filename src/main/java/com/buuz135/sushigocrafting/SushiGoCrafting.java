@@ -58,6 +58,7 @@ public class SushiGoCrafting {
         SushiContent.Items.REGISTRY.register(FMLJavaModLoadingContext.get().getModEventBus());
         SushiContent.Features.REGISTRY.register(FMLJavaModLoadingContext.get().getModEventBus());
         SushiContent.TileEntities.REGISTRY.register(FMLJavaModLoadingContext.get().getModEventBus());
+        SushiContent.Effects.REGISTRY.register(FMLJavaModLoadingContext.get().getModEventBus());
         EventManager.mod(FMLClientSetupEvent.class).process(this::fmlClient).subscribe();
         EventManager.mod(FMLCommonSetupEvent.class).process(this::fmlCommon).subscribe();
         EventManager.mod(GatherDataEvent.class).process(this::dataGen).subscribe();

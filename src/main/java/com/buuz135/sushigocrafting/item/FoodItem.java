@@ -4,6 +4,8 @@ import com.buuz135.sushigocrafting.api.IFoodIngredient;
 import com.buuz135.sushigocrafting.api.IFoodType;
 import com.buuz135.sushigocrafting.util.TextUtil;
 import net.minecraft.client.util.ITooltipFlag;
+import net.minecraft.item.Food;
+import net.minecraft.item.Foods;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
@@ -11,6 +13,7 @@ import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
 
+import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -88,5 +91,16 @@ public class FoodItem extends SushiItem {
             tooltip.addAll(getTagsFrom(negative, positive));
         }
 
+    }
+
+    @Override
+    public boolean isFood() {
+        return true;
+    }
+
+    @Nullable
+    @Override
+    public Food getFood() {
+        return Foods.APPLE; //Todo change
     }
 }

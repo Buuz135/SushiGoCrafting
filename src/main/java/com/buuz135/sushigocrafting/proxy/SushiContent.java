@@ -10,6 +10,9 @@ import com.buuz135.sushigocrafting.block.seaweed.SeaWeedBlock;
 import com.buuz135.sushigocrafting.block.seaweed.SeaWeedTopBlock;
 import com.buuz135.sushigocrafting.item.AmountItem;
 import com.buuz135.sushigocrafting.item.SushiItem;
+import com.buuz135.sushigocrafting.potioneffect.AcquiredTasteEffect;
+import com.buuz135.sushigocrafting.potioneffect.SmallBitesEffect;
+import com.buuz135.sushigocrafting.potioneffect.SteadyHandsEffect;
 import com.buuz135.sushigocrafting.tile.machinery.RiceCookerTile;
 import com.buuz135.sushigocrafting.tile.machinery.RollerTile;
 import com.buuz135.sushigocrafting.world.SeaWeedFeature;
@@ -19,6 +22,7 @@ import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
+import net.minecraft.potion.Effect;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.world.gen.feature.Feature;
@@ -54,6 +58,10 @@ public class SushiContent {
 
     public static <T extends TileEntity> RegistryObject<TileEntityType<?>> tile(String id, Supplier<T> supplier, Supplier<? extends Block> sup) {
         return TileEntities.REGISTRY.register(id, () -> TileEntityType.Builder.create(supplier, sup.get()).build(null));
+    }
+
+    public static RegistryObject<Effect> effect(String id, Supplier<Effect> supplier) {
+        return Effects.REGISTRY.register(id, supplier);
     }
 
     public static class Blocks {
@@ -127,6 +135,16 @@ public class SushiContent {
         public static final DeferredRegister<Feature<?>> REGISTRY = DeferredRegister.create(ForgeRegistries.FEATURES, SushiGoCrafting.MOD_ID);
 
         public static final RegistryObject<Feature<NoFeatureConfig>> SEAWEED = feature("seaweed", () -> new SeaWeedFeature(NoFeatureConfig.field_236558_a_));
+
+    }
+
+    public static class Effects {
+
+        public static final DeferredRegister<Effect> REGISTRY = DeferredRegister.create(ForgeRegistries.POTIONS, SushiGoCrafting.MOD_ID);
+
+        public static final RegistryObject<Effect> ACQUIRED_TASTE = effect("acquired_taste", AcquiredTasteEffect::new);
+        public static final RegistryObject<Effect> SMALL_BITES = effect("small_bites", SmallBitesEffect::new);
+        public static final RegistryObject<Effect> STEADY_HANDS = effect("steady_hands", SteadyHandsEffect::new);
 
     }
 

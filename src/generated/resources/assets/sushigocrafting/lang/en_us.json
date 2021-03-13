@@ -8,6 +8,9 @@
   "block.sushigocrafting.seaweed": "Seaweed",
   "block.sushigocrafting.sesame_crop": "Sesame Seed",
   "block.sushigocrafting.soy_crop": "Soy Seed",
+  "effect.sushigocrafting.acquired_taste": "Acquired Taste",
+  "effect.sushigocrafting.small_bites": "Small Bites",
+  "effect.sushigocrafting.steady_hands": "Steady Hands",
   "item.sushigocrafting.avocado": "Avocado",
   "item.sushigocrafting.avocado_maki": "Avocado Maki",
   "item.sushigocrafting.avocado_slices": "Avocado Slices",
@@ -57,5 +60,6 @@
   "item.sushigocrafting.tuna_maki": "Tuna Maki",
   "item.sushigocrafting.tuna_nigiri": "Tuna Nigiri",
   "item.sushigocrafting.tuna_temaki": "Tuna Temaki",
-  "item.sushigocrafting.wakame_gunkan": "Wakame Gunkan"
+  "item.sushigocrafting.wakame_gunkan": "Wakame Gunkan",
+  "itemGroup.sushigocrafting": "Sushi Go Crafting"
 }
