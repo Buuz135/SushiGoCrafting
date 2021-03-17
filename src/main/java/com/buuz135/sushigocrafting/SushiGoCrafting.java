@@ -77,7 +77,9 @@ public class SushiGoCrafting {
         }).subscribe();
         EventManager.forge(BiomeLoadingEvent.class).filter(biomeLoadingEvent -> biomeLoadingEvent.getCategory() == Biome.Category.PLAINS).process(biomeLoadingEvent -> {
             biomeLoadingEvent.getGeneration().getFeatures(GenerationStage.Decoration.VEGETAL_DECORATION).add(() ->
-                    Feature.TREE.withConfiguration(AvocadoTree.TREE).withPlacement(Placement.CHANCE.configure(new ChanceConfig(3))));
+                    Feature.TREE.withConfiguration(AvocadoTree.TREE)
+                            .withPlacement(Features.Placements.HEIGHTMAP_PLACEMENT)
+                            .withPlacement(Placement.CHANCE.configure(new ChanceConfig(6))));
         }).subscribe();
         EventManager.forge(PistonEvent.Pre.class).process(pre -> {
             if (pre.getWorld().getBlockState(pre.getFaceOffsetPos()).getBlock().equals(SushiContent.Blocks.SEAWEED_BLOCK.get()) && pre.getWorld().getBlockState(pre.getPos().offset(pre.getDirection(), 2)).getBlock().equals(Blocks.IRON_BLOCK)) {
