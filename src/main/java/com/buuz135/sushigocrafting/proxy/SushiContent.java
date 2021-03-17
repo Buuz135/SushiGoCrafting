@@ -5,6 +5,7 @@ import com.buuz135.sushigocrafting.block.SushiGoCraftingBlock;
 import com.buuz135.sushigocrafting.block.machinery.RiceCookerBlock;
 import com.buuz135.sushigocrafting.block.machinery.RollerBlock;
 import com.buuz135.sushigocrafting.block.plant.AvocadoLeavesBlock;
+import com.buuz135.sushigocrafting.block.plant.AvocadoLogBlock;
 import com.buuz135.sushigocrafting.block.plant.CustomCropBlock;
 import com.buuz135.sushigocrafting.block.plant.WaterCropBlock;
 import com.buuz135.sushigocrafting.block.seaweed.SeaWeedBlock;
@@ -78,7 +79,7 @@ public class SushiContent {
         public static final RegistryObject<Block> SEAWEED = block("seaweed", () -> new SeaWeedTopBlock(AbstractBlock.Properties.create(Material.OCEAN_PLANT).doesNotBlockMovement().tickRandomly().zeroHardnessAndResistance().sound(SoundType.WET_GRASS)));
         public static final RegistryObject<Block> SEAWEED_PLANT = block("seaweed_plant", () -> new SeaWeedBlock(AbstractBlock.Properties.create(Material.OCEAN_PLANT).doesNotBlockMovement().tickRandomly().zeroHardnessAndResistance().sound(SoundType.WET_GRASS)));
         public static final RegistryObject<Block> SEAWEED_BLOCK = block("dry_seaweed_block", () -> new SushiGoCraftingBlock(AbstractBlock.Properties.from(net.minecraft.block.Blocks.WHEAT)));
-        public static final RegistryObject<Block> AVOCADO_LOG = block("avocado_log", () -> new SushiGoCraftingBlock(AbstractBlock.Properties.from(net.minecraft.block.Blocks.OAK_WOOD)));
+        public static final RegistryObject<Block> AVOCADO_LOG = block("avocado_log", () -> new AvocadoLogBlock(AbstractBlock.Properties.from(net.minecraft.block.Blocks.OAK_WOOD)));
         public static final RegistryObject<Block> AVOCADO_LEAVES_LOG = block("avocado_leaves_logged", () -> new SushiGoCraftingBlock(AbstractBlock.Properties.from(net.minecraft.block.Blocks.OAK_WOOD)));
         public static final RegistryObject<Block> AVOCADO_LEAVES = block("avocado_leaves", AvocadoLeavesBlock::new);
 
