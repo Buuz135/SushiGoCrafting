@@ -1,28 +1,16 @@
 {
   "variants": {
     "age=0": {
-      "model": "sushigocrafting:rice_crop_0"
+      "model": "sushigocrafting:block/rice_crop_0"
     },
     "age=1": {
-      "model": "sushigocrafting:rice_crop_1"
+      "model": "sushigocrafting:block/rice_crop_1"
     },
     "age=2": {
-      "model": "sushigocrafting:rice_crop_2"
+      "model": "sushigocrafting:block/rice_crop_2"
     },
     "age=3": {
-      "model": "sushigocrafting:rice_crop_3"
-    },
-    "age=4": {
-      "model": "sushigocrafting:rice_crop_4"
-    },
-    "age=5": {
-      "model": "sushigocrafting:rice_crop_5"
-    },
-    "age=6": {
-      "model": "sushigocrafting:rice_crop_6"
-    },
-    "age=7": {
-      "model": "sushigocrafting:rice_crop_7"
+      "model": "sushigocrafting:block/rice_crop_3"
     }
   }
 }

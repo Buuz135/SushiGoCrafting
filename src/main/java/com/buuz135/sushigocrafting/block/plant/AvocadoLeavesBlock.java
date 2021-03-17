@@ -134,6 +134,7 @@ public class AvocadoLeavesBlock extends SushiGoCraftingBlock implements IForgeSh
         if (state.get(STAGE) == 2) {
             ItemHandlerHelper.giveItemToPlayer(player, new ItemStack(SushiContent.Items.AVOCADO.get()));
             worldIn.setBlockState(pos, state.with(STAGE, 1));
+            return ActionResultType.SUCCESS;
         }
         return super.onBlockActivated(state, worldIn, pos, player, handIn, hit);
     }

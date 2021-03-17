@@ -6,7 +6,6 @@ import com.hrznstudio.titanium.block.RotatableBlock;
 import net.minecraft.block.Block;
 import net.minecraft.block.CropsBlock;
 import net.minecraft.data.DataGenerator;
-import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.model.generators.BlockStateProvider;
 import net.minecraftforge.client.model.generators.ConfiguredModel;
 import net.minecraftforge.client.model.generators.ModelFile;
@@ -43,7 +42,7 @@ public class SushiBlockstateProvider extends BlockStateProvider {
     private void crop(CropsBlock block) {
         getVariantBuilder(block).forAllStates(blockState -> {
             int age = blockState.get(block.getAgeProperty());
-            return ConfiguredModel.builder().modelFile(new ModelFile.UncheckedModelFile(new ResourceLocation(block.getRegistryName().toString() + "_" + age))).build();
+            return ConfiguredModel.builder().modelFile(new ModelFile.UncheckedModelFile(modLoc("block/" + block.getRegistryName().getPath() + "_" + age))).build();
         });
     }
 

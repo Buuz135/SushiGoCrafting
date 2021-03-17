@@ -5,6 +5,7 @@ import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.CropsBlock;
 import net.minecraft.item.Item;
+import net.minecraft.state.IntegerProperty;
 import net.minecraft.state.StateContainer;
 import net.minecraft.util.IItemProvider;
 import net.minecraft.util.math.BlockPos;
@@ -15,6 +16,8 @@ import java.util.function.Predicate;
 import java.util.function.Supplier;
 
 public class CustomCropBlock extends CropsBlock {
+
+    public static final IntegerProperty AGE = IntegerProperty.create("age", 0, 3);
 
     private final int maxAge;
     private final Supplier<? extends Item> seedSupplier;
@@ -45,5 +48,10 @@ public class CustomCropBlock extends CropsBlock {
     @Override
     protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder) {
         builder.add(getAgeProperty());
+    }
+
+    @Override
+    public IntegerProperty getAgeProperty() {
+        return AGE;
     }
 }

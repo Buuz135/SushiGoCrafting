@@ -1,6 +1,6 @@
 {
   "parent": "block/crop",
   "textures": {
-    "crop": "sushigocrafting:block/wheat_stage_3"
+    "crop": "sushigocrafting:block/rice_stage_3"
   }
 }
