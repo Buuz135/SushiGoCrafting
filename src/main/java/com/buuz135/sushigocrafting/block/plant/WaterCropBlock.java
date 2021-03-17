@@ -1,4 +1,4 @@
-package com.buuz135.sushigocrafting.block.crop;
+package com.buuz135.sushigocrafting.block.plant;
 
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
@@ -37,7 +37,7 @@ public class WaterCropBlock extends CustomCropBlock implements ILiquidContainer 
 
     @Override
     public boolean canGrow(IBlockReader worldIn, BlockPos pos, BlockState state, boolean isClient) {
-        return state.isIn(Blocks.WATER);
+        return state.matchesBlock(Blocks.WATER);
     }
 
     @Nullable

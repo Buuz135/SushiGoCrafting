@@ -1,11 +1,11 @@
 {
 	"credit": "Made with Blockbench",
 	"textures": {
-		"particle": "blocks/avocado_log",
-		"side": "blocks/avocado_log",
-		"top": "blocks/avocado_log_top",
-		"bottom": "blocks/avocado_log_bottom"
-	},
+      "particle": "sushigocrafting:block/avocado_log",
+      "side": "sushigocrafting:block/avocado_log",
+      "top": "sushigocrafting:block/avocado_log_top",
+      "bottom": "sushigocrafting:block/avocado_log_bottom"
+    },
 	"elements": [
 		{
 			"from": [3, 0, 3],

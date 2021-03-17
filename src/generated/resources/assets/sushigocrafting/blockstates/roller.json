@@ -1,7 +1,7 @@
 {
   "variants": {
     "": {
-      "model": "sushigocrafting:roller"
+      "model": "sushigocrafting:block/roller"
     }
   }
 }

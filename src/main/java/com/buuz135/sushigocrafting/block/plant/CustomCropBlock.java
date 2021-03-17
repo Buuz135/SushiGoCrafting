@@ -1,4 +1,4 @@
-package com.buuz135.sushigocrafting.block.crop;
+package com.buuz135.sushigocrafting.block.plant;
 
 
 import net.minecraft.block.Block;

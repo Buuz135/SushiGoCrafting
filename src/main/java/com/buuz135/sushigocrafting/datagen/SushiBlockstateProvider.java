@@ -1,5 +1,6 @@
 package com.buuz135.sushigocrafting.datagen;
 
+import com.buuz135.sushigocrafting.block.plant.AvocadoLeavesBlock;
 import com.buuz135.sushigocrafting.proxy.SushiContent;
 import com.hrznstudio.titanium.block.RotatableBlock;
 import net.minecraft.block.Block;
@@ -27,6 +28,16 @@ public class SushiBlockstateProvider extends BlockStateProvider {
         simpleBlockUn(SushiContent.Blocks.SEAWEED_PLANT.get());
         simpleBlockUn(SushiContent.Blocks.ROLLER.get());
         horizontalBlock(SushiContent.Blocks.RICE_COOKER.get());
+        simpleBlockUn(SushiContent.Blocks.AVOCADO_LOG.get());
+        simpleBlockUn(SushiContent.Blocks.AVOCADO_LEAVES_LOG.get());
+        getVariantBuilder(SushiContent.Blocks.AVOCADO_LEAVES.get())
+                .partialState()
+                .with(AvocadoLeavesBlock.STAGE, 0).addModels(
+                ConfiguredModel.builder().modelFile(new ModelFile.UncheckedModelFile(modLoc("block/" + SushiContent.Blocks.AVOCADO_LEAVES.get().getRegistryName().getPath() + "_0"))).build())
+                .partialState().with(AvocadoLeavesBlock.STAGE, 1).addModels(
+                ConfiguredModel.builder().modelFile(new ModelFile.UncheckedModelFile(modLoc("block/" + SushiContent.Blocks.AVOCADO_LEAVES.get().getRegistryName().getPath() + "_1"))).build())
+                .partialState().with(AvocadoLeavesBlock.STAGE, 2).addModels(
+                ConfiguredModel.builder().modelFile(new ModelFile.UncheckedModelFile(modLoc("block/" + SushiContent.Blocks.AVOCADO_LEAVES.get().getRegistryName().getPath() + "_2"))).build());
     }
 
     private void crop(CropsBlock block) {
@@ -37,7 +48,7 @@ public class SushiBlockstateProvider extends BlockStateProvider {
     }
 
     private void simpleBlockUn(Block block) {
-        simpleBlock(block, new ModelFile.UncheckedModelFile(block.getRegistryName()));
+        simpleBlock(block, new ModelFile.UncheckedModelFile(modLoc("block/" + block.getRegistryName().getPath())));
     }
 
     private void horizontalBlock(Block block) {

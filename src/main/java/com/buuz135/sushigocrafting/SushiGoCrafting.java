@@ -2,18 +2,18 @@ package com.buuz135.sushigocrafting;
 
 import com.buuz135.sushigocrafting.api.FoodHelper;
 import com.buuz135.sushigocrafting.api.FoodType;
-import com.buuz135.sushigocrafting.datagen.SushiBlockstateProvider;
-import com.buuz135.sushigocrafting.datagen.SushiItemModelProvider;
-import com.buuz135.sushigocrafting.datagen.SushiLangProvider;
+import com.buuz135.sushigocrafting.datagen.*;
 import com.buuz135.sushigocrafting.proxy.SushiContent;
 import com.buuz135.sushigocrafting.recipe.CombineAmountItemRecipe;
 import com.buuz135.sushigocrafting.tile.machinery.RiceCookerTile;
 import com.buuz135.sushigocrafting.tile.machinery.RollerTile;
+import com.buuz135.sushigocrafting.world.tree.AvocadoTree;
 import com.hrznstudio.titanium.event.handler.EventManager;
 import com.hrznstudio.titanium.nbthandler.NBTManager;
 import net.minecraft.block.Blocks;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.RenderTypeLookup;
+import net.minecraft.data.BlockTagsProvider;
 import net.minecraft.inventory.InventoryHelper;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
@@ -23,8 +23,10 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.gen.GenerationStage;
+import net.minecraft.world.gen.feature.Feature;
 import net.minecraft.world.gen.feature.Features;
 import net.minecraft.world.gen.feature.IFeatureConfig;
+import net.minecraft.world.gen.placement.ChanceConfig;
 import net.minecraft.world.gen.placement.Placement;
 import net.minecraft.world.gen.placement.TopSolidWithNoiseConfig;
 import net.minecraftforge.api.distmarker.Dist;
@@ -71,7 +73,11 @@ public class SushiGoCrafting {
         EventManager.forge(BiomeLoadingEvent.class).filter(biomeLoadingEvent -> biomeLoadingEvent.getCategory() == Biome.Category.OCEAN).process(biomeLoadingEvent -> {
             biomeLoadingEvent.getGeneration().getFeatures(GenerationStage.Decoration.VEGETAL_DECORATION).add(() ->
                     SushiContent.Features.SEAWEED.get().withConfiguration(IFeatureConfig.NO_FEATURE_CONFIG)
-                            .withPlacement(Features.Placements.KELP_PLACEMENT.func_242728_a().withPlacement(Placement.field_242901_e.configure(new TopSolidWithNoiseConfig(80, 80.0D, 0.0D)))));
+                            .withPlacement(Features.Placements.KELP_PLACEMENT.square().withPlacement(Placement.COUNT_NOISE_BIASED.configure(new TopSolidWithNoiseConfig(80, 80.0D, 0.0D)))));
+        }).subscribe();
+        EventManager.forge(BiomeLoadingEvent.class).filter(biomeLoadingEvent -> biomeLoadingEvent.getCategory() == Biome.Category.PLAINS).process(biomeLoadingEvent -> {
+            biomeLoadingEvent.getGeneration().getFeatures(GenerationStage.Decoration.VEGETAL_DECORATION).add(() ->
+                    Feature.TREE.withConfiguration(AvocadoTree.TREE).withPlacement(Placement.CHANCE.configure(new ChanceConfig(3))));
         }).subscribe();
         EventManager.forge(PistonEvent.Pre.class).process(pre -> {
             if (pre.getWorld().getBlockState(pre.getFaceOffsetPos()).getBlock().equals(SushiContent.Blocks.SEAWEED_BLOCK.get()) && pre.getWorld().getBlockState(pre.getPos().offset(pre.getDirection(), 2)).getBlock().equals(Blocks.IRON_BLOCK)) {
@@ -90,6 +96,10 @@ public class SushiGoCrafting {
     @OnlyIn(Dist.CLIENT)
     public void fmlClient(FMLClientSetupEvent event) {
         RenderTypeLookup.setRenderLayer(SushiContent.Blocks.RICE_CROP.get(), RenderType.getCutout());
+        RenderTypeLookup.setRenderLayer(SushiContent.Blocks.AVOCADO_LEAVES_LOG.get(), RenderType.getCutout());
+        RenderTypeLookup.setRenderLayer(SushiContent.Blocks.AVOCADO_LEAVES.get(), RenderType.getCutout());
+        RenderTypeLookup.setRenderLayer(SushiContent.Blocks.SEAWEED.get(), RenderType.getCutout());
+        RenderTypeLookup.setRenderLayer(SushiContent.Blocks.SEAWEED_PLANT.get(), RenderType.getCutout());
     }
 
     public void dataGen(GatherDataEvent event) {
@@ -97,6 +107,9 @@ public class SushiGoCrafting {
         event.getGenerator().addProvider(new SushiBlockstateProvider(event.getGenerator(), MOD_ID, event.getExistingFileHelper()));
         event.getGenerator().addProvider(new SushiItemModelProvider(event.getGenerator(), MOD_ID, event.getExistingFileHelper()));
         event.getGenerator().addProvider(new SushiLangProvider(event.getGenerator(), MOD_ID, "en_us"));
+        BlockTagsProvider provider = new SushiBlockTagsProvider(event.getGenerator(), event.getExistingFileHelper());
+        event.getGenerator().addProvider(provider);
+        event.getGenerator().addProvider(new SushiItemTagsProvider(event.getGenerator(), provider, event.getExistingFileHelper()));
     }
 
 }

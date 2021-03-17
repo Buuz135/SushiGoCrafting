@@ -2,10 +2,11 @@ package com.buuz135.sushigocrafting.proxy;
 
 import com.buuz135.sushigocrafting.SushiGoCrafting;
 import com.buuz135.sushigocrafting.block.SushiGoCraftingBlock;
-import com.buuz135.sushigocrafting.block.crop.CustomCropBlock;
-import com.buuz135.sushigocrafting.block.crop.WaterCropBlock;
 import com.buuz135.sushigocrafting.block.machinery.RiceCookerBlock;
 import com.buuz135.sushigocrafting.block.machinery.RollerBlock;
+import com.buuz135.sushigocrafting.block.plant.AvocadoLeavesBlock;
+import com.buuz135.sushigocrafting.block.plant.CustomCropBlock;
+import com.buuz135.sushigocrafting.block.plant.WaterCropBlock;
 import com.buuz135.sushigocrafting.block.seaweed.SeaWeedBlock;
 import com.buuz135.sushigocrafting.block.seaweed.SeaWeedTopBlock;
 import com.buuz135.sushigocrafting.item.AmountItem;
@@ -68,15 +69,18 @@ public class SushiContent {
 
         public static final DeferredRegister<Block> REGISTRY = DeferredRegister.create(ForgeRegistries.BLOCKS, SushiGoCrafting.MOD_ID);
 
-        public static final RegistryObject<Block> RICE_CROP = block("rice_crop", () -> new WaterCropBlock(AbstractBlock.Properties.from(net.minecraft.block.Blocks.KELP_PLANT), Items.RICE_SEED, state -> state.isIn(net.minecraft.block.Blocks.DIRT)));
-        public static final RegistryObject<Block> CUCUMBER_CROP = block("cucumber_crop", () -> new CustomCropBlock(AbstractBlock.Properties.from(net.minecraft.block.Blocks.WHEAT), Items.CUCUMBER_SEED, state -> state.isIn(net.minecraft.block.Blocks.FARMLAND)));
-        public static final RegistryObject<Block> SOY_CROP = block("soy_crop", () -> new CustomCropBlock(AbstractBlock.Properties.from(net.minecraft.block.Blocks.WHEAT), Items.SOY_SEED, state -> state.isIn(net.minecraft.block.Blocks.FARMLAND)));
-        public static final RegistryObject<Block> HORSERADISH_CROP = block("horseradish_crop", () -> new CustomCropBlock(AbstractBlock.Properties.from(net.minecraft.block.Blocks.WHEAT), Items.HORSERADISH_SEED, state -> state.isIn(net.minecraft.block.Blocks.FARMLAND)));
-        public static final RegistryObject<Block> SESAME_CROP = block("sesame_crop", () -> new CustomCropBlock(AbstractBlock.Properties.from(net.minecraft.block.Blocks.WHEAT), Items.SESAME_SEED, state -> state.isIn(net.minecraft.block.Blocks.FARMLAND)));
+        public static final RegistryObject<Block> RICE_CROP = block("rice_crop", () -> new WaterCropBlock(AbstractBlock.Properties.from(net.minecraft.block.Blocks.KELP_PLANT), Items.RICE_SEED, state -> state.matchesBlock(net.minecraft.block.Blocks.DIRT)));
+        public static final RegistryObject<Block> CUCUMBER_CROP = block("cucumber_crop", () -> new CustomCropBlock(AbstractBlock.Properties.from(net.minecraft.block.Blocks.WHEAT), Items.CUCUMBER_SEED, state -> state.matchesBlock(net.minecraft.block.Blocks.FARMLAND)));
+        public static final RegistryObject<Block> SOY_CROP = block("soy_crop", () -> new CustomCropBlock(AbstractBlock.Properties.from(net.minecraft.block.Blocks.WHEAT), Items.SOY_SEED, state -> state.matchesBlock(net.minecraft.block.Blocks.FARMLAND)));
+        public static final RegistryObject<Block> HORSERADISH_CROP = block("horseradish_crop", () -> new CustomCropBlock(AbstractBlock.Properties.from(net.minecraft.block.Blocks.WHEAT), Items.HORSERADISH_SEED, state -> state.matchesBlock(net.minecraft.block.Blocks.FARMLAND)));
+        public static final RegistryObject<Block> SESAME_CROP = block("sesame_crop", () -> new CustomCropBlock(AbstractBlock.Properties.from(net.minecraft.block.Blocks.WHEAT), Items.SESAME_SEED, state -> state.matchesBlock(net.minecraft.block.Blocks.FARMLAND)));
 
         public static final RegistryObject<Block> SEAWEED = block("seaweed", () -> new SeaWeedTopBlock(AbstractBlock.Properties.create(Material.OCEAN_PLANT).doesNotBlockMovement().tickRandomly().zeroHardnessAndResistance().sound(SoundType.WET_GRASS)));
         public static final RegistryObject<Block> SEAWEED_PLANT = block("seaweed_plant", () -> new SeaWeedBlock(AbstractBlock.Properties.create(Material.OCEAN_PLANT).doesNotBlockMovement().tickRandomly().zeroHardnessAndResistance().sound(SoundType.WET_GRASS)));
         public static final RegistryObject<Block> SEAWEED_BLOCK = block("dry_seaweed_block", () -> new SushiGoCraftingBlock(AbstractBlock.Properties.from(net.minecraft.block.Blocks.WHEAT)));
+        public static final RegistryObject<Block> AVOCADO_LOG = block("avocado_log", () -> new SushiGoCraftingBlock(AbstractBlock.Properties.from(net.minecraft.block.Blocks.OAK_WOOD)));
+        public static final RegistryObject<Block> AVOCADO_LEAVES_LOG = block("avocado_leaves_logged", () -> new SushiGoCraftingBlock(AbstractBlock.Properties.from(net.minecraft.block.Blocks.OAK_WOOD)));
+        public static final RegistryObject<Block> AVOCADO_LEAVES = block("avocado_leaves", AvocadoLeavesBlock::new);
 
         public static final RegistryObject<RollerBlock> ROLLER = block("roller", RollerBlock::new);
         public static final RegistryObject<RiceCookerBlock> RICE_COOKER = block("rice_cooker", RiceCookerBlock::new);
@@ -103,6 +107,9 @@ public class SushiContent {
         public static final RegistryObject<Item> CRAB = basicItem("crab", "");
 
         public static final RegistryObject<Item> AVOCADO = basicItem("avocado", "plant");
+        public static final RegistryObject<BlockItem> AVOCADO_LOG = blockItem("avocado_log", Blocks.AVOCADO_LOG);
+        public static final RegistryObject<BlockItem> AVOCADO_LEAVES = blockItem("avocado_leaves", Blocks.AVOCADO_LEAVES);
+        public static final RegistryObject<BlockItem> AVOCADO_LEAVES_LOG = blockItem("avocado_leaves_logged", Blocks.AVOCADO_LEAVES_LOG);
 
         public static final RegistryObject<BlockItem> ROLLER = blockItem("roller", Blocks.ROLLER);
         public static final RegistryObject<BlockItem> RICE_COOKER = blockItem("rice_cooker", Blocks.RICE_COOKER);
@@ -134,7 +141,7 @@ public class SushiContent {
 
         public static final DeferredRegister<Feature<?>> REGISTRY = DeferredRegister.create(ForgeRegistries.FEATURES, SushiGoCrafting.MOD_ID);
 
-        public static final RegistryObject<Feature<NoFeatureConfig>> SEAWEED = feature("seaweed", () -> new SeaWeedFeature(NoFeatureConfig.field_236558_a_));
+        public static final RegistryObject<Feature<NoFeatureConfig>> SEAWEED = feature("seaweed", () -> new SeaWeedFeature(NoFeatureConfig.CODEC));
 
     }
 

@@ -1,7 +1,7 @@
 {
   "variants": {
     "": {
-      "model": "sushigocrafting:seaweed"
+      "model": "sushigocrafting:block/seaweed"
     }
   }
 }

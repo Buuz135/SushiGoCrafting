@@ -20,7 +20,7 @@ public class SushiItemModelProvider extends ItemModelProvider {
     @Override
     protected void registerModels() {
         SushiContent.Items.REGISTRY.getEntries().stream().map(RegistryObject::get).filter(item -> item instanceof BlockItem).map(item -> (BlockItem) item).forEach(blockItem -> {
-            getBuilder(blockItem.getBlock().getRegistryName().getPath()).parent(new ModelFile.UncheckedModelFile(blockItem.getBlock().getRegistryName()));
+            getBuilder(blockItem.getBlock().getRegistryName().getPath()).parent(new ModelFile.UncheckedModelFile(modLoc("block/" + blockItem.getBlock().getRegistryName().getPath())));
         });
         SushiContent.Items.REGISTRY.getEntries().stream().map(RegistryObject::get).filter(item -> !(item instanceof BlockItem)).forEach(item -> {
             getBuilder(item.getRegistryName().getPath())

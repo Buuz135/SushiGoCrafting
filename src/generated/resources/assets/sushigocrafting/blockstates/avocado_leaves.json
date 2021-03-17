@@ -1,0 +1,13 @@
+{
+  "variants": {
+    "stage=0": {
+      "model": "sushigocrafting:block/avocado_leaves_0"
+    },
+    "stage=1": {
+      "model": "sushigocrafting:block/avocado_leaves_1"
+    },
+    "stage=2": {
+      "model": "sushigocrafting:block/avocado_leaves_2"
+    }
+  }
+}
