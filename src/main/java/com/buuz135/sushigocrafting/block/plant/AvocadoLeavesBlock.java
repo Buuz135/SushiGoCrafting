@@ -1,16 +1,22 @@
 package com.buuz135.sushigocrafting.block.plant;
 
 import com.buuz135.sushigocrafting.block.SushiGoCraftingBlock;
+import com.buuz135.sushigocrafting.proxy.SushiContent;
 import net.minecraft.block.*;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.BlockItemUseContext;
+import net.minecraft.item.ItemStack;
 import net.minecraft.particles.ParticleTypes;
 import net.minecraft.state.BooleanProperty;
 import net.minecraft.state.IntegerProperty;
 import net.minecraft.state.StateContainer;
 import net.minecraft.state.properties.BlockStateProperties;
 import net.minecraft.tags.BlockTags;
+import net.minecraft.util.ActionResultType;
 import net.minecraft.util.Direction;
+import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.util.math.shapes.VoxelShape;
 import net.minecraft.util.math.shapes.VoxelShapes;
 import net.minecraft.world.IBlockReader;
@@ -20,6 +26,7 @@ import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.IForgeShearable;
+import net.minecraftforge.items.ItemHandlerHelper;
 
 import java.util.Random;
 
@@ -56,35 +63,43 @@ public class AvocadoLeavesBlock extends SushiGoCraftingBlock implements IForgeSh
         }
     }
 
+    @Override
     public VoxelShape getCollisionShape(BlockState state, IBlockReader reader, BlockPos pos) {
         return VoxelShapes.empty();
     }
 
+    @Override
     public boolean ticksRandomly(BlockState state) {
-        return state.get(DISTANCE) == 7 && !state.get(PERSISTENT);
+        return (state.get(DISTANCE) == 7 && !state.get(PERSISTENT)) || state.get(STAGE) == 1;
     }
 
+    @Override
     public void randomTick(BlockState state, ServerWorld worldIn, BlockPos pos, Random random) {
         if (!state.get(PERSISTENT) && state.get(DISTANCE) == 7) {
             spawnDrops(state, worldIn, pos);
             worldIn.removeBlock(pos, false);
         }
+        if (state.get(STAGE) == 1 && random.nextInt(3) == 0) {
+            worldIn.setBlockState(pos, state.with(STAGE, 2));
+        }
     }
 
+    @Override
     public void tick(BlockState state, ServerWorld worldIn, BlockPos pos, Random rand) {
         worldIn.setBlockState(pos, updateDistance(state, worldIn, pos), 3);
     }
 
+    @Override
     public int getOpacity(BlockState state, IBlockReader worldIn, BlockPos pos) {
         return 1;
     }
 
+    @Override
     public BlockState updatePostPlacement(BlockState stateIn, Direction facing, BlockState facingState, IWorld worldIn, BlockPos currentPos, BlockPos facingPos) {
         int i = getDistance(facingState) + 1;
         if (i != 1 || stateIn.get(DISTANCE) != i) {
             worldIn.getPendingBlockTicks().scheduleTick(currentPos, this, 1);
         }
-
         return stateIn;
     }
 
@@ -104,14 +119,24 @@ public class AvocadoLeavesBlock extends SushiGoCraftingBlock implements IForgeSh
         }
     }
 
+    @Override
     protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder) {
         builder.add(DISTANCE, PERSISTENT, STAGE);
     }
 
+    @Override
     public BlockState getStateForPlacement(BlockItemUseContext context) {
         return updateDistance(this.getDefaultState().with(PERSISTENT, Boolean.valueOf(true)), context.getWorld(), context.getPos());
     }
 
+    @Override
+    public ActionResultType onBlockActivated(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand handIn, BlockRayTraceResult hit) {
+        if (state.get(STAGE) == 2) {
+            ItemHandlerHelper.giveItemToPlayer(player, new ItemStack(SushiContent.Items.AVOCADO.get()));
+            worldIn.setBlockState(pos, state.with(STAGE, 1));
+        }
+        return super.onBlockActivated(state, worldIn, pos, player, handIn, hit);
+    }
 
     @Override
     public boolean canGrow(IBlockReader worldIn, BlockPos pos, BlockState state, boolean isClient) {
@@ -127,4 +152,6 @@ public class AvocadoLeavesBlock extends SushiGoCraftingBlock implements IForgeSh
     public void grow(ServerWorld worldIn, Random rand, BlockPos pos, BlockState state) {
         worldIn.setBlockState(pos, state.with(STAGE, 2));
     }
+
+
 }
