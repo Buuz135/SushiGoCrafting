@@ -1,6 +1,7 @@
 package com.buuz135.sushigocrafting.datagen;
 
 import com.buuz135.sushigocrafting.proxy.SushiContent;
+import net.minecraft.block.CropsBlock;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.model.generators.BlockModelProvider;
@@ -15,12 +16,17 @@ public class SushiModelProvider extends BlockModelProvider {
 
     @Override
     protected void registerModels() {
-
-        this.customCrop("rice_crop", SushiContent.Blocks.RICE_CROP.get().getRegistryName());
+        this.customCrop(SushiContent.Blocks.RICE_CROP.get(), "rice");
+        this.customCrop(SushiContent.Blocks.CUCUMBER_CROP.get(), "cucumber");
+        this.customCrop(SushiContent.Blocks.SOY_CROP.get(), "soy");
+        this.customCrop(SushiContent.Blocks.WASABI_CROP.get(), "wasabi");
     }
 
-    public void customCrop(String id, ResourceLocation resourceLocation) {
-        getBuilder("rice_crop").parent(getUnchecked(mcLoc(BLOCK_FOLDER + "/crop"))).texture(id, resourceLocation);
+    public void customCrop(CropsBlock block, String name) {
+        for (Integer allowedValue : block.getAgeProperty().getAllowedValues()) {
+            getBuilder(block.getRegistryName().getPath() + "_" + allowedValue).parent(getUnchecked(mcLoc(BLOCK_FOLDER + "/crop"))).texture("crop", modLoc(BLOCK_FOLDER + "/" + name + "_stage_" + allowedValue));
+        }
+
     }
 
     public ModelFile.UncheckedModelFile getUnchecked(ResourceLocation path) {

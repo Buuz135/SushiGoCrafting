@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:block/crop",
+  "textures": {
+    "crop": "sushigocrafting:block/cucumber_stage_3"
+  }
+}

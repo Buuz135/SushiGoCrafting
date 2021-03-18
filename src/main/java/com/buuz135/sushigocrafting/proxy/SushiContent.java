@@ -70,11 +70,11 @@ public class SushiContent {
 
         public static final DeferredRegister<Block> REGISTRY = DeferredRegister.create(ForgeRegistries.BLOCKS, SushiGoCrafting.MOD_ID);
 
-        public static final RegistryObject<Block> RICE_CROP = block("rice_crop", () -> new WaterCropBlock(AbstractBlock.Properties.from(net.minecraft.block.Blocks.KELP_PLANT), Items.RICE_SEED, state -> state.matchesBlock(net.minecraft.block.Blocks.DIRT)));
-        public static final RegistryObject<Block> CUCUMBER_CROP = block("cucumber_crop", () -> new CustomCropBlock(AbstractBlock.Properties.from(net.minecraft.block.Blocks.WHEAT), Items.CUCUMBER_SEED, state -> state.matchesBlock(net.minecraft.block.Blocks.FARMLAND)));
-        public static final RegistryObject<Block> SOY_CROP = block("soy_crop", () -> new CustomCropBlock(AbstractBlock.Properties.from(net.minecraft.block.Blocks.WHEAT), Items.SOY_SEED, state -> state.matchesBlock(net.minecraft.block.Blocks.FARMLAND)));
-        public static final RegistryObject<Block> HORSERADISH_CROP = block("horseradish_crop", () -> new CustomCropBlock(AbstractBlock.Properties.from(net.minecraft.block.Blocks.WHEAT), Items.HORSERADISH_SEED, state -> state.matchesBlock(net.minecraft.block.Blocks.FARMLAND)));
-        public static final RegistryObject<Block> SESAME_CROP = block("sesame_crop", () -> new CustomCropBlock(AbstractBlock.Properties.from(net.minecraft.block.Blocks.WHEAT), Items.SESAME_SEED, state -> state.matchesBlock(net.minecraft.block.Blocks.FARMLAND)));
+        public static final RegistryObject<CustomCropBlock> RICE_CROP = block("rice_crop", () -> new WaterCropBlock(AbstractBlock.Properties.from(net.minecraft.block.Blocks.KELP_PLANT), Items.RICE_SEED, state -> state.matchesBlock(net.minecraft.block.Blocks.DIRT)));
+        public static final RegistryObject<CustomCropBlock> CUCUMBER_CROP = block("cucumber_crop", () -> new CustomCropBlock(AbstractBlock.Properties.from(net.minecraft.block.Blocks.WHEAT), Items.CUCUMBER_SEED, state -> state.matchesBlock(net.minecraft.block.Blocks.FARMLAND)));
+        public static final RegistryObject<CustomCropBlock> SOY_CROP = block("soy_crop", () -> new CustomCropBlock(AbstractBlock.Properties.from(net.minecraft.block.Blocks.WHEAT), Items.SOY_SEED, state -> state.matchesBlock(net.minecraft.block.Blocks.FARMLAND)));
+        public static final RegistryObject<CustomCropBlock> WASABI_CROP = block("wasabi_crop", () -> new CustomCropBlock(AbstractBlock.Properties.from(net.minecraft.block.Blocks.WHEAT), Items.WASABI_SEED, state -> state.matchesBlock(net.minecraft.block.Blocks.FARMLAND)));
+        public static final RegistryObject<CustomCropBlock> SESAME_CROP = block("sesame_crop", () -> new CustomCropBlock(AbstractBlock.Properties.from(net.minecraft.block.Blocks.WHEAT), Items.SESAME_SEED, state -> state.matchesBlock(net.minecraft.block.Blocks.FARMLAND)));
 
         public static final RegistryObject<Block> SEAWEED = block("seaweed", () -> new SeaWeedTopBlock(AbstractBlock.Properties.create(Material.OCEAN_PLANT).doesNotBlockMovement().tickRandomly().zeroHardnessAndResistance().sound(SoundType.WET_GRASS)));
         public static final RegistryObject<Block> SEAWEED_PLANT = block("seaweed_plant", () -> new SeaWeedBlock(AbstractBlock.Properties.create(Material.OCEAN_PLANT).doesNotBlockMovement().tickRandomly().zeroHardnessAndResistance().sound(SoundType.WET_GRASS)));
@@ -97,7 +97,7 @@ public class SushiContent {
 
         public static final RegistryObject<BlockItem> CUCUMBER_SEED = blockItem("cucumber_seed", Blocks.CUCUMBER_CROP);
         public static final RegistryObject<BlockItem> SOY_SEED = blockItem("soy_seed", Blocks.SOY_CROP);
-        public static final RegistryObject<BlockItem> HORSERADISH_SEED = blockItem("horseradish_seed", Blocks.HORSERADISH_CROP);
+        public static final RegistryObject<BlockItem> WASABI_SEED = blockItem("wasabi_seed", Blocks.WASABI_CROP);
         public static final RegistryObject<BlockItem> SESAME_SEED = blockItem("sesame_seed", Blocks.SESAME_CROP);
 
         public static final RegistryObject<BlockItem> SEAWEED = blockItem("seaweed", Blocks.SEAWEED);

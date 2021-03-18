@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:block/crop",
+  "textures": {
+    "crop": "sushigocrafting:block/soy_stage_1"
+  }
+}

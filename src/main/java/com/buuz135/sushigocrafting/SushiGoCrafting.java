@@ -98,6 +98,9 @@ public class SushiGoCrafting {
     @OnlyIn(Dist.CLIENT)
     public void fmlClient(FMLClientSetupEvent event) {
         RenderTypeLookup.setRenderLayer(SushiContent.Blocks.RICE_CROP.get(), RenderType.getCutout());
+        RenderTypeLookup.setRenderLayer(SushiContent.Blocks.CUCUMBER_CROP.get(), RenderType.getCutout());
+        RenderTypeLookup.setRenderLayer(SushiContent.Blocks.SOY_CROP.get(), RenderType.getCutout());
+        RenderTypeLookup.setRenderLayer(SushiContent.Blocks.WASABI_CROP.get(), RenderType.getCutout());
         RenderTypeLookup.setRenderLayer(SushiContent.Blocks.AVOCADO_LEAVES_LOG.get(), RenderType.getCutout());
         RenderTypeLookup.setRenderLayer(SushiContent.Blocks.AVOCADO_LEAVES.get(), RenderType.getCutout());
         RenderTypeLookup.setRenderLayer(SushiContent.Blocks.SEAWEED.get(), RenderType.getCutout());
@@ -105,7 +108,7 @@ public class SushiGoCrafting {
     }
 
     public void dataGen(GatherDataEvent event) {
-        //event.getGenerator().addProvider(new SushiModelProvider(event.getGenerator(), MOD_ID, event.getExistingFileHelper()));
+        event.getGenerator().addProvider(new SushiModelProvider(event.getGenerator(), MOD_ID, event.getExistingFileHelper()));
         event.getGenerator().addProvider(new SushiBlockstateProvider(event.getGenerator(), MOD_ID, event.getExistingFileHelper()));
         event.getGenerator().addProvider(new SushiItemModelProvider(event.getGenerator(), MOD_ID, event.getExistingFileHelper()));
         event.getGenerator().addProvider(new SushiLangProvider(event.getGenerator(), MOD_ID, "en_us"));
