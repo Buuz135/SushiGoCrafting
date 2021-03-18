@@ -9,7 +9,9 @@ import net.minecraft.state.IntegerProperty;
 import net.minecraft.state.StateContainer;
 import net.minecraft.util.IItemProvider;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.IBlockReader;
+import net.minecraft.world.World;
 
 import java.util.Collections;
 import java.util.function.Predicate;
@@ -54,4 +56,15 @@ public class CustomCropBlock extends CropsBlock {
     public IntegerProperty getAgeProperty() {
         return AGE;
     }
+
+    @Override
+    public boolean isMaxAge(BlockState state) {
+        return state.get(getAgeProperty()) == getMaxAge();
+    }
+
+    @Override
+    protected int getBonemealAgeIncrease(World worldIn) {
+        return MathHelper.nextInt(worldIn.rand, 1, 3);
+    }
+
 }

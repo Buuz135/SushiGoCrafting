@@ -8,6 +8,8 @@ import net.minecraftforge.client.model.generators.BlockModelProvider;
 import net.minecraftforge.client.model.generators.ModelFile;
 import net.minecraftforge.common.data.ExistingFileHelper;
 
+import java.util.Arrays;
+
 public class SushiModelProvider extends BlockModelProvider {
 
     public SushiModelProvider(DataGenerator generator, String modid, ExistingFileHelper existingFileHelper) {
@@ -16,14 +18,15 @@ public class SushiModelProvider extends BlockModelProvider {
 
     @Override
     protected void registerModels() {
-        this.customCrop(SushiContent.Blocks.RICE_CROP.get(), "rice");
+        this.customCrop(SushiContent.Blocks.RICE_CROP.get(), "rice", 3);
         this.customCrop(SushiContent.Blocks.CUCUMBER_CROP.get(), "cucumber");
         this.customCrop(SushiContent.Blocks.SOY_CROP.get(), "soy");
         this.customCrop(SushiContent.Blocks.WASABI_CROP.get(), "wasabi");
     }
 
-    public void customCrop(CropsBlock block, String name) {
+    public void customCrop(CropsBlock block, String name, Integer... filterValues) {
         for (Integer allowedValue : block.getAgeProperty().getAllowedValues()) {
+            if (filterValues != null && Arrays.asList(filterValues).contains(allowedValue)) continue;
             getBuilder(block.getRegistryName().getPath() + "_" + allowedValue).parent(getUnchecked(mcLoc(BLOCK_FOLDER + "/crop"))).texture("crop", modLoc(BLOCK_FOLDER + "/" + name + "_stage_" + allowedValue));
         }
 
