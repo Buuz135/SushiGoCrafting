@@ -7,6 +7,7 @@ import com.buuz135.sushigocrafting.proxy.SushiContent;
 import com.buuz135.sushigocrafting.recipe.CombineAmountItemRecipe;
 import com.buuz135.sushigocrafting.tile.machinery.RiceCookerTile;
 import com.buuz135.sushigocrafting.tile.machinery.RollerTile;
+import com.buuz135.sushigocrafting.world.SushiTab;
 import com.buuz135.sushigocrafting.world.tree.AvocadoTree;
 import com.hrznstudio.titanium.event.handler.EventManager;
 import com.hrznstudio.titanium.nbthandler.NBTManager;
@@ -45,12 +46,7 @@ public class SushiGoCrafting {
 
     public static final String MOD_ID = "sushigocrafting";
 
-    public static final ItemGroup TAB = new ItemGroup(MOD_ID) {
-        @Override
-        public ItemStack createIcon() {
-            return new ItemStack(SushiContent.Items.RICE_SEEDS.get());
-        }
-    };
+    public static final ItemGroup TAB = new SushiTab(MOD_ID);
 
     //private static CommonProxy proxy;
 
