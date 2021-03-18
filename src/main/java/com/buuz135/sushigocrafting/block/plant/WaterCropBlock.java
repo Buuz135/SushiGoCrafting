@@ -1,7 +1,6 @@
 package com.buuz135.sushigocrafting.block.plant;
 
 import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
 import net.minecraft.block.ILiquidContainer;
 import net.minecraft.fluid.Fluid;
 import net.minecraft.fluid.FluidState;
@@ -37,7 +36,7 @@ public class WaterCropBlock extends CustomCropBlock implements ILiquidContainer 
 
     @Override
     public boolean canGrow(IBlockReader worldIn, BlockPos pos, BlockState state, boolean isClient) {
-        return state.matchesBlock(Blocks.WATER);
+        return worldIn.getFluidState(pos).isTagged(FluidTags.WATER) && super.canGrow(worldIn, pos, state, isClient);
     }
 
     @Nullable
