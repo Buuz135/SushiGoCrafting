@@ -48,7 +48,7 @@ public class SushiGoCrafting {
     public static final ItemGroup TAB = new ItemGroup(MOD_ID) {
         @Override
         public ItemStack createIcon() {
-            return new ItemStack(SushiContent.Items.RICE_SEED.get());
+            return new ItemStack(SushiContent.Items.RICE_SEEDS.get());
         }
     };
 
