@@ -18,8 +18,10 @@ import com.buuz135.sushigocrafting.potioneffect.SteadyHandsEffect;
 import com.buuz135.sushigocrafting.tile.machinery.RiceCookerTile;
 import com.buuz135.sushigocrafting.tile.machinery.RollerTile;
 import com.buuz135.sushigocrafting.world.SeaWeedFeature;
+import com.buuz135.sushigocrafting.world.tree.AvocadoTree;
 import net.minecraft.block.AbstractBlock;
 import net.minecraft.block.Block;
+import net.minecraft.block.SaplingBlock;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.item.BlockItem;
@@ -79,9 +81,11 @@ public class SushiContent {
         public static final RegistryObject<Block> SEAWEED = block("seaweed", () -> new SeaWeedTopBlock(AbstractBlock.Properties.create(Material.OCEAN_PLANT).doesNotBlockMovement().tickRandomly().zeroHardnessAndResistance().sound(SoundType.WET_GRASS)));
         public static final RegistryObject<Block> SEAWEED_PLANT = block("seaweed_plant", () -> new SeaWeedBlock(AbstractBlock.Properties.create(Material.OCEAN_PLANT).doesNotBlockMovement().tickRandomly().zeroHardnessAndResistance().sound(SoundType.WET_GRASS)));
         public static final RegistryObject<Block> SEAWEED_BLOCK = block("dry_seaweed_block", () -> new SushiGoCraftingBlock(AbstractBlock.Properties.from(net.minecraft.block.Blocks.WHEAT)));
+
         public static final RegistryObject<Block> AVOCADO_LOG = block("avocado_log", () -> new AvocadoLogBlock(AbstractBlock.Properties.from(net.minecraft.block.Blocks.OAK_WOOD)));
         public static final RegistryObject<Block> AVOCADO_LEAVES_LOG = block("avocado_leaves_logged", () -> new SushiGoCraftingBlock(AbstractBlock.Properties.from(net.minecraft.block.Blocks.OAK_WOOD)));
         public static final RegistryObject<Block> AVOCADO_LEAVES = block("avocado_leaves", AvocadoLeavesBlock::new);
+        public static final RegistryObject<Block> AVOCADO_SAPLING = block("avocado_sapling", () -> new SaplingBlock(new AvocadoTree(), AbstractBlock.Properties.from(net.minecraft.block.Blocks.OAK_SAPLING)));
 
         public static final RegistryObject<RollerBlock> ROLLER = block("roller", RollerBlock::new);
         public static final RegistryObject<RiceCookerBlock> RICE_COOKER = block("rice_cooker", RiceCookerBlock::new);
@@ -111,6 +115,7 @@ public class SushiContent {
         public static final RegistryObject<BlockItem> AVOCADO_LOG = blockItem("avocado_log", Blocks.AVOCADO_LOG);
         public static final RegistryObject<BlockItem> AVOCADO_LEAVES = blockItem("avocado_leaves", Blocks.AVOCADO_LEAVES);
         public static final RegistryObject<BlockItem> AVOCADO_LEAVES_LOG = blockItem("avocado_leaves_logged", Blocks.AVOCADO_LEAVES_LOG);
+        public static final RegistryObject<BlockItem> AVOCADO_SAPLING = blockItem("avocado_sapling", Blocks.AVOCADO_SAPLING);
 
         public static final RegistryObject<BlockItem> ROLLER = blockItem("roller", Blocks.ROLLER);
         public static final RegistryObject<BlockItem> RICE_COOKER = blockItem("rice_cooker", Blocks.RICE_COOKER);
@@ -126,6 +131,8 @@ public class SushiContent {
         public static final RegistryObject<AmountItem> TOBIKO = amountItem("tobiko", "ingredient", 10, 50, 100);
         public static final RegistryObject<AmountItem> CHEESE = amountItem("cheese", "ingredient", 50, 250, 500);
         public static final RegistryObject<AmountItem> SHRIMP = amountItem("shrimp", "ingredient", 10, 50, 100);
+        public static final RegistryObject<AmountItem> SOW_SAUCE = amountItem("soy_sauce", "ingredient", 10, 50, 100);
+        public static final RegistryObject<AmountItem> WASABI_PASTE = amountItem("wasabi_paste", "ingredient", 10, 50, 100);
 
     }
 

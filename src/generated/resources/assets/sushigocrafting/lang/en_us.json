@@ -2,6 +2,7 @@
   "block.sushigocrafting.avocado_leaves": "Avocado Leaves",
   "block.sushigocrafting.avocado_leaves_logged": "Avocado Leaves Logged",
   "block.sushigocrafting.avocado_log": "Avocado Log",
+  "block.sushigocrafting.avocado_sapling": "Avocado Sapling",
   "block.sushigocrafting.cucumber_crop": "Cucumber Seed",
   "block.sushigocrafting.dry_seaweed_block": "Dry Seaweed Block",
   "block.sushigocrafting.rice_cooker": "Rice Cooker",
@@ -10,7 +11,7 @@
   "block.sushigocrafting.seaweed": "Seaweed",
   "block.sushigocrafting.sesame_crop": "Sesame Seed",
   "block.sushigocrafting.soy_crop": "Soy Seed",
-  "block.sushigocrafting.wasabi_crop": "Horseradish Seed",
+  "block.sushigocrafting.wasabi_crop": "Wasabi Seed",
   "effect.sushigocrafting.acquired_taste": "Acquired Taste",
   "effect.sushigocrafting.small_bites": "Small Bites",
   "effect.sushigocrafting.steady_hands": "Steady Hands",
@@ -45,6 +46,7 @@
   "item.sushigocrafting.shrimp": "Shrimp",
   "item.sushigocrafting.shrimp_nigiri": "Shrimp Nigiri",
   "item.sushigocrafting.shrimp_temaki": "Shrimp Temaki",
+  "item.sushigocrafting.soy_sauce": "Soy Sauce",
   "item.sushigocrafting.tobiko": "Tobiko",
   "item.sushigocrafting.tobiko_crab_california": "Tobiko Crab California",
   "item.sushigocrafting.tobiko_crab_cheese_california": "Tobiko Crab Cheese California",
@@ -64,5 +66,6 @@
   "item.sushigocrafting.tuna_nigiri": "Tuna Nigiri",
   "item.sushigocrafting.tuna_temaki": "Tuna Temaki",
   "item.sushigocrafting.wakame_gunkan": "Wakame Gunkan",
+  "item.sushigocrafting.wasabi_paste": "Wasabi Paste",
   "itemGroup.sushigocrafting": "Sushi Go Crafting"
 }
