@@ -1,6 +1,6 @@
 {
   "parent": "minecraft:item/generated",
   "textures": {
-    "layer0": "sushigocrafting:item/dry_seaweed"
+    "layer0": "sushigocrafting:item/knife_cleaver"
   }
 }

@@ -26,9 +26,11 @@ public class SushiBlockstateProvider extends BlockStateProvider {
         simpleBlockUn(SushiContent.Blocks.SEAWEED.get());
         simpleBlockUn(SushiContent.Blocks.SEAWEED_PLANT.get());
         simpleBlockUn(SushiContent.Blocks.ROLLER.get());
+        simpleBlockUn(SushiContent.Blocks.AVOCADO_SAPLING.get());
         horizontalBlock(SushiContent.Blocks.RICE_COOKER.get());
         simpleBlockUn(SushiContent.Blocks.AVOCADO_LOG.get());
         simpleBlockUn(SushiContent.Blocks.AVOCADO_LEAVES_LOG.get());
+        simpleBlockUn(SushiContent.Blocks.SEAWEED_BLOCK.get());
         getVariantBuilder(SushiContent.Blocks.AVOCADO_LEAVES.get())
                 .partialState()
                 .with(AvocadoLeavesBlock.STAGE, 0).addModels(

@@ -24,7 +24,7 @@ public class SushiItemModelProvider extends ItemModelProvider {
     @Override
     protected void registerModels() {
         List<Item> FILTER_ITEM = Arrays.asList(SushiContent.Items.SEAWEED.get(), SushiContent.Items.WASABI_SEEDS.get(), SushiContent.Items.RICE_SEEDS.get(), SushiContent.Items.SOY_SEEDS.get(),
-                SushiContent.Items.SESAME_SEEDS.get(), SushiContent.Items.CUCUMBER_SEEDS.get());
+                SushiContent.Items.SESAME_SEEDS.get(), SushiContent.Items.CUCUMBER_SEEDS.get(), SushiContent.Items.AVOCADO_SAPLING.get());
         SushiContent.Items.REGISTRY.getEntries().stream().map(RegistryObject::get).filter(item -> item instanceof BlockItem && !FILTER_ITEM.contains(item)).map(item -> (BlockItem) item).forEach(blockItem -> {
             getBuilder(blockItem.getBlock().getRegistryName().getPath()).parent(new ModelFile.UncheckedModelFile(modLoc("block/" + blockItem.getBlock().getRegistryName().getPath())));
         });

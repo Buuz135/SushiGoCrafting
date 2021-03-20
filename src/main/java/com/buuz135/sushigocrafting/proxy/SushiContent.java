@@ -80,7 +80,7 @@ public class SushiContent {
 
         public static final RegistryObject<Block> SEAWEED = block("seaweed", () -> new SeaWeedTopBlock(AbstractBlock.Properties.create(Material.OCEAN_PLANT).doesNotBlockMovement().tickRandomly().zeroHardnessAndResistance().sound(SoundType.WET_GRASS)));
         public static final RegistryObject<Block> SEAWEED_PLANT = block("seaweed_plant", () -> new SeaWeedBlock(AbstractBlock.Properties.create(Material.OCEAN_PLANT).doesNotBlockMovement().tickRandomly().zeroHardnessAndResistance().sound(SoundType.WET_GRASS)));
-        public static final RegistryObject<Block> SEAWEED_BLOCK = block("dry_seaweed_block", () -> new SushiGoCraftingBlock(AbstractBlock.Properties.from(net.minecraft.block.Blocks.WHEAT)));
+        public static final RegistryObject<Block> SEAWEED_BLOCK = block("dried_seaweed_block", () -> new SushiGoCraftingBlock(AbstractBlock.Properties.from(net.minecraft.block.Blocks.WHEAT)));
 
         public static final RegistryObject<Block> AVOCADO_LOG = block("avocado_log", () -> new AvocadoLogBlock(AbstractBlock.Properties.from(net.minecraft.block.Blocks.OAK_WOOD)));
         public static final RegistryObject<Block> AVOCADO_LEAVES_LOG = block("avocado_leaves_logged", () -> new SushiGoCraftingBlock(AbstractBlock.Properties.from(net.minecraft.block.Blocks.OAK_WOOD).notSolid()));
@@ -111,8 +111,8 @@ public class SushiContent {
         public static final RegistryObject<BlockItem> SESAME_SEEDS = blockItem("sesame_seeds", Blocks.SESAME_CROP);
 
         public static final RegistryObject<BlockItem> SEAWEED = blockItem("seaweed", Blocks.SEAWEED);
-        public static final RegistryObject<Item> DRY_SEAWEED = basicItem("dry_seaweed", "");
-        public static final RegistryObject<BlockItem> SEAWEED_BLOCK = blockItem("dry_seaweed_block", Blocks.SEAWEED_BLOCK);
+        public static final RegistryObject<Item> DRY_SEAWEED = basicItem("dried_seaweed", "");
+        public static final RegistryObject<BlockItem> SEAWEED_BLOCK = blockItem("dried_seaweed_block", Blocks.SEAWEED_BLOCK);
 
         public static final RegistryObject<Item> RAW_TUNA = basicItem("raw_tuna", "");
         public static final RegistryObject<Item> CRAB = basicItem("crab", "");
@@ -139,6 +139,8 @@ public class SushiContent {
         public static final RegistryObject<AmountItem> SHRIMP = amountItem("shrimp", "ingredient", 10, 50, 100);
         public static final RegistryObject<AmountItem> SOW_SAUCE = amountItem("soy_sauce", "ingredient", 10, 50, 100);
         public static final RegistryObject<AmountItem> WASABI_PASTE = amountItem("wasabi_paste", "ingredient", 10, 50, 100);
+
+        public static final RegistryObject<Item> KNIFE_CLEAVER = basicItem("knife_cleaver", "");
 
     }
 
