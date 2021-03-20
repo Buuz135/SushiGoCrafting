@@ -5,7 +5,9 @@ import com.buuz135.sushigocrafting.proxy.SushiContent;
 import com.hrznstudio.titanium.block.RotatableBlock;
 import net.minecraft.block.Block;
 import net.minecraft.block.CropsBlock;
+import net.minecraft.block.RotatedPillarBlock;
 import net.minecraft.data.DataGenerator;
+import net.minecraft.util.Direction;
 import net.minecraftforge.client.model.generators.BlockStateProvider;
 import net.minecraftforge.client.model.generators.ConfiguredModel;
 import net.minecraftforge.client.model.generators.ModelFile;
@@ -28,8 +30,8 @@ public class SushiBlockstateProvider extends BlockStateProvider {
         simpleBlockUn(SushiContent.Blocks.ROLLER.get());
         simpleBlockUn(SushiContent.Blocks.AVOCADO_SAPLING.get());
         horizontalBlock(SushiContent.Blocks.RICE_COOKER.get());
-        simpleBlockUn(SushiContent.Blocks.AVOCADO_LOG.get());
-        simpleBlockUn(SushiContent.Blocks.AVOCADO_LEAVES_LOG.get());
+        logBlockRot(SushiContent.Blocks.AVOCADO_LOG.get());
+        logBlockRot(SushiContent.Blocks.AVOCADO_LEAVES_LOG.get());
         simpleBlockUn(SushiContent.Blocks.SEAWEED_BLOCK.get());
         getVariantBuilder(SushiContent.Blocks.AVOCADO_LEAVES.get())
                 .partialState()
@@ -59,6 +61,31 @@ public class SushiBlockstateProvider extends BlockStateProvider {
                         .modelFile(file)
                         .rotationY(((int) state.get(RotatableBlock.FACING_HORIZONTAL).getHorizontalAngle()) % 360)
                         .build()
+                );
+    }
+
+    private void logBlockRot(Block block) {
+        ModelFile file = new ModelFile.UncheckedModelFile(modLoc("block/" + block.getRegistryName().getPath()));
+        getVariantBuilder(block)
+                .forAllStates(state -> {
+                            Direction.Axis axis = state.get(RotatedPillarBlock.AXIS);
+                            if (axis == Direction.Axis.Y) {
+                                return ConfiguredModel.builder()
+                                        .modelFile(file)
+                                        .build();
+                            }
+                            if (axis == Direction.Axis.Z) {
+                                return ConfiguredModel.builder()
+                                        .modelFile(file)
+                                        .rotationX(90)
+                                        .build();
+                            }
+                            return ConfiguredModel.builder()
+                                    .modelFile(file)
+                                    .rotationX(90)
+                                    .rotationY(90)
+                                    .build();
+                        }
                 );
     }
 

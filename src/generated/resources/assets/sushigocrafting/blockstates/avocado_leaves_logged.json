@@ -1,7 +1,16 @@
 {
   "variants": {
-    "": {
+    "axis=x": {
+      "model": "sushigocrafting:block/avocado_leaves_logged",
+      "x": 90,
+      "y": 90
+    },
+    "axis=y": {
       "model": "sushigocrafting:block/avocado_leaves_logged"
+    },
+    "axis=z": {
+      "model": "sushigocrafting:block/avocado_leaves_logged",
+      "x": 90
     }
   }
 }

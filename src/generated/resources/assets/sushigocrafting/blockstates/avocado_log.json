@@ -1,7 +1,16 @@
 {
   "variants": {
-    "": {
+    "axis=x": {
+      "model": "sushigocrafting:block/avocado_log",
+      "x": 90,
+      "y": 90
+    },
+    "axis=y": {
       "model": "sushigocrafting:block/avocado_log"
+    },
+    "axis=z": {
+      "model": "sushigocrafting:block/avocado_log",
+      "x": 90
     }
   }
 }

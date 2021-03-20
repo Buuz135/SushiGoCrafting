@@ -19,10 +19,7 @@ import com.buuz135.sushigocrafting.tile.machinery.RiceCookerTile;
 import com.buuz135.sushigocrafting.tile.machinery.RollerTile;
 import com.buuz135.sushigocrafting.world.SeaWeedFeature;
 import com.buuz135.sushigocrafting.world.tree.AvocadoTree;
-import net.minecraft.block.AbstractBlock;
-import net.minecraft.block.Block;
-import net.minecraft.block.SaplingBlock;
-import net.minecraft.block.SoundType;
+import net.minecraft.block.*;
 import net.minecraft.block.material.Material;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
@@ -82,8 +79,8 @@ public class SushiContent {
         public static final RegistryObject<Block> SEAWEED_PLANT = block("seaweed_plant", () -> new SeaWeedBlock(AbstractBlock.Properties.create(Material.OCEAN_PLANT).doesNotBlockMovement().tickRandomly().zeroHardnessAndResistance().sound(SoundType.WET_GRASS)));
         public static final RegistryObject<Block> SEAWEED_BLOCK = block("dried_seaweed_block", () -> new SushiGoCraftingBlock(AbstractBlock.Properties.from(net.minecraft.block.Blocks.WHEAT)));
 
-        public static final RegistryObject<Block> AVOCADO_LOG = block("avocado_log", () -> new AvocadoLogBlock(AbstractBlock.Properties.from(net.minecraft.block.Blocks.OAK_WOOD)));
-        public static final RegistryObject<Block> AVOCADO_LEAVES_LOG = block("avocado_leaves_logged", () -> new SushiGoCraftingBlock(AbstractBlock.Properties.from(net.minecraft.block.Blocks.OAK_WOOD).notSolid()));
+        public static final RegistryObject<RotatedPillarBlock> AVOCADO_LOG = block("avocado_log", () -> new AvocadoLogBlock(AbstractBlock.Properties.from(net.minecraft.block.Blocks.OAK_WOOD)));
+        public static final RegistryObject<RotatedPillarBlock> AVOCADO_LEAVES_LOG = block("avocado_leaves_logged", () -> new RotatedPillarBlock(AbstractBlock.Properties.from(net.minecraft.block.Blocks.OAK_WOOD).notSolid()));
         public static final RegistryObject<Block> AVOCADO_LEAVES = block("avocado_leaves", AvocadoLeavesBlock::new);
         public static final RegistryObject<Block> AVOCADO_SAPLING = block("avocado_sapling", () -> new SaplingBlock(new AvocadoTree(), AbstractBlock.Properties.from(net.minecraft.block.Blocks.OAK_SAPLING)));
 
