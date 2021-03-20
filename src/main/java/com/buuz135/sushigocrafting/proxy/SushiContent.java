@@ -10,6 +10,7 @@ import com.buuz135.sushigocrafting.block.plant.CustomCropBlock;
 import com.buuz135.sushigocrafting.block.plant.WaterCropBlock;
 import com.buuz135.sushigocrafting.block.seaweed.SeaWeedBlock;
 import com.buuz135.sushigocrafting.block.seaweed.SeaWeedTopBlock;
+import com.buuz135.sushigocrafting.entity.TunaEntity;
 import com.buuz135.sushigocrafting.item.AmountItem;
 import com.buuz135.sushigocrafting.item.SushiItem;
 import com.buuz135.sushigocrafting.potioneffect.AcquiredTasteEffect;
@@ -21,7 +22,12 @@ import com.buuz135.sushigocrafting.world.SeaWeedFeature;
 import com.buuz135.sushigocrafting.world.tree.AvocadoTree;
 import net.minecraft.block.*;
 import net.minecraft.block.material.Material;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityClassification;
+import net.minecraft.entity.EntityType;
+import net.minecraft.fluid.Fluids;
 import net.minecraft.item.BlockItem;
+import net.minecraft.item.FishBucketItem;
 import net.minecraft.item.Item;
 import net.minecraft.potion.Effect;
 import net.minecraft.tileentity.TileEntity;
@@ -39,6 +45,10 @@ public class SushiContent {
 
     public static <T extends Block> RegistryObject<T> block(String id, Supplier<T> block) {
         return Blocks.REGISTRY.register(id, block);
+    }
+
+    public static RegistryObject<Item> item(String id, Supplier<Item> item) {
+        return Items.REGISTRY.register(id, item);
     }
 
     public static RegistryObject<Item> basicItem(String id, String category) {
@@ -63,6 +73,10 @@ public class SushiContent {
 
     public static RegistryObject<Effect> effect(String id, Supplier<Effect> supplier) {
         return Effects.REGISTRY.register(id, supplier);
+    }
+
+    public static <T extends Entity> RegistryObject<EntityType<T>> entity(String id, Supplier<EntityType<T>> supplier) {
+        return EntityTypes.REGISTRY.register(id, supplier);
     }
 
     public static class Blocks {
@@ -139,6 +153,8 @@ public class SushiContent {
 
         public static final RegistryObject<Item> KNIFE_CLEAVER = basicItem("cleaver_knife", "");
 
+        public static final RegistryObject<Item> TUNA_BUCKET = item("tuna_bucket", () -> new FishBucketItem(EntityTypes.TUNA, () -> Fluids.WATER, (new Item.Properties()).maxStackSize(1).group(SushiGoCrafting.TAB)));
+
     }
 
     public static class TileEntities {
@@ -166,6 +182,17 @@ public class SushiContent {
         public static final RegistryObject<Effect> SMALL_BITES = effect("small_bites", SmallBitesEffect::new);
         public static final RegistryObject<Effect> STEADY_HANDS = effect("steady_hands", SteadyHandsEffect::new);
 
+    }
+
+    public static class EntityTypes {
+
+        public static final DeferredRegister<EntityType<?>> REGISTRY = DeferredRegister.create(ForgeRegistries.ENTITIES, SushiGoCrafting.MOD_ID);
+
+        public static final RegistryObject<EntityType<TunaEntity>> TUNA = entity("tuna", () -> EntityType.Builder.create(TunaEntity::new, EntityClassification.WATER_AMBIENT).size(0.7F, 0.4F).trackingRange(4).setCustomClientFactory((spawnEntity, world) -> new TunaEntity(getTuna().get(), world)).build("tuna"));
+
+        public static RegistryObject<EntityType<TunaEntity>> getTuna() {
+            return TUNA;
+        }
     }
 
 }
