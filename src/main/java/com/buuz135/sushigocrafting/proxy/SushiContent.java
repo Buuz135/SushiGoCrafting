@@ -137,7 +137,7 @@ public class SushiContent {
         public static final RegistryObject<AmountItem> SOW_SAUCE = amountItem("soy_sauce", "ingredient", 10, 50, 100);
         public static final RegistryObject<AmountItem> WASABI_PASTE = amountItem("wasabi_paste", "ingredient", 10, 50, 100);
 
-        public static final RegistryObject<Item> KNIFE_CLEAVER = basicItem("knife_cleaver", "");
+        public static final RegistryObject<Item> KNIFE_CLEAVER = basicItem("cleaver_knife", "");
 
     }
 
