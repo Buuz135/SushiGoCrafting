@@ -10,6 +10,7 @@ import com.buuz135.sushigocrafting.block.plant.CustomCropBlock;
 import com.buuz135.sushigocrafting.block.plant.WaterCropBlock;
 import com.buuz135.sushigocrafting.block.seaweed.SeaWeedBlock;
 import com.buuz135.sushigocrafting.block.seaweed.SeaWeedTopBlock;
+import com.buuz135.sushigocrafting.entity.ShrimpEntity;
 import com.buuz135.sushigocrafting.entity.TunaEntity;
 import com.buuz135.sushigocrafting.item.AmountItem;
 import com.buuz135.sushigocrafting.item.SushiItem;
@@ -154,6 +155,7 @@ public class SushiContent {
         public static final RegistryObject<Item> KNIFE_CLEAVER = basicItem("cleaver_knife", "");
 
         public static final RegistryObject<Item> TUNA_BUCKET = item("tuna_bucket", () -> new FishBucketItem(EntityTypes.TUNA, () -> Fluids.WATER, (new Item.Properties()).maxStackSize(1).group(SushiGoCrafting.TAB)));
+        public static final RegistryObject<Item> SHRIMP_BUCKET = item("shrimp_bucket", () -> new FishBucketItem(EntityTypes.SHRIMP, () -> Fluids.WATER, (new Item.Properties()).maxStackSize(1).group(SushiGoCrafting.TAB)));
 
     }
 
@@ -189,9 +191,14 @@ public class SushiContent {
         public static final DeferredRegister<EntityType<?>> REGISTRY = DeferredRegister.create(ForgeRegistries.ENTITIES, SushiGoCrafting.MOD_ID);
 
         public static final RegistryObject<EntityType<TunaEntity>> TUNA = entity("tuna", () -> EntityType.Builder.create(TunaEntity::new, EntityClassification.WATER_AMBIENT).size(0.7F, 0.4F).trackingRange(4).setCustomClientFactory((spawnEntity, world) -> new TunaEntity(getTuna().get(), world)).build("tuna"));
+        public static final RegistryObject<EntityType<ShrimpEntity>> SHRIMP = entity("shrimp", () -> EntityType.Builder.create(ShrimpEntity::new, EntityClassification.WATER_AMBIENT).size(0.7F, 0.4F).trackingRange(4).setCustomClientFactory((spawnEntity, world) -> new ShrimpEntity(getShrimp().get(), world)).build("shrimp"));
 
         public static RegistryObject<EntityType<TunaEntity>> getTuna() {
             return TUNA;
+        }
+
+        public static RegistryObject<EntityType<ShrimpEntity>> getShrimp() {
+            return SHRIMP;
         }
     }
 

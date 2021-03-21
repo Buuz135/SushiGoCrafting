@@ -2,6 +2,7 @@ package com.buuz135.sushigocrafting;
 
 import com.buuz135.sushigocrafting.api.FoodHelper;
 import com.buuz135.sushigocrafting.api.FoodType;
+import com.buuz135.sushigocrafting.client.entity.ShrimpRenderer;
 import com.buuz135.sushigocrafting.client.entity.TunaRenderer;
 import com.buuz135.sushigocrafting.datagen.*;
 import com.buuz135.sushigocrafting.proxy.SushiContent;
@@ -75,6 +76,7 @@ public class SushiGoCrafting {
         NBTManager.getInstance().scanTileClassForAnnotations(RiceCookerTile.class);
         EventManager.forge(BiomeLoadingEvent.class).filter(biomeLoadingEvent -> biomeLoadingEvent.getCategory() == Biome.Category.OCEAN).process(biomeLoadingEvent -> {
             biomeLoadingEvent.getSpawns().withSpawner(EntityClassification.WATER_AMBIENT, new MobSpawnInfo.Spawners(SushiContent.EntityTypes.TUNA.get(), 8, 3, 6));
+            biomeLoadingEvent.getSpawns().withSpawner(EntityClassification.WATER_AMBIENT, new MobSpawnInfo.Spawners(SushiContent.EntityTypes.SHRIMP.get(), 10, 6, 9));
             biomeLoadingEvent.getGeneration().getFeatures(GenerationStage.Decoration.VEGETAL_DECORATION).add(() ->
                     SushiContent.Features.SEAWEED.get().withConfiguration(IFeatureConfig.NO_FEATURE_CONFIG)
                             .withPlacement(Features.Placements.KELP_PLACEMENT.square().withPlacement(Placement.COUNT_NOISE_BIASED.configure(new TopSolidWithNoiseConfig(80, 80.0D, 0.0D)))));
@@ -95,6 +97,7 @@ public class SushiGoCrafting {
         }).subscribe();
         EventManager.mod(EntityAttributeCreationEvent.class).process(entityAttributeCreationEvent -> {
             entityAttributeCreationEvent.put(SushiContent.EntityTypes.TUNA.get(), AbstractFishEntity.func_234176_m_().create());
+            entityAttributeCreationEvent.put(SushiContent.EntityTypes.SHRIMP.get(), AbstractFishEntity.func_234176_m_().create());
         }).subscribe();
     }
 
@@ -114,6 +117,7 @@ public class SushiGoCrafting {
         RenderTypeLookup.setRenderLayer(SushiContent.Blocks.SEAWEED.get(), RenderType.getCutout());
         RenderTypeLookup.setRenderLayer(SushiContent.Blocks.SEAWEED_PLANT.get(), RenderType.getCutout());
         RenderingRegistry.registerEntityRenderingHandler(SushiContent.EntityTypes.TUNA.get(), TunaRenderer::new);
+        RenderingRegistry.registerEntityRenderingHandler(SushiContent.EntityTypes.SHRIMP.get(), ShrimpRenderer::new);
     }
 
     public void dataGen(GatherDataEvent event) {
