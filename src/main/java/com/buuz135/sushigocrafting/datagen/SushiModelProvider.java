@@ -22,6 +22,7 @@ public class SushiModelProvider extends BlockModelProvider {
         this.customCrop(SushiContent.Blocks.CUCUMBER_CROP.get(), "cucumber");
         this.customCrop(SushiContent.Blocks.SOY_CROP.get(), "soy");
         this.customCrop(SushiContent.Blocks.WASABI_CROP.get(), "wasabi");
+        this.customCrop(SushiContent.Blocks.SESAME_CROP.get(), "sesame");
     }
 
     public void customCrop(CropsBlock block, String name, Integer... filterValues) {

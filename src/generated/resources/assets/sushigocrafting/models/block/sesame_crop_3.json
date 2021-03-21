@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:block/crop",
+  "textures": {
+    "crop": "sushigocrafting:block/sesame_stage_3"
+  }
+}

@@ -21,10 +21,11 @@ public class SushiBlockstateProvider extends BlockStateProvider {
 
     @Override
     protected void registerStatesAndModels() {
-        crop((CropsBlock) SushiContent.Blocks.CUCUMBER_CROP.get());
-        crop((CropsBlock) SushiContent.Blocks.RICE_CROP.get());
-        crop((CropsBlock) SushiContent.Blocks.WASABI_CROP.get());
-        crop((CropsBlock) SushiContent.Blocks.SOY_CROP.get());
+        crop(SushiContent.Blocks.CUCUMBER_CROP.get());
+        crop(SushiContent.Blocks.RICE_CROP.get());
+        crop(SushiContent.Blocks.WASABI_CROP.get());
+        crop(SushiContent.Blocks.SOY_CROP.get());
+        crop(SushiContent.Blocks.SESAME_CROP.get());
         simpleBlockUn(SushiContent.Blocks.SEAWEED.get());
         simpleBlockUn(SushiContent.Blocks.SEAWEED_PLANT.get());
         simpleBlockUn(SushiContent.Blocks.ROLLER.get());

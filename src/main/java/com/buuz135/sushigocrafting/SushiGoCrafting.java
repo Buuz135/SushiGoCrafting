@@ -116,6 +116,7 @@ public class SushiGoCrafting {
         RenderTypeLookup.setRenderLayer(SushiContent.Blocks.AVOCADO_SAPLING.get(), RenderType.getCutout());
         RenderTypeLookup.setRenderLayer(SushiContent.Blocks.SEAWEED.get(), RenderType.getCutout());
         RenderTypeLookup.setRenderLayer(SushiContent.Blocks.SEAWEED_PLANT.get(), RenderType.getCutout());
+        RenderTypeLookup.setRenderLayer(SushiContent.Blocks.SESAME_CROP.get(), RenderType.getCutout());
         RenderingRegistry.registerEntityRenderingHandler(SushiContent.EntityTypes.TUNA.get(), TunaRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(SushiContent.EntityTypes.SHRIMP.get(), ShrimpRenderer::new);
     }
