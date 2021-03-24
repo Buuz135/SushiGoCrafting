@@ -66,7 +66,6 @@ public class RiceCookerBlock extends RotatableBlock<RiceCookerTile> {
             double d6 = rand.nextDouble() * 6.0D / 16.0D;
             double d7 = direction$axis == Direction.Axis.Z ? (double) direction.getZOffset() * 0.52D : d4;
             worldIn.addParticle(ParticleTypes.CLOUD, d0 + d5, d1 + d6, d2 + d7, 0.0D, 0.0D, 0.0D);
-
         });
     }
 }

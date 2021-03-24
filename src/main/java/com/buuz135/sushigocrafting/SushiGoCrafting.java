@@ -4,9 +4,12 @@ import com.buuz135.sushigocrafting.api.FoodHelper;
 import com.buuz135.sushigocrafting.api.FoodType;
 import com.buuz135.sushigocrafting.client.entity.ShrimpRenderer;
 import com.buuz135.sushigocrafting.client.entity.TunaRenderer;
+import com.buuz135.sushigocrafting.client.tesr.CuttingBoardRenderer;
 import com.buuz135.sushigocrafting.datagen.*;
 import com.buuz135.sushigocrafting.proxy.SushiContent;
 import com.buuz135.sushigocrafting.recipe.CombineAmountItemRecipe;
+import com.buuz135.sushigocrafting.recipe.CuttingBoardRecipe;
+import com.buuz135.sushigocrafting.tile.machinery.CuttingBoardTile;
 import com.buuz135.sushigocrafting.tile.machinery.RiceCookerTile;
 import com.buuz135.sushigocrafting.tile.machinery.RollerTile;
 import com.buuz135.sushigocrafting.world.SushiTab;
@@ -41,6 +44,7 @@ import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.event.entity.EntityAttributeCreationEvent;
 import net.minecraftforge.event.world.BiomeLoadingEvent;
 import net.minecraftforge.event.world.PistonEvent;
+import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.client.registry.RenderingRegistry;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
@@ -68,12 +72,17 @@ public class SushiGoCrafting {
         EventManager.mod(FMLClientSetupEvent.class).process(this::fmlClient).subscribe();
         EventManager.mod(FMLCommonSetupEvent.class).process(this::fmlCommon).subscribe();
         EventManager.mod(GatherDataEvent.class).process(this::dataGen).subscribe();
-        EventManager.modGeneric(RegistryEvent.Register.class, IRecipeSerializer.class).process(register -> ((RegistryEvent.Register) register).getRegistry().register(CombineAmountItemRecipe.SERIALIZER.setRegistryName(new ResourceLocation(MOD_ID, "amount_combine_recipe")))).subscribe();
+        EventManager.modGeneric(RegistryEvent.Register.class, IRecipeSerializer.class)
+                .process(register -> ((RegistryEvent.Register) register).getRegistry()
+                        .registerAll(CombineAmountItemRecipe.SERIALIZER.setRegistryName(new ResourceLocation(MOD_ID, "amount_combine_recipe")),
+                                CuttingBoardRecipe.SERIALIZER
+                        )).subscribe();
         for (FoodType value : FoodType.values()) {
             FoodHelper.generateFood(value).forEach(item -> SushiContent.Items.REGISTRY.register(FoodHelper.getName(item), () -> item));
         }
         NBTManager.getInstance().scanTileClassForAnnotations(RollerTile.class);
         NBTManager.getInstance().scanTileClassForAnnotations(RiceCookerTile.class);
+        NBTManager.getInstance().scanTileClassForAnnotations(CuttingBoardTile.class);
         EventManager.forge(BiomeLoadingEvent.class).filter(biomeLoadingEvent -> biomeLoadingEvent.getCategory() == Biome.Category.OCEAN).process(biomeLoadingEvent -> {
             biomeLoadingEvent.getSpawns().withSpawner(EntityClassification.WATER_AMBIENT, new MobSpawnInfo.Spawners(SushiContent.EntityTypes.TUNA.get(), 8, 3, 6));
             biomeLoadingEvent.getSpawns().withSpawner(EntityClassification.WATER_AMBIENT, new MobSpawnInfo.Spawners(SushiContent.EntityTypes.SHRIMP.get(), 10, 6, 9));
@@ -119,6 +128,7 @@ public class SushiGoCrafting {
         RenderTypeLookup.setRenderLayer(SushiContent.Blocks.SESAME_CROP.get(), RenderType.getCutout());
         RenderingRegistry.registerEntityRenderingHandler(SushiContent.EntityTypes.TUNA.get(), TunaRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(SushiContent.EntityTypes.SHRIMP.get(), ShrimpRenderer::new);
+        ClientRegistry.bindTileEntityRenderer(SushiContent.TileEntities.CUTTING_BOARD.get(), CuttingBoardRenderer::new);
     }
 
     public void dataGen(GatherDataEvent event) {
@@ -129,6 +139,7 @@ public class SushiGoCrafting {
         BlockTagsProvider provider = new SushiBlockTagsProvider(event.getGenerator(), event.getExistingFileHelper());
         event.getGenerator().addProvider(provider);
         event.getGenerator().addProvider(new SushiItemTagsProvider(event.getGenerator(), provider, event.getExistingFileHelper()));
+        event.getGenerator().addProvider(new SushiRecipeProvider(event.getGenerator(), MOD_ID));
     }
 
 }

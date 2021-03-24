@@ -3,7 +3,7 @@ package com.buuz135.sushigocrafting.block.machinery;
 import com.buuz135.sushigocrafting.proxy.SushiContent;
 import com.buuz135.sushigocrafting.tile.machinery.RollerTile;
 import com.hrznstudio.titanium.api.IFactory;
-import com.hrznstudio.titanium.block.BasicTileBlock;
+import com.hrznstudio.titanium.block.RotatableBlock;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.entity.player.PlayerEntity;
@@ -13,7 +13,9 @@ import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
-public class RollerBlock extends BasicTileBlock<RollerTile> {
+import javax.annotation.Nonnull;
+
+public class RollerBlock extends RotatableBlock<RollerTile> {
 
     public RollerBlock() {
         super(Properties.from(Blocks.OAK_TRAPDOOR), RollerTile.class);
@@ -38,5 +40,11 @@ public class RollerBlock extends BasicTileBlock<RollerTile> {
     @Override
     public void onBlockClicked(BlockState state, World worldIn, BlockPos pos, PlayerEntity player) {
         this.getTile(worldIn, pos).ifPresent(rollerTile -> rollerTile.onClick(player));
+    }
+
+    @Nonnull
+    @Override
+    public RotationType getRotationType() {
+        return RotationType.FOUR_WAY;
     }
 }

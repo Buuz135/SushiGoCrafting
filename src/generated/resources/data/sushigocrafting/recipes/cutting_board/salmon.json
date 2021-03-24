@@ -1,0 +1,7 @@
+{
+  "input": {
+    "item": "minecraft:salmon"
+  },
+  "ingredient": "salmon",
+  "type": "sushigocrafting:cutting_board"
+}

@@ -28,7 +28,6 @@ public class SushiBlockstateProvider extends BlockStateProvider {
         crop(SushiContent.Blocks.SESAME_CROP.get());
         simpleBlockUn(SushiContent.Blocks.SEAWEED.get());
         simpleBlockUn(SushiContent.Blocks.SEAWEED_PLANT.get());
-        simpleBlockUn(SushiContent.Blocks.ROLLER.get());
         simpleBlockUn(SushiContent.Blocks.AVOCADO_SAPLING.get());
         horizontalBlock(SushiContent.Blocks.RICE_COOKER.get());
         logBlockRot(SushiContent.Blocks.AVOCADO_LOG.get());
@@ -42,6 +41,8 @@ public class SushiBlockstateProvider extends BlockStateProvider {
                 ConfiguredModel.builder().modelFile(new ModelFile.UncheckedModelFile(modLoc("block/" + SushiContent.Blocks.AVOCADO_LEAVES.get().getRegistryName().getPath() + "_1"))).build())
                 .partialState().with(AvocadoLeavesBlock.STAGE, 2).addModels(
                 ConfiguredModel.builder().modelFile(new ModelFile.UncheckedModelFile(modLoc("block/" + SushiContent.Blocks.AVOCADO_LEAVES.get().getRegistryName().getPath() + "_2"))).build());
+        horizontalBlock(SushiContent.Blocks.CUTTING_BOARD.get());
+        horizontalBlock(SushiContent.Blocks.ROLLER.get());
     }
 
     private void crop(CropsBlock block) {
@@ -56,7 +57,7 @@ public class SushiBlockstateProvider extends BlockStateProvider {
     }
 
     private void horizontalBlock(Block block) {
-        ModelFile file = new ModelFile.UncheckedModelFile(block.getRegistryName());
+        ModelFile file = new ModelFile.UncheckedModelFile(modLoc("block/" + block.getRegistryName().getPath()));
         getVariantBuilder(block)
                 .forAllStates(state -> ConfiguredModel.builder()
                         .modelFile(file)

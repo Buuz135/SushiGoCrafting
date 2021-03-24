@@ -2,6 +2,7 @@ package com.buuz135.sushigocrafting.proxy;
 
 import com.buuz135.sushigocrafting.SushiGoCrafting;
 import com.buuz135.sushigocrafting.block.SushiGoCraftingBlock;
+import com.buuz135.sushigocrafting.block.machinery.CuttingBoardBlock;
 import com.buuz135.sushigocrafting.block.machinery.RiceCookerBlock;
 import com.buuz135.sushigocrafting.block.machinery.RollerBlock;
 import com.buuz135.sushigocrafting.block.plant.AvocadoLeavesBlock;
@@ -17,6 +18,7 @@ import com.buuz135.sushigocrafting.item.SushiItem;
 import com.buuz135.sushigocrafting.potioneffect.AcquiredTasteEffect;
 import com.buuz135.sushigocrafting.potioneffect.SmallBitesEffect;
 import com.buuz135.sushigocrafting.potioneffect.SteadyHandsEffect;
+import com.buuz135.sushigocrafting.tile.machinery.CuttingBoardTile;
 import com.buuz135.sushigocrafting.tile.machinery.RiceCookerTile;
 import com.buuz135.sushigocrafting.tile.machinery.RollerTile;
 import com.buuz135.sushigocrafting.world.SeaWeedFeature;
@@ -68,7 +70,7 @@ public class SushiContent {
         return Features.REGISTRY.register(id, featureSupplier);
     }
 
-    public static <T extends TileEntity> RegistryObject<TileEntityType<?>> tile(String id, Supplier<T> supplier, Supplier<? extends Block> sup) {
+    public static <T extends TileEntity> RegistryObject<TileEntityType<T>> tile(String id, Supplier<T> supplier, Supplier<? extends Block> sup) {
         return TileEntities.REGISTRY.register(id, () -> TileEntityType.Builder.create(supplier, sup.get()).build(null));
     }
 
@@ -101,6 +103,8 @@ public class SushiContent {
 
         public static final RegistryObject<RollerBlock> ROLLER = block("roller", RollerBlock::new);
         public static final RegistryObject<RiceCookerBlock> RICE_COOKER = block("rice_cooker", RiceCookerBlock::new);
+        public static final RegistryObject<CuttingBoardBlock> CUTTING_BOARD = block("cutting_board", CuttingBoardBlock::new);
+
 
     }
 
@@ -137,6 +141,7 @@ public class SushiContent {
 
         public static final RegistryObject<BlockItem> ROLLER = blockItem("roller", Blocks.ROLLER);
         public static final RegistryObject<BlockItem> RICE_COOKER = blockItem("rice_cooker", Blocks.RICE_COOKER);
+        public static final RegistryObject<BlockItem> CUTTING_BOARD = blockItem("cutting_board", Blocks.CUTTING_BOARD);
 
         public static final RegistryObject<AmountItem> AVOCADO_SLICES = amountItem("avocado_slices", "ingredient", 100, 500, 1000);
         public static final RegistryObject<AmountItem> RAW_TUNA_FILLET = amountItem("tuna_fillet", "ingredient", 1000, 3000, 6000);
@@ -163,8 +168,10 @@ public class SushiContent {
 
         public static final DeferredRegister<TileEntityType<?>> REGISTRY = DeferredRegister.create(ForgeRegistries.TILE_ENTITIES, SushiGoCrafting.MOD_ID);
 
-        public static RegistryObject<TileEntityType<?>> ROLLER = tile("roller", RollerTile::new, Blocks.ROLLER);
-        public static RegistryObject<TileEntityType<?>> RICE_COOKER = tile("rice_cooker", RiceCookerTile::new, Blocks.RICE_COOKER);
+        public static RegistryObject<TileEntityType<RollerTile>> ROLLER = tile("roller", RollerTile::new, Blocks.ROLLER);
+        public static RegistryObject<TileEntityType<RiceCookerTile>> RICE_COOKER = tile("rice_cooker", RiceCookerTile::new, Blocks.RICE_COOKER);
+        public static RegistryObject<TileEntityType<CuttingBoardTile>> CUTTING_BOARD = tile("cutting_board", CuttingBoardTile::new, Blocks.CUTTING_BOARD);
+
     }
 
 
