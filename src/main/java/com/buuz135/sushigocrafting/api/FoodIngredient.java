@@ -65,6 +65,7 @@ public enum FoodIngredient implements IFoodIngredient {
     @Nullable
     public static FoodIngredient fromItem(Item item) {
         for (FoodIngredient value : values()) {
+            if (value.isEmpty()) continue;
             if (value.getItem().equals(item)) return value;
         }
         return null;

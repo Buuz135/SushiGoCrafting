@@ -4,9 +4,9 @@ import com.buuz135.sushigocrafting.api.FoodHelper;
 import com.buuz135.sushigocrafting.api.FoodIngredient;
 import com.buuz135.sushigocrafting.api.IFoodIngredient;
 import com.buuz135.sushigocrafting.api.IFoodType;
+import com.buuz135.sushigocrafting.client.gui.RollerWeightSelectorButtonComponent;
+import com.buuz135.sushigocrafting.client.gui.provider.RollerAssetProvider;
 import com.buuz135.sushigocrafting.component.FoodTypeButtonComponent;
-import com.buuz135.sushigocrafting.gui.RollerWeightSelectorButtonComponent;
-import com.buuz135.sushigocrafting.gui.provider.SushiAssetProvider;
 import com.buuz135.sushigocrafting.item.FoodItem;
 import com.buuz135.sushigocrafting.proxy.SushiContent;
 import com.hrznstudio.titanium.annotation.Save;
@@ -26,6 +26,7 @@ import net.minecraftforge.common.util.INBTSerializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+import java.util.function.Supplier;
 
 public class RollerTile extends ActiveTile<RollerTile> {
 
@@ -40,11 +41,16 @@ public class RollerTile extends ActiveTile<RollerTile> {
 
     public RollerTile() {
         super(SushiContent.Blocks.ROLLER.get());
-        int i = 1;
+        int i = 0;
         int max = 0;
         this.craftProgress = 0;
         for (IFoodType foodType : FoodHelper.getAllFoodTypes()) {
-            addButton(new FoodTypeButtonComponent(foodType, -20 * i, 0, 18, 18).setComponent(this::getSlots));
+            addButton(new FoodTypeButtonComponent(foodType, -20 - 20 * (i % 3), (i / 3) * 20, 18, 18) {
+                @Override
+                public Supplier<String> getSelected() {
+                    return () -> selected;
+                }
+            }.setComponent(this::getSlots));
             ++i;
             if (selected == null) selected = foodType.getName();
             if (foodType.getFoodIngredients().size() > max) max = foodType.getFoodIngredients().size();
@@ -155,7 +161,7 @@ public class RollerTile extends ActiveTile<RollerTile> {
 
     @Override
     public IAssetProvider getAssetProvider() {
-        return SushiAssetProvider.INSTANCE;
+        return RollerAssetProvider.INSTANCE;
     }
 
     private class WeightTracker implements INBTSerializable<CompoundNBT> {

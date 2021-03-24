@@ -1,12 +1,15 @@
-package com.buuz135.sushigocrafting.gui;
+package com.buuz135.sushigocrafting.client.gui;
 
 import com.buuz135.sushigocrafting.api.FoodHelper;
+import com.buuz135.sushigocrafting.client.gui.provider.SushiAssetTypes;
 import com.buuz135.sushigocrafting.component.FoodTypeButtonComponent;
 import com.hrznstudio.titanium.Titanium;
+import com.hrznstudio.titanium.api.client.IAsset;
 import com.hrznstudio.titanium.client.screen.addon.BasicButtonAddon;
 import com.hrznstudio.titanium.client.screen.asset.IAssetProvider;
 import com.hrznstudio.titanium.network.locator.ILocatable;
 import com.hrznstudio.titanium.network.messages.ButtonClickNetworkMessage;
+import com.hrznstudio.titanium.util.AssetUtil;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.audio.SimpleSound;
@@ -21,16 +24,28 @@ import net.minecraft.util.text.StringTextComponent;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.function.Supplier;
 
 public class FoodTypeSelectionButtonAddon extends BasicButtonAddon {
 
-    public FoodTypeSelectionButtonAddon(FoodTypeButtonComponent buttonComponent) {
+    private final Supplier<String> selected;
+
+    public FoodTypeSelectionButtonAddon(FoodTypeButtonComponent buttonComponent, Supplier<String> selected) {
         super(buttonComponent);
+        this.selected = selected;
     }
 
     @Override
     public void drawBackgroundLayer(MatrixStack stack, Screen screen, IAssetProvider provider, int guiX, int guiY, int mouseX, int mouseY, float partialTicks) {
         super.drawBackgroundLayer(stack, screen, provider, guiX, guiY, mouseX, mouseY, partialTicks);
+        IAsset asset = provider.getAsset(SushiAssetTypes.ROLLER_TYPE_BG);
+        if (asset != null) {
+            AssetUtil.drawAsset(stack, screen, asset, guiX + getPosX() - 1, guiY + getPosY() - 1);
+        }
+        asset = provider.getAsset(SushiAssetTypes.ROLLER_TYPE_BG_OVER);
+        if (asset != null && getButton().getType().getName().equalsIgnoreCase(selected.get())) {
+            AssetUtil.drawAsset(stack, screen, asset, guiX + getPosX() - 1, guiY + getPosY() - 1);
+        }
         Minecraft.getInstance().getItemRenderer().renderItemAndEffectIntoGUI(new ItemStack(FoodHelper.REGISTERED.get(getButton().getType().getName()).get(0)), guiX + getPosX(), guiY + getPosY());
     }
 

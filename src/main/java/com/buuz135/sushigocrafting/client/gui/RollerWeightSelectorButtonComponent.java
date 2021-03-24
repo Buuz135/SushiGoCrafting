@@ -1,6 +1,6 @@
-package com.buuz135.sushigocrafting.gui;
+package com.buuz135.sushigocrafting.client.gui;
 
-import com.buuz135.sushigocrafting.gui.provider.SushiAssetTypes;
+import com.buuz135.sushigocrafting.client.gui.provider.SushiAssetTypes;
 import com.buuz135.sushigocrafting.tile.machinery.RollerTile;
 import com.hrznstudio.titanium.Titanium;
 import com.hrznstudio.titanium.api.client.IAsset;
@@ -38,7 +38,6 @@ public abstract class RollerWeightSelectorButtonComponent extends BasicScreenAdd
         this.inventoryComponent = inventoryComponent;
         this.slot = slot;
     }
-
 
     @Override
     public void drawBackgroundLayer(MatrixStack matrixStack, Screen screen, IAssetProvider iAssetProvider, int guiX, int guiY, int mouseX, int mouseY, float v) {
