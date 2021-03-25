@@ -9,6 +9,8 @@ import net.minecraft.state.IntegerProperty;
 import net.minecraft.state.StateContainer;
 import net.minecraft.util.IItemProvider;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.shapes.ISelectionContext;
+import net.minecraft.util.math.shapes.VoxelShape;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
 
@@ -20,6 +22,12 @@ public class CustomCropBlock extends CropsBlock {
 
     public static final IntegerProperty AGE = IntegerProperty.create("age", 0, 3);
 
+    private static final VoxelShape[] SHAPE_BY_AGE = new VoxelShape[]{
+            Block.makeCuboidShape(0.0D, 0.0D, 0.0D, 16.0D, 2.0D, 16.0D),
+            Block.makeCuboidShape(0.0D, 0.0D, 0.0D, 16.0D, 6.0D, 16.0D),
+            Block.makeCuboidShape(0.0D, 0.0D, 0.0D, 16.0D, 12.0D, 16.0D),
+            Block.makeCuboidShape(0.0D, 0.0D, 0.0D, 16.0D, 16.0D, 16.0D)};
+
     private final int maxAge;
     private final Supplier<? extends Item> seedSupplier;
     private final Predicate<BlockState> groundPredicate;
@@ -29,6 +37,10 @@ public class CustomCropBlock extends CropsBlock {
         this.maxAge = Collections.max(getAgeProperty().getAllowedValues());
         this.seedSupplier = seedSupplier;
         this.groundPredicate = groundPredicate;
+    }
+
+    public VoxelShape getShape(BlockState state, IBlockReader worldIn, BlockPos pos, ISelectionContext context) {
+        return SHAPE_BY_AGE[state.get(this.getAgeProperty())];
     }
 
     @Override
