@@ -21,8 +21,8 @@ public class SushiRecipeProvider extends TitaniumSerializableProvider {
     @Override
     public void add(Map<IJsonFile, IJSONGenerator> map) {
         for (FoodIngredient value : FoodIngredient.values()) {
-            if (value.isNeedsChoppingRecipe()) {
-                CuttingBoardRecipe recipe = new CuttingBoardRecipe(new ResourceLocation(SushiGoCrafting.MOD_ID, value.getName()), value.getTag().get(), value.getName());
+            if (value.needsChoppingRecipe()) {
+                CuttingBoardRecipe recipe = new CuttingBoardRecipe(new ResourceLocation(SushiGoCrafting.MOD_ID, value.getName()), value.getInput().get(), value.getName());
                 map.put(recipe, recipe);
             }
         }

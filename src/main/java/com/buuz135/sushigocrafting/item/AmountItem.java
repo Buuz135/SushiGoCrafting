@@ -1,5 +1,6 @@
 package com.buuz135.sushigocrafting.item;
 
+import com.buuz135.sushigocrafting.api.FoodIngredient;
 import com.buuz135.sushigocrafting.proxy.SushiContent;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.player.PlayerEntity;
@@ -96,5 +97,13 @@ public class AmountItem extends SushiItem {
             extra += (entity.getActivePotionEffect(SushiContent.Effects.STEADY_HANDS.get()).getAmplifier() + 1) * getMinAmount();
         }
         return withAmount(Math.min(getMaxCombineAmount(), extra + world.rand.nextInt(getMaxAmount() - getMinAmount()) + getMinAmount()));
+    }
+
+    public void consume(FoodIngredient ingredient, ItemStack stack, int amountLevel) {
+        int amount = stack.getOrCreateTag().getInt(NBT_AMOUNT) - ingredient.getDefaultAmount() * amountLevel;
+        stack.getOrCreateTag().putInt(NBT_AMOUNT, amount);
+        if (amount < 0) {
+            stack.shrink(1);
+        }
     }
 }

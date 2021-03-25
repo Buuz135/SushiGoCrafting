@@ -103,7 +103,9 @@ public class RollerTile extends ActiveTile<RollerTile> {
                         List<Integer> weightValues = new ArrayList<>();
                         for (int i1 = 0; i1 < slots.getSlots(); i1++) {
                             if (i1 < iFoodType.getFoodIngredients().size()) {
-                                foodIngredients.add(FoodIngredient.fromItem(slots.getStackInSlot(i1).getItem()));
+                                FoodIngredient ingredient = FoodIngredient.fromItem(slots.getStackInSlot(i1).getItem());
+                                ingredient.getIngredientConsumer().consume(ingredient, slots.getStackInSlot(i1), weightTracker.weights.get(i1));
+                                foodIngredients.add(ingredient);
                                 weightValues.add(random.nextInt(5) - weightTracker.weights.get(i1));
                             }
                         }

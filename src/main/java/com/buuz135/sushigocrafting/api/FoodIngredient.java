@@ -9,31 +9,33 @@ import javax.annotation.Nullable;
 import java.util.function.Supplier;
 
 public enum FoodIngredient implements IFoodIngredient {
-    EMPTY("empty", null, false, null),
-    RICE("rice", SushiContent.Items.COOKED_RICE, false, null),
-    NORI("nori", SushiContent.Items.NORI_SHEET, false, null),
-    TUNA_FILLET("tuna", SushiContent.Items.RAW_TUNA_FILLET, true, () -> Ingredient.fromItems(SushiContent.Items.RAW_TUNA.get())),
-    SALMON_FILLET("salmon", SushiContent.Items.RAW_SALMON_FILLET, true, () -> Ingredient.fromItems(Items.SALMON)),
-    AVOCADO("avocado", SushiContent.Items.AVOCADO_SLICES, true, () -> Ingredient.fromItems(SushiContent.Items.AVOCADO.get())),
-    CUCUMBER("cucumber", SushiContent.Items.CUCUMBER_SLICES, true, () -> Ingredient.fromItems(SushiContent.Items.CUCUMBER.get())),
-    SESAME("sesame", SushiContent.Items.SESAME_SEED, false, null),
-    CRAB("crab", SushiContent.Items.IMITATION_CRAB, true, () -> Ingredient.fromItems(Items.COD)),
-    WAKAME("wakame", SushiContent.Items.IMITATION_CRAB, true, () -> Ingredient.fromItems(Items.KELP)),
-    TOBIKO("tobiko", SushiContent.Items.TOBIKO, false, null),
-    CHEESE("cheese", SushiContent.Items.CHEESE, false, null),
-    SHRIMP("shrimp", SushiContent.Items.SHRIMP, true, () -> Ingredient.fromItems(SushiContent.Items.SHRIMP.get())),
-    CHICKEN("chicken", () -> Items.COOKED_CHICKEN, false, null);
+    EMPTY("empty", null, 0, IIngredientConsumer.WEIGHT, null),
+    RICE("rice", SushiContent.Items.COOKED_RICE, 10, IIngredientConsumer.WEIGHT, null),
+    NORI("nori", SushiContent.Items.NORI_SHEET, 1, IIngredientConsumer.STACK, null),
+    TUNA_FILLET("tuna", SushiContent.Items.RAW_TUNA_FILLET, 10, IIngredientConsumer.WEIGHT, () -> Ingredient.fromItems(SushiContent.Items.RAW_TUNA.get())),
+    SALMON_FILLET("salmon", SushiContent.Items.RAW_SALMON_FILLET, 10, IIngredientConsumer.WEIGHT, () -> Ingredient.fromItems(Items.SALMON)),
+    AVOCADO("avocado", SushiContent.Items.AVOCADO_SLICES, 15, IIngredientConsumer.WEIGHT, () -> Ingredient.fromItems(SushiContent.Items.AVOCADO.get())),
+    CUCUMBER("cucumber", SushiContent.Items.CUCUMBER_SLICES, 5, IIngredientConsumer.WEIGHT, () -> Ingredient.fromItems(SushiContent.Items.CUCUMBER.get())),
+    SESAME("sesame", SushiContent.Items.SESAME_SEED, 2, IIngredientConsumer.WEIGHT, null),
+    CRAB("crab", SushiContent.Items.IMITATION_CRAB, 10, IIngredientConsumer.WEIGHT, () -> Ingredient.fromItems(Items.COD)),
+    WAKAME("wakame", SushiContent.Items.IMITATION_CRAB, 10, IIngredientConsumer.WEIGHT, () -> Ingredient.fromItems(Items.KELP)),
+    TOBIKO("tobiko", SushiContent.Items.TOBIKO, 4, IIngredientConsumer.WEIGHT, null),
+    CHEESE("cheese", SushiContent.Items.CHEESE, 4, IIngredientConsumer.WEIGHT, null),
+    SHRIMP("shrimp", SushiContent.Items.SHRIMP, 10, IIngredientConsumer.WEIGHT, () -> Ingredient.fromItems(SushiContent.Items.SHRIMP.get())),
+    CHICKEN("chicken", () -> Items.COOKED_CHICKEN, 10, IIngredientConsumer.WEIGHT, null);
 
     private final Supplier<? extends Item> item;
     private final String name;
-    private final boolean needsChoppingRecipe;
-    private final Supplier<Ingredient> tag;
+    private final int defaultAmount;
+    private final IIngredientConsumer ingredientConsumer;
+    private final Supplier<Ingredient> ingredientSupplier;
 
-    FoodIngredient(String name, Supplier<? extends Item> item, boolean needsChoppingRecipe, Supplier<Ingredient> tag) {
+    FoodIngredient(String name, Supplier<? extends Item> item, int defaultAmount, IIngredientConsumer ingredientConsumer, Supplier<Ingredient> ingredientSupplier) {
         this.name = name;
         this.item = item;
-        this.needsChoppingRecipe = needsChoppingRecipe;
-        this.tag = tag;
+        this.defaultAmount = defaultAmount;
+        this.ingredientConsumer = ingredientConsumer;
+        this.ingredientSupplier = ingredientSupplier;
     }
 
     @Override
@@ -58,8 +60,8 @@ public enum FoodIngredient implements IFoodIngredient {
         return null;
     }
 
-    public boolean isNeedsChoppingRecipe() {
-        return needsChoppingRecipe;
+    public boolean needsChoppingRecipe() {
+        return ingredientSupplier != null;
     }
 
     @Nullable
@@ -71,7 +73,15 @@ public enum FoodIngredient implements IFoodIngredient {
         return null;
     }
 
-    public Supplier<Ingredient> getTag() {
-        return tag;
+    public Supplier<Ingredient> getInput() {
+        return ingredientSupplier;
+    }
+
+    public int getDefaultAmount() {
+        return defaultAmount;
+    }
+
+    public IIngredientConsumer getIngredientConsumer() {
+        return ingredientConsumer;
     }
 }
