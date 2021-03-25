@@ -15,6 +15,7 @@ import com.buuz135.sushigocrafting.entity.ShrimpEntity;
 import com.buuz135.sushigocrafting.entity.TunaEntity;
 import com.buuz135.sushigocrafting.item.AmountItem;
 import com.buuz135.sushigocrafting.item.SushiItem;
+import com.buuz135.sushigocrafting.loot.SeedsLootModifier;
 import com.buuz135.sushigocrafting.potioneffect.AcquiredTasteEffect;
 import com.buuz135.sushigocrafting.potioneffect.SmallBitesEffect;
 import com.buuz135.sushigocrafting.potioneffect.SteadyHandsEffect;
@@ -38,6 +39,8 @@ import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.world.gen.feature.Feature;
 import net.minecraft.world.gen.feature.IFeatureConfig;
 import net.minecraft.world.gen.feature.NoFeatureConfig;
+import net.minecraftforge.common.loot.GlobalLootModifierSerializer;
+import net.minecraftforge.common.loot.IGlobalLootModifier;
 import net.minecraftforge.fml.RegistryObject;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
@@ -80,6 +83,10 @@ public class SushiContent {
 
     public static <T extends Entity> RegistryObject<EntityType<T>> entity(String id, Supplier<EntityType<T>> supplier) {
         return EntityTypes.REGISTRY.register(id, supplier);
+    }
+
+    public static <T extends IGlobalLootModifier> RegistryObject<GlobalLootModifierSerializer<?>> lootSerializer(String id, Supplier<GlobalLootModifierSerializer<T>> supplier) {
+        return LootSerializers.REGISTRY.register(id, supplier);
     }
 
     public static class Blocks {
@@ -208,5 +215,13 @@ public class SushiContent {
             return SHRIMP;
         }
     }
+
+    public static class LootSerializers {
+
+        public static final DeferredRegister<GlobalLootModifierSerializer<?>> REGISTRY = DeferredRegister.create(ForgeRegistries.LOOT_MODIFIER_SERIALIZERS, SushiGoCrafting.MOD_ID);
+
+        public static final RegistryObject<GlobalLootModifierSerializer<?>> SEEDS = lootSerializer("grass_seeds", SeedsLootModifier.Serializer::new);
+    }
+
 
 }

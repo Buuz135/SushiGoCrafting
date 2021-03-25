@@ -69,6 +69,7 @@ public class SushiGoCrafting {
         SushiContent.TileEntities.REGISTRY.register(FMLJavaModLoadingContext.get().getModEventBus());
         SushiContent.Effects.REGISTRY.register(FMLJavaModLoadingContext.get().getModEventBus());
         SushiContent.EntityTypes.REGISTRY.register(FMLJavaModLoadingContext.get().getModEventBus());
+        SushiContent.LootSerializers.REGISTRY.register(FMLJavaModLoadingContext.get().getModEventBus());
         EventManager.mod(FMLClientSetupEvent.class).process(this::fmlClient).subscribe();
         EventManager.mod(FMLCommonSetupEvent.class).process(this::fmlCommon).subscribe();
         EventManager.mod(GatherDataEvent.class).process(this::dataGen).subscribe();
@@ -140,6 +141,7 @@ public class SushiGoCrafting {
         event.getGenerator().addProvider(provider);
         event.getGenerator().addProvider(new SushiItemTagsProvider(event.getGenerator(), provider, event.getExistingFileHelper()));
         event.getGenerator().addProvider(new SushiRecipeProvider(event.getGenerator(), MOD_ID));
+        event.getGenerator().addProvider(new SushiLootTableProvider(event.getGenerator()));
     }
 
 }
