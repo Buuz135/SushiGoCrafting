@@ -1,0 +1,14 @@
+{
+  "type": "sushigocrafting:item_amount",
+  "conditions": [
+    {
+      "condition": "minecraft:alternative",
+      "terms": [
+        {
+          "condition": "random_chance",
+          "chance": 1
+        }
+      ]
+    }
+  ]
+}

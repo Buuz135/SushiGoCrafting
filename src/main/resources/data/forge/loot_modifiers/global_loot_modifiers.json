@@ -1,6 +1,7 @@
 {
   "replace": false,
   "entries": [
-    "sushigocrafting:grass_seeds"
+    "sushigocrafting:grass_seeds",
+    "sushigocrafting:item_amount"
   ]
 }

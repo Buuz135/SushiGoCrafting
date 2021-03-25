@@ -1,5 +1,6 @@
 package com.buuz135.sushigocrafting.datagen;
 
+import com.buuz135.sushigocrafting.proxy.SushiContent;
 import com.mojang.datafixers.util.Pair;
 import net.minecraft.advancements.criterion.ItemPredicate;
 import net.minecraft.block.Block;
@@ -8,6 +9,7 @@ import net.minecraft.data.LootTableProvider;
 import net.minecraft.data.loot.BlockLootTables;
 import net.minecraft.data.loot.EntityLootTables;
 import net.minecraft.enchantment.Enchantments;
+import net.minecraft.entity.EntityType;
 import net.minecraft.item.Items;
 import net.minecraft.loot.*;
 import net.minecraft.loot.conditions.ILootCondition;
@@ -32,7 +34,7 @@ public class SushiLootTableProvider extends LootTableProvider {
 
     @Override
     protected List<Pair<Supplier<Consumer<BiConsumer<ResourceLocation, LootTable.Builder>>>, LootParameterSet>> getTables() {
-        return Arrays.asList(Pair.of(SushiBlockLootTables::new, LootParameterSets.BLOCK));
+        return Arrays.asList(Pair.of(SushiBlockLootTables::new, LootParameterSets.BLOCK), Pair.of(SushiEntityLootTables::new, LootParameterSets.ENTITY));
     }
 
     @Override
@@ -83,9 +85,13 @@ public class SushiLootTableProvider extends LootTableProvider {
 
         @Override
         protected void addTables() {
-
+            this.registerLootTable(SushiContent.EntityTypes.TUNA.get(), LootTable.builder().addLootPool(LootPool.builder().rolls(ConstantRange.of(1)).addEntry(ItemLootEntry.builder(SushiContent.Items.RAW_TUNA.get()))).addLootPool(LootPool.builder().rolls(ConstantRange.of(1)).addEntry(ItemLootEntry.builder(Items.BONE_MEAL)).acceptCondition(RandomChance.builder(0.05F))));
+            this.registerLootTable(SushiContent.EntityTypes.SHRIMP.get(), LootTable.builder().addLootPool(LootPool.builder().rolls(ConstantRange.of(1)).addEntry(ItemLootEntry.builder(SushiContent.Items.SHRIMP.get()))));
         }
 
-
+        @Override
+        protected Iterable<EntityType<?>> getKnownEntities() {
+            return Arrays.asList(SushiContent.EntityTypes.TUNA.get(), SushiContent.EntityTypes.SHRIMP.get());
+        }
     }
 }

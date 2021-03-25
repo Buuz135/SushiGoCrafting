@@ -15,6 +15,7 @@ import com.buuz135.sushigocrafting.entity.ShrimpEntity;
 import com.buuz135.sushigocrafting.entity.TunaEntity;
 import com.buuz135.sushigocrafting.item.AmountItem;
 import com.buuz135.sushigocrafting.item.SushiItem;
+import com.buuz135.sushigocrafting.loot.ItemAmountLootModifier;
 import com.buuz135.sushigocrafting.loot.SeedsLootModifier;
 import com.buuz135.sushigocrafting.potioneffect.AcquiredTasteEffect;
 import com.buuz135.sushigocrafting.potioneffect.SmallBitesEffect;
@@ -112,7 +113,6 @@ public class SushiContent {
         public static final RegistryObject<RiceCookerBlock> RICE_COOKER = block("rice_cooker", RiceCookerBlock::new);
         public static final RegistryObject<CuttingBoardBlock> CUTTING_BOARD = block("cutting_board", CuttingBoardBlock::new);
 
-
     }
 
     public static class Items {
@@ -160,7 +160,7 @@ public class SushiContent {
         public static final RegistryObject<AmountItem> SESAME_SEED = amountItem("sesame_seed", "ingredient", 10, 100, 200);
         public static final RegistryObject<AmountItem> TOBIKO = amountItem("tobiko", "ingredient", 10, 50, 100);
         public static final RegistryObject<AmountItem> CHEESE = amountItem("cheese", "ingredient", 50, 250, 500);
-        public static final RegistryObject<AmountItem> SHRIMP = amountItem("shrimp", "ingredient", 10, 50, 100);
+        public static final RegistryObject<AmountItem> SHRIMP = amountItem("shrimp", "ingredient", 20, 50, 100);
         public static final RegistryObject<AmountItem> SOW_SAUCE = amountItem("soy_sauce", "ingredient", 10, 50, 100);
         public static final RegistryObject<AmountItem> WASABI_PASTE = amountItem("wasabi_paste", "ingredient", 10, 50, 100);
 
@@ -221,6 +221,8 @@ public class SushiContent {
         public static final DeferredRegister<GlobalLootModifierSerializer<?>> REGISTRY = DeferredRegister.create(ForgeRegistries.LOOT_MODIFIER_SERIALIZERS, SushiGoCrafting.MOD_ID);
 
         public static final RegistryObject<GlobalLootModifierSerializer<?>> SEEDS = lootSerializer("grass_seeds", SeedsLootModifier.Serializer::new);
+        public static final RegistryObject<GlobalLootModifierSerializer<?>> ITEM_AMOUNT = lootSerializer("item_amount", ItemAmountLootModifier.Serializer::new);
+
     }
 
 

@@ -93,7 +93,7 @@ public class AmountItem extends SushiItem {
 
     public ItemStack random(PlayerEntity entity, World world) {
         int extra = 0;
-        if (entity.isPotionActive(SushiContent.Effects.STEADY_HANDS.get())) {
+        if (entity != null && entity.isPotionActive(SushiContent.Effects.STEADY_HANDS.get())) {
             extra += (entity.getActivePotionEffect(SushiContent.Effects.STEADY_HANDS.get()).getAmplifier() + 1) * getMinAmount();
         }
         return withAmount(Math.min(getMaxCombineAmount(), extra + world.rand.nextInt(getMaxAmount() - getMinAmount()) + getMinAmount()));
