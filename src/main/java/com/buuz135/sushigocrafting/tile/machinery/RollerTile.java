@@ -61,7 +61,7 @@ public class RollerTile extends ActiveTile<RollerTile> {
         slots.setInputFilter((stack, integer) -> FoodIngredient.fromItem(stack.getItem()) != null);
         FoodHelper.getTypeFromName(selected).ifPresent(iFoodType -> {
             for (int i1 = 0; i1 < slots.getSlots(); i1++) {
-                slots.setSlotLimit(i1, i1 < iFoodType.getFoodIngredients().size() ? 1 : 0);
+                slots.setSlotLimit(i1, i1 < iFoodType.getFoodIngredients().size() ? 64 : 0);
                 int finalI = i1;
                 addGuiAddonFactory(() -> new RollerWeightSelectorButtonComponent(slots, finalI) {
                     @Override
@@ -129,7 +129,7 @@ public class RollerTile extends ActiveTile<RollerTile> {
             FoodHelper.getTypeFromName(compound.getString("Type")).ifPresent(iFoodType -> {
                 slots.setSlotPosition(iFoodType.getSlotPosition());
                 for (int i1 = 0; i1 < slots.getSlots(); i1++) {
-                    slots.setSlotLimit(i1, i1 < iFoodType.getFoodIngredients().size() ? 1 : 0);
+                    slots.setSlotLimit(i1, i1 < iFoodType.getFoodIngredients().size() ? 64 : 0);
                 }
                 markForUpdate();
             });
