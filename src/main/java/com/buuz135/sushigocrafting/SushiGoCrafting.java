@@ -100,7 +100,7 @@ public class SushiGoCrafting {
             if (pre.getWorld().getBlockState(pre.getFaceOffsetPos()).getBlock().equals(SushiContent.Blocks.SEAWEED_BLOCK.get()) && pre.getWorld().getBlockState(pre.getPos().offset(pre.getDirection(), 2)).getBlock().equals(Blocks.IRON_BLOCK)) {
                 pre.getWorld().destroyBlock(pre.getFaceOffsetPos(), false);
                 NonNullList<ItemStack> list = NonNullList.create();
-                list.add(new ItemStack(SushiContent.Items.NORI_SHEET.get(), 3));
+                list.add(new ItemStack(SushiContent.Items.NORI_SHEET.get(), 3 + pre.getWorld().getRandom().nextInt(3)));
                 InventoryHelper.dropItems((World) pre.getWorld(), pre.getFaceOffsetPos().add(0.5, 0.5, 0.5), list);
             }
         }).subscribe();
