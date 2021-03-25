@@ -55,10 +55,10 @@ public class FoodItem extends SushiItem {
         } else if (Math.abs(negative) == positive) {
             names.add(new StringTextComponent(TextFormatting.DARK_GREEN + "Wierdly Balanced"));
         }
-        if (Math.abs(negative) > positive) {
+        if (Math.abs(negative) < positive) {
             names.add(new StringTextComponent(TextFormatting.RED + "Almost Hollow"));
         }
-        if (Math.abs(negative) < positive) {
+        if (Math.abs(negative) > positive) {
             names.add(new StringTextComponent(TextFormatting.RED + "Overflowing"));
         }
         return names;
