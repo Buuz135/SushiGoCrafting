@@ -14,6 +14,6 @@ public interface IIngredientConsumer {
         }
     };
 
-    void consume(FoodIngredient foodIngredient, ItemStack stack, int amountLevel);
+    void consume(IFoodIngredient foodIngredient, ItemStack stack, int amountLevel);
 
 }

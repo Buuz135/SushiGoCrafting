@@ -1,6 +1,6 @@
 package com.buuz135.sushigocrafting.tile.machinery;
 
-import com.buuz135.sushigocrafting.api.FoodIngredient;
+import com.buuz135.sushigocrafting.api.FoodAPI;
 import com.buuz135.sushigocrafting.item.AmountItem;
 import com.buuz135.sushigocrafting.proxy.SushiContent;
 import com.buuz135.sushigocrafting.recipe.CuttingBoardRecipe;
@@ -42,7 +42,7 @@ public class CuttingBoardTile extends ActiveTile<CuttingBoardTile> {
                 if (click > 5) {
                     for (CuttingBoardRecipe recipe : RecipeUtil.getRecipes(this.world, CuttingBoardRecipe.SERIALIZER.getRecipeType())) {
                         if (recipe.getInput().test(this.input.getStackInSlot(0))) {
-                            Item item = FoodIngredient.fromName(recipe.getIngredient()).getItem();
+                            Item item = FoodAPI.get().getIngredientFromName(recipe.getIngredient()).getItem();
                             if (item instanceof AmountItem) {
                                 ItemHandlerHelper.giveItemToPlayer(player, ((AmountItem) item).random(player, world));
                             } else {

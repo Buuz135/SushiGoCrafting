@@ -8,5 +8,11 @@ public interface IFoodIngredient {
 
     String getName();
 
-    boolean isEmpty();
+    public default boolean isEmpty() {
+        return this == FoodIngredient.EMPTY;
+    }
+
+    IIngredientConsumer getIngredientConsumer();
+
+    int getDefaultAmount();
 }

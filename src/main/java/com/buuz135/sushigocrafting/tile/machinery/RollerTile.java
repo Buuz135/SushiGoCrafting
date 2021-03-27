@@ -1,7 +1,7 @@
 package com.buuz135.sushigocrafting.tile.machinery;
 
+import com.buuz135.sushigocrafting.api.FoodAPI;
 import com.buuz135.sushigocrafting.api.FoodHelper;
-import com.buuz135.sushigocrafting.api.FoodIngredient;
 import com.buuz135.sushigocrafting.api.IFoodIngredient;
 import com.buuz135.sushigocrafting.api.IFoodType;
 import com.buuz135.sushigocrafting.client.gui.RollerWeightSelectorButtonComponent;
@@ -44,7 +44,7 @@ public class RollerTile extends ActiveTile<RollerTile> {
         int i = 0;
         int max = 0;
         this.craftProgress = 0;
-        for (IFoodType foodType : FoodHelper.getAllFoodTypes()) {
+        for (IFoodType foodType : FoodAPI.get().getFoodTypes()) {
             addButton(new FoodTypeButtonComponent(foodType, -20 - 20 * (i % 3), (i / 3) * 20, 18, 18) {
                 @Override
                 public Supplier<String> getSelected() {
@@ -57,9 +57,9 @@ public class RollerTile extends ActiveTile<RollerTile> {
         }
         weightTracker = new WeightTracker(max);
         slots = new InventoryComponent<>("slots", 0, 0, max);
-        slots.setSlotPosition(FoodHelper.getAllFoodTypes().get(0).getSlotPosition());
-        slots.setInputFilter((stack, integer) -> FoodIngredient.fromItem(stack.getItem()) != null);
-        FoodHelper.getTypeFromName(selected).ifPresent(iFoodType -> {
+        slots.setSlotPosition(FoodAPI.get().getFoodTypes().get(0).getSlotPosition());
+        slots.setInputFilter((stack, integer) -> !FoodAPI.get().getIngredientFromItem(stack.getItem()).isEmpty());
+        FoodAPI.get().getTypeFromName(selected).ifPresent(iFoodType -> {
             for (int i1 = 0; i1 < slots.getSlots(); i1++) {
                 slots.setSlotLimit(i1, i1 < iFoodType.getFoodIngredients().size() ? 64 : 0);
                 int finalI = i1;
@@ -86,7 +86,7 @@ public class RollerTile extends ActiveTile<RollerTile> {
 
     public void onClick(PlayerEntity player) {
         if (isServer()) {
-            FoodHelper.getTypeFromName(selected).ifPresent(iFoodType -> {
+            FoodAPI.get().getTypeFromName(selected).ifPresent(iFoodType -> {
                 boolean allFull = true;
                 for (int i1 = 0; i1 < slots.getSlots(); i1++) {
                     if (i1 < iFoodType.getFoodIngredients().size() && slots.getStackInSlot(i1).isEmpty()) {
@@ -103,7 +103,7 @@ public class RollerTile extends ActiveTile<RollerTile> {
                         List<Integer> weightValues = new ArrayList<>();
                         for (int i1 = 0; i1 < slots.getSlots(); i1++) {
                             if (i1 < iFoodType.getFoodIngredients().size()) {
-                                FoodIngredient ingredient = FoodIngredient.fromItem(slots.getStackInSlot(i1).getItem());
+                                IFoodIngredient ingredient = FoodAPI.get().getIngredientFromItem(slots.getStackInSlot(i1).getItem());
                                 ingredient.getIngredientConsumer().consume(ingredient, slots.getStackInSlot(i1), weightTracker.weights.get(i1));
                                 foodIngredients.add(ingredient);
                                 weightValues.add(random.nextInt(5) - weightTracker.weights.get(i1));
@@ -126,7 +126,7 @@ public class RollerTile extends ActiveTile<RollerTile> {
         super.handleButtonMessage(id, playerEntity, compound);
         if (compound.contains("Type")) {
             //Random random = new Random(((ServerWorld) this.world).getSeed() + compound.getString("Type").hashCode());
-            FoodHelper.getTypeFromName(compound.getString("Type")).ifPresent(iFoodType -> {
+            FoodAPI.get().getTypeFromName(compound.getString("Type")).ifPresent(iFoodType -> {
                 slots.setSlotPosition(iFoodType.getSlotPosition());
                 for (int i1 = 0; i1 < slots.getSlots(); i1++) {
                     slots.setSlotLimit(i1, i1 < iFoodType.getFoodIngredients().size() ? 64 : 0);

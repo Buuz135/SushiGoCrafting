@@ -1,7 +1,9 @@
 package com.buuz135.sushigocrafting.datagen;
 
 import com.buuz135.sushigocrafting.SushiGoCrafting;
+import com.buuz135.sushigocrafting.api.FoodAPI;
 import com.buuz135.sushigocrafting.api.FoodIngredient;
+import com.buuz135.sushigocrafting.api.IFoodIngredient;
 import com.buuz135.sushigocrafting.recipe.CuttingBoardRecipe;
 import com.hrznstudio.titanium.recipe.generator.IJSONGenerator;
 import com.hrznstudio.titanium.recipe.generator.IJsonFile;
@@ -20,9 +22,9 @@ public class SushiRecipeProvider extends TitaniumSerializableProvider {
 
     @Override
     public void add(Map<IJsonFile, IJSONGenerator> map) {
-        for (FoodIngredient value : FoodIngredient.values()) {
-            if (value.needsChoppingRecipe()) {
-                CuttingBoardRecipe recipe = new CuttingBoardRecipe(new ResourceLocation(SushiGoCrafting.MOD_ID, value.getName()), value.getInput().get(), value.getName());
+        for (IFoodIngredient value : FoodAPI.get().getFoodIngredient()) {
+            if (value instanceof FoodIngredient && ((FoodIngredient) value).needsChoppingRecipe()) {
+                CuttingBoardRecipe recipe = new CuttingBoardRecipe(new ResourceLocation(SushiGoCrafting.MOD_ID, value.getName()), ((FoodIngredient) value).getInput().get(), value.getName());
                 map.put(recipe, recipe);
             }
         }

@@ -1,7 +1,8 @@
 package com.buuz135.sushigocrafting;
 
+import com.buuz135.sushigocrafting.api.FoodAPI;
 import com.buuz135.sushigocrafting.api.FoodHelper;
-import com.buuz135.sushigocrafting.api.FoodType;
+import com.buuz135.sushigocrafting.api.IFoodType;
 import com.buuz135.sushigocrafting.client.entity.ShrimpRenderer;
 import com.buuz135.sushigocrafting.client.entity.TunaRenderer;
 import com.buuz135.sushigocrafting.client.tesr.CuttingBoardRenderer;
@@ -78,7 +79,7 @@ public class SushiGoCrafting {
                         .registerAll(CombineAmountItemRecipe.SERIALIZER.setRegistryName(new ResourceLocation(MOD_ID, "amount_combine_recipe")),
                                 CuttingBoardRecipe.SERIALIZER
                         )).subscribe();
-        for (FoodType value : FoodType.values()) {
+        for (IFoodType value : FoodAPI.get().getFoodTypes()) {
             FoodHelper.generateFood(value).forEach(item -> SushiContent.Items.REGISTRY.register(FoodHelper.getName(item), () -> item));
         }
         NBTManager.getInstance().scanTileClassForAnnotations(RollerTile.class);
