@@ -1,5 +1,7 @@
-package com.buuz135.sushigocrafting.api;
+package com.buuz135.sushigocrafting.api.impl;
 
+import com.buuz135.sushigocrafting.api.IFoodIngredient;
+import com.buuz135.sushigocrafting.api.IIngredientConsumer;
 import com.buuz135.sushigocrafting.proxy.SushiContent;
 import net.minecraft.item.Item;
 import net.minecraft.item.Items;

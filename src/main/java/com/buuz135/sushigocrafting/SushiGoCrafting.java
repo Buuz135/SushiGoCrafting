@@ -1,8 +1,8 @@
 package com.buuz135.sushigocrafting;
 
-import com.buuz135.sushigocrafting.api.FoodAPI;
-import com.buuz135.sushigocrafting.api.FoodHelper;
 import com.buuz135.sushigocrafting.api.IFoodType;
+import com.buuz135.sushigocrafting.api.impl.FoodAPI;
+import com.buuz135.sushigocrafting.api.impl.FoodHelper;
 import com.buuz135.sushigocrafting.client.entity.ShrimpRenderer;
 import com.buuz135.sushigocrafting.client.entity.TunaRenderer;
 import com.buuz135.sushigocrafting.client.tesr.CuttingBoardRenderer;

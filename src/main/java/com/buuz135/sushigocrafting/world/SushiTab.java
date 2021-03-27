@@ -1,6 +1,6 @@
 package com.buuz135.sushigocrafting.world;
 
-import com.buuz135.sushigocrafting.api.FoodHelper;
+import com.buuz135.sushigocrafting.api.impl.FoodHelper;
 import net.minecraft.client.Minecraft;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;

@@ -1,6 +1,6 @@
 package com.buuz135.sushigocrafting.client.gui;
 
-import com.buuz135.sushigocrafting.api.FoodHelper;
+import com.buuz135.sushigocrafting.api.impl.FoodHelper;
 import com.buuz135.sushigocrafting.client.gui.provider.SushiAssetTypes;
 import com.buuz135.sushigocrafting.component.FoodTypeButtonComponent;
 import com.hrznstudio.titanium.Titanium;

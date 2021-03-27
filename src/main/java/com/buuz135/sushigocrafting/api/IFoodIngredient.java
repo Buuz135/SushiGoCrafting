@@ -1,5 +1,6 @@
 package com.buuz135.sushigocrafting.api;
 
+import com.buuz135.sushigocrafting.api.impl.FoodIngredient;
 import net.minecraft.item.Item;
 
 public interface IFoodIngredient {

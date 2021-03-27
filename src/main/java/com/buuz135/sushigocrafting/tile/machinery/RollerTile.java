@@ -1,9 +1,9 @@
 package com.buuz135.sushigocrafting.tile.machinery;
 
-import com.buuz135.sushigocrafting.api.FoodAPI;
-import com.buuz135.sushigocrafting.api.FoodHelper;
 import com.buuz135.sushigocrafting.api.IFoodIngredient;
 import com.buuz135.sushigocrafting.api.IFoodType;
+import com.buuz135.sushigocrafting.api.impl.FoodAPI;
+import com.buuz135.sushigocrafting.api.impl.FoodHelper;
 import com.buuz135.sushigocrafting.client.gui.RollerWeightSelectorButtonComponent;
 import com.buuz135.sushigocrafting.client.gui.provider.RollerAssetProvider;
 import com.buuz135.sushigocrafting.component.FoodTypeButtonComponent;

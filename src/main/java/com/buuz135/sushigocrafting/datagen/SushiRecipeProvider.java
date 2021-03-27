@@ -1,9 +1,9 @@
 package com.buuz135.sushigocrafting.datagen;
 
 import com.buuz135.sushigocrafting.SushiGoCrafting;
-import com.buuz135.sushigocrafting.api.FoodAPI;
-import com.buuz135.sushigocrafting.api.FoodIngredient;
 import com.buuz135.sushigocrafting.api.IFoodIngredient;
+import com.buuz135.sushigocrafting.api.impl.FoodAPI;
+import com.buuz135.sushigocrafting.api.impl.FoodIngredient;
 import com.buuz135.sushigocrafting.recipe.CuttingBoardRecipe;
 import com.hrznstudio.titanium.recipe.generator.IJSONGenerator;
 import com.hrznstudio.titanium.recipe.generator.IJsonFile;

@@ -1,6 +1,8 @@
-package com.buuz135.sushigocrafting.api;
+package com.buuz135.sushigocrafting.api.impl;
 
 import com.buuz135.sushigocrafting.SushiGoCrafting;
+import com.buuz135.sushigocrafting.api.IFoodIngredient;
+import com.buuz135.sushigocrafting.api.IFoodType;
 import com.buuz135.sushigocrafting.item.FoodItem;
 import net.minecraft.item.Item;
 

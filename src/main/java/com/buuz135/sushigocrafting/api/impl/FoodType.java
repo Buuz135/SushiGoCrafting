@@ -1,5 +1,7 @@
-package com.buuz135.sushigocrafting.api;
+package com.buuz135.sushigocrafting.api.impl;
 
+import com.buuz135.sushigocrafting.api.IFoodIngredient;
+import com.buuz135.sushigocrafting.api.IFoodType;
 import org.apache.commons.lang3.tuple.Pair;
 
 import java.util.ArrayList;

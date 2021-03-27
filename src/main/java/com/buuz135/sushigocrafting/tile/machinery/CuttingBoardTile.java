@@ -1,6 +1,6 @@
 package com.buuz135.sushigocrafting.tile.machinery;
 
-import com.buuz135.sushigocrafting.api.FoodAPI;
+import com.buuz135.sushigocrafting.api.impl.FoodAPI;
 import com.buuz135.sushigocrafting.item.AmountItem;
 import com.buuz135.sushigocrafting.proxy.SushiContent;
 import com.buuz135.sushigocrafting.recipe.CuttingBoardRecipe;
