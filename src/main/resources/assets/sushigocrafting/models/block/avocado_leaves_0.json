@@ -1,7 +1,8 @@
 {
 	"credit": "Made with Blockbench",
 	"textures": {
-		"leaves": "sushigocrafting:block/avocado_leaves"
+		"leaves": "sushigocrafting:block/avocado_leaves",
+		"particle": "sushigocrafting:block/avocado_leaves"
 	},
 	"elements": [
 		{
