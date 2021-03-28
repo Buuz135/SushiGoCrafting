@@ -14,6 +14,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.ActionResultType;
 import net.minecraft.util.Direction;
 import net.minecraft.util.Hand;
+import net.minecraftforge.common.ForgeHooks;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 
 import javax.annotation.Nonnull;
@@ -28,10 +29,15 @@ public class RiceCookerTile extends ActiveTile<RiceCookerTile> {
     private InventoryComponent<RiceCookerTile> output;
     @Save
     private FluidTankComponent<RiceCookerTile> water;
+    @Save
+    private InventoryComponent<RiceCookerTile> fuel;
+    @Save
+    private double burnTime;
 
 
     public RiceCookerTile() {
         super(SushiContent.Blocks.RICE_COOKER.get());
+        this.burnTime = 0;
         addInventory(this.input = new InventoryComponent<RiceCookerTile>("input", 20, 38, 4)
                 .setRange(2, 2)
                 .setSlotToColorRender(0, DyeColor.BLUE)
@@ -57,6 +63,9 @@ public class RiceCookerTile extends ActiveTile<RiceCookerTile> {
                         this.input.setStackInSlot(i, ItemStack.EMPTY);
                     }
                     this.water.drainForced(1000, IFluidHandler.FluidAction.EXECUTE);
+                    --this.burnTime;
+                    syncObject(this.bar);
+                    markDirty();
                 }));
         addInventory(this.output = new InventoryComponent<RiceCookerTile>("output", 134, 48, 1)
                 .setSlotToColorRender(0, DyeColor.ORANGE)
@@ -65,8 +74,13 @@ public class RiceCookerTile extends ActiveTile<RiceCookerTile> {
                 .setOutputFilter((stack, integer) -> true));
         addTank(this.water = (FluidTankComponent<RiceCookerTile>) new FluidTankComponent<RiceCookerTile>("water", 8000, 68, 27)
                 .setTankAction(FluidTankComponent.Action.FILL)
+                .setTankType(FluidTankComponent.Type.SMALL)
                 .setValidator(fluidStack -> fluidStack.getFluid().isEquivalentTo(Fluids.WATER))
         );
+        addInventory(this.fuel = new InventoryComponent<RiceCookerTile>("fuel", 69, 67, 1)
+                .setSlotToColorRender(0, DyeColor.RED)
+                .setSlotLimit(64)
+                .setInputFilter((stack, integer) -> ForgeHooks.getBurnTime(stack) > 0));
     }
 
     @Nonnull
@@ -86,7 +100,12 @@ public class RiceCookerTile extends ActiveTile<RiceCookerTile> {
     }
 
     public boolean canStart() {
-        return getSlotsFilled() > 0 && (this.output.getStackInSlot(0).isEmpty() || ((AmountItem) this.output.getStackInSlot(0).getItem()).getCurrentAmount(this.output.getStackInSlot(0)) < ((AmountItem) this.output.getStackInSlot(0).getItem()).getMaxCombineAmount()) && this.water.getFluidAmount() >= 1000;
+        if (burnTime < 1 && !this.fuel.getStackInSlot(0).isEmpty()) {
+            this.burnTime += ForgeHooks.getBurnTime(this.fuel.getStackInSlot(0)) / 200D;
+            this.fuel.getStackInSlot(0).shrink(1);
+            markDirty();
+        }
+        return burnTime > 0 && getSlotsFilled() > 0 && (this.output.getStackInSlot(0).isEmpty() || ((AmountItem) this.output.getStackInSlot(0).getItem()).getCurrentAmount(this.output.getStackInSlot(0)) < ((AmountItem) this.output.getStackInSlot(0).getItem()).getMaxCombineAmount()) && this.water.getFluidAmount() >= 1000;
     }
 
     private int getSlotsFilled() {
