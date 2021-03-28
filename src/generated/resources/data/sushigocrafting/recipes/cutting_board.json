@@ -1,0 +1,37 @@
+{
+  "type": "forge:conditional",
+  "recipes": [
+    {
+      "conditions": [
+        {
+          "values": [
+            {
+              "item": "sushigocrafting:cutting_board",
+              "type": "forge:item_exists"
+            }
+          ],
+          "type": "forge:and"
+        }
+      ],
+      "recipe": {
+        "type": "minecraft:crafting_shaped",
+        "pattern": [
+          "   ",
+          "SSS",
+          "BBB"
+        ],
+        "key": {
+          "S": {
+            "tag": "minecraft:slabs"
+          },
+          "B": {
+            "tag": "minecraft:logs"
+          }
+        },
+        "result": {
+          "item": "sushigocrafting:cutting_board"
+        }
+      }
+    }
+  ]
+}

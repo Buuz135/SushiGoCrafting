@@ -1,0 +1,35 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {
+      "item": "sushigocrafting:dried_seaweed"
+    },
+    {
+      "item": "sushigocrafting:dried_seaweed"
+    },
+    {
+      "item": "sushigocrafting:dried_seaweed"
+    },
+    {
+      "item": "sushigocrafting:dried_seaweed"
+    },
+    {
+      "item": "sushigocrafting:dried_seaweed"
+    },
+    {
+      "item": "sushigocrafting:dried_seaweed"
+    },
+    {
+      "item": "sushigocrafting:dried_seaweed"
+    },
+    {
+      "item": "sushigocrafting:dried_seaweed"
+    },
+    {
+      "item": "sushigocrafting:dried_seaweed"
+    }
+  ],
+  "result": {
+    "item": "sushigocrafting:dried_seaweed_block"
+  }
+}

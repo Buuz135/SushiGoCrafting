@@ -1,0 +1,37 @@
+{
+  "type": "forge:conditional",
+  "recipes": [
+    {
+      "conditions": [
+        {
+          "values": [
+            {
+              "item": "sushigocrafting:roller",
+              "type": "forge:item_exists"
+            }
+          ],
+          "type": "forge:and"
+        }
+      ],
+      "recipe": {
+        "type": "minecraft:crafting_shaped",
+        "pattern": [
+          "BBB",
+          "SSS",
+          "BBB"
+        ],
+        "key": {
+          "B": {
+            "item": "minecraft:bamboo"
+          },
+          "S": {
+            "item": "minecraft:string"
+          }
+        },
+        "result": {
+          "item": "sushigocrafting:roller"
+        }
+      }
+    }
+  ]
+}

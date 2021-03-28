@@ -1,32 +1,53 @@
 package com.buuz135.sushigocrafting.datagen;
 
 import com.buuz135.sushigocrafting.SushiGoCrafting;
-import com.buuz135.sushigocrafting.api.IFoodIngredient;
-import com.buuz135.sushigocrafting.api.impl.FoodAPI;
-import com.buuz135.sushigocrafting.api.impl.FoodIngredient;
-import com.buuz135.sushigocrafting.recipe.CuttingBoardRecipe;
-import com.hrznstudio.titanium.recipe.generator.IJSONGenerator;
-import com.hrznstudio.titanium.recipe.generator.IJsonFile;
-import com.hrznstudio.titanium.recipe.generator.TitaniumSerializableProvider;
+import com.buuz135.sushigocrafting.proxy.SushiContent;
+import com.hrznstudio.titanium.recipe.generator.TitaniumRecipeProvider;
+import com.hrznstudio.titanium.recipe.generator.TitaniumShapedRecipeBuilder;
+import com.hrznstudio.titanium.recipe.generator.TitaniumShapelessRecipeBuilder;
+import net.minecraft.data.CookingRecipeBuilder;
 import net.minecraft.data.DataGenerator;
+import net.minecraft.data.IFinishedRecipe;
+import net.minecraft.item.Items;
+import net.minecraft.item.crafting.Ingredient;
+import net.minecraft.tags.ItemTags;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.common.Tags;
 
-import java.util.Map;
+import java.util.function.Consumer;
 
-public class SushiRecipeProvider extends TitaniumSerializableProvider {
+public class SushiRecipeProvider extends TitaniumRecipeProvider {
 
-
-    public SushiRecipeProvider(DataGenerator generatorIn, String modid) {
-        super(generatorIn, modid);
+    public SushiRecipeProvider(DataGenerator generatorIn) {
+        super(generatorIn);
     }
 
     @Override
-    public void add(Map<IJsonFile, IJSONGenerator> map) {
-        for (IFoodIngredient value : FoodAPI.get().getFoodIngredient()) {
-            if (value instanceof FoodIngredient && ((FoodIngredient) value).needsChoppingRecipe()) {
-                CuttingBoardRecipe recipe = new CuttingBoardRecipe(new ResourceLocation(SushiGoCrafting.MOD_ID, value.getName()), ((FoodIngredient) value).getInput().get(), value.getName());
-                map.put(recipe, recipe);
-            }
-        }
+    public void register(Consumer<IFinishedRecipe> consumer) {
+        TitaniumShapedRecipeBuilder.shapedRecipe(SushiContent.Items.KNIFE_CLEAVER.get())
+                .patternLine(" II").patternLine("II ").patternLine("S  ")
+                .key('I', Tags.Items.INGOTS_IRON)
+                .key('S', Items.STICK)
+                .build(consumer);
+        TitaniumShapedRecipeBuilder.shapedRecipe(SushiContent.Items.ROLLER.get())
+                .patternLine("BBB").patternLine("SSS").patternLine("BBB")
+                .key('B', Items.BAMBOO)
+                .key('S', Items.STRING)
+                .build(consumer);
+        TitaniumShapedRecipeBuilder.shapedRecipe(SushiContent.Items.RICE_COOKER.get())
+                .patternLine("IGI").patternLine("IFI").patternLine("IRI")
+                .key('I', Tags.Items.INGOTS_IRON)
+                .key('G', Items.LIGHT_WEIGHTED_PRESSURE_PLATE)
+                .key('F', Items.FURNACE)
+                .key('R', Items.REDSTONE)
+                .build(consumer);
+        CookingRecipeBuilder.smeltingRecipe(Ingredient.fromItems(SushiContent.Items.SEAWEED.get()), SushiContent.Items.DRY_SEAWEED.get(), 0.3f, 200).addCriterion("has_seaweed", hasItem(SushiContent.Items.SEAWEED.get())).build(consumer);
+        TitaniumShapelessRecipeBuilder.shapelessRecipe(SushiContent.Blocks.SEAWEED_BLOCK.get()).addIngredient(Ingredient.fromItems(SushiContent.Items.DRY_SEAWEED.get()), 9).build(consumer);
+        TitaniumShapelessRecipeBuilder.shapelessRecipe(SushiContent.Items.DRY_SEAWEED.get(), 9).addIngredient(Ingredient.fromItems(SushiContent.Blocks.SEAWEED_BLOCK.get()), 1).build(consumer, new ResourceLocation(SushiGoCrafting.MOD_ID, "seaweed_uncrafting"));
+        TitaniumShapedRecipeBuilder.shapedRecipe(SushiContent.Items.CUTTING_BOARD.get())
+                .patternLine("   ").patternLine("SSS").patternLine("BBB")
+                .key('S', ItemTags.SLABS)
+                .key('B', ItemTags.LOGS)
+                .build(consumer);
     }
 }

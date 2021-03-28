@@ -172,8 +172,9 @@ public class SushiGoCrafting {
         BlockTagsProvider provider = new SushiBlockTagsProvider(event.getGenerator(), event.getExistingFileHelper());
         event.getGenerator().addProvider(provider);
         event.getGenerator().addProvider(new SushiItemTagsProvider(event.getGenerator(), provider, event.getExistingFileHelper()));
-        event.getGenerator().addProvider(new SushiRecipeProvider(event.getGenerator(), MOD_ID));
+        event.getGenerator().addProvider(new SushiSerializableProvider(event.getGenerator(), MOD_ID));
         event.getGenerator().addProvider(new SushiLootTableProvider(event.getGenerator()));
+        event.getGenerator().addProvider(new SushiRecipeProvider(event.getGenerator()));
     }
 
 }
