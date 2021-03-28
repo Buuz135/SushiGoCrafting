@@ -17,5 +17,6 @@ public class SushiBlockTagsProvider extends ForgeBlockTagsProvider {
     public void registerTags() {
         getOrCreateBuilder(BlockTags.LOGS).add(SushiContent.Blocks.AVOCADO_LOG.get());
         getOrCreateBuilder(BlockTags.LOGS).add(SushiContent.Blocks.AVOCADO_LEAVES_LOG.get());
+        getOrCreateBuilder(BlockTags.SAPLINGS).add(SushiContent.Blocks.AVOCADO_SAPLING.get());
     }
 }
