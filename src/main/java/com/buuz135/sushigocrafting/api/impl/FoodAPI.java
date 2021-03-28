@@ -17,8 +17,13 @@ public class FoodAPI {
     private List<IFoodIngredient> foodIngredients = new ArrayList<>();
 
     private FoodAPI() {
+
+    }
+
+    public FoodAPI init() {
         FoodIngredient.init();
         FoodType.init();
+        return this;
     }
 
     public static FoodAPI get() {

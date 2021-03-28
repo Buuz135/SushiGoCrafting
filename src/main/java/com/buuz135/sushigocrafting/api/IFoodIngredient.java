@@ -16,4 +16,7 @@ public interface IFoodIngredient {
     IIngredientConsumer getIngredientConsumer();
 
     int getDefaultAmount();
+
+    IIngredientEffect getEffect();
+
 }

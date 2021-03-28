@@ -1,8 +1,12 @@
 package com.buuz135.sushigocrafting;
 
+import com.buuz135.sushigocrafting.api.IFoodIngredient;
 import com.buuz135.sushigocrafting.api.IFoodType;
+import com.buuz135.sushigocrafting.api.IIngredientEffect;
 import com.buuz135.sushigocrafting.api.impl.FoodAPI;
 import com.buuz135.sushigocrafting.api.impl.FoodHelper;
+import com.buuz135.sushigocrafting.api.impl.effect.AddIngredientEffect;
+import com.buuz135.sushigocrafting.api.impl.effect.ModifyIngredientEffect;
 import com.buuz135.sushigocrafting.client.entity.ShrimpRenderer;
 import com.buuz135.sushigocrafting.client.entity.TunaRenderer;
 import com.buuz135.sushigocrafting.client.tesr.CuttingBoardRenderer;
@@ -18,6 +22,7 @@ import com.buuz135.sushigocrafting.world.tree.AvocadoTree;
 import com.hrznstudio.titanium.event.handler.EventManager;
 import com.hrznstudio.titanium.nbthandler.NBTManager;
 import net.minecraft.block.Blocks;
+import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.RenderTypeLookup;
 import net.minecraft.data.BlockTagsProvider;
@@ -29,6 +34,8 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipeSerializer;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.text.StringTextComponent;
+import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.biome.MobSpawnInfo;
@@ -43,6 +50,7 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.event.entity.EntityAttributeCreationEvent;
+import net.minecraftforge.event.entity.player.ItemTooltipEvent;
 import net.minecraftforge.event.world.BiomeLoadingEvent;
 import net.minecraftforge.event.world.PistonEvent;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
@@ -63,6 +71,8 @@ public class SushiGoCrafting {
     //private static CommonProxy proxy;
 
     public SushiGoCrafting() {
+        FoodAPI.get();
+        FoodAPI.get().init();
         //proxy = DistExecutor.runForDist(() -> ClientProxy::new, () -> CommonProxy::new);
         SushiContent.Blocks.REGISTRY.register(FMLJavaModLoadingContext.get().getModEventBus());
         SushiContent.Items.REGISTRY.register(FMLJavaModLoadingContext.get().getModEventBus());
@@ -109,6 +119,27 @@ public class SushiGoCrafting {
         EventManager.mod(EntityAttributeCreationEvent.class).process(entityAttributeCreationEvent -> {
             entityAttributeCreationEvent.put(SushiContent.EntityTypes.TUNA.get(), AbstractFishEntity.func_234176_m_().create());
             entityAttributeCreationEvent.put(SushiContent.EntityTypes.SHRIMP.get(), AbstractFishEntity.func_234176_m_().create());
+        }).subscribe();
+        EventManager.forge(ItemTooltipEvent.class).process(event -> {
+            IFoodIngredient ingredient = FoodAPI.get().getIngredientFromItem(event.getItemStack().getItem());
+            if (!ingredient.isEmpty() && ingredient.getEffect() != null) {
+                event.getToolTip().add(new StringTextComponent(""));
+                if (!Screen.hasShiftDown()) {
+                    IIngredientEffect effect = ingredient.getEffect();
+                    if (effect instanceof AddIngredientEffect) {
+                        event.getToolTip().add(new StringTextComponent(TextFormatting.DARK_AQUA + "Adds Food Effect:"));
+                        event.getToolTip().add(new StringTextComponent(TextFormatting.YELLOW + " - " + TextFormatting.GOLD + ((AddIngredientEffect) effect).getEffect().get().getDisplayName().getString() + TextFormatting.DARK_AQUA + " (" + TextFormatting.WHITE + ((AddIngredientEffect) effect).getDuration() + TextFormatting.YELLOW + "s" + TextFormatting.DARK_AQUA + ", " + TextFormatting.YELLOW + "Level " + TextFormatting.WHITE + (((AddIngredientEffect) effect).getLevel() + 1) + TextFormatting.DARK_AQUA + ")"));
+                    }
+                    if (effect instanceof ModifyIngredientEffect) {
+                        event.getToolTip().add(new StringTextComponent(TextFormatting.DARK_AQUA + "Modifies Food Effect:"));
+                        event.getToolTip().add(new StringTextComponent(TextFormatting.YELLOW + " - " + TextFormatting.GOLD + " Multiplies Time By " + TextFormatting.WHITE + ((ModifyIngredientEffect) effect).getTimeModifier()));
+                        if (((ModifyIngredientEffect) effect).getLevelModifier() > 0)
+                            event.getToolTip().add(new StringTextComponent(TextFormatting.YELLOW + " - " + TextFormatting.GOLD + " Increases Level By " + TextFormatting.WHITE + ((ModifyIngredientEffect) effect).getLevelModifier()));
+                    }
+                } else {
+                    event.getToolTip().add(new StringTextComponent(TextFormatting.YELLOW + "Hold " + TextFormatting.GOLD + "" + TextFormatting.ITALIC + "<Shift>" + TextFormatting.RESET + TextFormatting.YELLOW + " for sushi effect"));
+                }
+            }
         }).subscribe();
     }
 
