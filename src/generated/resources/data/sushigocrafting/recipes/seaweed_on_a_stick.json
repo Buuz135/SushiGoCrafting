@@ -1,0 +1,14 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {
+      "item": "minecraft:fishing_rod"
+    },
+    {
+      "item": "sushigocrafting:seaweed"
+    }
+  ],
+  "result": {
+    "item": "sushigocrafting:seaweed_on_a_stick"
+  }
+}

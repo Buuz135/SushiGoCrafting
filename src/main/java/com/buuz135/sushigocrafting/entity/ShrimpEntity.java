@@ -175,7 +175,7 @@ public class ShrimpEntity extends AbstractGroupFishEntity implements IRideable, 
             return false;
         } else {
             PlayerEntity playerentity = (PlayerEntity) entity;
-            return playerentity.getHeldItemMainhand().getItem() == Items.CARROT_ON_A_STICK || playerentity.getHeldItemOffhand().getItem() == Items.CARROT_ON_A_STICK;
+            return playerentity.getHeldItemMainhand().getItem() == SushiContent.Items.SEAWEED_ON_A_STICK.get() || playerentity.getHeldItemOffhand().getItem() == SushiContent.Items.SEAWEED_ON_A_STICK.get();
         }
     }
 

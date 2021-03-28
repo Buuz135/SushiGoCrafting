@@ -33,8 +33,14 @@ public class SushiItemModelProvider extends ItemModelProvider {
     }
 
     private void generateItem(Item item) {
-        getBuilder(item.getRegistryName().getPath())
-                .parent(new ModelFile.UncheckedModelFile("item/generated"))
-                .texture("layer0", modLoc("item/" + (item instanceof SushiItem ? (((SushiItem) item).getCategory().isEmpty() ? "" : ((SushiItem) item).getCategory() + "/") : "") + item.getRegistryName().getPath()));
+        if (item.equals(SushiContent.Items.SEAWEED_ON_A_STICK.get())) {
+            getBuilder(item.getRegistryName().getPath())
+                    .parent(new ModelFile.UncheckedModelFile("item/handheld_rod"))
+                    .texture("layer0", modLoc("item/" + (item instanceof SushiItem ? (((SushiItem) item).getCategory().isEmpty() ? "" : ((SushiItem) item).getCategory() + "/") : "") + item.getRegistryName().getPath()));
+        } else {
+            getBuilder(item.getRegistryName().getPath())
+                    .parent(new ModelFile.UncheckedModelFile("item/generated"))
+                    .texture("layer0", modLoc("item/" + (item instanceof SushiItem ? (((SushiItem) item).getCategory().isEmpty() ? "" : ((SushiItem) item).getCategory() + "/") : "") + item.getRegistryName().getPath()));
+        }
     }
 }

@@ -49,5 +49,6 @@ public class SushiRecipeProvider extends TitaniumRecipeProvider {
                 .key('S', ItemTags.SLABS)
                 .key('B', ItemTags.LOGS)
                 .build(consumer);
+        TitaniumShapelessRecipeBuilder.shapelessRecipe(SushiContent.Items.SEAWEED_ON_A_STICK.get()).addIngredient(Items.FISHING_ROD).addIngredient(SushiContent.Items.SEAWEED.get()).build(consumer);
     }
 }
