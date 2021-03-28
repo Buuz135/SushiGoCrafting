@@ -49,7 +49,7 @@ public class CustomCropBlock extends CropsBlock {
     }
 
     @Override
-    protected IItemProvider getSeedsItem() {
+    public IItemProvider getSeedsItem() {
         return seedSupplier.get();
     }
 
