@@ -114,7 +114,7 @@ public class FoodItem extends SushiItem {
             effect = getModifierFrom(negative, positive);
         }
         tooltip.add(new StringTextComponent(""));
-        if (!Screen.hasShiftDown()) {
+        if (Screen.hasShiftDown()) {
             List<EffectInstance> effectInstances = new ArrayList<>();
             ingredientList.stream().map(IFoodIngredient::getEffect).filter(Objects::nonNull).sorted(Comparator.comparingInt(IIngredientEffect::getPriority)).forEach(iIngredientEffect -> iIngredientEffect.accept(effectInstances));
             if (effect != null) effect.accept(effectInstances);

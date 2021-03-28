@@ -124,7 +124,7 @@ public class SushiGoCrafting {
             IFoodIngredient ingredient = FoodAPI.get().getIngredientFromItem(event.getItemStack().getItem());
             if (!ingredient.isEmpty() && ingredient.getEffect() != null) {
                 event.getToolTip().add(new StringTextComponent(""));
-                if (!Screen.hasShiftDown()) {
+                if (Screen.hasShiftDown()) {
                     IIngredientEffect effect = ingredient.getEffect();
                     if (effect instanceof AddIngredientEffect) {
                         event.getToolTip().add(new StringTextComponent(TextFormatting.DARK_AQUA + "Adds Food Effect:"));
