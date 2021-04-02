@@ -1,5 +1,8 @@
 package com.buuz135.sushigocrafting.client.gui;
 
+import com.buuz135.sushigocrafting.api.IFoodIngredient;
+import com.buuz135.sushigocrafting.api.IIngredientConsumer;
+import com.buuz135.sushigocrafting.api.impl.FoodAPI;
 import com.buuz135.sushigocrafting.client.gui.provider.SushiAssetTypes;
 import com.buuz135.sushigocrafting.tile.machinery.RollerTile;
 import com.hrznstudio.titanium.Titanium;
@@ -90,7 +93,16 @@ public abstract class RollerWeightSelectorButtonComponent extends BasicScreenAdd
     @Override
     public List<ITextComponent> getTooltipLines() {
         List<ITextComponent> lines = new ArrayList<>();
-        lines.add(new StringTextComponent(NumberFormat.getInstance(Locale.getDefault()).format(((getWeight() + 1) / 5D) * 100) + TextFormatting.DARK_AQUA + "%" + TextFormatting.GOLD + " Weight"));
+        if (inventoryComponent.getStackInSlot(slot).isEmpty()) {
+            lines.add(new StringTextComponent(NumberFormat.getInstance(Locale.getDefault()).format(((getWeight() + 1) / 5D) * 100) + TextFormatting.DARK_AQUA + "%" + TextFormatting.GOLD + " Weight"));
+        } else {
+            IFoodIngredient ingredient = FoodAPI.get().getIngredientFromItem(inventoryComponent.getStackInSlot(slot).getItem());
+            if (!ingredient.isEmpty()) {
+                String unit = ingredient.getIngredientConsumer() == IIngredientConsumer.STACK ? "u" : "gr";
+                double amount = ingredient.getIngredientConsumer() == IIngredientConsumer.STACK ? ingredient.getDefaultAmount() * (getWeight() + 1) : ingredient.getDefaultAmount() * (getWeight() + 1) / 5D;
+                lines.add(new StringTextComponent(TextFormatting.GOLD + "Consumes " + TextFormatting.WHITE + NumberFormat.getInstance(Locale.getDefault()).format(amount) + TextFormatting.YELLOW + unit));
+            }
+        }
         lines.add(new StringTextComponent(TextFormatting.DARK_GRAY + "*Left Click to Increase*"));
         lines.add(new StringTextComponent(TextFormatting.DARK_GRAY + "*Right Click to Decrease*"));
         return lines;

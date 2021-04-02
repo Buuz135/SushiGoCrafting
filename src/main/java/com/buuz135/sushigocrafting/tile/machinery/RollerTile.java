@@ -89,9 +89,12 @@ public class RollerTile extends ActiveTile<RollerTile> {
             FoodAPI.get().getTypeFromName(selected).ifPresent(iFoodType -> {
                 boolean allFull = true;
                 for (int i1 = 0; i1 < slots.getSlots(); i1++) {
-                    if (i1 < iFoodType.getFoodIngredients().size() && slots.getStackInSlot(i1).isEmpty()) {
-                        allFull = false;
-                        break;
+                    if (i1 < iFoodType.getFoodIngredients().size()) { //Check if valid amount
+                        IFoodIngredient ingredient = FoodAPI.get().getIngredientFromItem(slots.getStackInSlot(i1).getItem());
+                        if (ingredient.isEmpty() || !ingredient.getIngredientConsumer().canConsume(ingredient, slots.getStackInSlot(i1), weightTracker.weights.get(i1))) {
+                            allFull = false;
+                            break;
+                        }
                     }
                 }
                 if (allFull) {

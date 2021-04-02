@@ -100,10 +100,16 @@ public class AmountItem extends SushiItem {
     }
 
     public void consume(IFoodIngredient ingredient, ItemStack stack, int amountLevel) {
-        int amount = stack.getOrCreateTag().getInt(NBT_AMOUNT) - ingredient.getDefaultAmount() * amountLevel;
+        int amount = (int) (stack.getOrCreateTag().getInt(NBT_AMOUNT) - ingredient.getDefaultAmount() * (amountLevel + 1) / 5D);
         stack.getOrCreateTag().putInt(NBT_AMOUNT, amount);
-        if (amount < 0) {
+        if (amount <= 0) {
             stack.shrink(1);
         }
     }
+
+    public boolean canConsume(IFoodIngredient ingredient, ItemStack stack, int amountLevel) {
+        int amount = (int) (ingredient.getDefaultAmount() * (amountLevel + 1) / 5D);
+        return !stack.isEmpty() && stack.getOrCreateTag().getInt(NBT_AMOUNT) >= amount;
+    }
+
 }

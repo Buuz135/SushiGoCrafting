@@ -16,19 +16,19 @@ import java.util.function.Supplier;
 public class FoodIngredient implements IFoodIngredient {
 
     public static FoodIngredient EMPTY = new FoodIngredient("empty", null, 0, IIngredientConsumer.WEIGHT, null, null);
-    public static FoodIngredient RICE = new FoodIngredient("rice", SushiContent.Items.COOKED_RICE, 10, IIngredientConsumer.WEIGHT, null, new ModifyIngredientEffect(1.75f, 0));
+    public static FoodIngredient RICE = new FoodIngredient("rice", SushiContent.Items.COOKED_RICE, 30, IIngredientConsumer.WEIGHT, null, new ModifyIngredientEffect(1.75f, 0));
     public static FoodIngredient NORI = new FoodIngredient("nori", SushiContent.Items.NORI_SHEET, 1, IIngredientConsumer.STACK, null, null);
-    public static FoodIngredient TUNA_FILLET = new FoodIngredient("tuna", SushiContent.Items.RAW_TUNA_FILLET, 10, IIngredientConsumer.WEIGHT, () -> Ingredient.fromItems(SushiContent.Items.RAW_TUNA.get()), new AddIngredientEffect(SushiContent.Effects.ACQUIRED_TASTE, 30, 0));
-    public static FoodIngredient SALMON_FILLET = new FoodIngredient("salmon", SushiContent.Items.RAW_SALMON_FILLET, 10, IIngredientConsumer.WEIGHT, () -> Ingredient.fromItems(Items.SALMON), new AddIngredientEffect(SushiContent.Effects.SMALL_BITES, 30, 0));
-    public static FoodIngredient AVOCADO = new FoodIngredient("avocado", SushiContent.Items.AVOCADO_SLICES, 15, IIngredientConsumer.WEIGHT, () -> Ingredient.fromItems(SushiContent.Items.AVOCADO.get()), new ModifyIngredientEffect(1.25f, 1));
-    public static FoodIngredient CUCUMBER = new FoodIngredient("cucumber", SushiContent.Items.CUCUMBER_SLICES, 5, IIngredientConsumer.WEIGHT, () -> Ingredient.fromItems(SushiContent.Items.CUCUMBER.get()), new ModifyIngredientEffect(1.75f, 0));
-    public static FoodIngredient SESAME = new FoodIngredient("sesame", SushiContent.Items.SESAME_SEED, 2, IIngredientConsumer.WEIGHT, null, new ModifyIngredientEffect(2, 0));
-    public static FoodIngredient CRAB = new FoodIngredient("crab", SushiContent.Items.IMITATION_CRAB, 10, IIngredientConsumer.WEIGHT, () -> Ingredient.fromItems(Items.COD), new ModifyIngredientEffect(1.25f, 0));
-    public static FoodIngredient WAKAME = new FoodIngredient("wakame", SushiContent.Items.IMITATION_CRAB, 10, IIngredientConsumer.WEIGHT, () -> Ingredient.fromItems(Items.KELP), null);
-    public static FoodIngredient TOBIKO = new FoodIngredient("tobiko", SushiContent.Items.TOBIKO, 4, IIngredientConsumer.WEIGHT, null, new ModifyIngredientEffect(1.75f, 0));
-    public static FoodIngredient CHEESE = new FoodIngredient("cheese", SushiContent.Items.CHEESE, 4, IIngredientConsumer.WEIGHT, null, new AddIngredientEffect(() -> Effects.SATURATION, 15, 0));
-    public static FoodIngredient SHRIMP = new FoodIngredient("shrimp", SushiContent.Items.SHRIMP, 10, IIngredientConsumer.WEIGHT, () -> Ingredient.fromItems(SushiContent.Items.SHRIMP.get()), new AddIngredientEffect(SushiContent.Effects.STEADY_HANDS, 60, 0));
-    public static FoodIngredient CHICKEN = new FoodIngredient("chicken", () -> Items.COOKED_CHICKEN, 10, IIngredientConsumer.WEIGHT, null, new AddIngredientEffect(() -> Effects.SLOW_FALLING, 10, 0));
+    public static FoodIngredient TUNA_FILLET = new FoodIngredient("tuna", SushiContent.Items.RAW_TUNA_FILLET, 30, IIngredientConsumer.WEIGHT, () -> Ingredient.fromItems(SushiContent.Items.RAW_TUNA.get()), new AddIngredientEffect(SushiContent.Effects.ACQUIRED_TASTE, 30, 0));
+    public static FoodIngredient SALMON_FILLET = new FoodIngredient("salmon", SushiContent.Items.RAW_SALMON_FILLET, 30, IIngredientConsumer.WEIGHT, () -> Ingredient.fromItems(Items.SALMON), new AddIngredientEffect(SushiContent.Effects.SMALL_BITES, 30, 0));
+    public static FoodIngredient AVOCADO = new FoodIngredient("avocado", SushiContent.Items.AVOCADO_SLICES, 45, IIngredientConsumer.WEIGHT, () -> Ingredient.fromItems(SushiContent.Items.AVOCADO.get()), new ModifyIngredientEffect(1.25f, 1));
+    public static FoodIngredient CUCUMBER = new FoodIngredient("cucumber", SushiContent.Items.CUCUMBER_SLICES, 15, IIngredientConsumer.WEIGHT, () -> Ingredient.fromItems(SushiContent.Items.CUCUMBER.get()), new ModifyIngredientEffect(1.75f, 0));
+    public static FoodIngredient SESAME = new FoodIngredient("sesame", SushiContent.Items.SESAME_SEED, 6, IIngredientConsumer.WEIGHT, null, new ModifyIngredientEffect(2, 0));
+    public static FoodIngredient CRAB = new FoodIngredient("crab", SushiContent.Items.IMITATION_CRAB, 30, IIngredientConsumer.WEIGHT, () -> Ingredient.fromItems(Items.COD), new ModifyIngredientEffect(1.25f, 0));
+    public static FoodIngredient WAKAME = new FoodIngredient("wakame", SushiContent.Items.IMITATION_CRAB, 30, IIngredientConsumer.WEIGHT, () -> Ingredient.fromItems(Items.KELP), null);
+    public static FoodIngredient TOBIKO = new FoodIngredient("tobiko", SushiContent.Items.TOBIKO, 12, IIngredientConsumer.WEIGHT, null, new ModifyIngredientEffect(1.75f, 0));
+    public static FoodIngredient CHEESE = new FoodIngredient("cheese", SushiContent.Items.CHEESE, 12, IIngredientConsumer.WEIGHT, null, new AddIngredientEffect(() -> Effects.SATURATION, 15, 0));
+    public static FoodIngredient SHRIMP = new FoodIngredient("shrimp", SushiContent.Items.SHRIMP, 30, IIngredientConsumer.WEIGHT, () -> Ingredient.fromItems(SushiContent.Items.SHRIMP.get()), new AddIngredientEffect(SushiContent.Effects.STEADY_HANDS, 60, 0));
+    public static FoodIngredient CHICKEN = new FoodIngredient("chicken", () -> Items.COOKED_CHICKEN, 30, IIngredientConsumer.WEIGHT, null, new AddIngredientEffect(() -> Effects.SLOW_FALLING, 10, 0));
 
     private final Supplier<? extends Item> item;
     private final String name;
