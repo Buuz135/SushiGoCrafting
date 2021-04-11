@@ -4,6 +4,7 @@ import com.buuz135.sushigocrafting.api.IFoodIngredient;
 import com.buuz135.sushigocrafting.api.IFoodType;
 import com.buuz135.sushigocrafting.api.impl.FoodAPI;
 import com.buuz135.sushigocrafting.api.impl.FoodHelper;
+import com.buuz135.sushigocrafting.cap.SushiWeightDiscoveryCapability;
 import com.buuz135.sushigocrafting.client.gui.RollerWeightSelectorButtonComponent;
 import com.buuz135.sushigocrafting.client.gui.provider.RollerAssetProvider;
 import com.buuz135.sushigocrafting.component.FoodTypeButtonComponent;
@@ -14,12 +15,16 @@ import com.hrznstudio.titanium.block.tile.ActiveTile;
 import com.hrznstudio.titanium.client.screen.asset.IAssetProvider;
 import com.hrznstudio.titanium.component.inventory.InventoryComponent;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.inventory.InventoryHelper;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.ActionResultType;
 import net.minecraft.util.Direction;
 import net.minecraft.util.Hand;
+import net.minecraft.util.SoundEvents;
+import net.minecraft.util.text.StringTextComponent;
+import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.common.util.INBTSerializable;
 
@@ -68,6 +73,11 @@ public class RollerTile extends ActiveTile<RollerTile> {
                     public int getWeight() {
                         return weightTracker.weights.get(finalI);
                     }
+
+                    @Override
+                    public String getType() {
+                        return selected;
+                    }
                 });
             }
         });
@@ -78,6 +88,9 @@ public class RollerTile extends ActiveTile<RollerTile> {
     public ActionResultType onActivated(PlayerEntity player, Hand hand, Direction facing, double hitX, double hitY, double hitZ) {
         ActionResultType type = super.onActivated(player, hand, facing, hitX, hitY, hitZ);
         if (!type.isSuccess()) {
+            if (player instanceof ServerPlayerEntity) {
+                player.getCapability(SushiWeightDiscoveryCapability.CAPABILITY).ifPresent(iSushiWeightDiscovery -> iSushiWeightDiscovery.requestUpdate((ServerPlayerEntity) player));
+            }
             openGui(player);
             return ActionResultType.SUCCESS;
         }
@@ -89,7 +102,7 @@ public class RollerTile extends ActiveTile<RollerTile> {
             FoodAPI.get().getTypeFromName(selected).ifPresent(iFoodType -> {
                 boolean allFull = true;
                 for (int i1 = 0; i1 < slots.getSlots(); i1++) {
-                    if (i1 < iFoodType.getFoodIngredients().size()) { //Check if valid amount
+                    if (i1 < iFoodType.getFoodIngredients().size()) {
                         IFoodIngredient ingredient = FoodAPI.get().getIngredientFromItem(slots.getStackInSlot(i1).getItem());
                         if (ingredient.isEmpty() || !ingredient.getIngredientConsumer().canConsume(ingredient, slots.getStackInSlot(i1), weightTracker.weights.get(i1))) {
                             allFull = false;
@@ -104,12 +117,23 @@ public class RollerTile extends ActiveTile<RollerTile> {
                         craftProgress = 0;
                         List<IFoodIngredient> foodIngredients = new ArrayList<>();
                         List<Integer> weightValues = new ArrayList<>();
-                        for (int i1 = 0; i1 < slots.getSlots(); i1++) {
-                            if (i1 < iFoodType.getFoodIngredients().size()) {
-                                IFoodIngredient ingredient = FoodAPI.get().getIngredientFromItem(slots.getStackInSlot(i1).getItem());
-                                ingredient.getIngredientConsumer().consume(ingredient, slots.getStackInSlot(i1), weightTracker.weights.get(i1));
+                        for (int slot = 0; slot < slots.getSlots(); slot++) {
+                            if (slot < iFoodType.getFoodIngredients().size()) {
+                                IFoodIngredient ingredient = FoodAPI.get().getIngredientFromItem(slots.getStackInSlot(slot).getItem());
+                                ingredient.getIngredientConsumer().consume(ingredient, slots.getStackInSlot(slot), weightTracker.weights.get(slot));
                                 foodIngredients.add(ingredient);
-                                weightValues.add(random.nextInt(5) - weightTracker.weights.get(i1));
+                                int value = random.nextInt(5) - weightTracker.weights.get(slot);
+                                weightValues.add(value);
+                                if (value == 0) {
+                                    int finalSlot = slot;
+                                    player.getCapability(SushiWeightDiscoveryCapability.CAPABILITY).ifPresent(iSushiWeightDiscovery -> {
+                                        if (!iSushiWeightDiscovery.hasDiscovery(selected + "-" + finalSlot)) {
+                                            iSushiWeightDiscovery.setDiscovery(selected + "-" + finalSlot, weightTracker.weights.get(finalSlot));
+                                            player.sendStatusMessage(new StringTextComponent(TextFormatting.GOLD + "You have discovered a new perfect weight!"), false);
+                                            player.playSound(SoundEvents.ENTITY_PLAYER_LEVELUP, 0.2f, 1);
+                                        }
+                                    });
+                                }
                             }
                         }
                         FoodItem item = FoodHelper.getFoodFromIngredients(selected, foodIngredients);
@@ -117,6 +141,9 @@ public class RollerTile extends ActiveTile<RollerTile> {
                             ItemStack stack = new ItemStack(item);
                             stack.getOrCreateTag().putIntArray(FoodItem.WEIGHTS_TAG, weightValues);
                             InventoryHelper.spawnItemStack(this.world, this.pos.getX(), this.getPos().getY(), this.getPos().getZ(), stack);
+                        }
+                        if (player instanceof ServerPlayerEntity) {
+                            player.getCapability(SushiWeightDiscoveryCapability.CAPABILITY).ifPresent(iSushiWeightDiscovery -> iSushiWeightDiscovery.requestUpdate((ServerPlayerEntity) player));
                         }
                     }
                 }

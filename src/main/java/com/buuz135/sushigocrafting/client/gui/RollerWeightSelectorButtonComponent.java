@@ -3,6 +3,7 @@ package com.buuz135.sushigocrafting.client.gui;
 import com.buuz135.sushigocrafting.api.IFoodIngredient;
 import com.buuz135.sushigocrafting.api.IIngredientConsumer;
 import com.buuz135.sushigocrafting.api.impl.FoodAPI;
+import com.buuz135.sushigocrafting.cap.SushiWeightDiscoveryCapability;
 import com.buuz135.sushigocrafting.client.gui.provider.SushiAssetTypes;
 import com.buuz135.sushigocrafting.tile.machinery.RollerTile;
 import com.hrznstudio.titanium.Titanium;
@@ -26,6 +27,7 @@ import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TextFormatting;
 
+import java.awt.*;
 import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.List;
@@ -56,6 +58,12 @@ public abstract class RollerWeightSelectorButtonComponent extends BasicScreenAdd
         if (asset != null) {
             AssetUtil.drawAsset(matrixStack, screen, asset, getPosX(), getPosY() + (4 - getWeight()) * (getYSize() / 4) - 1);
         }
+        Minecraft.getInstance().player.getCapability(SushiWeightDiscoveryCapability.CAPABILITY).ifPresent(iSushiWeightDiscovery -> {
+            if (iSushiWeightDiscovery.hasDiscovery(getType() + "-" + slot)) {
+                int pos = getPosY() + (4 - iSushiWeightDiscovery.getDiscovery(getType() + "-" + slot)) * (getYSize() / 4) - 1;
+                Screen.fill(matrixStack, getPosX() + 1, pos + 1, getPosX() + 3, pos + 2, new Color(TextFormatting.GOLD.getColor()).getRGB());
+            }
+        });
     }
 
     @Override
@@ -109,5 +117,7 @@ public abstract class RollerWeightSelectorButtonComponent extends BasicScreenAdd
     }
 
     public abstract int getWeight();
+
+    public abstract String getType();
 
 }

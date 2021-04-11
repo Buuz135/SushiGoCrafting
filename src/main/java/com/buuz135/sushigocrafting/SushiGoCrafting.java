@@ -7,10 +7,14 @@ import com.buuz135.sushigocrafting.api.impl.FoodAPI;
 import com.buuz135.sushigocrafting.api.impl.FoodHelper;
 import com.buuz135.sushigocrafting.api.impl.effect.AddIngredientEffect;
 import com.buuz135.sushigocrafting.api.impl.effect.ModifyIngredientEffect;
+import com.buuz135.sushigocrafting.cap.ISushiWeightDiscovery;
+import com.buuz135.sushigocrafting.cap.SushiDiscoveryProvider;
+import com.buuz135.sushigocrafting.cap.SushiWeightDiscoveryCapability;
 import com.buuz135.sushigocrafting.client.entity.ShrimpRenderer;
 import com.buuz135.sushigocrafting.client.entity.TunaRenderer;
 import com.buuz135.sushigocrafting.client.tesr.CuttingBoardRenderer;
 import com.buuz135.sushigocrafting.datagen.*;
+import com.buuz135.sushigocrafting.network.CapabilitySyncMessage;
 import com.buuz135.sushigocrafting.proxy.SushiContent;
 import com.buuz135.sushigocrafting.recipe.CombineAmountItemRecipe;
 import com.buuz135.sushigocrafting.recipe.CuttingBoardRecipe;
@@ -21,13 +25,17 @@ import com.buuz135.sushigocrafting.world.SushiTab;
 import com.buuz135.sushigocrafting.world.tree.AvocadoTree;
 import com.hrznstudio.titanium.event.handler.EventManager;
 import com.hrznstudio.titanium.nbthandler.NBTManager;
+import com.hrznstudio.titanium.network.NetworkHandler;
 import net.minecraft.block.Blocks;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.RenderTypeLookup;
 import net.minecraft.data.BlockTagsProvider;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityClassification;
 import net.minecraft.entity.passive.fish.AbstractFishEntity;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.inventory.InventoryHelper;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
@@ -48,9 +56,12 @@ import net.minecraft.world.gen.placement.Placement;
 import net.minecraft.world.gen.placement.TopSolidWithNoiseConfig;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.common.capabilities.CapabilityManager;
+import net.minecraftforge.event.AttachCapabilitiesEvent;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.event.entity.EntityAttributeCreationEvent;
 import net.minecraftforge.event.entity.player.ItemTooltipEvent;
+import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.event.world.BiomeLoadingEvent;
 import net.minecraftforge.event.world.PistonEvent;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
@@ -67,13 +78,15 @@ public class SushiGoCrafting {
     public static final String MOD_ID = "sushigocrafting";
 
     public static final ItemGroup TAB = new SushiTab(MOD_ID);
+    public static NetworkHandler NETWORK = new NetworkHandler(MOD_ID);
 
-    //private static CommonProxy proxy;
+    static {
+        NETWORK.registerMessage(CapabilitySyncMessage.class);
+    }
 
     public SushiGoCrafting() {
         FoodAPI.get();
         FoodAPI.get().init();
-        //proxy = DistExecutor.runForDist(() -> ClientProxy::new, () -> CommonProxy::new);
         SushiContent.Blocks.REGISTRY.register(FMLJavaModLoadingContext.get().getModEventBus());
         SushiContent.Items.REGISTRY.register(FMLJavaModLoadingContext.get().getModEventBus());
         SushiContent.Features.REGISTRY.register(FMLJavaModLoadingContext.get().getModEventBus());
@@ -141,10 +154,11 @@ public class SushiGoCrafting {
                 }
             }
         }).subscribe();
+
     }
 
     public void fmlCommon(FMLCommonSetupEvent event) {
-
+        registerCapability();
     }
 
     @OnlyIn(Dist.CLIENT)
@@ -177,4 +191,23 @@ public class SushiGoCrafting {
         event.getGenerator().addProvider(new SushiRecipeProvider(event.getGenerator()));
     }
 
+    private void registerCapability() {
+        CapabilityManager.INSTANCE.register(ISushiWeightDiscovery.class, new SushiWeightDiscoveryCapability.Storage(), SushiWeightDiscoveryCapability::new);
+        EventManager.forgeGeneric(AttachCapabilitiesEvent.class, Entity.class)
+                .filter(attachCapabilitiesEvent -> ((AttachCapabilitiesEvent) attachCapabilitiesEvent).getObject() instanceof PlayerEntity)
+                .process(attachCapabilitiesEvent -> ((AttachCapabilitiesEvent) attachCapabilitiesEvent).addCapability(new ResourceLocation(MOD_ID, "weight_discovery"), new SushiDiscoveryProvider()))
+                .subscribe();
+        EventManager.forge(PlayerEvent.Clone.class).process(clone -> {
+            clone.getOriginal().getCapability(SushiWeightDiscoveryCapability.CAPABILITY).ifPresent(original -> {
+                clone.getPlayer().getCapability(SushiWeightDiscoveryCapability.CAPABILITY).ifPresent(future -> {
+                    future.deserializeNBT(original.serializeNBT());
+                    future.requestUpdate((ServerPlayerEntity) clone.getPlayer());
+                });
+            });
+        }).subscribe();
+        EventManager.forge(PlayerEvent.PlayerLoggedInEvent.class)
+                .filter(playerLoggedInEvent -> playerLoggedInEvent.getPlayer() instanceof ServerPlayerEntity)
+                .process(playerLoggedInEvent -> playerLoggedInEvent.getPlayer().getCapability(SushiWeightDiscoveryCapability.CAPABILITY)
+                        .ifPresent(iSushiWeightDiscovery -> iSushiWeightDiscovery.requestUpdate((ServerPlayerEntity) playerLoggedInEvent.getPlayer()))).subscribe();
+    }
 }
