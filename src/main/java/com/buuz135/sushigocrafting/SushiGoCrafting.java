@@ -141,7 +141,7 @@ public class SushiGoCrafting {
                     IIngredientEffect effect = ingredient.getEffect();
                     if (effect instanceof AddIngredientEffect) {
                         event.getToolTip().add(new StringTextComponent(TextFormatting.DARK_AQUA + "Adds Food Effect:"));
-                        event.getToolTip().add(new StringTextComponent(TextFormatting.YELLOW + " - " + TextFormatting.GOLD + ((AddIngredientEffect) effect).getEffect().get().getDisplayName().getString() + TextFormatting.DARK_AQUA + " (" + TextFormatting.WHITE + ((AddIngredientEffect) effect).getDuration() + TextFormatting.YELLOW + "s" + TextFormatting.DARK_AQUA + ", " + TextFormatting.YELLOW + "Level " + TextFormatting.WHITE + (((AddIngredientEffect) effect).getLevel() + 1) + TextFormatting.DARK_AQUA + ")"));
+                        event.getToolTip().add(new StringTextComponent(TextFormatting.YELLOW + " - " + TextFormatting.GOLD + ((AddIngredientEffect) effect).getEffect().get().getDisplayName().getString() + TextFormatting.DARK_AQUA + " (" + TextFormatting.WHITE + ((AddIngredientEffect) effect).getDuration() / 20 + TextFormatting.YELLOW + "s" + TextFormatting.DARK_AQUA + ", " + TextFormatting.YELLOW + "Level " + TextFormatting.WHITE + (((AddIngredientEffect) effect).getLevel() + 1) + TextFormatting.DARK_AQUA + ")"));
                     }
                     if (effect instanceof ModifyIngredientEffect) {
                         event.getToolTip().add(new StringTextComponent(TextFormatting.DARK_AQUA + "Modifies Food Effect:"));
