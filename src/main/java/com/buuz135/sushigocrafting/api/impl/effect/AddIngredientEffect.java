@@ -13,9 +13,9 @@ public class AddIngredientEffect implements IIngredientEffect {
     private final int duration;
     private final int level;
 
-    public AddIngredientEffect(Supplier<Effect> effect, int duration, int level) {
+    public AddIngredientEffect(Supplier<Effect> effect, int durationSeconds, int level) {
         this.effect = effect;
-        this.duration = duration;
+        this.duration = durationSeconds * 20;
         this.level = level;
     }
 

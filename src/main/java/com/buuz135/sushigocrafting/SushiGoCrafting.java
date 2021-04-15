@@ -154,7 +154,6 @@ public class SushiGoCrafting {
                 }
             }
         }).subscribe();
-
     }
 
     public void fmlCommon(FMLCommonSetupEvent event) {

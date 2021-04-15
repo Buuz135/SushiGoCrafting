@@ -19,4 +19,7 @@ public interface IFoodIngredient {
 
     IIngredientEffect getEffect();
 
+    int getHungerValue();
+
+    int getSaturationValue();
 }
