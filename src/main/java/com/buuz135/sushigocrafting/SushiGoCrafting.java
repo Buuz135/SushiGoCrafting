@@ -18,6 +18,7 @@ import com.buuz135.sushigocrafting.network.CapabilitySyncMessage;
 import com.buuz135.sushigocrafting.proxy.SushiContent;
 import com.buuz135.sushigocrafting.recipe.CombineAmountItemRecipe;
 import com.buuz135.sushigocrafting.recipe.CuttingBoardRecipe;
+import com.buuz135.sushigocrafting.tile.machinery.CoolerBoxTile;
 import com.buuz135.sushigocrafting.tile.machinery.CuttingBoardTile;
 import com.buuz135.sushigocrafting.tile.machinery.RiceCookerTile;
 import com.buuz135.sushigocrafting.tile.machinery.RollerTile;
@@ -108,6 +109,7 @@ public class SushiGoCrafting {
         NBTManager.getInstance().scanTileClassForAnnotations(RollerTile.class);
         NBTManager.getInstance().scanTileClassForAnnotations(RiceCookerTile.class);
         NBTManager.getInstance().scanTileClassForAnnotations(CuttingBoardTile.class);
+        NBTManager.getInstance().scanTileClassForAnnotations(CoolerBoxTile.class);
         EventManager.forge(BiomeLoadingEvent.class).filter(biomeLoadingEvent -> biomeLoadingEvent.getCategory() == Biome.Category.OCEAN).process(biomeLoadingEvent -> {
             biomeLoadingEvent.getSpawns().withSpawner(EntityClassification.WATER_AMBIENT, new MobSpawnInfo.Spawners(SushiContent.EntityTypes.TUNA.get(), 8, 3, 6));
             biomeLoadingEvent.getSpawns().withSpawner(EntityClassification.WATER_AMBIENT, new MobSpawnInfo.Spawners(SushiContent.EntityTypes.SHRIMP.get(), 10, 6, 9));

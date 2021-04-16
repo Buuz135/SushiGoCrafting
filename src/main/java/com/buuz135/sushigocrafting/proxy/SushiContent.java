@@ -2,6 +2,7 @@ package com.buuz135.sushigocrafting.proxy;
 
 import com.buuz135.sushigocrafting.SushiGoCrafting;
 import com.buuz135.sushigocrafting.block.SushiGoCraftingBlock;
+import com.buuz135.sushigocrafting.block.machinery.CoolerBoxBlock;
 import com.buuz135.sushigocrafting.block.machinery.CuttingBoardBlock;
 import com.buuz135.sushigocrafting.block.machinery.RiceCookerBlock;
 import com.buuz135.sushigocrafting.block.machinery.RollerBlock;
@@ -20,6 +21,7 @@ import com.buuz135.sushigocrafting.loot.SeedsLootModifier;
 import com.buuz135.sushigocrafting.potioneffect.AcquiredTasteEffect;
 import com.buuz135.sushigocrafting.potioneffect.SmallBitesEffect;
 import com.buuz135.sushigocrafting.potioneffect.SteadyHandsEffect;
+import com.buuz135.sushigocrafting.tile.machinery.CoolerBoxTile;
 import com.buuz135.sushigocrafting.tile.machinery.CuttingBoardTile;
 import com.buuz135.sushigocrafting.tile.machinery.RiceCookerTile;
 import com.buuz135.sushigocrafting.tile.machinery.RollerTile;
@@ -112,6 +114,7 @@ public class SushiContent {
         public static final RegistryObject<RollerBlock> ROLLER = block("roller", RollerBlock::new);
         public static final RegistryObject<RiceCookerBlock> RICE_COOKER = block("rice_cooker", RiceCookerBlock::new);
         public static final RegistryObject<CuttingBoardBlock> CUTTING_BOARD = block("cutting_board", CuttingBoardBlock::new);
+        public static final RegistryObject<CoolerBoxBlock> COOLER_BOX = block("cooler_box", CoolerBoxBlock::new);
 
     }
 
@@ -150,6 +153,7 @@ public class SushiContent {
         public static final RegistryObject<BlockItem> ROLLER = blockItem("roller", Blocks.ROLLER);
         public static final RegistryObject<BlockItem> RICE_COOKER = blockItem("rice_cooker", Blocks.RICE_COOKER);
         public static final RegistryObject<BlockItem> CUTTING_BOARD = blockItem("cutting_board", Blocks.CUTTING_BOARD);
+        public static final RegistryObject<BlockItem> COOLER_BOX = blockItem("cooler_box", Blocks.COOLER_BOX);
 
         public static final RegistryObject<AmountItem> AVOCADO_SLICES = amountItem("avocado_slices", "ingredient", 100, 500, 1000);
         public static final RegistryObject<AmountItem> RAW_TUNA_FILLET = amountItem("tuna_fillet", "ingredient", 1000, 3000, 6000);
@@ -179,6 +183,7 @@ public class SushiContent {
         public static RegistryObject<TileEntityType<RollerTile>> ROLLER = tile("roller", RollerTile::new, Blocks.ROLLER);
         public static RegistryObject<TileEntityType<RiceCookerTile>> RICE_COOKER = tile("rice_cooker", RiceCookerTile::new, Blocks.RICE_COOKER);
         public static RegistryObject<TileEntityType<CuttingBoardTile>> CUTTING_BOARD = tile("cutting_board", CuttingBoardTile::new, Blocks.CUTTING_BOARD);
+        public static RegistryObject<TileEntityType<CoolerBoxTile>> COOLER_BOX = tile("cooler_box", CoolerBoxTile::new, Blocks.COOLER_BOX);
 
     }
 
