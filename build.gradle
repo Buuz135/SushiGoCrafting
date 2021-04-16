@@ -41,6 +41,8 @@ minecraft {
     mappings channel: 'snapshot', version: '20210309-1.16.5'
     runs {
         client = {
+            property 'mixin.env.remapRefMap', 'true'
+            property 'mixin.env.refMapRemappingFile', "${projectDir}/build/createSrgToMcp/output.srg"
             // recommended logging data for a userdev environment
             properties 'forge.logging.markers': 'SCAN,REGISTRIES,REGISTRYDUMP'
             // recommended logging level for the console
@@ -49,6 +51,8 @@ minecraft {
             source sourceSets.main
         }
         server = {
+            property 'mixin.env.remapRefMap', 'true'
+            property 'mixin.env.refMapRemappingFile', "${projectDir}/build/createSrgToMcp/output.srg"
             // recommended logging data for a userdev environment
             properties 'forge.logging.markers': 'SCAN,REGISTRIES,REGISTRYDUMP'
             // recommended logging level for the console
@@ -57,6 +61,8 @@ minecraft {
             source sourceSets.main
         }
         data = {
+            property 'mixin.env.remapRefMap', 'true'
+            property 'mixin.env.refMapRemappingFile', "${projectDir}/build/createSrgToMcp/output.srg"
             workingDirectory project.file('run')
             property 'forge.logging.markers', 'SCAN,REGISTRIES,REGISTRYDUMP'
             property 'forge.logging.console.level', 'info'
@@ -78,6 +84,7 @@ repositories {
     maven {
         url 'https://cdn.hrzn.studio/maven/'
     }
+    maven { url 'https://maven.blamejared.com' }
 }
 
 dependencies {
@@ -86,6 +93,8 @@ dependencies {
     // at runtime, use the full JEI jar
     runtimeOnly fg.deobf("mezz.jei:jei-1.16.4:7.6.1.72")
     compile fg.deobf (project.dependencies.create('com.hrznstudio:titanium:1.16.5-3.2.8'))
+    compileOnly fg.deobf("vazkii.patchouli:Patchouli:1.16.2+:api")
+    runtimeOnly fg.deobf("vazkii.patchouli:Patchouli:1.16.2+")
 }
 
 afterEvaluate {
