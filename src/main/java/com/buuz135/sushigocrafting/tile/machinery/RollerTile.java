@@ -19,10 +19,7 @@ import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.inventory.InventoryHelper;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.util.ActionResultType;
-import net.minecraft.util.Direction;
-import net.minecraft.util.Hand;
-import net.minecraft.util.SoundEvents;
+import net.minecraft.util.*;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.server.ServerWorld;
@@ -130,7 +127,7 @@ public class RollerTile extends ActiveTile<RollerTile> {
                                         if (!iSushiWeightDiscovery.hasDiscovery(selected + "-" + finalSlot)) {
                                             iSushiWeightDiscovery.setDiscovery(selected + "-" + finalSlot, weightTracker.weights.get(finalSlot));
                                             player.sendStatusMessage(new StringTextComponent(TextFormatting.GOLD + "You have discovered a new perfect weight!"), false);
-                                            player.playSound(SoundEvents.ENTITY_PLAYER_LEVELUP, 0.2f, 1);
+                                            player.playSound(SoundEvents.ENTITY_PLAYER_LEVELUP, SoundCategory.PLAYERS, 0.2f, 1);
                                         }
                                     });
                                 }
