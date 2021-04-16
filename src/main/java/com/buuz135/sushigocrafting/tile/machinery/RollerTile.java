@@ -161,6 +161,7 @@ public class RollerTile extends ActiveTile<RollerTile> {
                 for (int i1 = 0; i1 < slots.getSlots(); i1++) {
                     slots.setSlotLimit(i1, i1 < iFoodType.getFoodIngredients().size() ? 64 : 0);
                 }
+                this.selected = compound.getString("Type");
                 markForUpdate();
             });
         }
