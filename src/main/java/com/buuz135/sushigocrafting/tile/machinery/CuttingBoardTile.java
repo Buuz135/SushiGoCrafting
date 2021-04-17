@@ -60,6 +60,11 @@ public class CuttingBoardTile extends ActiveTile<CuttingBoardTile> {
                 stack.setCount(0);
                 return ActionResultType.SUCCESS;
             }
+        } else if (player.isSneaking()) {
+            ItemStack inserted = this.input.getStackInSlot(0).copy();
+            this.input.setStackInSlot(0, ItemStack.EMPTY);
+            ItemHandlerHelper.giveItemToPlayer(player, inserted);
+            return ActionResultType.SUCCESS;
         }
         return ActionResultType.FAIL;
     }
