@@ -142,7 +142,6 @@ public class SushiContent {
         public static final RegistryObject<Item> SEAWEED_ON_A_STICK = basicItem("seaweed_on_a_stick", "");
 
         public static final RegistryObject<Item> RAW_TUNA = basicItem("raw_tuna", "");
-        public static final RegistryObject<Item> CRAB = basicItem("crab", "");
 
         public static final RegistryObject<Item> AVOCADO = basicItem("avocado", "plant");
         public static final RegistryObject<BlockItem> AVOCADO_LOG = blockItem("avocado_log", Blocks.AVOCADO_LOG);
