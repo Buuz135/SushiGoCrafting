@@ -44,26 +44,34 @@ public abstract class RollerWeightSelectorButtonComponent extends BasicScreenAdd
         this.slot = slot;
     }
 
-    @Override
-    public void drawBackgroundLayer(MatrixStack matrixStack, Screen screen, IAssetProvider iAssetProvider, int guiX, int guiY, int mouseX, int mouseY, float v) {
+    public static void drawBackground(MatrixStack matrixStack, Screen screen, IAssetProvider iAssetProvider, int guiX, int guiY, int posX, int posY) {
         IAsset asset = iAssetProvider.getAsset(SushiAssetTypes.ROLLER_WEIGHT_PICKER_BG);
         if (asset != null) {
-            AssetUtil.drawAsset(matrixStack, screen, asset, guiX + getPosX(), guiY + getPosY());
+            AssetUtil.drawAsset(matrixStack, screen, asset, guiX + posX, guiY + posY);
         }
+    }
+
+    public static void drawForeground(MatrixStack matrixStack, Screen screen, IAssetProvider iAssetProvider, int guiX, int guiY, int posX, int posY, int weight, int ySize, String type, int slot) {
+        IAsset asset = iAssetProvider.getAsset(SushiAssetTypes.ROLLER_WEIGHT_PICKER_POINTER);
+        if (asset != null && weight != Integer.MIN_VALUE) {
+            AssetUtil.drawAsset(matrixStack, screen, asset, posX, posY + (4 - weight) * (ySize / 4) - 1);
+        }
+        Minecraft.getInstance().player.getCapability(SushiWeightDiscoveryCapability.CAPABILITY).ifPresent(iSushiWeightDiscovery -> {
+            if (iSushiWeightDiscovery.hasDiscovery(type + "-" + slot)) {
+                int pos = posY + (4 - iSushiWeightDiscovery.getDiscovery(type + "-" + slot)) * (ySize / 4) - 1;
+                Screen.fill(matrixStack, posX + 1, pos + 1, posX + 3, pos + 2, new Color(TextFormatting.GOLD.getColor()).getRGB());
+            }
+        });
+    }
+
+    @Override
+    public void drawBackgroundLayer(MatrixStack matrixStack, Screen screen, IAssetProvider iAssetProvider, int guiX, int guiY, int mouseX, int mouseY, float v) {
+        drawBackground(matrixStack, screen, iAssetProvider, guiX, guiY, getPosX(), getPosY());
     }
 
     @Override
     public void drawForegroundLayer(MatrixStack matrixStack, Screen screen, IAssetProvider iAssetProvider, int guiX, int guiY, int mouseX, int mouseY) {
-        IAsset asset = iAssetProvider.getAsset(SushiAssetTypes.ROLLER_WEIGHT_PICKER_POINTER);
-        if (asset != null) {
-            AssetUtil.drawAsset(matrixStack, screen, asset, getPosX(), getPosY() + (4 - getWeight()) * (getYSize() / 4) - 1);
-        }
-        Minecraft.getInstance().player.getCapability(SushiWeightDiscoveryCapability.CAPABILITY).ifPresent(iSushiWeightDiscovery -> {
-            if (iSushiWeightDiscovery.hasDiscovery(getType() + "-" + slot)) {
-                int pos = getPosY() + (4 - iSushiWeightDiscovery.getDiscovery(getType() + "-" + slot)) * (getYSize() / 4) - 1;
-                Screen.fill(matrixStack, getPosX() + 1, pos + 1, getPosX() + 3, pos + 2, new Color(TextFormatting.GOLD.getColor()).getRGB());
-            }
-        });
+        drawForeground(matrixStack, screen, iAssetProvider, guiX, guiY, getPosX(), getPosY(), getWeight(), getYSize(), getType(), slot);
     }
 
     @Override

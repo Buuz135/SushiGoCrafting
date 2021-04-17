@@ -28,12 +28,12 @@ public class FoodType implements IFoodType {
             of(FoodIngredient.SALMON_FILLET, FoodIngredient.TUNA_FILLET, FoodIngredient.WAKAME));
     public static FoodType CALIFORNIA = new FoodType("california", new int[]{0, 4, 5},
             integer -> {
-                if (integer == 5)
-                    return Pair.of(16, 40);
-                if (integer > 2)
-                    return Pair.of(60 + (integer - 3) * 25, 40 - (integer - 3) * 8);
+                if (integer == 0)
+                    return Pair.of(20, 40);
+                if (integer > 3)
+                    return Pair.of(35 + (integer - 3) * 25, 45 - (integer - 3) * 8);
                 //return Pair.of(66 + integer * 10, 40 - (integer - 3) * 22);
-                return Pair.of(55 + integer * 25, 72 - integer * 8);
+                return Pair.of(30 + integer * 25, 77 - integer * 8);
             }, of(FoodIngredient.TOBIKO, FoodIngredient.EMPTY),
             of(FoodIngredient.RICE),
             of(FoodIngredient.NORI),
@@ -62,7 +62,7 @@ public class FoodType implements IFoodType {
             integer -> {
                 if (integer > 3)
                     return Pair.of(-Integer.MAX_VALUE, -Integer.MAX_VALUE);
-                return Pair.of(70 + integer * 10, 76 - integer * 20);
+                return Pair.of(70 + integer * 10, 78 - integer * 20);
             },
             of(FoodIngredient.NORI),
             of(FoodIngredient.AVOCADO),
