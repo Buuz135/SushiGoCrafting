@@ -21,6 +21,7 @@ import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvents;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
+import org.apache.commons.lang3.text.WordUtils;
 
 import java.util.Collections;
 import java.util.List;
@@ -62,7 +63,7 @@ public class FoodTypeSelectionButtonAddon extends BasicButtonAddon {
 
     @Override
     public List<ITextComponent> getTooltipLines() {
-        return Collections.singletonList(new StringTextComponent(getButton().getType().getName()));
+        return Collections.singletonList(new StringTextComponent(WordUtils.capitalize(getButton().getType().getName())));
     }
 
     @Override
