@@ -59,7 +59,6 @@ public abstract class RollerWeightSelectorButtonComponent extends BasicScreenAdd
             AssetUtil.drawAsset(matrixStack, screen, asset, getPosX(), getPosY() + (4 - getWeight()) * (getYSize() / 4) - 1);
         }
         Minecraft.getInstance().player.getCapability(SushiWeightDiscoveryCapability.CAPABILITY).ifPresent(iSushiWeightDiscovery -> {
-            System.out.println(getType());
             if (iSushiWeightDiscovery.hasDiscovery(getType() + "-" + slot)) {
                 int pos = getPosY() + (4 - iSushiWeightDiscovery.getDiscovery(getType() + "-" + slot)) * (getYSize() / 4) - 1;
                 Screen.fill(matrixStack, getPosX() + 1, pos + 1, getPosX() + 3, pos + 2, new Color(TextFormatting.GOLD.getColor()).getRGB());
