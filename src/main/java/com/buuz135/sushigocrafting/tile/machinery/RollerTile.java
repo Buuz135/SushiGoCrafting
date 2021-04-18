@@ -24,6 +24,7 @@ import net.minecraft.util.Direction;
 import net.minecraft.util.Hand;
 import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.common.util.INBTSerializable;
+import net.minecraftforge.items.ItemHandlerHelper;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -157,7 +158,14 @@ public class RollerTile extends ActiveTile<RollerTile> {
             FoodAPI.get().getTypeFromName(compound.getString("Type")).ifPresent(iFoodType -> {
                 slots.setSlotPosition(iFoodType.getSlotPosition());
                 for (int i1 = 0; i1 < slots.getSlots(); i1++) {
-                    slots.setSlotLimit(i1, i1 < iFoodType.getFoodIngredients().size() ? 64 : 0);
+                    if (i1 < iFoodType.getFoodIngredients().size()) {
+                        slots.setSlotLimit(i1, 64);
+                    } else {
+                        ItemStack slotStack = slots.getStackInSlot(i1).copy();
+                        slots.setStackInSlot(i1, ItemStack.EMPTY);
+                        slots.setSlotLimit(i1, 0);
+                        ItemHandlerHelper.giveItemToPlayer(playerEntity, slotStack);
+                    }
                 }
                 this.selected = compound.getString("Type");
                 syncObject(slots);
