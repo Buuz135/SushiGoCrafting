@@ -103,7 +103,7 @@ public class RollerTile extends ActiveTile<RollerTile> {
                 for (int i1 = 0; i1 < slots.getSlots(); i1++) {
                     if (i1 < iFoodType.getFoodIngredients().size()) {
                         IFoodIngredient ingredient = FoodAPI.get().getIngredientFromItem(slots.getStackInSlot(i1).getItem());
-                        if (ingredient.isEmpty() || !ingredient.getIngredientConsumer().canConsume(ingredient, slots.getStackInSlot(i1), weightTracker.weights.get(i1))) {
+                        if (!ingredient.isEmpty() && !ingredient.getIngredientConsumer().canConsume(ingredient, slots.getStackInSlot(i1), weightTracker.weights.get(i1))) {
                             allFull = false;
                             break;
                         }
@@ -120,23 +120,28 @@ public class RollerTile extends ActiveTile<RollerTile> {
                         for (int slot = 0; slot < slots.getSlots(); slot++) {
                             if (slot < iFoodType.getFoodIngredients().size()) {
                                 IFoodIngredient ingredient = FoodAPI.get().getIngredientFromItem(slots.getStackInSlot(slot).getItem());
-                                ingredient.getIngredientConsumer().consume(ingredient, slots.getStackInSlot(slot), weightTracker.weights.get(slot));
                                 foodIngredients.add(ingredient);
-                                int value = random.nextInt(5) - weightTracker.weights.get(slot);
-                                weightValues.add(value);
-                                if (value == 0) {
-                                    int finalSlot = slot;
-                                    player.getCapability(SushiWeightDiscoveryCapability.CAPABILITY).ifPresent(iSushiWeightDiscovery -> {
-                                        if (!iSushiWeightDiscovery.hasDiscovery(selected + "-" + finalSlot)) {
-                                            iSushiWeightDiscovery.setDiscovery(selected + "-" + finalSlot, weightTracker.weights.get(finalSlot));
-                                            discovery.set(true);
-                                        }
-                                    });
-                                }
                             }
                         }
                         FoodItem item = FoodHelper.getFoodFromIngredients(selected, foodIngredients);
                         if (item != null) {
+                            for (int slot = 0; slot < slots.getSlots(); slot++) {
+                                if (slot < iFoodType.getFoodIngredients().size()) {
+                                    IFoodIngredient ingredient = foodIngredients.get(slot);
+                                    ingredient.getIngredientConsumer().consume(ingredient, slots.getStackInSlot(slot), weightTracker.weights.get(slot));
+                                    int value = random.nextInt(5) - weightTracker.weights.get(slot);
+                                    weightValues.add(value);
+                                    if (value == 0 && !ingredient.isEmpty()) {
+                                        int finalSlot = slot;
+                                        player.getCapability(SushiWeightDiscoveryCapability.CAPABILITY).ifPresent(iSushiWeightDiscovery -> {
+                                            if (!iSushiWeightDiscovery.hasDiscovery(selected + "-" + finalSlot)) {
+                                                iSushiWeightDiscovery.setDiscovery(selected + "-" + finalSlot, weightTracker.weights.get(finalSlot));
+                                                discovery.set(true);
+                                            }
+                                        });
+                                    }
+                                }
+                            }
                             ItemStack stack = new ItemStack(item);
                             stack.getOrCreateTag().putIntArray(FoodItem.WEIGHTS_TAG, weightValues);
                             InventoryHelper.spawnItemStack(this.world, this.pos.getX(), this.getPos().getY(), this.getPos().getZ(), stack);
