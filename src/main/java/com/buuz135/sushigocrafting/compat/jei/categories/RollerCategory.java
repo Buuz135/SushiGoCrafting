@@ -25,7 +25,9 @@ import org.apache.commons.lang3.tuple.Pair;
 import java.awt.*;
 import java.util.stream.Collectors;
 
-public class RollerCategory implements IRecipeCategory<RollerCategory.Recipe> {
+import static com.buuz135.sushigocrafting.compat.jei.categories.RollerCategory.Recipe;
+
+public class RollerCategory implements IRecipeCategory<Recipe> {
 
     public static ResourceLocation UID = new ResourceLocation(SushiGoCrafting.MOD_ID, "roller");
 
@@ -42,7 +44,7 @@ public class RollerCategory implements IRecipeCategory<RollerCategory.Recipe> {
 
     @Override
     public Class<? extends Recipe> getRecipeClass() {
-        return RollerCategory.Recipe.class;
+        return Recipe.class;
     }
 
     @Override
@@ -63,7 +65,7 @@ public class RollerCategory implements IRecipeCategory<RollerCategory.Recipe> {
     @Override
     public void setIngredients(Recipe recipe, IIngredients iIngredients) {
         iIngredients.setOutput(VanillaTypes.ITEM, new ItemStack(recipe.stack));
-        iIngredients.setInputs(VanillaTypes.ITEM, recipe.stack.getIngredientList().stream().map(iFoodIngredient -> new ItemStack(iFoodIngredient.getItem())).collect(Collectors.toList()));
+        iIngredients.setInputs(VanillaTypes.ITEM, recipe.stack.getIngredientList().stream().filter(iFoodIngredient -> !iFoodIngredient.isEmpty()).map(iFoodIngredient -> new ItemStack(iFoodIngredient.getItem())).collect(Collectors.toList()));
     }
 
     @Override
@@ -72,8 +74,10 @@ public class RollerCategory implements IRecipeCategory<RollerCategory.Recipe> {
         stackGroup.init(0, false, 0, 0);
         stackGroup.set(0, new ItemStack(recipe.stack));
         for (int i = 0; i < recipe.stack.getIngredientList().size(); i++) {
-            stackGroup.init(i + 1, true, recipe.stack.getType().getSlotPosition().apply(i).getLeft() - 20, recipe.stack.getType().getSlotPosition().apply(i).getRight() - 18);
-            stackGroup.set(i + 1, new ItemStack(recipe.stack.getIngredientList().get(i).getItem()));
+            if (!recipe.stack.getIngredientList().get(i).isEmpty()) {
+                stackGroup.init(i + 1, true, recipe.stack.getType().getSlotPosition().apply(i).getLeft() - 20, recipe.stack.getType().getSlotPosition().apply(i).getRight() - 18);
+                stackGroup.set(i + 1, new ItemStack(recipe.stack.getIngredientList().get(i).getItem()));
+            }
         }
     }
 
@@ -93,6 +97,7 @@ public class RollerCategory implements IRecipeCategory<RollerCategory.Recipe> {
 
         public Recipe(FoodItem stack) {
             this.stack = stack;
+            System.out.println(this.stack.getRegistryName());
         }
     }
 }

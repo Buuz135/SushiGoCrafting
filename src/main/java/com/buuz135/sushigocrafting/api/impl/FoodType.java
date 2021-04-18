@@ -51,9 +51,9 @@ public class FoodType implements IFoodType {
             of(FoodIngredient.NORI));
     public static FoodType ONIGIRI = new FoodType("onigiri", new int[]{1},
             integer -> {
-                if (integer > 1)
+                if (integer > 2)
                     return Pair.of(-Integer.MAX_VALUE, -Integer.MAX_VALUE);
-                return Pair.of(70 + integer * 10, 60 - integer * 28);
+                return Pair.of(70 + integer * 10, 76 - integer * 28);
             },
             of(FoodIngredient.RICE),
             of(FoodIngredient.EMPTY),
