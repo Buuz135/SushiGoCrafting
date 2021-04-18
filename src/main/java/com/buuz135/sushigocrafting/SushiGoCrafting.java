@@ -202,13 +202,13 @@ public class SushiGoCrafting {
             clone.getOriginal().getCapability(SushiWeightDiscoveryCapability.CAPABILITY).ifPresent(original -> {
                 clone.getPlayer().getCapability(SushiWeightDiscoveryCapability.CAPABILITY).ifPresent(future -> {
                     future.deserializeNBT(original.serializeNBT());
-                    future.requestUpdate((ServerPlayerEntity) clone.getPlayer());
+                    future.requestUpdate((ServerPlayerEntity) clone.getPlayer(), false);
                 });
             });
         }).subscribe();
         EventManager.forge(PlayerEvent.PlayerLoggedInEvent.class)
                 .filter(playerLoggedInEvent -> playerLoggedInEvent.getPlayer() instanceof ServerPlayerEntity)
                 .process(playerLoggedInEvent -> playerLoggedInEvent.getPlayer().getCapability(SushiWeightDiscoveryCapability.CAPABILITY)
-                        .ifPresent(iSushiWeightDiscovery -> iSushiWeightDiscovery.requestUpdate((ServerPlayerEntity) playerLoggedInEvent.getPlayer()))).subscribe();
+                        .ifPresent(iSushiWeightDiscovery -> iSushiWeightDiscovery.requestUpdate((ServerPlayerEntity) playerLoggedInEvent.getPlayer(), false))).subscribe();
     }
 }

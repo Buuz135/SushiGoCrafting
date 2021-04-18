@@ -26,8 +26,8 @@ public class SushiWeightDiscoveryCapability implements ISushiWeightDiscovery {
     }
 
     @Override
-    public void requestUpdate(ServerPlayerEntity entity) {
-        SushiGoCrafting.NETWORK.get().sendTo(new CapabilitySyncMessage(serializeNBT()), entity.connection.getNetworkManager(), NetworkDirection.PLAY_TO_CLIENT);
+    public void requestUpdate(ServerPlayerEntity entity, boolean discovery) {
+        SushiGoCrafting.NETWORK.get().sendTo(new CapabilitySyncMessage(serializeNBT(), discovery), entity.connection.getNetworkManager(), NetworkDirection.PLAY_TO_CLIENT);
     }
 
     @Override

@@ -6,7 +6,7 @@ import net.minecraftforge.common.util.INBTSerializable;
 
 public interface ISushiWeightDiscovery extends INBTSerializable<CompoundNBT> {
 
-    void requestUpdate(ServerPlayerEntity entity);
+    void requestUpdate(ServerPlayerEntity entity, boolean discovery);
 
     boolean hasDiscovery(String discovery);
 

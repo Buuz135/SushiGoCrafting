@@ -19,15 +19,16 @@ import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.inventory.InventoryHelper;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.util.*;
-import net.minecraft.util.text.StringTextComponent;
-import net.minecraft.util.text.TextFormatting;
+import net.minecraft.util.ActionResultType;
+import net.minecraft.util.Direction;
+import net.minecraft.util.Hand;
 import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.common.util.INBTSerializable;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.function.Supplier;
 
 public class RollerTile extends ActiveTile<RollerTile> {
@@ -86,7 +87,7 @@ public class RollerTile extends ActiveTile<RollerTile> {
         ActionResultType type = super.onActivated(player, hand, facing, hitX, hitY, hitZ);
         if (!type.isSuccess()) {
             if (player instanceof ServerPlayerEntity) {
-                player.getCapability(SushiWeightDiscoveryCapability.CAPABILITY).ifPresent(iSushiWeightDiscovery -> iSushiWeightDiscovery.requestUpdate((ServerPlayerEntity) player));
+                player.getCapability(SushiWeightDiscoveryCapability.CAPABILITY).ifPresent(iSushiWeightDiscovery -> iSushiWeightDiscovery.requestUpdate((ServerPlayerEntity) player, false));
             }
             openGui(player);
             return ActionResultType.SUCCESS;
@@ -114,6 +115,7 @@ public class RollerTile extends ActiveTile<RollerTile> {
                         craftProgress = 0;
                         List<IFoodIngredient> foodIngredients = new ArrayList<>();
                         List<Integer> weightValues = new ArrayList<>();
+                        AtomicBoolean discovery = new AtomicBoolean(false);
                         for (int slot = 0; slot < slots.getSlots(); slot++) {
                             if (slot < iFoodType.getFoodIngredients().size()) {
                                 IFoodIngredient ingredient = FoodAPI.get().getIngredientFromItem(slots.getStackInSlot(slot).getItem());
@@ -126,8 +128,7 @@ public class RollerTile extends ActiveTile<RollerTile> {
                                     player.getCapability(SushiWeightDiscoveryCapability.CAPABILITY).ifPresent(iSushiWeightDiscovery -> {
                                         if (!iSushiWeightDiscovery.hasDiscovery(selected + "-" + finalSlot)) {
                                             iSushiWeightDiscovery.setDiscovery(selected + "-" + finalSlot, weightTracker.weights.get(finalSlot));
-                                            player.sendStatusMessage(new StringTextComponent(TextFormatting.GOLD + "You have discovered a new perfect weight!"), false);
-                                            player.playSound(SoundEvents.ENTITY_PLAYER_LEVELUP, SoundCategory.PLAYERS, 0.2f, 1);
+                                            discovery.set(true);
                                         }
                                     });
                                 }
@@ -140,7 +141,7 @@ public class RollerTile extends ActiveTile<RollerTile> {
                             InventoryHelper.spawnItemStack(this.world, this.pos.getX(), this.getPos().getY(), this.getPos().getZ(), stack);
                         }
                         if (player instanceof ServerPlayerEntity) {
-                            player.getCapability(SushiWeightDiscoveryCapability.CAPABILITY).ifPresent(iSushiWeightDiscovery -> iSushiWeightDiscovery.requestUpdate((ServerPlayerEntity) player));
+                            player.getCapability(SushiWeightDiscoveryCapability.CAPABILITY).ifPresent(iSushiWeightDiscovery -> iSushiWeightDiscovery.requestUpdate((ServerPlayerEntity) player, discovery.get()));
                         }
                     }
                 }
@@ -159,6 +160,7 @@ public class RollerTile extends ActiveTile<RollerTile> {
                     slots.setSlotLimit(i1, i1 < iFoodType.getFoodIngredients().size() ? 64 : 0);
                 }
                 this.selected = compound.getString("Type");
+                syncObject(slots);
                 markForUpdate();
             });
         }
