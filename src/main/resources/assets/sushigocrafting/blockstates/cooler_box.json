@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "subfacing=north": {
+      "model": "sushigocrafting:block/cooler_box",
+      "y": 180
+    },
+    "subfacing=south": {
+      "model": "sushigocrafting:block/cooler_box"
+    },
+    "subfacing=west": {
+      "model": "sushigocrafting:block/cooler_box",
+      "y": 90
+    },
+    "subfacing=east": {
+      "model": "sushigocrafting:block/cooler_box",
+      "y": 270
+    }
+  }
+}
