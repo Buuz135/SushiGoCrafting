@@ -5,6 +5,7 @@ import com.buuz135.sushigocrafting.proxy.SushiContent;
 import com.hrznstudio.titanium.recipe.generator.TitaniumRecipeProvider;
 import com.hrznstudio.titanium.recipe.generator.TitaniumShapedRecipeBuilder;
 import com.hrznstudio.titanium.recipe.generator.TitaniumShapelessRecipeBuilder;
+import net.minecraft.block.Blocks;
 import net.minecraft.data.CookingRecipeBuilder;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.IFinishedRecipe;
@@ -40,6 +41,12 @@ public class SushiRecipeProvider extends TitaniumRecipeProvider {
                 .key('G', Items.LIGHT_WEIGHTED_PRESSURE_PLATE)
                 .key('F', Items.FURNACE)
                 .key('R', Items.REDSTONE)
+                .build(consumer);
+        TitaniumShapedRecipeBuilder.shapedRecipe(SushiContent.Items.COOLER_BOX.get())
+                .patternLine("IGI").patternLine("IFI").patternLine("III")
+                .key('I', Blocks.SNOW_BLOCK)
+                .key('G', Blocks.IRON_TRAPDOOR)
+                .key('F', Tags.Items.CHESTS)
                 .build(consumer);
         CookingRecipeBuilder.smeltingRecipe(Ingredient.fromItems(SushiContent.Items.SEAWEED.get()), SushiContent.Items.DRY_SEAWEED.get(), 0.3f, 200).addCriterion("has_seaweed", hasItem(SushiContent.Items.SEAWEED.get())).build(consumer);
         TitaniumShapelessRecipeBuilder.shapelessRecipe(SushiContent.Blocks.SEAWEED_BLOCK.get()).addIngredient(Ingredient.fromItems(SushiContent.Items.DRY_SEAWEED.get()), 9).build(consumer);

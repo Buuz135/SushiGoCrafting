@@ -1,0 +1,40 @@
+{
+  "type": "forge:conditional",
+  "recipes": [
+    {
+      "conditions": [
+        {
+          "values": [
+            {
+              "item": "sushigocrafting:cooler_box",
+              "type": "forge:item_exists"
+            }
+          ],
+          "type": "forge:and"
+        }
+      ],
+      "recipe": {
+        "type": "minecraft:crafting_shaped",
+        "pattern": [
+          "IGI",
+          "IFI",
+          "III"
+        ],
+        "key": {
+          "I": {
+            "item": "minecraft:snow_block"
+          },
+          "G": {
+            "item": "minecraft:iron_trapdoor"
+          },
+          "F": {
+            "tag": "forge:chests"
+          }
+        },
+        "result": {
+          "item": "sushigocrafting:cooler_box"
+        }
+      }
+    }
+  ]
+}
