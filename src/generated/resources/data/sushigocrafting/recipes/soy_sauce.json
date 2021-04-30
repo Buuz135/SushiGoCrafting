@@ -1,0 +1,9 @@
+{
+  "type": "minecraft:smelting",
+  "ingredient": {
+    "item": "sushigocrafting:soy_bean"
+  },
+  "result": "sushigocrafting:soy_sauce",
+  "experience": 0.3,
+  "cookingtime": 200
+}

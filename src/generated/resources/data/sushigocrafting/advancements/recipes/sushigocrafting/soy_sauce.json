@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "rewards": {
+    "recipes": [
+      "sushigocrafting:soy_sauce"
+    ]
+  },
+  "criteria": {
+    "has_soy": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "sushigocrafting:soy_bean"
+          }
+        ]
+      }
+    },
+    "has_the_recipe": {
+      "trigger": "minecraft:recipe_unlocked",
+      "conditions": {
+        "recipe": "sushigocrafting:soy_sauce"
+      }
+    }
+  },
+  "requirements": [
+    [
+      "has_soy",
+      "has_the_recipe"
+    ]
+  ]
+}

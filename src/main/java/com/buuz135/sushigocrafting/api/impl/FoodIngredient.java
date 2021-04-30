@@ -29,6 +29,8 @@ public class FoodIngredient implements IFoodIngredient {
     public static FoodIngredient CHEESE = new FoodIngredient("cheese", SushiContent.Items.CHEESE, 12, IIngredientConsumer.WEIGHT, null, new AddIngredientEffect(() -> Effects.SATURATION, 15, 0), 1, 2);
     public static FoodIngredient SHRIMP = new FoodIngredient("shrimp", SushiContent.Items.SHRIMP, 30, IIngredientConsumer.WEIGHT, null, new AddIngredientEffect(SushiContent.Effects.STEADY_HANDS, 60, 0), 2, 1);
     public static FoodIngredient CHICKEN = new FoodIngredient("chicken", () -> Items.COOKED_CHICKEN, 30, IIngredientConsumer.WEIGHT, null, new AddIngredientEffect(() -> Effects.SLOW_FALLING, 10, 0), 2, 1);
+    public static FoodIngredient SOY_SAUCE = new FoodIngredient("soy_sauce", SushiContent.Items.SOY_SAUCE, 4, IIngredientConsumer.WEIGHT, null, new ModifyIngredientEffect(1f, 1), 0, 0);
+    public static FoodIngredient WASABI = new FoodIngredient("wasabi", SushiContent.Items.WASABI_PASTE, 4, IIngredientConsumer.WEIGHT, () -> Ingredient.fromItems(SushiContent.Items.WASABI_ROOT.get()), new AddIngredientEffect(() -> Effects.FIRE_RESISTANCE, 15, 0), 0, 0);
 
     private final Supplier<? extends Item> item;
     private final String name;
