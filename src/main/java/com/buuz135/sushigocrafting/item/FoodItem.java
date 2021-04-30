@@ -3,6 +3,7 @@ package com.buuz135.sushigocrafting.item;
 import com.buuz135.sushigocrafting.api.IFoodIngredient;
 import com.buuz135.sushigocrafting.api.IFoodType;
 import com.buuz135.sushigocrafting.api.IIngredientEffect;
+import com.buuz135.sushigocrafting.api.impl.FoodAPI;
 import com.buuz135.sushigocrafting.api.impl.effect.ModifyIngredientEffect;
 import com.buuz135.sushigocrafting.util.TextUtil;
 import net.minecraft.client.gui.screen.Screen;
@@ -11,6 +12,7 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Food;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.potion.EffectInstance;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
@@ -26,6 +28,7 @@ import java.util.Objects;
 public class FoodItem extends SushiItem {
 
     public static final String WEIGHTS_TAG = "Weights";
+    public static final String SPICES_TAG = "Spices";
 
     private final List<IFoodIngredient> ingredientList;
     private final IFoodType type;
@@ -107,6 +110,14 @@ public class FoodItem extends SushiItem {
                 tooltip.add(new StringTextComponent(line));
             }
         }
+        if (stack.hasTag() && stack.getChildTag(FoodItem.SPICES_TAG) != null) {
+            CompoundNBT compoundNBT = stack.getChildTag(FoodItem.SPICES_TAG);
+            for (String name : compoundNBT.keySet()) {
+                IFoodIngredient foodIngredient = FoodAPI.get().getIngredientFromName(name);
+                if (!foodIngredient.isEmpty())
+                    tooltip.add(new StringTextComponent(TextFormatting.GRAY + " - " + new TranslationTextComponent(foodIngredient.getItem().getTranslationKey()).getString()));
+            }
+        }
         Info info = new Info(stack, Screen.hasShiftDown());
         tooltip.addAll(getTagsFrom(info.getNegative(), info.getPositive()));
         tooltip.add(new StringTextComponent(""));
@@ -163,7 +174,15 @@ public class FoodItem extends SushiItem {
             this.hunger = foodItem.getIngredientList().stream().map(IFoodIngredient::getHungerValue).mapToInt(Integer::intValue).sum() * getFoodModifierValue(negative, positive);
             this.saturation = foodItem.getIngredientList().stream().map(IFoodIngredient::getSaturationValue).mapToInt(Integer::intValue).sum() * getFoodModifierValue(negative, positive);
             if (calculateEffects) {
-                foodItem.getIngredientList().stream().map(IFoodIngredient::getEffect).filter(Objects::nonNull).sorted(Comparator.comparingInt(IIngredientEffect::getPriority)).forEach(iIngredientEffect -> iIngredientEffect.accept(effectInstances));
+                List<IFoodIngredient> foodIngredients = new ArrayList<>(foodItem.getIngredientList());
+                if (stack.hasTag() && stack.getChildTag(FoodItem.SPICES_TAG) != null) {
+                    CompoundNBT compoundNBT = stack.getChildTag(FoodItem.SPICES_TAG);
+                    for (String name : compoundNBT.keySet()) {
+                        IFoodIngredient foodIngredient = FoodAPI.get().getIngredientFromName(name);
+                        if (!foodIngredient.isEmpty()) foodIngredients.add(foodIngredient);
+                    }
+                }
+                foodIngredients.stream().map(IFoodIngredient::getEffect).filter(Objects::nonNull).sorted(Comparator.comparingInt(IIngredientEffect::getPriority)).forEach(iIngredientEffect -> iIngredientEffect.accept(effectInstances));
                 if (modifyIngredientEffect != null) modifyIngredientEffect.accept(effectInstances);
             }
         }

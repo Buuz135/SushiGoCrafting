@@ -17,6 +17,7 @@ import com.hrznstudio.titanium.component.inventory.InventoryComponent;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.inventory.InventoryHelper;
+import net.minecraft.item.DyeColor;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.ActionResultType;
@@ -42,6 +43,8 @@ public class RollerTile extends ActiveTile<RollerTile> {
     private WeightTracker weightTracker;
     @Save
     private int craftProgress;
+    @Save
+    private InventoryComponent<RollerTile> spices;
 
     public RollerTile() {
         super(SushiContent.Blocks.ROLLER.get());
@@ -49,7 +52,7 @@ public class RollerTile extends ActiveTile<RollerTile> {
         int max = 0;
         this.craftProgress = 0;
         for (IFoodType foodType : FoodAPI.get().getFoodTypes()) {
-            addButton(new FoodTypeButtonComponent(foodType, -20 - 20 * (i % 3), (i / 3) * 20, 18, 18) {
+            addButton(new FoodTypeButtonComponent(foodType, -20, i * 20 + 10, 18, 18) {
                 @Override
                 public Supplier<String> getSelected() {
                     return () -> selected;
@@ -81,6 +84,18 @@ public class RollerTile extends ActiveTile<RollerTile> {
             }
         });
         addInventory(slots);
+        addInventory(this.spices = new InventoryComponent<RollerTile>("spices", 130, 76, 2)
+                .setSlotLimit(1)
+                .setSlotToColorRender(0, DyeColor.YELLOW)
+                .setSlotToColorRender(1, DyeColor.YELLOW)
+                .setSlotToItemStackRender(0, new ItemStack(SushiContent.Items.SOY_SAUCE.get()))
+                .setSlotToItemStackRender(1, new ItemStack(SushiContent.Items.WASABI_PASTE.get()))
+                .setInputFilter((stack, integer) -> {
+                    if (integer == 0) return stack.getItem().equals(SushiContent.Items.SOY_SAUCE.get());
+                    if (integer == 1) return stack.getItem().equals(SushiContent.Items.WASABI_PASTE.get());
+                    return false;
+                })
+        );
     }
 
     @Override
@@ -144,6 +159,17 @@ public class RollerTile extends ActiveTile<RollerTile> {
                             }
                             ItemStack stack = new ItemStack(item);
                             stack.getOrCreateTag().putIntArray(FoodItem.WEIGHTS_TAG, weightValues);
+                            CompoundNBT spicesNBT = new CompoundNBT();
+                            for (int i = 0; i < spices.getSlots(); i++) {
+                                if (!spices.getStackInSlot(i).isEmpty()) {
+                                    IFoodIngredient soy = FoodAPI.get().getIngredientFromItem(spices.getStackInSlot(i).getItem());
+                                    if (soy.getIngredientConsumer().canConsume(soy, spices.getStackInSlot(i), 0)) {
+                                        soy.getIngredientConsumer().consume(soy, spices.getStackInSlot(i), 0);
+                                        spicesNBT.putBoolean(soy.getName(), true);
+                                    }
+                                }
+                            }
+                            stack.getOrCreateTag().put(FoodItem.SPICES_TAG, spicesNBT);
                             InventoryHelper.spawnItemStack(this.world, this.pos.getX(), this.getPos().getY(), this.getPos().getZ(), stack);
                         }
                         if (player instanceof ServerPlayerEntity) {

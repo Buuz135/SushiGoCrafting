@@ -149,7 +149,9 @@ public class SushiGoCrafting {
                     }
                     if (effect instanceof ModifyIngredientEffect) {
                         event.getToolTip().add(new StringTextComponent(TextFormatting.DARK_AQUA + "Modifies Food Effect:"));
-                        event.getToolTip().add(new StringTextComponent(TextFormatting.YELLOW + " - " + TextFormatting.GOLD + " Multiplies Time By " + TextFormatting.WHITE + ((ModifyIngredientEffect) effect).getTimeModifier()));
+                        if (((ModifyIngredientEffect) effect).getTimeModifier() != 1) {
+                            event.getToolTip().add(new StringTextComponent(TextFormatting.YELLOW + " - " + TextFormatting.GOLD + " Multiplies Time By " + TextFormatting.WHITE + ((ModifyIngredientEffect) effect).getTimeModifier()));
+                        }
                         if (((ModifyIngredientEffect) effect).getLevelModifier() > 0)
                             event.getToolTip().add(new StringTextComponent(TextFormatting.YELLOW + " - " + TextFormatting.GOLD + " Increases Level By " + TextFormatting.WHITE + ((ModifyIngredientEffect) effect).getLevelModifier()));
                     }
