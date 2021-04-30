@@ -96,7 +96,6 @@ public class RollerCategory implements IRecipeCategory<Recipe> {
 
         public Recipe(FoodItem stack) {
             this.stack = stack;
-            System.out.println(this.stack.getRegistryName());
         }
     }
 }
