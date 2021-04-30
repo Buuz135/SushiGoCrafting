@@ -1,17 +1,13 @@
 {
-  "name": "Sewer",
-  "icon": "industrialforegoing:sewer",
-  "category": "agriculture_husbandry",
-  "sortnum": 12,
-  "read_by_default": true,
+  "name": "Crops",
+  "icon": "sushigocrafting:wasabi_root",
+  "category": "world",
+  "sortnum": 3,
+  "read_by_default": false,
   "pages": [
     {
       "type": "text",
-      "text": "A machine used to collect $(l:agr_hus/sewage)Sewage$() from animals and experience to turn it into essence."
-    },
-    {
-      "type": "crafting",
-      "recipe": "industrialforegoing:sewer"
+      "text": "You can get seeds by breaking grass. $(br2)Most of the crops are grown like normal crops except Rice that needs to be grown underwater on dirt."
     }
   ]
 }

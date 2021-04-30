@@ -159,7 +159,6 @@ public class RollerTile extends ActiveTile<RollerTile> {
     public void handleButtonMessage(int id, PlayerEntity playerEntity, CompoundNBT compound) {
         super.handleButtonMessage(id, playerEntity, compound);
         if (compound.contains("Type")) {
-            //Random random = new Random(((ServerWorld) this.world).getSeed() + compound.getString("Type").hashCode());
             FoodAPI.get().getTypeFromName(compound.getString("Type")).ifPresent(iFoodType -> {
                 slots.setSlotPosition(iFoodType.getSlotPosition());
                 for (int i1 = 0; i1 < slots.getSlots(); i1++) {

@@ -1,17 +1,17 @@
 {
-  "name": "Sewer",
-  "icon": "industrialforegoing:sewer",
-  "category": "agriculture_husbandry",
-  "sortnum": 12,
-  "read_by_default": true,
+  "name": "Ingredients",
+  "icon": "sushigocrafting:cleaver_knife",
+  "category": "getting_started",
+  "sortnum": 1,
+  "read_by_default": false,
   "pages": [
     {
       "type": "text",
-      "text": "A machine used to collect $(l:agr_hus/sewage)Sewage$() from animals and experience to turn it into essence."
+      "text": "Ingredients are 'usually' processed food ready to used when making food, most of them will have a weight to them and their weights can be combined in the crafting table or in a $(l:using_tools/cooler_box)Cooler Box$() to do it in automated way."
     },
     {
-      "type": "crafting",
-      "recipe": "industrialforegoing:sewer"
+      "type": "text",
+      "text": "Most ingredients have an affect attached to them or an effect modifier that will modify/amplify effects from other ingredients."
     }
   ]
 }
