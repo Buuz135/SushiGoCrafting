@@ -1,0 +1,9 @@
+{
+  "type": "minecraft:smelting",
+  "ingredient": {
+    "item": "minecraft:milk_bucket"
+  },
+  "result": "sushigocrafting:cheese",
+  "experience": 0.3,
+  "cookingtime": 200
+}

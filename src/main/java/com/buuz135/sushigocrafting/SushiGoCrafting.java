@@ -34,6 +34,7 @@ import net.minecraft.client.renderer.RenderTypeLookup;
 import net.minecraft.data.BlockTagsProvider;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityClassification;
+import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.entity.passive.fish.AbstractFishEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
@@ -61,6 +62,7 @@ import net.minecraftforge.common.capabilities.CapabilityManager;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.event.entity.EntityAttributeCreationEvent;
+import net.minecraftforge.event.entity.living.LivingDropsEvent;
 import net.minecraftforge.event.entity.player.ItemTooltipEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.event.world.BiomeLoadingEvent;
@@ -154,6 +156,11 @@ public class SushiGoCrafting {
                 } else {
                     event.getToolTip().add(new StringTextComponent(TextFormatting.YELLOW + "Hold " + TextFormatting.GOLD + "" + TextFormatting.ITALIC + "<Shift>" + TextFormatting.RESET + TextFormatting.YELLOW + " for sushi effect"));
                 }
+            }
+        }).subscribe();
+        EventManager.forge(LivingDropsEvent.class).filter(livingDropsEvent -> livingDropsEvent.getEntity() instanceof AbstractFishEntity).process(livingDropsEvent -> {
+            if (livingDropsEvent.getEntity().world.getRandom().nextInt(10) <= 2) {
+                livingDropsEvent.getDrops().add(new ItemEntity(livingDropsEvent.getEntity().world, livingDropsEvent.getEntity().getPosX(), livingDropsEvent.getEntity().getPosY(), livingDropsEvent.getEntity().getPosZ(), SushiContent.Items.TOBIKO.get().random(null, livingDropsEvent.getEntity().world)));
             }
         }).subscribe();
     }
