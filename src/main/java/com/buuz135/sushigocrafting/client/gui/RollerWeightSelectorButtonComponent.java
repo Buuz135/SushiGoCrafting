@@ -27,7 +27,6 @@ import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TextFormatting;
 
-import java.awt.*;
 import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.List;
@@ -59,7 +58,7 @@ public abstract class RollerWeightSelectorButtonComponent extends BasicScreenAdd
         Minecraft.getInstance().player.getCapability(SushiWeightDiscoveryCapability.CAPABILITY).ifPresent(iSushiWeightDiscovery -> {
             if (iSushiWeightDiscovery.hasDiscovery(type + "-" + slot)) {
                 int pos = posY + (4 - iSushiWeightDiscovery.getDiscovery(type + "-" + slot)) * (ySize / 4) - 1;
-                Screen.fill(matrixStack, posX + 1, pos + 1, posX + 3, pos + 2, new Color(TextFormatting.GOLD.getColor()).getRGB());
+                AssetUtil.drawAsset(matrixStack, screen, iAssetProvider.getAsset(SushiAssetTypes.ROLLER_WEIGHT_PERFECT_POINTER), posX + 1, pos + 1);
             }
         });
     }

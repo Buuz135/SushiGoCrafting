@@ -47,6 +47,16 @@ public class RollerAssetProvider implements IAssetProvider {
         }
     };
 
+    private final IAsset ROLLER_WEIGHT_PERFECT_POINTER = new IAsset() {
+        public Rectangle getArea() {
+            return new Rectangle(9, 223, 2, 1);
+        }
+
+        public ResourceLocation getResourceLocation() {
+            return TEXTURE;
+        }
+    };
+
     private final Point HOTBAR_POS = new Point(8, 160);
     private final Point INV_POS = new Point(8, 102);
     private final IBackgroundAsset BACKGROUND = new IBackgroundAsset() {
@@ -102,6 +112,8 @@ public class RollerAssetProvider implements IAssetProvider {
             return iAssetType.castOrDefault(ROLLER_TYPE_BG_OVER);
         if (iAssetType == AssetTypes.SLOT)
             return iAssetType.castOrDefault(this.SLOT);
+        if (iAssetType == SushiAssetTypes.ROLLER_WEIGHT_PERFECT_POINTER)
+            return iAssetType.castOrDefault(ROLLER_WEIGHT_PERFECT_POINTER);
         return null;
         //return DefaultAssetProvider.DEFAULT_PROVIDER.getAsset(iAssetType);
     }
