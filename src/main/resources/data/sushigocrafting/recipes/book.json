@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {
+      "item": "minecraft:book"
+    },
+    {
+      "item": "sushigocrafting:seaweed"
+    },
+    {
+      "item": "sushigocrafting:seaweed"
+    }
+  ],
+  "result": {
+    "item": "patchouli:guide_book",
+    "nbt": {
+      "patchouli:book": "sushigocrafting:sushigocrafting"
+    }
+  }
+}
