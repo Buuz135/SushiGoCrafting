@@ -1,5 +1,6 @@
 package com.buuz135.sushigocrafting.client;
 
+import com.buuz135.sushigocrafting.SushiGoCrafting;
 import com.buuz135.sushigocrafting.api.IFoodIngredient;
 import com.buuz135.sushigocrafting.api.IIngredientEffect;
 import com.buuz135.sushigocrafting.api.impl.FoodAPI;
@@ -13,14 +14,20 @@ import com.hrznstudio.titanium.event.handler.EventManager;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.RenderTypeLookup;
+import net.minecraft.client.renderer.model.IBakedModel;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TextFormatting;
+import net.minecraftforge.client.event.ModelBakeEvent;
 import net.minecraftforge.event.entity.player.ItemTooltipEvent;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.client.registry.RenderingRegistry;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 
 public class ClientProxy {
+
+    public static IBakedModel SALMON_BACK;
+    public static IBakedModel TUNA_BACK;
 
     public void fmlClient(FMLClientSetupEvent fml) {
         RenderTypeLookup.setRenderLayer(SushiContent.Blocks.RICE_CROP.get(), RenderType.getCutout());
@@ -36,6 +43,10 @@ public class ClientProxy {
         RenderingRegistry.registerEntityRenderingHandler(SushiContent.EntityTypes.TUNA.get(), TunaRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(SushiContent.EntityTypes.SHRIMP.get(), ShrimpRenderer::new);
         ClientRegistry.bindTileEntityRenderer(SushiContent.TileEntities.CUTTING_BOARD.get(), CuttingBoardRenderer::new);
+        EventManager.mod(ModelBakeEvent.class).process(event -> {
+            SALMON_BACK = event.getModelRegistry().get(new ResourceLocation(SushiGoCrafting.MOD_ID, "block/salmon_back"));
+            TUNA_BACK = event.getModelRegistry().get(new ResourceLocation(SushiGoCrafting.MOD_ID, "block/tuna_back"));
+        }).subscribe();
         EventManager.forge(ItemTooltipEvent.class).process(event -> {
             IFoodIngredient ingredient = FoodAPI.get().getIngredientFromItem(event.getItemStack().getItem());
             if (!ingredient.isEmpty() && ingredient.getEffect() != null) {

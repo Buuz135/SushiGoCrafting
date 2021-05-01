@@ -7,6 +7,7 @@ import com.buuz135.sushigocrafting.cap.ISushiWeightDiscovery;
 import com.buuz135.sushigocrafting.cap.SushiDiscoveryProvider;
 import com.buuz135.sushigocrafting.cap.SushiWeightDiscoveryCapability;
 import com.buuz135.sushigocrafting.client.ClientProxy;
+import com.buuz135.sushigocrafting.client.render.ContributorsBackRender;
 import com.buuz135.sushigocrafting.datagen.*;
 import com.buuz135.sushigocrafting.network.CapabilitySyncMessage;
 import com.buuz135.sushigocrafting.proxy.SushiContent;
@@ -18,10 +19,16 @@ import com.buuz135.sushigocrafting.tile.machinery.RiceCookerTile;
 import com.buuz135.sushigocrafting.tile.machinery.RollerTile;
 import com.buuz135.sushigocrafting.world.SushiTab;
 import com.buuz135.sushigocrafting.world.tree.AvocadoTree;
+import com.hrznstudio.titanium.TitaniumClient;
 import com.hrznstudio.titanium.event.handler.EventManager;
 import com.hrznstudio.titanium.nbthandler.NBTManager;
 import com.hrznstudio.titanium.network.NetworkHandler;
+import com.hrznstudio.titanium.reward.Reward;
+import com.hrznstudio.titanium.reward.RewardGiver;
+import com.hrznstudio.titanium.reward.RewardManager;
 import net.minecraft.block.Blocks;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.entity.EntityRendererManager;
 import net.minecraft.data.BlockTagsProvider;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityClassification;
@@ -46,6 +53,9 @@ import net.minecraft.world.gen.placement.ChanceConfig;
 import net.minecraft.world.gen.placement.Placement;
 import net.minecraft.world.gen.placement.TopSolidWithNoiseConfig;
 import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.client.event.ModelRegistryEvent;
+import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.common.capabilities.CapabilityManager;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
 import net.minecraftforge.event.RegistryEvent;
@@ -60,6 +70,12 @@ import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.GatherDataEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.util.UUID;
 
 @Mod(SushiGoCrafting.MOD_ID)
 public class SushiGoCrafting {
@@ -68,6 +84,7 @@ public class SushiGoCrafting {
 
     public static final ItemGroup TAB = new SushiTab(MOD_ID);
     public static NetworkHandler NETWORK = new NetworkHandler(MOD_ID);
+    public static Logger LOGGER = LogManager.getLogger(MOD_ID);
 
     static {
         NETWORK.registerMessage(CapabilitySyncMessage.class);
@@ -84,6 +101,10 @@ public class SushiGoCrafting {
         SushiContent.EntityTypes.REGISTRY.register(FMLJavaModLoadingContext.get().getModEventBus());
         SushiContent.LootSerializers.REGISTRY.register(FMLJavaModLoadingContext.get().getModEventBus());
         DistExecutor.runWhenOn(Dist.CLIENT, () -> () -> EventManager.mod(FMLClientSetupEvent.class).process(fmlClientSetupEvent -> new ClientProxy().fmlClient(fmlClientSetupEvent)).subscribe());
+        DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () -> EventManager.mod(ModelRegistryEvent.class).process(modelRegistryEvent -> {
+            ModelLoader.addSpecialModel(new ResourceLocation(SushiGoCrafting.MOD_ID, "block/salmon_back"));
+            ModelLoader.addSpecialModel(new ResourceLocation(SushiGoCrafting.MOD_ID, "block/tuna_back"));
+        }).subscribe());
         EventManager.mod(FMLCommonSetupEvent.class).process(this::fmlCommon).subscribe();
         EventManager.mod(GatherDataEvent.class).process(this::dataGen).subscribe();
         EventManager.modGeneric(RegistryEvent.Register.class, IRecipeSerializer.class)
@@ -128,6 +149,16 @@ public class SushiGoCrafting {
                 livingDropsEvent.getDrops().add(new ItemEntity(livingDropsEvent.getEntity().world, livingDropsEvent.getEntity().getPosX(), livingDropsEvent.getEntity().getPosY(), livingDropsEvent.getEntity().getPosZ(), SushiContent.Items.TOBIKO.get().random(null, livingDropsEvent.getEntity().world)));
             }
         }).subscribe();
+        RewardGiver giver = RewardManager.get().getGiver(UUID.fromString("d28b7061-fb92-4064-90fb-7e02b95a72a6"), "Buuz135");
+        try {
+            giver.addReward(new Reward(new ResourceLocation(SushiGoCrafting.MOD_ID, "back"), new URL("https://raw.githubusercontent.com/Buuz135/Industrial-Foregoing/master/contributors.json"), () -> dist -> {
+                if (dist == Dist.CLIENT) {
+                    registerReward();
+                }
+            }, new String[]{"salmon", "tuna"}));
+        } catch (MalformedURLException e) {
+            LOGGER.catching(e);
+        }
     }
 
     public void fmlCommon(FMLCommonSetupEvent event) {
@@ -165,5 +196,13 @@ public class SushiGoCrafting {
                 .filter(playerLoggedInEvent -> playerLoggedInEvent.getPlayer() instanceof ServerPlayerEntity)
                 .process(playerLoggedInEvent -> playerLoggedInEvent.getPlayer().getCapability(SushiWeightDiscoveryCapability.CAPABILITY)
                         .ifPresent(iSushiWeightDiscovery -> iSushiWeightDiscovery.requestUpdate((ServerPlayerEntity) playerLoggedInEvent.getPlayer(), false))).subscribe();
+    }
+
+    @OnlyIn(Dist.CLIENT)
+    private void registerReward() {
+        Minecraft instance = Minecraft.getInstance();
+        EntityRendererManager manager = instance.getRenderManager();
+        manager.getSkinMap().get("default").addLayer(new ContributorsBackRender(TitaniumClient.getPlayerRenderer(Minecraft.getInstance())));
+        manager.getSkinMap().get("slim").addLayer(new ContributorsBackRender(TitaniumClient.getPlayerRenderer(Minecraft.getInstance())));
     }
 }

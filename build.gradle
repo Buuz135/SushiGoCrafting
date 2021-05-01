@@ -23,8 +23,7 @@ plugins {
 apply plugin: 'net.minecraftforge.gradle'
 apply plugin: 'eclipse'
 
-def BUILD_NUMBER = System.getenv("BUILD_NUMBER") ?: "0"
-version = "${minecraftVersion}-${modVersion}.$BUILD_NUMBER"
+version = "${minecraftVersion}-${modVersion}"
 group = "com.buuz135"
 archivesBaseName = "sushigocrafting"
 
