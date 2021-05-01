@@ -25,4 +25,21 @@ displayName = "Sushi Go Crafting" #mandatory
 description = '''
 Sushi!
 '''
-
+[[dependencies.sushigocrafting]] #optional
+modId = "titanium" #mandatory
+mandatory = true #mandatory
+versionRange = "[3.2.8,)" #mandatory
+ordering = "NONE"
+side = "BOTH"
+[[dependencies.sushigocrafting]] #optional
+modId = "patchouli" #mandatory
+versionRange = "[1.16.4-50,)"
+mandatory = true #mandatory
+ordering = "NONE"
+side = "BOTH"
+[[dependencies.sushigocrafting]] #optional
+modId = "jei" #mandatory
+mandatory = true #mandatory
+versionRange = "[7.6.1.72,)" #mandatory
+ordering = "NONE"
+side = "BOTH"

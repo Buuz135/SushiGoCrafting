@@ -93,8 +93,8 @@ dependencies {
     // at runtime, use the full JEI jar
     runtimeOnly fg.deobf("mezz.jei:jei-1.16.4:7.6.1.72")
     compile fg.deobf (project.dependencies.create('com.hrznstudio:titanium:1.16.5-3.2.8'))
-    compileOnly fg.deobf("vazkii.patchouli:Patchouli:1.16.2+:api")
-    runtimeOnly fg.deobf("vazkii.patchouli:Patchouli:1.16.2+")
+    compileOnly fg.deobf("vazkii.patchouli:Patchouli:1.16.4-50:api")
+    runtimeOnly fg.deobf("vazkii.patchouli:Patchouli:1.16.4-50")
 }
 
 afterEvaluate {
