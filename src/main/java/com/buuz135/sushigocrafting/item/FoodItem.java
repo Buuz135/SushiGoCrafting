@@ -62,7 +62,7 @@ public class FoodItem extends SushiItem {
         if (negative == 0 && positive == 0) {
             names.add(new StringTextComponent(TextFormatting.GOLD + "Perfect"));
         } else if (Math.abs(negative) == positive) {
-            names.add(new StringTextComponent(TextFormatting.DARK_GREEN + "Wierdly Balanced"));
+            names.add(new StringTextComponent(TextFormatting.DARK_GREEN + "Weirdly Balanced"));
         }
         if (Math.abs(negative) < positive) {
             names.add(new StringTextComponent(TextFormatting.RED + "Almost Hollow"));
@@ -118,13 +118,16 @@ public class FoodItem extends SushiItem {
                     tooltip.add(new StringTextComponent(TextFormatting.GRAY + " - " + new TranslationTextComponent(foodIngredient.getItem().getTranslationKey()).getString()));
             }
         }
-        Info info = new Info(stack, Screen.hasShiftDown());
+        boolean hasShift = Screen.hasShiftDown();
+        boolean hasAlt = Screen.hasAltDown();
+        //hasShift = hasAlt = true;
+        Info info = new Info(stack, hasShift);
         tooltip.addAll(getTagsFrom(info.getNegative(), info.getPositive()));
         tooltip.add(new StringTextComponent(""));
-        if (Screen.hasShiftDown()) {
+        if (hasShift) {
             if (info.getEffectInstances().size() > 0) {
                 tooltip.add(new StringTextComponent(TextFormatting.DARK_AQUA + "Effects:"));
-                if (Screen.hasAltDown()) {
+                if (hasAlt) {
                     tooltip.add(new StringTextComponent(TextFormatting.YELLOW + " - " + TextFormatting.GOLD + "Hunger: " + TextFormatting.WHITE + (int) info.getHunger()));
                     tooltip.add(new StringTextComponent(TextFormatting.YELLOW + " - " + TextFormatting.GOLD + "Saturation: " + TextFormatting.WHITE + info.getSaturation()));
                 }
