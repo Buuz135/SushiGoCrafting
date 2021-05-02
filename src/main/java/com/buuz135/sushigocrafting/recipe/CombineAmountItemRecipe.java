@@ -68,7 +68,7 @@ public class CombineAmountItemRecipe extends SpecialRecipe {
                 list.add(itemstack);
                 if (list.size() > 1) {
                     ItemStack itemstack1 = list.get(0);
-                    if (stackMatches(itemstack, itemstack1)) {
+                    if (!stackMatches(itemstack, itemstack1)) {
                         return ItemStack.EMPTY;
                     }
                 }

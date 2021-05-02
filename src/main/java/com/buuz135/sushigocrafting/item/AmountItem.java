@@ -56,7 +56,7 @@ public class AmountItem extends SushiItem {
     public void addInformation(ItemStack stack, World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
         super.addInformation(stack, worldIn, tooltip, flagIn);
         if (stack.hasTag()) {
-            tooltip.add(new StringTextComponent(TextFormatting.GRAY + "Amount: " + stack.getTag().getInt(NBT_AMOUNT) + " gr.")); //TODO Localize
+            tooltip.add(new StringTextComponent(TextFormatting.GRAY + "Amount: " + stack.getTag().getInt(NBT_AMOUNT) + "/" + maxCombineAmount + " gr.")); //TODO Localize
         }
     }
 
