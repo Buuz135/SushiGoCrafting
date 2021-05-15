@@ -1,0 +1,10 @@
+{
+  "replace": false,
+  "values": [
+    "sushigocrafting:rice_crop",
+    "sushigocrafting:cucumber_crop",
+    "sushigocrafting:soy_crop",
+    "sushigocrafting:wasabi_crop",
+    "sushigocrafting:sesame_crop"
+  ]
+}

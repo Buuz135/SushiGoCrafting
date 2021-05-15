@@ -159,6 +159,7 @@ public class SushiGoCrafting {
         } catch (MalformedURLException e) {
             LOGGER.catching(e);
         }
+        //EventManager.forge(ItemTooltipEvent.class).process(itemTooltipEvent -> { itemTooltipEvent.getToolTip().addAll(itemTooltipEvent.getItemStack().getItem().getTags().stream().map(resourceLocation -> new StringTextComponent(resourceLocation.toString())).collect(Collectors.toList())); }).subscribe();
     }
 
     public void fmlCommon(FMLCommonSetupEvent event) {
