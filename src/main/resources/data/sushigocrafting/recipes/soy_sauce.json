@@ -3,7 +3,12 @@
   "ingredient": {
     "item": "sushigocrafting:soy_bean"
   },
-  "result": "sushigocrafting:soy_sauce",
+  "result": {
+    "item": "sushigocrafting:soy_sauce",
+    "nbt": {
+      "Amount": 25
+    }
+  },
   "experience": 0.3,
   "cookingtime": 200
 }

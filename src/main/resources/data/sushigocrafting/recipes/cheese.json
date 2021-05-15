@@ -3,7 +3,12 @@
   "ingredient": {
     "item": "minecraft:milk_bucket"
   },
-  "result": "sushigocrafting:cheese",
+  "result": {
+    "item": "sushigocrafting:cheese",
+    "nbt": {
+      "Amount": 125
+    }
+  },
   "experience": 0.3,
   "cookingtime": 200
 }
