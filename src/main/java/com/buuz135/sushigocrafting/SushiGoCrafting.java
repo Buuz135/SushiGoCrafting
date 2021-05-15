@@ -42,6 +42,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipeSerializer;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.biome.MobSpawnInfo;
@@ -61,6 +62,7 @@ import net.minecraftforge.event.AttachCapabilitiesEvent;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.event.entity.EntityAttributeCreationEvent;
 import net.minecraftforge.event.entity.living.LivingDropsEvent;
+import net.minecraftforge.event.entity.player.ItemTooltipEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.event.world.BiomeLoadingEvent;
 import net.minecraftforge.event.world.PistonEvent;
@@ -76,6 +78,7 @@ import org.apache.logging.log4j.Logger;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Mod(SushiGoCrafting.MOD_ID)
 public class SushiGoCrafting {
@@ -159,7 +162,9 @@ public class SushiGoCrafting {
         } catch (MalformedURLException e) {
             LOGGER.catching(e);
         }
-        //EventManager.forge(ItemTooltipEvent.class).process(itemTooltipEvent -> { itemTooltipEvent.getToolTip().addAll(itemTooltipEvent.getItemStack().getItem().getTags().stream().map(resourceLocation -> new StringTextComponent(resourceLocation.toString())).collect(Collectors.toList())); }).subscribe();
+        EventManager.forge(ItemTooltipEvent.class).process(itemTooltipEvent -> {
+            itemTooltipEvent.getToolTip().addAll(itemTooltipEvent.getItemStack().getItem().getTags().stream().map(resourceLocation -> new StringTextComponent(resourceLocation.toString())).collect(Collectors.toList()));
+        }).subscribe();
     }
 
     public void fmlCommon(FMLCommonSetupEvent event) {

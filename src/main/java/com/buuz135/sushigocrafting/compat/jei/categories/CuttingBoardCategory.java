@@ -57,7 +57,7 @@ public class CuttingBoardCategory implements IRecipeCategory<CuttingBoardRecipe>
 
     @Override
     public void setIngredients(CuttingBoardRecipe cuttingBoardRecipe, IIngredients iIngredients) {
-        iIngredients.setInputs(VanillaTypes.ITEM, Arrays.asList(cuttingBoardRecipe.input.getMatchingStacks()));
+        iIngredients.setInputLists(VanillaTypes.ITEM, Arrays.asList(Arrays.asList(cuttingBoardRecipe.input.getMatchingStacks())));
         iIngredients.setOutput(VanillaTypes.ITEM, new ItemStack(FoodAPI.get().getIngredientFromName(cuttingBoardRecipe.ingredient).getItem()));
     }
 

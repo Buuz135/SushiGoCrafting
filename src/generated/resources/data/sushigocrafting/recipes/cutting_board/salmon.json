@@ -1,6 +1,6 @@
 {
   "input": {
-    "item": "minecraft:salmon"
+    "tag": "forge:raw_fishes/salmon"
   },
   "ingredient": "salmon",
   "type": "sushigocrafting:cutting_board"

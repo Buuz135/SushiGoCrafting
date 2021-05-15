@@ -1,6 +1,6 @@
 {
   "input": {
-    "item": "sushigocrafting:avocado"
+    "tag": "forge:fruits/avocado"
   },
   "ingredient": "avocado",
   "type": "sushigocrafting:cutting_board"

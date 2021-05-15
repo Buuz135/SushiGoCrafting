@@ -1,6 +1,6 @@
 {
   "input": {
-    "item": "sushigocrafting:cucumber"
+    "tag": "forge:crops/cucumber"
   },
   "ingredient": "cucumber",
   "type": "sushigocrafting:cutting_board"

@@ -8,17 +8,22 @@ import com.hrznstudio.titanium.annotation.Save;
 import com.hrznstudio.titanium.block.tile.ActiveTile;
 import com.hrznstudio.titanium.component.inventory.InventoryComponent;
 import com.hrznstudio.titanium.util.RecipeUtil;
+import com.hrznstudio.titanium.util.TagUtil;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.tags.ITag;
 import net.minecraft.util.ActionResultType;
 import net.minecraft.util.Direction;
 import net.minecraft.util.Hand;
+import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.items.ItemHandlerHelper;
 
 import javax.annotation.Nonnull;
 
 public class CuttingBoardTile extends ActiveTile<CuttingBoardTile> {
+
+    public static ITag<Item> KNIFE = TagUtil.getItemTag(new ResourceLocation("forge", "tools/knife"));
 
     @Save
     private InventoryComponent<CuttingBoardTile> input;
@@ -37,7 +42,7 @@ public class CuttingBoardTile extends ActiveTile<CuttingBoardTile> {
     public ActionResultType onActivated(PlayerEntity player, Hand hand, Direction facing, double hitX, double hitY, double hitZ) {
         ItemStack stack = player.getHeldItem(hand);
         if (!stack.isEmpty()) {
-            if (!this.input.getStackInSlot(0).isEmpty() && stack.getItem().equals(SushiContent.Items.KNIFE_CLEAVER.get())) {
+            if (!this.input.getStackInSlot(0).isEmpty() && stack.getItem().isIn(KNIFE)) {
                 ++click;
                 if (click > 5) {
                     for (CuttingBoardRecipe recipe : RecipeUtil.getRecipes(this.world, CuttingBoardRecipe.SERIALIZER.getRecipeType())) {

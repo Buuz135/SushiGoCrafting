@@ -8,6 +8,7 @@ import com.buuz135.sushigocrafting.proxy.SushiContent;
 import net.minecraft.data.BlockTagsProvider;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.item.Item;
+import net.minecraft.item.Items;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.util.ResourceLocation;
@@ -40,6 +41,12 @@ public class SushiItemTagsProvider extends ForgeItemTagsProvider {
             getOrCreateBuilder(ItemTags.createOptional(new ResourceLocation("forge", "crops/" + item.getRegistryName().getPath()))).add(item.asItem());
         }
         getOrCreateBuilder(ItemTags.FISHES).add(SushiContent.Items.RAW_TUNA.get()).add(SushiContent.Items.SHRIMP.get());
+        getOrCreateBuilder(ItemTags.createOptional(new ResourceLocation("forge", "raw_fishes"))).add(Items.SALMON).add(SushiContent.Items.SHRIMP.get()).add(SushiContent.Items.RAW_TUNA.get());
+        for (Item item : new Item[]{Items.SALMON, SushiContent.Items.SHRIMP.get(), SushiContent.Items.RAW_TUNA.get()}) {
+            getOrCreateBuilder(ItemTags.createOptional(new ResourceLocation("forge", "raw_fishes/" + (item.equals(SushiContent.Items.RAW_TUNA.get()) ? "tuna" : item.getRegistryName().getPath())))).add(item.asItem());
+        }
+        getOrCreateBuilder(ItemTags.createOptional(new ResourceLocation("forge", "fruits"))).add(SushiContent.Items.AVOCADO.get());
+        getOrCreateBuilder(ItemTags.createOptional(new ResourceLocation("forge", "fruits/avocado"))).add(SushiContent.Items.AVOCADO.get());
         getOrCreateBuilder(ItemTags.createOptional(new ResourceLocation("forge", "tools/knife"))).add(SushiContent.Items.KNIFE_CLEAVER.get());
         for (Map.Entry<String, List<FoodItem>> stringListEntry : FoodHelper.REGISTERED.entrySet()) {
             for (FoodItem foodItem : stringListEntry.getValue()) {
