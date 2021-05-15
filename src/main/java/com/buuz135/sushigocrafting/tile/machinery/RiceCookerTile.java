@@ -7,19 +7,25 @@ import com.hrznstudio.titanium.block.tile.ActiveTile;
 import com.hrznstudio.titanium.component.fluid.FluidTankComponent;
 import com.hrznstudio.titanium.component.inventory.InventoryComponent;
 import com.hrznstudio.titanium.component.progress.ProgressBarComponent;
+import com.hrznstudio.titanium.util.TagUtil;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.fluid.Fluids;
 import net.minecraft.item.DyeColor;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.tags.ITag;
 import net.minecraft.util.ActionResultType;
 import net.minecraft.util.Direction;
 import net.minecraft.util.Hand;
+import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.ForgeHooks;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 
 import javax.annotation.Nonnull;
 
 public class RiceCookerTile extends ActiveTile<RiceCookerTile> {
+
+    public static ITag<Item> RICE = TagUtil.getItemTag(new ResourceLocation("forge", "crops/rice"));
 
     @Save
     private InventoryComponent<RiceCookerTile> input;
@@ -45,7 +51,7 @@ public class RiceCookerTile extends ActiveTile<RiceCookerTile> {
                 .setSlotToColorRender(2, DyeColor.BLUE)
                 .setSlotToColorRender(3, DyeColor.BLUE)
                 .setSlotLimit(1)
-                .setInputFilter((stack, integer) -> stack.getItem().equals(SushiContent.Items.RICE.get()))
+                .setInputFilter((stack, integer) -> stack.getItem().isIn(RICE))
                 .setOutputFilter((stack, integer) -> false));
         addProgressBar(this.bar = new ProgressBarComponent<RiceCookerTile>(99, 48, 100)
                 .setCanIncrease(RiceCookerTile::canStart)
