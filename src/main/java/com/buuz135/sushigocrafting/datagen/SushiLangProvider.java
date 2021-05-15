@@ -16,7 +16,7 @@ public class SushiLangProvider extends LanguageProvider {
     @Override
     protected void addTranslations() {
         add("itemGroup.sushigocrafting", "Sushi Go Crafting");
-        add("text.sushigocrafting.book.title", "Becoming an Itamae");
+        add("text.sushigocrafting.book.title", "Becoming an Itamae (Sushi Go Crafting Manual)");
         SushiContent.Items.REGISTRY.getEntries().stream().map(RegistryObject::get).filter(item -> item instanceof BlockItem).map(item -> (BlockItem) item).forEach(blockItem -> {
             add(blockItem, WordUtils.capitalize(blockItem.getRegistryName().getPath().replaceAll("_", " ")));
         });
