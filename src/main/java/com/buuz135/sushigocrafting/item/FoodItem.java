@@ -20,6 +20,7 @@ import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
 
+import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
@@ -147,6 +148,12 @@ public class FoodItem extends SushiItem {
             info.getEffectInstances().forEach(player::addPotionEffect);
         }
         return entity.onFoodEaten(worldIn, stack);
+    }
+
+    @Nullable
+    @Override
+    public Food getFood() {
+        return new Food.Builder().hunger(getIngredientList().stream().mapToInt(IFoodIngredient::getHungerValue).sum()).saturation(getIngredientList().stream().mapToInt(IFoodIngredient::getSaturationValue).sum()).build();
     }
 
     public static class Info {

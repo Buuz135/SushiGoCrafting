@@ -15,10 +15,12 @@ buildscript {
     }
     dependencies {
         classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '3.+', changing: true
+        classpath "com.wynprice.cursemaven:CurseMaven:2.1.1"
     }
 }
 plugins {
     id 'java'
+    id "com.wynprice.cursemaven" version "2.1.1"
 }
 apply plugin: 'net.minecraftforge.gradle'
 apply plugin: 'eclipse'
@@ -94,6 +96,7 @@ dependencies {
     compile fg.deobf (project.dependencies.create('com.hrznstudio:titanium:1.16.5-3.2.8'))
     compileOnly fg.deobf("vazkii.patchouli:Patchouli:1.16.4-50:api")
     runtimeOnly fg.deobf("vazkii.patchouli:Patchouli:1.16.4-50")
+    compile fg.deobf("curse.maven:diet-443570:3300992")
 }
 
 afterEvaluate {
