@@ -13,7 +13,7 @@ public interface IIngredientConsumer {
 
         @Override
         public boolean canConsume(IFoodIngredient foodIngredient, ItemStack stack, int amountLevel) {
-            return !stack.isEmpty() && stack.getCount() > (amountLevel + 1);
+            return !stack.isEmpty() && stack.getCount() >= (amountLevel + 1);
         }
     };
     IIngredientConsumer WEIGHT = new IIngredientConsumer() {
