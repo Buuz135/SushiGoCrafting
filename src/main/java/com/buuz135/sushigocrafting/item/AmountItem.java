@@ -1,12 +1,19 @@
 package com.buuz135.sushigocrafting.item;
 
 import com.buuz135.sushigocrafting.api.IFoodIngredient;
+import com.buuz135.sushigocrafting.api.impl.FoodAPI;
 import com.buuz135.sushigocrafting.proxy.SushiContent;
+import com.mojang.datafixers.util.Pair;
 import net.minecraft.client.util.ITooltipFlag;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.Food;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
+import net.minecraft.potion.EffectInstance;
+import net.minecraft.potion.Effects;
 import net.minecraft.util.NonNullList;
+import net.minecraft.util.SoundCategory;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TextFormatting;
@@ -23,8 +30,8 @@ public class AmountItem extends SushiItem {
     private final int maxAmount;
     private final int maxCombineAmount;
 
-    public AmountItem(Properties properties, String category, int minAmount, int maxAmount, int maxCombineAmount) {
-        super(properties, category);
+    public AmountItem(Properties properties, String category, int minAmount, int maxAmount, int maxCombineAmount, boolean foodHurts) {
+        super(properties.food((new Food.Builder()).hunger(2).saturation(0.3F).effect(new EffectInstance(Effects.POISON, 100, 0), foodHurts ? 0.6f : 0.01f).build()), category);
         this.minAmount = minAmount;
         this.maxAmount = maxAmount;
         this.maxCombineAmount = maxCombineAmount;
@@ -110,6 +117,23 @@ public class AmountItem extends SushiItem {
     public boolean canConsume(IFoodIngredient ingredient, ItemStack stack, int amountLevel) {
         int amount = (int) (ingredient.getDefaultAmount() * (amountLevel + 1) / 5D);
         return !stack.isEmpty() && stack.getOrCreateTag().getInt(NBT_AMOUNT) >= amount;
+    }
+
+    @Override
+    public ItemStack onItemUseFinish(ItemStack stack, World worldIn, LivingEntity entityLiving) {
+        if (entityLiving instanceof PlayerEntity) {
+            worldIn.playSound((PlayerEntity) null, entityLiving.getPosX(), entityLiving.getPosY(), entityLiving.getPosZ(), this.getEatSound(), SoundCategory.NEUTRAL, 1.0F, 1.0F + (worldIn.rand.nextFloat() - worldIn.rand.nextFloat()) * 0.4F);
+            ((PlayerEntity) entityLiving).getFoodStats().addStats(stack.getItem().getFood().getHealing(), stack.getItem().getFood().getSaturation());
+            for (Pair<EffectInstance, Float> pair : stack.getItem().getFood().getEffects()) {
+                if (!worldIn.isRemote && pair.getFirst() != null && worldIn.rand.nextFloat() < pair.getSecond()) {
+                    entityLiving.addPotionEffect(new EffectInstance(pair.getFirst()));
+                }
+            }
+            if (!((PlayerEntity) entityLiving).abilities.isCreativeMode) {
+                consume(FoodAPI.get().getIngredientFromItem(this), stack, 6);
+            }
+        }
+        return stack;
     }
 
 }

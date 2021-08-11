@@ -65,8 +65,8 @@ public class SushiContent {
         return Items.REGISTRY.register(id, () -> new SushiItem(new Item.Properties().group(SushiGoCrafting.TAB), category));
     }
 
-    public static RegistryObject<AmountItem> amountItem(String id, String category, int minAmount, int maxAmount, int maxCombine) {
-        return Items.REGISTRY.register(id, () -> new AmountItem(new Item.Properties().group(SushiGoCrafting.TAB).maxStackSize(1), category, minAmount, maxAmount, maxCombine));
+    public static RegistryObject<AmountItem> amountItem(String id, String category, int minAmount, int maxAmount, int maxCombine, boolean hurts) {
+        return Items.REGISTRY.register(id, () -> new AmountItem(new Item.Properties().group(SushiGoCrafting.TAB).maxStackSize(1), category, minAmount, maxAmount, maxCombine, hurts));
     }
 
     public static RegistryObject<BlockItem> blockItem(String id, Supplier<? extends Block> sup) {
@@ -164,19 +164,19 @@ public class SushiContent {
         public static final RegistryObject<BlockItem> CUTTING_BOARD = blockItem("cutting_board", Blocks.CUTTING_BOARD);
         public static final RegistryObject<BlockItem> COOLER_BOX = blockItem("cooler_box", Blocks.COOLER_BOX, new Item.Properties().maxStackSize(1));
 
-        public static final RegistryObject<AmountItem> AVOCADO_SLICES = amountItem("avocado_slices", "ingredient", 100, 500, 1000);
-        public static final RegistryObject<AmountItem> RAW_TUNA_FILLET = amountItem("tuna_fillet", "ingredient", 1000, 3000, 6000);
-        public static final RegistryObject<AmountItem> RAW_SALMON_FILLET = amountItem("salmon_fillet", "ingredient", 500, 2000, 4000);
+        public static final RegistryObject<AmountItem> AVOCADO_SLICES = amountItem("avocado_slices", "ingredient", 100, 500, 1000, false);
+        public static final RegistryObject<AmountItem> RAW_TUNA_FILLET = amountItem("tuna_fillet", "ingredient", 1000, 3000, 6000, false);
+        public static final RegistryObject<AmountItem> RAW_SALMON_FILLET = amountItem("salmon_fillet", "ingredient", 500, 2000, 4000, false);
         public static final RegistryObject<Item> NORI_SHEET = basicItem("nori_sheets", "ingredient");
-        public static final RegistryObject<AmountItem> COOKED_RICE = amountItem("cooked_rice", "ingredient", 50, 500, 2000);
-        public static final RegistryObject<AmountItem> CUCUMBER_SLICES = amountItem("cucumber_slices", "ingredient", 50, 200, 400);
-        public static final RegistryObject<AmountItem> IMITATION_CRAB = amountItem("imitation_crab", "ingredient", 50, 200, 400);
-        public static final RegistryObject<AmountItem> SESAME_SEED = amountItem("sesame_seed", "ingredient", 10, 100, 200);
-        public static final RegistryObject<AmountItem> TOBIKO = amountItem("tobiko", "ingredient", 10, 50, 100);
-        public static final RegistryObject<AmountItem> CHEESE = amountItem("cheese", "ingredient", 50, 250, 500);
-        public static final RegistryObject<AmountItem> SHRIMP = amountItem("shrimp", "ingredient", 20, 50, 100);
-        public static final RegistryObject<AmountItem> SOY_SAUCE = amountItem("soy_sauce", "ingredient", 10, 50, 100);
-        public static final RegistryObject<AmountItem> WASABI_PASTE = amountItem("wasabi_paste", "ingredient", 10, 50, 100);
+        public static final RegistryObject<AmountItem> COOKED_RICE = amountItem("cooked_rice", "ingredient", 50, 500, 2000, false);
+        public static final RegistryObject<AmountItem> CUCUMBER_SLICES = amountItem("cucumber_slices", "ingredient", 50, 200, 400, false);
+        public static final RegistryObject<AmountItem> IMITATION_CRAB = amountItem("imitation_crab", "ingredient", 50, 200, 400, false);
+        public static final RegistryObject<AmountItem> SESAME_SEED = amountItem("sesame_seed", "ingredient", 10, 100, 200, false);
+        public static final RegistryObject<AmountItem> TOBIKO = amountItem("tobiko", "ingredient", 10, 50, 100, false);
+        public static final RegistryObject<AmountItem> CHEESE = amountItem("cheese", "ingredient", 50, 250, 500, false);
+        public static final RegistryObject<AmountItem> SHRIMP = amountItem("shrimp", "ingredient", 20, 50, 100, false);
+        public static final RegistryObject<AmountItem> SOY_SAUCE = amountItem("soy_sauce", "ingredient", 10, 50, 100, true);
+        public static final RegistryObject<AmountItem> WASABI_PASTE = amountItem("wasabi_paste", "ingredient", 10, 50, 100, true);
 
         public static final RegistryObject<Item> KNIFE_CLEAVER = basicItem("cleaver_knife", "");
 
