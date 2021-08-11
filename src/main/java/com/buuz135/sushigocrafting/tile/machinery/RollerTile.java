@@ -8,6 +8,7 @@ import com.buuz135.sushigocrafting.cap.SushiWeightDiscoveryCapability;
 import com.buuz135.sushigocrafting.client.gui.RollerWeightSelectorButtonComponent;
 import com.buuz135.sushigocrafting.client.gui.provider.RollerAssetProvider;
 import com.buuz135.sushigocrafting.component.FoodTypeButtonComponent;
+import com.buuz135.sushigocrafting.component.RollerCraftButtonComponent;
 import com.buuz135.sushigocrafting.item.FoodItem;
 import com.buuz135.sushigocrafting.proxy.SushiContent;
 import com.hrznstudio.titanium.annotation.Save;
@@ -96,6 +97,7 @@ public class RollerTile extends ActiveTile<RollerTile> {
                     return false;
                 })
         );
+        addButton(new RollerCraftButtonComponent(148, 20, 18, 18).setId(101));
     }
 
     @Override
@@ -212,6 +214,16 @@ public class RollerTile extends ActiveTile<RollerTile> {
                 weightTracker.weights.set(weight, Math.max(0, weightTracker.weights.get(weight) - 1));
             }
             syncObject(weightTracker);
+        }
+        if (id == 101) {
+            int amount = 1;
+            if (compound.contains("Button")) {
+                amount = compound.getInt("Button") == 1 ? 64 : 1;
+            }
+            for (int i = 0; i < amount; i++) {
+                this.craftProgress = 4;
+                onClick(playerEntity);
+            }
         }
     }
 
