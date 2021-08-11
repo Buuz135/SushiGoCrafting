@@ -198,14 +198,14 @@ public class SushiGoCrafting {
             clone.getOriginal().getCapability(SushiWeightDiscoveryCapability.CAPABILITY).ifPresent(original -> {
                 clone.getPlayer().getCapability(SushiWeightDiscoveryCapability.CAPABILITY).ifPresent(future -> {
                     future.deserializeNBT(original.serializeNBT());
-                    future.requestUpdate((ServerPlayerEntity) clone.getPlayer(), false);
+                    future.requestUpdate((ServerPlayerEntity) clone.getPlayer(), ItemStack.EMPTY);
                 });
             });
         }).subscribe();
         EventManager.forge(PlayerEvent.PlayerLoggedInEvent.class)
                 .filter(playerLoggedInEvent -> playerLoggedInEvent.getPlayer() instanceof ServerPlayerEntity)
                 .process(playerLoggedInEvent -> playerLoggedInEvent.getPlayer().getCapability(SushiWeightDiscoveryCapability.CAPABILITY)
-                        .ifPresent(iSushiWeightDiscovery -> iSushiWeightDiscovery.requestUpdate((ServerPlayerEntity) playerLoggedInEvent.getPlayer(), false))).subscribe();
+                        .ifPresent(iSushiWeightDiscovery -> iSushiWeightDiscovery.requestUpdate((ServerPlayerEntity) playerLoggedInEvent.getPlayer(), ItemStack.EMPTY))).subscribe();
     }
 
     @OnlyIn(Dist.CLIENT)

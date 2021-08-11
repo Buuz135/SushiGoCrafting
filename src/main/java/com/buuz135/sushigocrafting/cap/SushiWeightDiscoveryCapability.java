@@ -3,6 +3,7 @@ package com.buuz135.sushigocrafting.cap;
 import com.buuz135.sushigocrafting.SushiGoCrafting;
 import com.buuz135.sushigocrafting.network.CapabilitySyncMessage;
 import net.minecraft.entity.player.ServerPlayerEntity;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.INBT;
 import net.minecraft.util.Direction;
@@ -26,7 +27,7 @@ public class SushiWeightDiscoveryCapability implements ISushiWeightDiscovery {
     }
 
     @Override
-    public void requestUpdate(ServerPlayerEntity entity, boolean discovery) {
+    public void requestUpdate(ServerPlayerEntity entity, ItemStack discovery) {
         SushiGoCrafting.NETWORK.get().sendTo(new CapabilitySyncMessage(serializeNBT(), discovery), entity.connection.getNetworkManager(), NetworkDirection.PLAY_TO_CLIENT);
     }
 

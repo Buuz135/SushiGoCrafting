@@ -30,7 +30,7 @@ import net.minecraftforge.items.ItemHandlerHelper;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
-import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Supplier;
 
 public class RollerTile extends ActiveTile<RollerTile> {
@@ -103,7 +103,7 @@ public class RollerTile extends ActiveTile<RollerTile> {
         ActionResultType type = super.onActivated(player, hand, facing, hitX, hitY, hitZ);
         if (!type.isSuccess()) {
             if (player instanceof ServerPlayerEntity) {
-                player.getCapability(SushiWeightDiscoveryCapability.CAPABILITY).ifPresent(iSushiWeightDiscovery -> iSushiWeightDiscovery.requestUpdate((ServerPlayerEntity) player, false));
+                player.getCapability(SushiWeightDiscoveryCapability.CAPABILITY).ifPresent(iSushiWeightDiscovery -> iSushiWeightDiscovery.requestUpdate((ServerPlayerEntity) player, ItemStack.EMPTY));
             }
             openGui(player);
             return ActionResultType.SUCCESS;
@@ -131,7 +131,7 @@ public class RollerTile extends ActiveTile<RollerTile> {
                         craftProgress = 0;
                         List<IFoodIngredient> foodIngredients = new ArrayList<>();
                         List<Integer> weightValues = new ArrayList<>();
-                        AtomicBoolean discovery = new AtomicBoolean(false);
+                        AtomicReference<ItemStack> discovery = new AtomicReference<>(ItemStack.EMPTY);
                         for (int slot = 0; slot < slots.getSlots(); slot++) {
                             if (slot < iFoodType.getFoodIngredients().size()) {
                                 IFoodIngredient ingredient = FoodAPI.get().getIngredientFromItem(slots.getStackInSlot(slot).getItem());
@@ -140,6 +140,7 @@ public class RollerTile extends ActiveTile<RollerTile> {
                         }
                         FoodItem item = FoodHelper.getFoodFromIngredients(selected, foodIngredients);
                         if (item != null) {
+                            ItemStack stack = new ItemStack(item);
                             for (int slot = 0; slot < slots.getSlots(); slot++) {
                                 if (slot < iFoodType.getFoodIngredients().size()) {
                                     IFoodIngredient ingredient = foodIngredients.get(slot);
@@ -151,13 +152,12 @@ public class RollerTile extends ActiveTile<RollerTile> {
                                         player.getCapability(SushiWeightDiscoveryCapability.CAPABILITY).ifPresent(iSushiWeightDiscovery -> {
                                             if (!iSushiWeightDiscovery.hasDiscovery(selected + "-" + finalSlot)) {
                                                 iSushiWeightDiscovery.setDiscovery(selected + "-" + finalSlot, weightTracker.weights.get(finalSlot));
-                                                discovery.set(true);
+                                                discovery.set(stack.copy());
                                             }
                                         });
                                     }
                                 }
                             }
-                            ItemStack stack = new ItemStack(item);
                             stack.getOrCreateTag().putIntArray(FoodItem.WEIGHTS_TAG, weightValues);
                             CompoundNBT spicesNBT = new CompoundNBT();
                             for (int i = 0; i < spices.getSlots(); i++) {

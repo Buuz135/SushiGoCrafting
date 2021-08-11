@@ -1,12 +1,13 @@
 package com.buuz135.sushigocrafting.cap;
 
 import net.minecraft.entity.player.ServerPlayerEntity;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraftforge.common.util.INBTSerializable;
 
 public interface ISushiWeightDiscovery extends INBTSerializable<CompoundNBT> {
 
-    void requestUpdate(ServerPlayerEntity entity, boolean discovery);
+    void requestUpdate(ServerPlayerEntity entity, ItemStack discovery);
 
     boolean hasDiscovery(String discovery);
 

@@ -1,9 +1,10 @@
 package com.buuz135.sushigocrafting.network;
 
 import com.buuz135.sushigocrafting.cap.SushiWeightDiscoveryCapability;
+import com.buuz135.sushigocrafting.client.gui.PerfectionToast;
 import com.hrznstudio.titanium.network.Message;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.toasts.TutorialToast;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TextFormatting;
@@ -14,11 +15,11 @@ import net.minecraftforge.fml.network.NetworkEvent;
 public class CapabilitySyncMessage extends Message {
 
     private CompoundNBT capability;
-    private boolean hasUpdated;
+    private ItemStack itemStack;
 
-    public CapabilitySyncMessage(CompoundNBT capability, boolean hasUpdated) {
+    public CapabilitySyncMessage(CompoundNBT capability, ItemStack itemStack) {
         this.capability = capability;
-        this.hasUpdated = hasUpdated;
+        this.itemStack = itemStack;
     }
 
     public CapabilitySyncMessage() {
@@ -33,8 +34,8 @@ public class CapabilitySyncMessage extends Message {
     @OnlyIn(Dist.CLIENT)
     public void handle() {
         Minecraft.getInstance().player.getCapability(SushiWeightDiscoveryCapability.CAPABILITY).ifPresent(iSushiWeightDiscovery -> iSushiWeightDiscovery.deserializeNBT(capability));
-        if (hasUpdated) {
-            TutorialToast toast = new TutorialToast(TutorialToast.Icons.WOODEN_PLANKS, new StringTextComponent(TextFormatting.DARK_AQUA + "You have discovered a"), new StringTextComponent(TextFormatting.DARK_AQUA + "new perfect weight!"), false);
+        if (!itemStack.isEmpty()) {
+            PerfectionToast toast = new PerfectionToast(itemStack, new StringTextComponent(TextFormatting.DARK_AQUA + "You have discovered a"), new StringTextComponent(TextFormatting.DARK_AQUA + "new perfect weight!"), false);
             Minecraft.getInstance().getToastGui().add(toast);
             new Thread(() -> {
                 try {
