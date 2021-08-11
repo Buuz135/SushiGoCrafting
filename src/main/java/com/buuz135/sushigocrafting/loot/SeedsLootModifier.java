@@ -22,11 +22,11 @@ public class SeedsLootModifier extends LootModifier {
     public SeedsLootModifier(ILootCondition[] conditionsIn) {
         super(conditionsIn);
         seeds.add(new ItemWeightedItem(Items.WHEAT_SEEDS, 150));
-        seeds.add(new ItemWeightedItem(SushiContent.Items.RICE_SEEDS.get(), 50));
-        seeds.add(new ItemWeightedItem(SushiContent.Items.SESAME_SEEDS.get(), 50));
-        seeds.add(new ItemWeightedItem(SushiContent.Items.WASABI_SEEDS.get(), 50));
-        seeds.add(new ItemWeightedItem(SushiContent.Items.SOY_SEEDS.get(), 50));
-        seeds.add(new ItemWeightedItem(SushiContent.Items.CUCUMBER_SEEDS.get(), 50));
+        seeds.add(new ItemWeightedItem(SushiContent.Items.RICE_SEEDS.get(), 25));
+        seeds.add(new ItemWeightedItem(SushiContent.Items.SESAME_SEEDS.get(), 10));
+        seeds.add(new ItemWeightedItem(SushiContent.Items.WASABI_SEEDS.get(), 25));
+        seeds.add(new ItemWeightedItem(SushiContent.Items.SOY_SEEDS.get(), 25));
+        seeds.add(new ItemWeightedItem(SushiContent.Items.CUCUMBER_SEEDS.get(), 25));
     }
 
     @Nonnull
