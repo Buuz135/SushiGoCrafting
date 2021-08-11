@@ -14,13 +14,11 @@ buildscript {
         }
     }
     dependencies {
-        classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '3.+', changing: true
-        classpath "com.wynprice.cursemaven:CurseMaven:2.1.1"
+        classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '5.1.+', changing: true
     }
 }
 plugins {
     id 'java'
-    id "com.wynprice.cursemaven" version "2.1.1"
 }
 apply plugin: 'net.minecraftforge.gradle'
 apply plugin: 'eclipse'
@@ -86,6 +84,9 @@ repositories {
         url 'https://cdn.hrzn.studio/maven/'
     }
     maven { url 'https://maven.blamejared.com' }
+    maven {
+        url = "https://www.cursemaven.com"
+    }
 }
 
 dependencies {
@@ -93,36 +94,16 @@ dependencies {
     compileOnly fg.deobf("mezz.jei:jei-1.16.4:7.6.1.72:api")
     // at runtime, use the full JEI jar
     runtimeOnly fg.deobf("mezz.jei:jei-1.16.4:7.6.1.72")
-    compile fg.deobf (project.dependencies.create('com.hrznstudio:titanium:1.16.5-3.2.8'))
+    compileOnly fg.deobf ('com.hrznstudio:titanium:1.16.5-3.2.8')
+    runtimeOnly fg.deobf ('com.hrznstudio:titanium:1.16.5-3.2.8')
     compileOnly fg.deobf("vazkii.patchouli:Patchouli:1.16.4-50:api")
     runtimeOnly fg.deobf("vazkii.patchouli:Patchouli:1.16.4-50")
-    compile fg.deobf("curse.maven:diet-443570:3300992")
+    runtimeOnly fg.deobf("curse.maven:diet-443570:3300992")
+    runtimeOnly fg.deobf("curse.maven:appleskin-248787:3395800")
 }
 
 afterEvaluate {
     tasks.withType(JavaCompile) {
         options.compilerArgs << "-Xmaxerrs" << "2000"
-    }
-}
-task wrapper(type: Wrapper) {
-    gradleVersion = '4.9'
-}
-
-processResources {
-    // this will ensure that this task is redone when the versions change.
-    inputs.property 'version', project.version
-    inputs.property 'mcversion', '1.13'
-
-    // replace stuff in mcmod.info, nothing else
-    from(sourceSets.main.resources.srcDirs) {
-        include 'META_INF/mods.toml'
-
-        // replace version and mcversion
-        expand 'version':project.version, 'mcversion': '1.13'
-    }
-
-    // copy everything else except the mcmod.info
-    from(sourceSets.main.resources.srcDirs) {
-        exclude 'META_INF/mods.toml'
     }
 }
