@@ -14,6 +14,7 @@ import net.minecraft.item.Food;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.potion.EffectInstance;
+import net.minecraft.util.SoundCategory;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TextFormatting;
@@ -146,6 +147,11 @@ public class FoodItem extends SushiItem {
             Info info = new Info(stack, true);
             player.getFoodStats().addStats((int) info.getHunger(), info.getSaturation());
             info.getEffectInstances().forEach(player::addPotionEffect);
+            worldIn.playSound(null, entity.getPosX(), entity.getPosY(), entity.getPosZ(), entity.getEatSound(stack), SoundCategory.NEUTRAL, 1.0F, 1.0F + (worldIn.rand.nextFloat() - worldIn.rand.nextFloat()) * 0.4F);
+            if (!(entity instanceof PlayerEntity) || !((PlayerEntity) entity).abilities.isCreativeMode) {
+                stack.shrink(1);
+            }
+            return stack;
         }
         return entity.onFoodEaten(worldIn, stack);
     }
