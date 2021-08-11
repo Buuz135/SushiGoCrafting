@@ -80,9 +80,6 @@ repositories {
         name = "Progwml6 maven"
         url = "https://dvs1.progwml6.com/files/maven/"
     }
-    maven {
-        url 'https://cdn.hrzn.studio/maven/'
-    }
     maven { url 'https://maven.blamejared.com' }
     maven {
         url = "https://www.cursemaven.com"
@@ -94,8 +91,8 @@ dependencies {
     compileOnly fg.deobf("mezz.jei:jei-1.16.4:7.6.1.72:api")
     // at runtime, use the full JEI jar
     runtimeOnly fg.deobf("mezz.jei:jei-1.16.4:7.6.1.72")
-    compileOnly fg.deobf ('com.hrznstudio:titanium:1.16.5-3.2.8')
-    runtimeOnly fg.deobf ('com.hrznstudio:titanium:1.16.5-3.2.8')
+    compileOnly fg.deobf ('com.hrznstudio:titanium:1.16.5-3.2.8.5+')
+    runtimeOnly fg.deobf ('com.hrznstudio:titanium:1.16.5-3.2.8.5+')
     compileOnly fg.deobf("vazkii.patchouli:Patchouli:1.16.4-50:api")
     runtimeOnly fg.deobf("vazkii.patchouli:Patchouli:1.16.4-50")
     runtimeOnly fg.deobf("curse.maven:diet-443570:3300992")

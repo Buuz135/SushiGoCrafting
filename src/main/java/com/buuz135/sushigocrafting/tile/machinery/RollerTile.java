@@ -98,6 +98,12 @@ public class RollerTile extends ActiveTile<RollerTile> {
                 })
         );
         addButton(new RollerCraftButtonComponent(148, 20, 18, 18).setId(101));
+        FoodAPI.get().getTypeFromName(this.selected).ifPresent(iFoodType -> {
+            for (int slot = 0; slot < slots.getSlots(); slot++) {
+                slots.setSlotToItemStackRender(slot, iFoodType.getSlotStackRender().apply(slot));
+                slots.setSlotToColorRender(slot, 0xffc769);
+            }
+        });
     }
 
     @Override
@@ -200,6 +206,9 @@ public class RollerTile extends ActiveTile<RollerTile> {
                     }
                 }
                 this.selected = compound.getString("Type");
+                for (int i = 0; i < slots.getSlots(); i++) {
+                    slots.setSlotToItemStackRender(i, iFoodType.getSlotStackRender().apply(i));
+                }
                 syncObject(slots);
                 markForUpdate();
             });

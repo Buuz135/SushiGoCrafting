@@ -57,6 +57,9 @@ public class FoodTypeSelectionButtonAddon extends BasicButtonAddon {
             CompoundNBT nbt = new CompoundNBT();
             nbt.putString("Type", getButton().getType().getName());
             getButton().getComponent().get().setSlotPosition(getButton().getType().getSlotPosition());
+            for (int i = 0; i < getButton().getComponent().get().getSlots(); i++) {
+                getButton().getComponent().get().setSlotToItemStackRender(i, getButton().getType().getSlotStackRender().apply(i));
+            }
             Titanium.NETWORK.get().sendToServer(new ButtonClickNetworkMessage(locatable.getLocatorInstance(), this.getButton().getId(), nbt));
             for (int i1 = 0; i1 < getButton().getComponent().get().getSlots(); i1++) {
                 getButton().getComponent().get().setSlotLimit(i1, i1 < getButton().getType().getFoodIngredients().size() ? 64 : 0);

@@ -1,5 +1,6 @@
 package com.buuz135.sushigocrafting.api;
 
+import net.minecraft.item.ItemStack;
 import org.apache.commons.lang3.tuple.Pair;
 
 import java.util.List;
@@ -14,5 +15,7 @@ public interface IFoodType {
     String getName();
 
     Function<Integer, Pair<Integer, Integer>> getSlotPosition();
+
+    Function<Integer, ItemStack> getSlotStackRender();
 
 }
