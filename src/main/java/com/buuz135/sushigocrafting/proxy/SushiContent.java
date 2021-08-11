@@ -73,6 +73,10 @@ public class SushiContent {
         return Items.REGISTRY.register(id, () -> new BlockItem(sup.get(), new Item.Properties().group(SushiGoCrafting.TAB)));
     }
 
+    public static RegistryObject<BlockItem> blockItem(String id, Supplier<? extends Block> sup, Item.Properties properties) {
+        return Items.REGISTRY.register(id, () -> new BlockItem(sup.get(), properties.group(SushiGoCrafting.TAB)));
+    }
+
     public static <T extends IFeatureConfig> RegistryObject<Feature<T>> feature(String id, Supplier<Feature<T>> featureSupplier) {
         return Features.REGISTRY.register(id, featureSupplier);
     }
@@ -158,7 +162,7 @@ public class SushiContent {
         public static final RegistryObject<BlockItem> ROLLER = blockItem("roller", Blocks.ROLLER);
         public static final RegistryObject<BlockItem> RICE_COOKER = blockItem("rice_cooker", Blocks.RICE_COOKER);
         public static final RegistryObject<BlockItem> CUTTING_BOARD = blockItem("cutting_board", Blocks.CUTTING_BOARD);
-        public static final RegistryObject<BlockItem> COOLER_BOX = blockItem("cooler_box", Blocks.COOLER_BOX);
+        public static final RegistryObject<BlockItem> COOLER_BOX = blockItem("cooler_box", Blocks.COOLER_BOX, new Item.Properties().maxStackSize(1));
 
         public static final RegistryObject<AmountItem> AVOCADO_SLICES = amountItem("avocado_slices", "ingredient", 100, 500, 1000);
         public static final RegistryObject<AmountItem> RAW_TUNA_FILLET = amountItem("tuna_fillet", "ingredient", 1000, 3000, 6000);

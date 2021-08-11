@@ -7,19 +7,30 @@ import com.hrznstudio.titanium.block.RotatableBlock;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
+import net.minecraft.client.util.ITooltipFlag;
+import net.minecraft.inventory.ItemStackHelper;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.Direction;
+import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.shapes.IBooleanFunction;
 import net.minecraft.util.math.shapes.ISelectionContext;
 import net.minecraft.util.math.shapes.VoxelShape;
-import net.minecraft.util.math.shapes.VoxelShapes;
+import net.minecraft.util.text.IFormattableTextComponent;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TextFormatting;
+import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.IBlockReader;
+import net.minecraft.world.World;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
 import javax.annotation.Nonnull;
-import java.util.stream.Stream;
+import javax.annotation.Nullable;
+import java.util.List;
 
 public class CoolerBoxBlock extends RotatableBlock<CoolerBoxTile> {
 
@@ -64,6 +75,42 @@ public class CoolerBoxBlock extends RotatableBlock<CoolerBoxTile> {
     public VoxelShape getShape(BlockState state, IBlockReader worldIn, BlockPos pos, ISelectionContext context) {
         Direction direction = state.get(RotatableBlock.FACING_HORIZONTAL);
         return direction == Direction.NORTH || direction == Direction.SOUTH ? SHAPE_NORTH : SHAPE_EAST;
+    }
+
+    @Override
+    public NonNullList<ItemStack> getDynamicDrops(BlockState state, World worldIn, BlockPos pos, BlockState newState, boolean isMoving) {
+        return NonNullList.create();
+    }
+
+    @OnlyIn(Dist.CLIENT)
+    public void addInformation(ItemStack stack, @Nullable IBlockReader worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
+        super.addInformation(stack, worldIn, tooltip, flagIn);
+        CompoundNBT compoundnbt = stack.getChildTag("BlockEntityTag");
+        if (compoundnbt != null) {
+            if (compoundnbt.contains("input")) {
+                NonNullList<ItemStack> nonnulllist = NonNullList.withSize(27, ItemStack.EMPTY);
+                ItemStackHelper.loadAllItems(compoundnbt.getCompound("input"), nonnulllist);
+                int i = 0;
+                int j = 0;
+
+                for (ItemStack itemstack : nonnulllist) {
+                    if (!itemstack.isEmpty()) {
+                        ++j;
+                        if (i <= 4) {
+                            ++i;
+                            IFormattableTextComponent iformattabletextcomponent = itemstack.getDisplayName().deepCopy();
+                            iformattabletextcomponent.appendString(" x").appendString(String.valueOf(itemstack.getCount())).mergeStyle(TextFormatting.DARK_AQUA);
+                            tooltip.add(iformattabletextcomponent);
+                        }
+                    }
+                }
+
+                if (j - i > 0) {
+                    tooltip.add((new TranslationTextComponent("container.shulkerBox.more", j - i)).mergeStyle(TextFormatting.ITALIC, TextFormatting.DARK_AQUA));
+                }
+            }
+        }
+
     }
 
 }

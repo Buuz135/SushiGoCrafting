@@ -16,6 +16,7 @@ import net.minecraft.loot.*;
 import net.minecraft.loot.conditions.BlockStateProperty;
 import net.minecraft.loot.conditions.ILootCondition;
 import net.minecraft.loot.conditions.RandomChance;
+import net.minecraft.loot.functions.CopyNbt;
 import net.minecraft.util.IItemProvider;
 import net.minecraft.util.ResourceLocation;
 
@@ -62,9 +63,12 @@ public class SushiLootTableProvider extends LootTableProvider {
             this.dropSelf(SushiContent.Blocks.CUTTING_BOARD);
             this.dropSelf(SushiContent.Blocks.AVOCADO_LOG);
             this.dropSelf(SushiContent.Blocks.ROLLER);
-            this.dropSelf(SushiContent.Blocks.COOLER_BOX);
+
             this.dropLeaves(SushiContent.Blocks.AVOCADO_LEAVES, SushiContent.Blocks.AVOCADO_SAPLING);
             this.dropLeavesSpecial(SushiContent.Blocks.AVOCADO_LEAVES_LOG, SushiContent.Blocks.AVOCADO_LOG);
+            CopyNbt.Builder nbtBuilder = CopyNbt.builder(CopyNbt.Source.BLOCK_ENTITY);
+            nbtBuilder.replaceOperation("input", "BlockEntityTag.input");
+            this.droppingSelfWithNbt(SushiContent.Blocks.COOLER_BOX, nbtBuilder);
         }
 
         private void crop(Supplier<CustomCropBlock> blockSupplier, Supplier<? extends Item> extra) {
@@ -93,6 +97,11 @@ public class SushiLootTableProvider extends LootTableProvider {
                 return droppingWithSilkTouchOrShears(block, withSurvivesExplosion(block, ItemLootEntry.builder(extra.get())));
             });
             knownBlocks.add(blockSupplier.get());
+        }
+
+        public void droppingSelfWithNbt(Supplier<? extends Block> itemProvider, CopyNbt.Builder nbtBuilder) {
+            this.registerLootTable(itemProvider.get(), LootTable.builder().addLootPool(withSurvivesExplosion(itemProvider.get(), LootPool.builder().rolls(ConstantRange.of(1)).addEntry(ItemLootEntry.builder(itemProvider.get()).acceptFunction(nbtBuilder)))));
+            knownBlocks.add(itemProvider.get());
         }
 
         @Override

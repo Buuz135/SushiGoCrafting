@@ -64,4 +64,8 @@ public class CoolerBoxTile extends ActiveTile<CoolerBoxTile> {
     public CoolerBoxTile getSelf() {
         return this;
     }
+
+    public InventoryComponent<CoolerBoxTile> getInput() {
+        return input;
+    }
 }
