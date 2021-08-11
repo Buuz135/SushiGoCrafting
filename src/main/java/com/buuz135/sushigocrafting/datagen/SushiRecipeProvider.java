@@ -48,9 +48,13 @@ public class SushiRecipeProvider extends TitaniumRecipeProvider {
                 .key('G', Blocks.IRON_TRAPDOOR)
                 .key('F', Tags.Items.CHESTS)
                 .build(consumer);
+        TitaniumShapedRecipeBuilder.shapedRecipe(SushiContent.Items.FERMENTATION_BARREL.get())
+                .patternLine("IGI").patternLine("IFI").patternLine("III")
+                .key('I', ItemTags.PLANKS)
+                .key('G', ItemTags.WOODEN_PRESSURE_PLATES)
+                .key('F', Blocks.FURNACE)
+                .build(consumer);
         CookingRecipeBuilder.smeltingRecipe(Ingredient.fromItems(SushiContent.Items.SEAWEED.get()), SushiContent.Items.DRY_SEAWEED.get(), 0.3f, 200).addCriterion("has_seaweed", hasItem(SushiContent.Items.SEAWEED.get())).build(consumer);
-        //CookingRecipeBuilder.smeltingRecipe(Ingredient.fromItems(Items.MILK_BUCKET), SushiContent.Items.CHEESE.get(), 0.3f, 200).addCriterion("has_milk", hasItem(Items.MILK_BUCKET)).build(consumer);
-        //CookingRecipeBuilder.smeltingRecipe(Ingredient.fromItems(SushiContent.Items.SOY_BEAN.get()), SushiContent.Items.SOY_SAUCE.get(), 0.3f, 200).addCriterion("has_soy", hasItem(SushiContent.Items.SOY_BEAN.get())).build(consumer);
         TitaniumShapelessRecipeBuilder.shapelessRecipe(SushiContent.Blocks.SEAWEED_BLOCK.get()).addIngredient(Ingredient.fromItems(SushiContent.Items.DRY_SEAWEED.get()), 9).build(consumer);
         TitaniumShapelessRecipeBuilder.shapelessRecipe(SushiContent.Items.DRY_SEAWEED.get(), 9).addIngredient(Ingredient.fromItems(SushiContent.Blocks.SEAWEED_BLOCK.get()), 1).build(consumer, new ResourceLocation(SushiGoCrafting.MOD_ID, "seaweed_uncrafting"));
         TitaniumShapedRecipeBuilder.shapedRecipe(SushiContent.Items.CUTTING_BOARD.get())

@@ -13,10 +13,8 @@ import com.buuz135.sushigocrafting.network.CapabilitySyncMessage;
 import com.buuz135.sushigocrafting.proxy.SushiContent;
 import com.buuz135.sushigocrafting.recipe.CombineAmountItemRecipe;
 import com.buuz135.sushigocrafting.recipe.CuttingBoardRecipe;
-import com.buuz135.sushigocrafting.tile.machinery.CoolerBoxTile;
-import com.buuz135.sushigocrafting.tile.machinery.CuttingBoardTile;
-import com.buuz135.sushigocrafting.tile.machinery.RiceCookerTile;
-import com.buuz135.sushigocrafting.tile.machinery.RollerTile;
+import com.buuz135.sushigocrafting.recipe.FermentingBarrelRecipe;
+import com.buuz135.sushigocrafting.tile.machinery.*;
 import com.buuz135.sushigocrafting.world.SushiTab;
 import com.buuz135.sushigocrafting.world.tree.AvocadoTree;
 import com.hrznstudio.titanium.TitaniumClient;
@@ -59,6 +57,7 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.event.ModelRegistryEvent;
 import net.minecraftforge.client.model.ModelLoader;
+import net.minecraftforge.common.ForgeMod;
 import net.minecraftforge.common.capabilities.CapabilityManager;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
 import net.minecraftforge.event.RegistryEvent;
@@ -89,6 +88,7 @@ public class SushiGoCrafting {
     public static Logger LOGGER = LogManager.getLogger(MOD_ID);
 
     static {
+        ForgeMod.enableMilkFluid();
         NETWORK.registerMessage(CapabilitySyncMessage.class);
     }
 
@@ -112,7 +112,8 @@ public class SushiGoCrafting {
         EventManager.modGeneric(RegistryEvent.Register.class, IRecipeSerializer.class)
                 .process(register -> ((RegistryEvent.Register) register).getRegistry()
                         .registerAll(CombineAmountItemRecipe.SERIALIZER.setRegistryName(new ResourceLocation(MOD_ID, "amount_combine_recipe")),
-                                CuttingBoardRecipe.SERIALIZER
+                                CuttingBoardRecipe.SERIALIZER,
+                                FermentingBarrelRecipe.SERIALIZER
                         )).subscribe();
         for (IFoodType value : FoodAPI.get().getFoodTypes()) {
             FoodHelper.generateFood(value).forEach(item -> SushiContent.Items.REGISTRY.register(FoodHelper.getName(item), () -> item));
@@ -121,6 +122,7 @@ public class SushiGoCrafting {
         NBTManager.getInstance().scanTileClassForAnnotations(RiceCookerTile.class);
         NBTManager.getInstance().scanTileClassForAnnotations(CuttingBoardTile.class);
         NBTManager.getInstance().scanTileClassForAnnotations(CoolerBoxTile.class);
+        NBTManager.getInstance().scanTileClassForAnnotations(FermentationBarrelTile.class);
         EventManager.forge(BiomeLoadingEvent.class).filter(biomeLoadingEvent -> biomeLoadingEvent.getCategory() == Biome.Category.OCEAN).process(biomeLoadingEvent -> {
             biomeLoadingEvent.getSpawns().withSpawner(EntityClassification.WATER_AMBIENT, new MobSpawnInfo.Spawners(SushiContent.EntityTypes.TUNA.get(), 8, 3, 6));
             biomeLoadingEvent.getSpawns().withSpawner(EntityClassification.WATER_AMBIENT, new MobSpawnInfo.Spawners(SushiContent.EntityTypes.SHRIMP.get(), 10, 6, 9));

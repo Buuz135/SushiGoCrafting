@@ -43,6 +43,7 @@ public class SushiBlockstateProvider extends BlockStateProvider {
                 ConfiguredModel.builder().modelFile(new ModelFile.UncheckedModelFile(modLoc("block/" + SushiContent.Blocks.AVOCADO_LEAVES.get().getRegistryName().getPath() + "_2"))).build());
         horizontalBlock(SushiContent.Blocks.CUTTING_BOARD.get());
         horizontalBlock(SushiContent.Blocks.ROLLER.get());
+        simpleBlockUn(SushiContent.Blocks.FERMENTATION_BARREL.get());
     }
 
     private void crop(CropsBlock block) {

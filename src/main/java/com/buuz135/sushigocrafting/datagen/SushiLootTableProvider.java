@@ -63,7 +63,7 @@ public class SushiLootTableProvider extends LootTableProvider {
             this.dropSelf(SushiContent.Blocks.CUTTING_BOARD);
             this.dropSelf(SushiContent.Blocks.AVOCADO_LOG);
             this.dropSelf(SushiContent.Blocks.ROLLER);
-
+            this.dropSelf(SushiContent.Blocks.FERMENTATION_BARREL);
             this.dropLeaves(SushiContent.Blocks.AVOCADO_LEAVES, SushiContent.Blocks.AVOCADO_SAPLING);
             this.dropLeavesSpecial(SushiContent.Blocks.AVOCADO_LEAVES_LOG, SushiContent.Blocks.AVOCADO_LOG);
             CopyNbt.Builder nbtBuilder = CopyNbt.builder(CopyNbt.Source.BLOCK_ENTITY);

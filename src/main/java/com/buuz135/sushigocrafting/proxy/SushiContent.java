@@ -2,10 +2,7 @@ package com.buuz135.sushigocrafting.proxy;
 
 import com.buuz135.sushigocrafting.SushiGoCrafting;
 import com.buuz135.sushigocrafting.block.SushiGoCraftingBlock;
-import com.buuz135.sushigocrafting.block.machinery.CoolerBoxBlock;
-import com.buuz135.sushigocrafting.block.machinery.CuttingBoardBlock;
-import com.buuz135.sushigocrafting.block.machinery.RiceCookerBlock;
-import com.buuz135.sushigocrafting.block.machinery.RollerBlock;
+import com.buuz135.sushigocrafting.block.machinery.*;
 import com.buuz135.sushigocrafting.block.plant.AvocadoLeavesBlock;
 import com.buuz135.sushigocrafting.block.plant.AvocadoLogBlock;
 import com.buuz135.sushigocrafting.block.plant.CustomCropBlock;
@@ -21,10 +18,7 @@ import com.buuz135.sushigocrafting.loot.SeedsLootModifier;
 import com.buuz135.sushigocrafting.potioneffect.AcquiredTasteEffect;
 import com.buuz135.sushigocrafting.potioneffect.SmallBitesEffect;
 import com.buuz135.sushigocrafting.potioneffect.SteadyHandsEffect;
-import com.buuz135.sushigocrafting.tile.machinery.CoolerBoxTile;
-import com.buuz135.sushigocrafting.tile.machinery.CuttingBoardTile;
-import com.buuz135.sushigocrafting.tile.machinery.RiceCookerTile;
-import com.buuz135.sushigocrafting.tile.machinery.RollerTile;
+import com.buuz135.sushigocrafting.tile.machinery.*;
 import com.buuz135.sushigocrafting.world.SeaWeedFeature;
 import com.buuz135.sushigocrafting.world.tree.AvocadoTree;
 import net.minecraft.block.*;
@@ -125,6 +119,7 @@ public class SushiContent {
         public static final RegistryObject<RiceCookerBlock> RICE_COOKER = block("rice_cooker", RiceCookerBlock::new);
         public static final RegistryObject<CuttingBoardBlock> CUTTING_BOARD = block("cutting_board", CuttingBoardBlock::new);
         public static final RegistryObject<CoolerBoxBlock> COOLER_BOX = block("cooler_box", CoolerBoxBlock::new);
+        public static final RegistryObject<FermentationBarrelBlock> FERMENTATION_BARREL = block("fermentation_barrel", FermentationBarrelBlock::new);
 
     }
 
@@ -163,6 +158,7 @@ public class SushiContent {
         public static final RegistryObject<BlockItem> RICE_COOKER = blockItem("rice_cooker", Blocks.RICE_COOKER);
         public static final RegistryObject<BlockItem> CUTTING_BOARD = blockItem("cutting_board", Blocks.CUTTING_BOARD);
         public static final RegistryObject<BlockItem> COOLER_BOX = blockItem("cooler_box", Blocks.COOLER_BOX, new Item.Properties().maxStackSize(1));
+        public static final RegistryObject<BlockItem> FERMENTATION_BARREL = blockItem("fermentation_barrel", Blocks.FERMENTATION_BARREL);
 
         public static final RegistryObject<AmountItem> AVOCADO_SLICES = amountItem("avocado_slices", "ingredient", 100, 500, 1000, false);
         public static final RegistryObject<AmountItem> RAW_TUNA_FILLET = amountItem("tuna_fillet", "ingredient", 1000, 3000, 6000, false);
@@ -193,6 +189,7 @@ public class SushiContent {
         public static RegistryObject<TileEntityType<RiceCookerTile>> RICE_COOKER = tile("rice_cooker", RiceCookerTile::new, Blocks.RICE_COOKER);
         public static RegistryObject<TileEntityType<CuttingBoardTile>> CUTTING_BOARD = tile("cutting_board", CuttingBoardTile::new, Blocks.CUTTING_BOARD);
         public static RegistryObject<TileEntityType<CoolerBoxTile>> COOLER_BOX = tile("cooler_box", CoolerBoxTile::new, Blocks.COOLER_BOX);
+        public static RegistryObject<TileEntityType<FermentationBarrelTile>> FERMENTATION_BARREL = tile("fermentation_barrel", FermentationBarrelTile::new, Blocks.FERMENTATION_BARREL);
 
     }
 

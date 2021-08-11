@@ -1,0 +1,8 @@
+{
+  "fluid": "{FluidName:\"minecraft:milk\",Amount:250}",
+  "output": {
+    "item": "sushigocrafting:cheese",
+    "count": 1
+  },
+  "type": "sushigocrafting:fermenting_barrel"
+}

@@ -1,0 +1,11 @@
+{
+  "input": {
+    "tag": "forge:crops/soy_bean"
+  },
+  "fluid": "{FluidName:\"minecraft:water\",Amount:250}",
+  "output": {
+    "item": "sushigocrafting:soy_sauce",
+    "count": 1
+  },
+  "type": "sushigocrafting:fermenting_barrel"
+}
