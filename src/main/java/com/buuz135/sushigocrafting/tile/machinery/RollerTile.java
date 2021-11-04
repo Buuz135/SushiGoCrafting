@@ -59,17 +59,24 @@ public class RollerTile extends ActiveTile<RollerTile> {
                     return () -> selected;
                 }
             }.setComponent(this::getSlots));
-            ++i;
             if (selected == null) selected = foodType.getName();
-            if (foodType.getFoodIngredients().size() > max) max = foodType.getFoodIngredients().size();
+            max = Math.max(max,foodType.getFoodIngredients().size());
+            ++i;
         }
         weightTracker = new WeightTracker(max);
-        slots = new InventoryComponent<>("slots", 0, 0, max);
-        slots.setSlotPosition(FoodAPI.get().getFoodTypes().get(0).getSlotPosition());
-        slots.setInputFilter((stack, integer) -> !FoodAPI.get().getIngredientFromItem(stack.getItem()).isEmpty());
+        slots = new InventoryComponent<RollerTile>("slots", 0, 0, max)
+            .setSlotPosition(FoodAPI.get().getTypeFromName(selected).get().getSlotPosition())
+            .setInputFilter((stack, integer) -> {
+                List<IFoodIngredient[]> ingredients = FoodAPI.get().getTypeFromName(selected).get().getFoodIngredients();
+                if (integer>=ingredients.size()) return false;
+                for (IFoodIngredient ingredient : ingredients.get(integer)){
+                    if (ingredient.isEmpty()) continue;
+                    if (ingredient.getItem().equals(stack.getItem())) return true;
+                }
+                return false;
+            });
         FoodAPI.get().getTypeFromName(selected).ifPresent(iFoodType -> {
             for (int i1 = 0; i1 < slots.getSlots(); i1++) {
-                slots.setSlotLimit(i1, i1 < iFoodType.getFoodIngredients().size() ? 64 : 0);
                 int finalI = i1;
                 addGuiAddonFactory(() -> new RollerWeightSelectorButtonComponent(slots, finalI) {
                     @Override
