@@ -217,6 +217,13 @@ public class RollerTile extends ActiveTile<RollerTile> {
                     slots.setSlotToItemStackRender(i, iFoodType.getSlotStackRender().apply(i));
                 }
                 syncObject(slots);
+                for (int i = 0; i < slots.getSlots(); i++) {
+                    if (!slots.isItemValid(i, slots.getStackInSlot(i))) {
+                        ItemStack slotStack = slots.getStackInSlot(i).copy();
+                        slots.setStackInSlot(i, ItemStack.EMPTY);
+                        ItemHandlerHelper.giveItemToPlayer(playerEntity, slotStack);
+                    }
+                }
                 markForUpdate();
             });
         }
