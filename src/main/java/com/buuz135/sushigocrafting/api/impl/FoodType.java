@@ -6,32 +6,20 @@ import net.minecraft.item.ItemStack;
 import org.apache.commons.lang3.tuple.Pair;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.function.Function;
 
 public class FoodType implements IFoodType {
 
-    public static FoodType MAKI = new FoodType("maki", new int[]{2},
+    public static FoodType MAKI = new FoodType(
+            "maki",
+            new int[]{2},
             integer -> {
                 if (integer > 2)
                     return Pair.of(-Integer.MAX_VALUE, -Integer.MAX_VALUE);
                 return Pair.of(78 - (int) (30 * (integer - (2 / 2D))), 49);
-            }, integer -> {
-        switch (integer) {
-            case 0:
-                return new ItemStack(FoodIngredient.NORI.getItem());
-            case 1:
-                return new ItemStack(FoodIngredient.RICE.getItem());
-        }
-        return ItemStack.EMPTY;
-    }, of(FoodIngredient.NORI),
-            of(FoodIngredient.RICE),
-            of(FoodIngredient.SALMON_FILLET, FoodIngredient.TUNA_FILLET, FoodIngredient.AVOCADO, FoodIngredient.CUCUMBER, FoodIngredient.CRAB));
-    public static FoodType GUNKAN = new FoodType("gunkan", new int[]{2}, integer -> {
-        if (integer > 2)
-            return Pair.of(-Integer.MAX_VALUE, -Integer.MAX_VALUE);
-        return Pair.of(78 - (int) (30 * (integer - (2 / 2D))), 49);
-    },
+            },
             integer -> {
                 switch (integer) {
                     case 0:
@@ -40,33 +28,62 @@ public class FoodType implements IFoodType {
                         return new ItemStack(FoodIngredient.RICE.getItem());
                 }
                 return ItemStack.EMPTY;
-            }, of(FoodIngredient.NORI),
-            of(FoodIngredient.RICE),
-            of(FoodIngredient.SALMON_FILLET, FoodIngredient.TUNA_FILLET, FoodIngredient.WAKAME));
-    public static FoodType CALIFORNIA = new FoodType("california", new int[]{0, 4, 5},
-            integer -> {
-                if (integer == 0)
-                    return Pair.of(12, 77);
-                return Pair.of(78 - (int) (30 * ((integer - 1) - (4 / 2D))), 49);
-            }, integer -> {
-        switch (integer) {
-            case 0:
-                return new ItemStack(FoodIngredient.TOBIKO.getItem());
-            case 1:
-                return new ItemStack(FoodIngredient.RICE.getItem());
-            case 2:
-                return new ItemStack(FoodIngredient.NORI.getItem());
-            case 3:
-                return new ItemStack(FoodIngredient.AVOCADO.getItem());
-        }
-        return ItemStack.EMPTY;
-    }, of(FoodIngredient.TOBIKO, FoodIngredient.EMPTY),
-            of(FoodIngredient.RICE),
+            },
             of(FoodIngredient.NORI),
-            of(FoodIngredient.AVOCADO),
+            of(FoodIngredient.RICE),
+            of(FoodIngredient.SALMON_FILLET, FoodIngredient.TUNA_FILLET, FoodIngredient.AVOCADO, FoodIngredient.CUCUMBER, FoodIngredient.CRAB)
+    );
+    public static FoodType GUNKAN = new FoodType(
+            "gunkan",
+            new int[]{2}, integer -> {
+                if (integer > 2)
+                    return Pair.of(-Integer.MAX_VALUE, -Integer.MAX_VALUE);
+                return Pair.of(78 - (int) (30 * (integer - (2 / 2D))), 49);
+            },
+            integer -> {
+                switch (integer) {
+                    case 0:
+                        return new ItemStack(FoodIngredient.NORI.getItem());
+                    case 1:
+                        return new ItemStack(FoodIngredient.RICE.getItem());
+                }
+                return ItemStack.EMPTY;
+            },
+            of(FoodIngredient.NORI),
+            of(FoodIngredient.RICE),
+            of(FoodIngredient.SALMON_FILLET, FoodIngredient.TUNA_FILLET, FoodIngredient.WAKAME)
+    );
+    public static FoodType CALIFORNIA = new FoodType(
+            "california",
+            new int[]{5, 2, 4},
+            integer -> {
+                if (integer == 5)
+                    return Pair.of(12, 77);
+                return Pair.of(78 - (int) (30 * ((integer - 1) - (2 / 2D))), 49);
+            },
+            integer -> {
+                switch (integer) {
+                    case 0:
+                        return new ItemStack(FoodIngredient.NORI.getItem());
+                    case 1:
+                        return new ItemStack(FoodIngredient.RICE.getItem());
+                    case 3:
+                        return new ItemStack(FoodIngredient.AVOCADO.getItem());
+                    case 5:
+                        return new ItemStack(FoodIngredient.TOBIKO.getItem());
+                }
+                return ItemStack.EMPTY;
+            },
+            of(FoodIngredient.NORI),
+            of(FoodIngredient.RICE),
             of(FoodIngredient.TUNA_FILLET, FoodIngredient.SALMON_FILLET, FoodIngredient.CRAB),
-            of(FoodIngredient.CUCUMBER, FoodIngredient.EMPTY, FoodIngredient.CHEESE));
-    public static FoodType NIGIRI = new FoodType("nigiri", new int[]{1},
+            of(FoodIngredient.AVOCADO),
+            of(FoodIngredient.CUCUMBER, FoodIngredient.EMPTY, FoodIngredient.CHEESE),
+            of(FoodIngredient.TOBIKO, FoodIngredient.EMPTY)
+    );
+    public static FoodType NIGIRI = new FoodType(
+            "nigiri",
+            new int[]{2},
             integer -> {
                 if (integer > 2)
                     return Pair.of(-Integer.MAX_VALUE, -Integer.MAX_VALUE);
@@ -75,32 +92,41 @@ public class FoodType implements IFoodType {
             integer -> {
                 switch (integer) {
                     case 0:
-                        return new ItemStack(FoodIngredient.RICE.getItem());
-                    case 2:
                         return new ItemStack(FoodIngredient.NORI.getItem());
+                    case 1:
+                        return new ItemStack(FoodIngredient.RICE.getItem());
                 }
                 return ItemStack.EMPTY;
-            }, of(FoodIngredient.RICE),
-            of(FoodIngredient.SALMON_FILLET, FoodIngredient.TUNA_FILLET, FoodIngredient.SHRIMP),
-            of(FoodIngredient.NORI));
-    public static FoodType ONIGIRI = new FoodType("onigiri", new int[]{1},
+            },
+            of(FoodIngredient.NORI),
+            of(FoodIngredient.RICE),
+            of(FoodIngredient.SALMON_FILLET, FoodIngredient.TUNA_FILLET, FoodIngredient.SHRIMP)
+    );
+
+    public static FoodType ONIGIRI = new FoodType(
+            "onigiri",
+            new int[]{},
             integer -> {
-                if (integer > 2)
+                if (integer > 1)
                     return Pair.of(-Integer.MAX_VALUE, -Integer.MAX_VALUE);
-                return Pair.of(78 - (int) (30 * (integer - (2 / 2D))), 49);
+                return Pair.of(78 - (int) (30 * (integer - (1 / 2D))), 49);
             },
             integer -> {
                 switch (integer) {
                     case 0:
-                        return new ItemStack(FoodIngredient.RICE.getItem());
-                    case 2:
                         return new ItemStack(FoodIngredient.NORI.getItem());
+                    case 1:
+                        return new ItemStack(FoodIngredient.RICE.getItem());
                 }
                 return ItemStack.EMPTY;
-            }, of(FoodIngredient.RICE),
-            of(FoodIngredient.EMPTY),
-            of(FoodIngredient.NORI));
-    public static FoodType TEMAKI = new FoodType("temaki", new int[]{3},
+            },
+            of(FoodIngredient.NORI),
+            of(FoodIngredient.RICE)
+    );
+
+    public static FoodType TEMAKI = new FoodType(
+            "temaki",
+            new int[]{2},
             integer -> {
                 if (integer > 3)
                     return Pair.of(-Integer.MAX_VALUE, -Integer.MAX_VALUE);
@@ -111,15 +137,16 @@ public class FoodType implements IFoodType {
                     case 0:
                         return new ItemStack(FoodIngredient.NORI.getItem());
                     case 1:
-                        return new ItemStack(FoodIngredient.AVOCADO.getItem());
-                    case 2:
                         return new ItemStack(FoodIngredient.RICE.getItem());
+                    case 3:
+                        return new ItemStack(FoodIngredient.AVOCADO.getItem());
                 }
                 return ItemStack.EMPTY;
-            }, of(FoodIngredient.NORI),
-            of(FoodIngredient.AVOCADO),
+            },
+            of(FoodIngredient.NORI),
             of(FoodIngredient.RICE),
-            of(FoodIngredient.SALMON_FILLET, FoodIngredient.TUNA_FILLET, FoodIngredient.SHRIMP, FoodIngredient.CHICKEN)
+            of(FoodIngredient.SALMON_FILLET, FoodIngredient.TUNA_FILLET, FoodIngredient.SHRIMP, FoodIngredient.CHICKEN),
+            of(FoodIngredient.AVOCADO)
     );
     private final Function<Integer, ItemStack> slotStackRender;
 
@@ -134,11 +161,7 @@ public class FoodType implements IFoodType {
         this.slotPos = slotPos;
         this.slotStackRender = slotStackRender;
         this.ingredients = new ArrayList<>();
-        if (ingredients != null) {
-            for (IFoodIngredient[] ingredient : ingredients) {
-                this.ingredients.add(ingredient);
-            }
-        }
+        Collections.addAll(this.ingredients, ingredients);
         FoodAPI.get().addFoodType(this);
     }
 
