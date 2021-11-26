@@ -26,6 +26,9 @@ public class CuttingBoardHandler implements IRecipeHandler<CuttingBoardRecipe> {
     @Override
     public Optional<Function<ResourceLocation, CuttingBoardRecipe>> replaceIngredients(IRecipeManager manager, CuttingBoardRecipe recipe, List<IReplacementRule> rules) {
         Optional<Ingredient> input = IRecipeHandler.attemptReplacing(recipe.getInput(), Ingredient.class, recipe, rules);
+        if(!input.isPresent()){
+            return Optional.empty();
+        }
         return Optional.of(id -> new CuttingBoardRecipe(id, input.orElseGet(recipe::getInput), recipe.getIngredient()));
     }
     

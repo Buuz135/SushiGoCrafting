@@ -28,6 +28,9 @@ public class FermentingBarrelHandler implements IRecipeHandler<FermentingBarrelR
     @Override
     public Optional<Function<ResourceLocation, FermentingBarrelRecipe>> replaceIngredients(IRecipeManager manager, FermentingBarrelRecipe recipe, List<IReplacementRule> rules) {
         Optional<Ingredient> input = IRecipeHandler.attemptReplacing(recipe.getInput(), Ingredient.class, recipe, rules);
+        if(!input.isPresent()){
+            return Optional.empty();
+        }
         return Optional.of(id -> new FermentingBarrelRecipe(id, input.orElseGet(recipe::getInput), recipe.getFluid(), recipe.getOutput()));
     }
     
