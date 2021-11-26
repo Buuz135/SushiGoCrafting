@@ -19,6 +19,7 @@ import com.buuz135.sushigocrafting.world.SushiTab;
 import com.buuz135.sushigocrafting.world.tree.AvocadoTree;
 import com.hrznstudio.titanium.TitaniumClient;
 import com.hrznstudio.titanium.event.handler.EventManager;
+import com.hrznstudio.titanium.module.ModuleController;
 import com.hrznstudio.titanium.nbthandler.NBTManager;
 import com.hrznstudio.titanium.network.NetworkHandler;
 import com.hrznstudio.titanium.reward.Reward;
@@ -79,7 +80,7 @@ import java.net.URL;
 import java.util.UUID;
 
 @Mod(SushiGoCrafting.MOD_ID)
-public class SushiGoCrafting {
+public class SushiGoCrafting extends ModuleController {
 
     public static final String MOD_ID = "sushigocrafting";
 
@@ -172,7 +173,12 @@ public class SushiGoCrafting {
         //    itemTooltipEvent.getToolTip().addAll(itemTooltipEvent.getItemStack().getItem().getTags().stream().map(resourceLocation -> new StringTextComponent(resourceLocation.toString())).collect(Collectors.toList()));
         //}).subscribe();
     }
-
+    
+    @Override
+    protected void initModules() {
+    
+    }
+    
     public void fmlCommon(FMLCommonSetupEvent event) {
         registerCapability();
     }
