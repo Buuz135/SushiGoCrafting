@@ -34,6 +34,12 @@ public class FoodTypeSelectionButtonAddon extends BasicButtonAddon {
     public FoodTypeSelectionButtonAddon(FoodTypeButtonComponent buttonComponent, Supplier<String> selected) {
         super(buttonComponent);
         this.selected = selected;
+        if (getButton().getType().getName().equalsIgnoreCase(selected.get())) {
+            getButton().getComponent().get().setSlotPosition(getButton().getType().getSlotPosition());
+            for (int i = 0; i < getButton().getComponent().get().getSlots(); i++) {
+                getButton().getComponent().get().setSlotToItemStackRender(i, getButton().getType().getSlotStackRender().apply(i));
+            }
+        }
     }
 
     @Override
