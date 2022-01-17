@@ -7,6 +7,7 @@ import com.blamejared.crafttweaker.api.item.MCItemStack;
 import com.blamejared.crafttweaker.api.recipe.handler.IRecipeHandler;
 import com.blamejared.crafttweaker.api.recipe.handler.IReplacementRule;
 import com.blamejared.crafttweaker.api.recipe.manager.base.IRecipeManager;
+import com.blamejared.crafttweaker.api.util.IngredientUtil;
 import com.blamejared.crafttweaker.api.util.StringUtils;
 import com.buuz135.sushigocrafting.recipe.FermentingBarrelRecipe;
 import net.minecraft.resources.ResourceLocation;
@@ -28,7 +29,7 @@ public class FermentingBarrelHandler implements IRecipeHandler<FermentingBarrelR
     @Override
     public Optional<Function<ResourceLocation, FermentingBarrelRecipe>> replaceIngredients(IRecipeManager manager, FermentingBarrelRecipe recipe, List<IReplacementRule> rules) {
         Optional<Ingredient> input = IRecipeHandler.attemptReplacing(recipe.getInput(), Ingredient.class, recipe, rules);
-        if(!input.isPresent()){
+        if(input.isEmpty()){
             return Optional.empty();
         }
         return Optional.of(id -> new FermentingBarrelRecipe(id, input.orElseGet(recipe::getInput), recipe.getFluid(), recipe.getOutput()));
@@ -36,7 +37,6 @@ public class FermentingBarrelHandler implements IRecipeHandler<FermentingBarrelR
     
     @Override
     public <U extends Recipe<?>> boolean doesConflict(IRecipeManager manager, FermentingBarrelRecipe firstRecipe, U secondRecipe) {
-        return false;
-        //return IngredientHelper.canConflict(firstRecipe.getInput(), ((FermentingBarrelRecipe) secondRecipe).getInput());
+        return IngredientUtil.canConflict(firstRecipe.getInput(), ((FermentingBarrelRecipe) secondRecipe).getInput());
     }
 }

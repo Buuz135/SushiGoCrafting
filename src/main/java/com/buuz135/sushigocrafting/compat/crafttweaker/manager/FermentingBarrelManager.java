@@ -14,12 +14,12 @@ import org.openzen.zencode.java.ZenCodeType;
 
 @ZenRegister
 @ZenCodeType.Name("mods.sushigocrafting.FermentingBarrel")
-public class FermentingBarrelManager implements IRecipeManager {
+public class FermentingBarrelManager implements IRecipeManager<FermentingBarrelRecipe> {
     
     @ZenCodeType.Method
     public void addRecipe(String name, IIngredient input, IFluidStack stack, IItemStack output) {
         name = fixRecipeName(name);
-        CraftTweakerAPI.apply(new ActionAddRecipe(this, new FermentingBarrelRecipe(new ResourceLocation("crafttweaker", name), input.asVanillaIngredient(), stack.getInternal(), output.getInternal())));
+        CraftTweakerAPI.apply(new ActionAddRecipe<>(this, new FermentingBarrelRecipe(new ResourceLocation("crafttweaker", name), input.asVanillaIngredient(), stack.getInternal(), output.getInternal())));
     }
     
     @Override
