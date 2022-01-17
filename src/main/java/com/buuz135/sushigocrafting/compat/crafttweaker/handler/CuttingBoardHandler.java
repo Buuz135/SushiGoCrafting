@@ -1,10 +1,10 @@
 package com.buuz135.sushigocrafting.compat.crafttweaker.handler;
 
-
 import com.blamejared.crafttweaker.api.ingredient.IIngredient;
 import com.blamejared.crafttweaker.api.recipe.handler.IRecipeHandler;
 import com.blamejared.crafttweaker.api.recipe.handler.IReplacementRule;
 import com.blamejared.crafttweaker.api.recipe.manager.base.IRecipeManager;
+import com.blamejared.crafttweaker.api.util.IngredientUtil;
 import com.blamejared.crafttweaker.api.util.StringUtils;
 import com.buuz135.sushigocrafting.recipe.CuttingBoardRecipe;
 import net.minecraft.resources.ResourceLocation;
@@ -26,7 +26,7 @@ public class CuttingBoardHandler implements IRecipeHandler<CuttingBoardRecipe> {
     @Override
     public Optional<Function<ResourceLocation, CuttingBoardRecipe>> replaceIngredients(IRecipeManager manager, CuttingBoardRecipe recipe, List<IReplacementRule> rules) {
         Optional<Ingredient> input = IRecipeHandler.attemptReplacing(recipe.getInput(), Ingredient.class, recipe, rules);
-        if(!input.isPresent()){
+        if(input.isEmpty()){
             return Optional.empty();
         }
         return Optional.of(id -> new CuttingBoardRecipe(id, input.orElseGet(recipe::getInput), recipe.getIngredient()));
@@ -34,7 +34,6 @@ public class CuttingBoardHandler implements IRecipeHandler<CuttingBoardRecipe> {
     
     @Override
     public <U extends Recipe<?>> boolean doesConflict(IRecipeManager manager, CuttingBoardRecipe firstRecipe, U secondRecipe) {
-        return false;
-        //return IngredientHelper.canConflict(firstRecipe.getInput(), ((CuttingBoardRecipe) secondRecipe).getInput());
+        return IngredientUtil.canConflict(firstRecipe.getInput(), ((CuttingBoardRecipe) secondRecipe).getInput());
     }
 }
