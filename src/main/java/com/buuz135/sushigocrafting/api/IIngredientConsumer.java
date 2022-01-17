@@ -1,7 +1,7 @@
 package com.buuz135.sushigocrafting.api;
 
 import com.buuz135.sushigocrafting.item.AmountItem;
-import net.minecraft.item.ItemStack;
+import net.minecraft.world.item.ItemStack;
 
 public interface IIngredientConsumer {
 

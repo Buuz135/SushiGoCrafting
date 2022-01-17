@@ -9,7 +9,7 @@ import com.hrznstudio.titanium.client.screen.addon.SlotsScreenAddon;
 import com.hrznstudio.titanium.client.screen.asset.DefaultAssetProvider;
 import com.hrznstudio.titanium.client.screen.asset.IAssetProvider;
 import com.hrznstudio.titanium.util.AssetUtil;
-import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.PoseStack;
 import mezz.jei.api.constants.VanillaTypes;
 import mezz.jei.api.gui.IRecipeLayout;
 import mezz.jei.api.gui.drawable.IDrawable;
@@ -18,12 +18,13 @@ import mezz.jei.api.helpers.IGuiHelper;
 import mezz.jei.api.ingredients.IIngredients;
 import mezz.jei.api.recipe.category.IRecipeCategory;
 import net.minecraft.client.Minecraft;
-import net.minecraft.fluid.Fluids;
-import net.minecraft.item.DyeColor;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.Ingredient;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.DyeColor;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.level.material.Fluids;
 import net.minecraftforge.fluids.FluidStack;
 import org.apache.commons.lang3.tuple.Pair;
 
@@ -53,8 +54,8 @@ public class RiceCookerCategory implements IRecipeCategory<RiceCookerCategory.Ri
     }
 
     @Override
-    public String getTitle() {
-        return new TranslationTextComponent(SushiContent.Blocks.RICE_COOKER.get().getTranslationKey()).getString();
+    public Component getTitle() {
+        return new TranslatableComponent(SushiContent.Blocks.RICE_COOKER.get().getDescriptionId());
     }
 
     @Override
@@ -69,7 +70,7 @@ public class RiceCookerCategory implements IRecipeCategory<RiceCookerCategory.Ri
 
     @Override
     public void setIngredients(RiceCookerRecipe cuttingBoardRecipe, IIngredients iIngredients) {
-        iIngredients.setInputLists(VanillaTypes.ITEM, Arrays.asList(Arrays.asList(Ingredient.fromTag(RiceCookerTile.RICE).getMatchingStacks())));
+        iIngredients.setInputLists(VanillaTypes.ITEM, Arrays.asList(Arrays.asList(Ingredient.of(RiceCookerTile.RICE).getItems())));
         iIngredients.setInput(VanillaTypes.FLUID, new FluidStack(Fluids.WATER, 1000));
         iIngredients.setOutput(VanillaTypes.ITEM, SushiContent.Items.COOKED_RICE.get().withAmount(50));
     }
@@ -88,12 +89,12 @@ public class RiceCookerCategory implements IRecipeCategory<RiceCookerCategory.Ri
     }
 
     @Override
-    public void draw(RiceCookerRecipe recipe, MatrixStack matrixStack, double mouseX, double mouseY) {
-        SlotsScreenAddon.drawAsset(matrixStack, Minecraft.getInstance().currentScreen, DefaultAssetProvider.DEFAULT_PROVIDER, 4, 3, 0, 0, 1, integer -> Pair.of(0, 0), integer -> ItemStack.EMPTY, true, integer -> new Color(DyeColor.BLUE.getFireworkColor()), integer -> true);
-        AssetUtil.drawAsset(matrixStack, Minecraft.getInstance().currentScreen, DefaultAssetProvider.DEFAULT_PROVIDER.getAsset(AssetTypes.TANK_SMALL), 3, 27);
-        AssetUtil.drawAsset(matrixStack, Minecraft.getInstance().currentScreen, IAssetProvider.getAsset(DefaultAssetProvider.DEFAULT_PROVIDER, AssetTypes.PROGRESS_BAR_BACKGROUND_ARROW_HORIZONTAL), 30, 16);
-        SlotsScreenAddon.drawAsset(matrixStack, Minecraft.getInstance().currentScreen, DefaultAssetProvider.DEFAULT_PROVIDER, 60, 16, 0, 0, 1, integer -> Pair.of(0, 0), integer -> ItemStack.EMPTY, true, integer -> new Color(DyeColor.ORANGE.getFireworkColor()), integer -> true);
-        SlotsScreenAddon.drawAsset(matrixStack, Minecraft.getInstance().currentScreen, DefaultAssetProvider.DEFAULT_PROVIDER, 30, 37, 0, 0, 1, integer -> Pair.of(0, 0), integer -> ItemStack.EMPTY, true, integer -> new Color(DyeColor.RED.getFireworkColor()), integer -> true);
+    public void draw(RiceCookerRecipe recipe, PoseStack matrixStack, double mouseX, double mouseY) {
+        SlotsScreenAddon.drawAsset(matrixStack, Minecraft.getInstance().screen, DefaultAssetProvider.DEFAULT_PROVIDER, 4, 3, 0, 0, 1, integer -> Pair.of(0, 0), integer -> ItemStack.EMPTY, true, integer -> new Color(DyeColor.BLUE.getFireworkColor()), integer -> true);
+        AssetUtil.drawAsset(matrixStack, Minecraft.getInstance().screen, DefaultAssetProvider.DEFAULT_PROVIDER.getAsset(AssetTypes.TANK_SMALL), 3, 27);
+        AssetUtil.drawAsset(matrixStack, Minecraft.getInstance().screen, IAssetProvider.getAsset(DefaultAssetProvider.DEFAULT_PROVIDER, AssetTypes.PROGRESS_BAR_BACKGROUND_ARROW_HORIZONTAL), 30, 16);
+        SlotsScreenAddon.drawAsset(matrixStack, Minecraft.getInstance().screen, DefaultAssetProvider.DEFAULT_PROVIDER, 60, 16, 0, 0, 1, integer -> Pair.of(0, 0), integer -> ItemStack.EMPTY, true, integer -> new Color(DyeColor.ORANGE.getFireworkColor()), integer -> true);
+        SlotsScreenAddon.drawAsset(matrixStack, Minecraft.getInstance().screen, DefaultAssetProvider.DEFAULT_PROVIDER, 30, 37, 0, 0, 1, integer -> Pair.of(0, 0), integer -> ItemStack.EMPTY, true, integer -> new Color(DyeColor.RED.getFireworkColor()), integer -> true);
     }
 
     public static class RiceCookerRecipe {

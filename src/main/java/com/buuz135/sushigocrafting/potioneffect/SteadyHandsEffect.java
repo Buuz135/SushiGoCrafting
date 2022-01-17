@@ -1,13 +1,13 @@
 package com.buuz135.sushigocrafting.potioneffect;
 
-import net.minecraft.potion.Effect;
-import net.minecraft.potion.EffectType;
+import net.minecraft.world.effect.MobEffect;
+import net.minecraft.world.effect.MobEffectCategory;
 
 import java.awt.*;
 
-public class SteadyHandsEffect extends Effect {
+public class SteadyHandsEffect extends MobEffect {
 
     public SteadyHandsEffect() {
-        super(EffectType.BENEFICIAL, Color.ORANGE.getRGB());
+        super(MobEffectCategory.BENEFICIAL, Color.ORANGE.getRGB());
     }
 }

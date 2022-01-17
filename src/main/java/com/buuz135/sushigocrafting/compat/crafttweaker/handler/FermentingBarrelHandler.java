@@ -1,17 +1,17 @@
 package com.buuz135.sushigocrafting.compat.crafttweaker.handler;
 
-import com.blamejared.crafttweaker.api.item.IIngredient;
-import com.blamejared.crafttweaker.api.managers.IRecipeManager;
-import com.blamejared.crafttweaker.api.recipes.IRecipeHandler;
-import com.blamejared.crafttweaker.api.recipes.IReplacementRule;
+
+import com.blamejared.crafttweaker.api.fluid.MCFluidStack;
+import com.blamejared.crafttweaker.api.ingredient.IIngredient;
+import com.blamejared.crafttweaker.api.item.MCItemStack;
+import com.blamejared.crafttweaker.api.recipe.handler.IRecipeHandler;
+import com.blamejared.crafttweaker.api.recipe.handler.IReplacementRule;
+import com.blamejared.crafttweaker.api.recipe.manager.base.IRecipeManager;
 import com.blamejared.crafttweaker.api.util.StringUtils;
-import com.blamejared.crafttweaker.impl.fluid.MCFluidStack;
-import com.blamejared.crafttweaker.impl.helper.IngredientHelper;
-import com.blamejared.crafttweaker.impl.item.MCItemStack;
 import com.buuz135.sushigocrafting.recipe.FermentingBarrelRecipe;
-import net.minecraft.item.crafting.IRecipe;
-import net.minecraft.item.crafting.Ingredient;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.item.crafting.Recipe;
 
 import java.util.List;
 import java.util.Optional;
@@ -35,7 +35,8 @@ public class FermentingBarrelHandler implements IRecipeHandler<FermentingBarrelR
     }
     
     @Override
-    public <U extends IRecipe<?>> boolean doesConflict(IRecipeManager manager, FermentingBarrelRecipe firstRecipe, U secondRecipe) {
-        return IngredientHelper.canConflict(firstRecipe.getInput(), ((FermentingBarrelRecipe) secondRecipe).getInput());
+    public <U extends Recipe<?>> boolean doesConflict(IRecipeManager manager, FermentingBarrelRecipe firstRecipe, U secondRecipe) {
+        return false;
+        //return IngredientHelper.canConflict(firstRecipe.getInput(), ((FermentingBarrelRecipe) secondRecipe).getInput());
     }
 }

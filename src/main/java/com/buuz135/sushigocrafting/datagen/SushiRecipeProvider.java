@@ -5,14 +5,14 @@ import com.buuz135.sushigocrafting.proxy.SushiContent;
 import com.hrznstudio.titanium.recipe.generator.TitaniumRecipeProvider;
 import com.hrznstudio.titanium.recipe.generator.TitaniumShapedRecipeBuilder;
 import com.hrznstudio.titanium.recipe.generator.TitaniumShapelessRecipeBuilder;
-import net.minecraft.block.Blocks;
-import net.minecraft.data.CookingRecipeBuilder;
 import net.minecraft.data.DataGenerator;
-import net.minecraft.data.IFinishedRecipe;
-import net.minecraft.item.Items;
-import net.minecraft.item.crafting.Ingredient;
+import net.minecraft.data.recipes.FinishedRecipe;
+import net.minecraft.data.recipes.SimpleCookingRecipeBuilder;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.ItemTags;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraftforge.common.Tags;
 
 import java.util.function.Consumer;
@@ -24,44 +24,44 @@ public class SushiRecipeProvider extends TitaniumRecipeProvider {
     }
 
     @Override
-    public void register(Consumer<IFinishedRecipe> consumer) {
+    public void register(Consumer<FinishedRecipe> consumer) {
         TitaniumShapedRecipeBuilder.shapedRecipe(SushiContent.Items.KNIFE_CLEAVER.get())
-                .patternLine(" II").patternLine("II ").patternLine("S  ")
-                .key('I', Tags.Items.INGOTS_IRON)
-                .key('S', Items.STICK)
-                .build(consumer);
+                .pattern(" II").pattern("II ").pattern("S  ")
+                .define('I', Tags.Items.INGOTS_IRON)
+                .define('S', Items.STICK)
+                .save(consumer);
         TitaniumShapedRecipeBuilder.shapedRecipe(SushiContent.Items.ROLLER.get())
-                .patternLine("BBB").patternLine("SSS").patternLine("BBB")
-                .key('B', Items.BAMBOO)
-                .key('S', Items.STRING)
-                .build(consumer);
+                .pattern("BBB").pattern("SSS").pattern("BBB")
+                .define('B', Items.BAMBOO)
+                .define('S', Items.STRING)
+                .save(consumer);
         TitaniumShapedRecipeBuilder.shapedRecipe(SushiContent.Items.RICE_COOKER.get())
-                .patternLine("IGI").patternLine("IFI").patternLine("IRI")
-                .key('I', Tags.Items.INGOTS_IRON)
-                .key('G', Items.LIGHT_WEIGHTED_PRESSURE_PLATE)
-                .key('F', Items.FURNACE)
-                .key('R', Items.REDSTONE)
-                .build(consumer);
+                .pattern("IGI").pattern("IFI").pattern("IRI")
+                .define('I', Tags.Items.INGOTS_IRON)
+                .define('G', Items.LIGHT_WEIGHTED_PRESSURE_PLATE)
+                .define('F', Items.FURNACE)
+                .define('R', Items.REDSTONE)
+                .save(consumer);
         TitaniumShapedRecipeBuilder.shapedRecipe(SushiContent.Items.COOLER_BOX.get())
-                .patternLine("IGI").patternLine("IFI").patternLine("III")
-                .key('I', Blocks.SNOW_BLOCK)
-                .key('G', Blocks.IRON_TRAPDOOR)
-                .key('F', Tags.Items.CHESTS)
-                .build(consumer);
+                .pattern("IGI").pattern("IFI").pattern("III")
+                .define('I', Blocks.SNOW_BLOCK)
+                .define('G', Blocks.IRON_TRAPDOOR)
+                .define('F', Tags.Items.CHESTS)
+                .save(consumer);
         TitaniumShapedRecipeBuilder.shapedRecipe(SushiContent.Items.FERMENTATION_BARREL.get())
-                .patternLine("IGI").patternLine("IFI").patternLine("III")
-                .key('I', ItemTags.PLANKS)
-                .key('G', ItemTags.WOODEN_PRESSURE_PLATES)
-                .key('F', Blocks.FURNACE)
-                .build(consumer);
-        CookingRecipeBuilder.smeltingRecipe(Ingredient.fromItems(SushiContent.Items.SEAWEED.get()), SushiContent.Items.DRY_SEAWEED.get(), 0.3f, 200).addCriterion("has_seaweed", hasItem(SushiContent.Items.SEAWEED.get())).build(consumer);
-        TitaniumShapelessRecipeBuilder.shapelessRecipe(SushiContent.Blocks.SEAWEED_BLOCK.get()).addIngredient(Ingredient.fromItems(SushiContent.Items.DRY_SEAWEED.get()), 9).build(consumer);
-        TitaniumShapelessRecipeBuilder.shapelessRecipe(SushiContent.Items.DRY_SEAWEED.get(), 9).addIngredient(Ingredient.fromItems(SushiContent.Blocks.SEAWEED_BLOCK.get()), 1).build(consumer, new ResourceLocation(SushiGoCrafting.MOD_ID, "seaweed_uncrafting"));
+                .pattern("IGI").pattern("IFI").pattern("III")
+                .define('I', ItemTags.PLANKS)
+                .define('G', ItemTags.WOODEN_PRESSURE_PLATES)
+                .define('F', Blocks.FURNACE)
+                .save(consumer);
+        SimpleCookingRecipeBuilder.smelting(Ingredient.of(SushiContent.Items.SEAWEED.get()), SushiContent.Items.DRY_SEAWEED.get(), 0.3f, 200).unlockedBy("has_seaweed", has(SushiContent.Items.SEAWEED.get())).save(consumer);
+        TitaniumShapelessRecipeBuilder.shapelessRecipe(SushiContent.Blocks.SEAWEED_BLOCK.get()).requires(Ingredient.of(SushiContent.Items.DRY_SEAWEED.get()), 9).save(consumer);
+        TitaniumShapelessRecipeBuilder.shapelessRecipe(SushiContent.Items.DRY_SEAWEED.get(), 9).requires(Ingredient.of(SushiContent.Blocks.SEAWEED_BLOCK.get()), 1).save(consumer, new ResourceLocation(SushiGoCrafting.MOD_ID, "seaweed_uncrafting"));
         TitaniumShapedRecipeBuilder.shapedRecipe(SushiContent.Items.CUTTING_BOARD.get())
-                .patternLine("   ").patternLine("SSS").patternLine("BBB")
-                .key('S', ItemTags.SLABS)
-                .key('B', ItemTags.LOGS)
-                .build(consumer);
-        TitaniumShapelessRecipeBuilder.shapelessRecipe(SushiContent.Items.SEAWEED_ON_A_STICK.get()).addIngredient(Items.FISHING_ROD).addIngredient(SushiContent.Items.SEAWEED.get()).build(consumer);
+                .pattern("   ").pattern("SSS").pattern("BBB")
+                .define('S', ItemTags.SLABS)
+                .define('B', ItemTags.LOGS)
+                .save(consumer);
+        TitaniumShapelessRecipeBuilder.shapelessRecipe(SushiContent.Items.SEAWEED_ON_A_STICK.get()).requires(Items.FISHING_ROD).requires(SushiContent.Items.SEAWEED.get()).save(consumer);
     }
 }

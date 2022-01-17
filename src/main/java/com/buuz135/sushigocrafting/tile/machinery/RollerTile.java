@@ -15,16 +15,18 @@ import com.hrznstudio.titanium.annotation.Save;
 import com.hrznstudio.titanium.block.tile.ActiveTile;
 import com.hrznstudio.titanium.client.screen.asset.IAssetProvider;
 import com.hrznstudio.titanium.component.inventory.InventoryComponent;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.inventory.InventoryHelper;
-import net.minecraft.item.DyeColor;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.util.ActionResultType;
-import net.minecraft.util.Direction;
-import net.minecraft.util.Hand;
-import net.minecraft.world.server.ServerWorld;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.Containers;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.DyeColor;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.common.util.INBTSerializable;
 import net.minecraftforge.items.ItemHandlerHelper;
 
@@ -47,8 +49,8 @@ public class RollerTile extends ActiveTile<RollerTile> {
     @Save
     private InventoryComponent<RollerTile> spices;
 
-    public RollerTile() {
-        super(SushiContent.Blocks.ROLLER.get());
+    public RollerTile(BlockPos pos, BlockState state) {
+        super(SushiContent.Blocks.ROLLER.get(), pos, state);
         int i = 0;
         int max = 0;
         this.craftProgress = 0;
@@ -114,19 +116,19 @@ public class RollerTile extends ActiveTile<RollerTile> {
     }
 
     @Override
-    public ActionResultType onActivated(PlayerEntity player, Hand hand, Direction facing, double hitX, double hitY, double hitZ) {
-        ActionResultType type = super.onActivated(player, hand, facing, hitX, hitY, hitZ);
-        if (!type.isSuccess()) {
-            if (player instanceof ServerPlayerEntity) {
-                player.getCapability(SushiWeightDiscoveryCapability.CAPABILITY).ifPresent(iSushiWeightDiscovery -> iSushiWeightDiscovery.requestUpdate((ServerPlayerEntity) player, ItemStack.EMPTY));
+    public InteractionResult onActivated(Player player, InteractionHand hand, Direction facing, double hitX, double hitY, double hitZ) {
+        InteractionResult type = super.onActivated(player, hand, facing, hitX, hitY, hitZ);
+        if (!type.shouldSwing()) {
+            if (player instanceof ServerPlayer) {
+                player.getCapability(SushiWeightDiscoveryCapability.CAPABILITY).ifPresent(iSushiWeightDiscovery -> iSushiWeightDiscovery.requestUpdate((ServerPlayer) player, ItemStack.EMPTY));
             }
             openGui(player);
-            return ActionResultType.SUCCESS;
+            return InteractionResult.SUCCESS;
         }
         return type;
     }
 
-    public void onClick(PlayerEntity player) {
+    public void onClick(Player player) {
         if (isServer()) {
             FoodAPI.get().getTypeFromName(selected).ifPresent(iFoodType -> {
                 boolean allFull = true;
@@ -142,7 +144,7 @@ public class RollerTile extends ActiveTile<RollerTile> {
                 if (allFull) {
                     ++craftProgress;
                     if (craftProgress >= 4) {
-                        Random random = new Random(((ServerWorld) this.world).getSeed() + selected.hashCode());
+                        Random random = new Random(((ServerLevel) this.level).getSeed() + selected.hashCode());
                         craftProgress = 0;
                         List<IFoodIngredient> foodIngredients = new ArrayList<>();
                         List<Integer> weightValues = new ArrayList<>();
@@ -174,7 +176,7 @@ public class RollerTile extends ActiveTile<RollerTile> {
                                 }
                             }
                             stack.getOrCreateTag().putIntArray(FoodItem.WEIGHTS_TAG, weightValues);
-                            CompoundNBT spicesNBT = new CompoundNBT();
+                            CompoundTag spicesNBT = new CompoundTag();
                             for (int i = 0; i < spices.getSlots(); i++) {
                                 if (!spices.getStackInSlot(i).isEmpty()) {
                                     IFoodIngredient soy = FoodAPI.get().getIngredientFromItem(spices.getStackInSlot(i).getItem());
@@ -185,11 +187,12 @@ public class RollerTile extends ActiveTile<RollerTile> {
                                 }
                             }
                             stack.getOrCreateTag().put(FoodItem.SPICES_TAG, spicesNBT);
-                            InventoryHelper.spawnItemStack(this.world, this.pos.getX(), this.getPos().getY(), this.getPos().getZ(), stack);
+                            Containers.dropItemStack(this.level, this.worldPosition.getX(), this.getBlockPos().getY(), this.getBlockPos().getZ(), stack);
                         }
-                        if (player instanceof ServerPlayerEntity) {
-                            player.getCapability(SushiWeightDiscoveryCapability.CAPABILITY).ifPresent(iSushiWeightDiscovery -> iSushiWeightDiscovery.requestUpdate((ServerPlayerEntity) player, discovery.get()));
+                        if (player instanceof ServerPlayer) {
+                            player.getCapability(SushiWeightDiscoveryCapability.CAPABILITY).ifPresent(iSushiWeightDiscovery -> iSushiWeightDiscovery.requestUpdate((ServerPlayer) player, discovery.get()));
                         }
+                        markForUpdate();
                     }
                 }
             });
@@ -197,7 +200,7 @@ public class RollerTile extends ActiveTile<RollerTile> {
     }
 
     @Override
-    public void handleButtonMessage(int id, PlayerEntity playerEntity, CompoundNBT compound) {
+    public void handleButtonMessage(int id, Player playerEntity, CompoundTag compound) {
         super.handleButtonMessage(id, playerEntity, compound);
         if (compound.contains("Type")) {
             FoodAPI.get().getTypeFromName(compound.getString("Type")).ifPresent(iFoodType -> {
@@ -255,11 +258,6 @@ public class RollerTile extends ActiveTile<RollerTile> {
         return this;
     }
 
-    @Override
-    public void tick() {
-        super.tick();
-    }
-
     public InventoryComponent<RollerTile> getSlots() {
         return slots;
     }
@@ -269,7 +267,7 @@ public class RollerTile extends ActiveTile<RollerTile> {
         return RollerAssetProvider.INSTANCE;
     }
 
-    private class WeightTracker implements INBTSerializable<CompoundNBT> {
+    private class WeightTracker implements INBTSerializable<CompoundTag> {
 
         private List<Integer> weights;
 
@@ -282,14 +280,14 @@ public class RollerTile extends ActiveTile<RollerTile> {
         }
 
         @Override
-        public CompoundNBT serializeNBT() {
-            CompoundNBT compoundNBT = new CompoundNBT();
+        public CompoundTag serializeNBT() {
+            CompoundTag compoundNBT = new CompoundTag();
             compoundNBT.putIntArray("Weights", weights);
             return compoundNBT;
         }
 
         @Override
-        public void deserializeNBT(CompoundNBT nbt) {
+        public void deserializeNBT(CompoundTag nbt) {
             weights = new ArrayList<>();
             for (int i : nbt.getIntArray("Weights")) {
                 weights.add(i);

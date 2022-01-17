@@ -8,7 +8,7 @@ import com.hrznstudio.titanium.client.screen.addon.SlotsScreenAddon;
 import com.hrznstudio.titanium.client.screen.asset.DefaultAssetProvider;
 import com.hrznstudio.titanium.client.screen.asset.IAssetProvider;
 import com.hrznstudio.titanium.util.AssetUtil;
-import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.PoseStack;
 import mezz.jei.api.constants.VanillaTypes;
 import mezz.jei.api.gui.IRecipeLayout;
 import mezz.jei.api.gui.drawable.IDrawable;
@@ -17,10 +17,11 @@ import mezz.jei.api.helpers.IGuiHelper;
 import mezz.jei.api.ingredients.IIngredients;
 import mezz.jei.api.recipe.category.IRecipeCategory;
 import net.minecraft.client.Minecraft;
-import net.minecraft.item.DyeColor;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.DyeColor;
+import net.minecraft.world.item.ItemStack;
 import org.apache.commons.lang3.tuple.Pair;
 
 import java.awt.*;
@@ -49,8 +50,8 @@ public class FermentationBarrelCategory implements IRecipeCategory<FermentingBar
     }
 
     @Override
-    public String getTitle() {
-        return new TranslationTextComponent(SushiContent.Blocks.FERMENTATION_BARREL.get().getTranslationKey()).getString();
+    public Component getTitle() {
+        return new TranslatableComponent(SushiContent.Blocks.FERMENTATION_BARREL.get().getDescriptionId());
     }
 
     @Override
@@ -65,7 +66,7 @@ public class FermentationBarrelCategory implements IRecipeCategory<FermentingBar
 
     @Override
     public void setIngredients(FermentingBarrelRecipe recipe, IIngredients iIngredients) {
-        iIngredients.setInputLists(VanillaTypes.ITEM, Arrays.asList(Arrays.asList(recipe.input.getMatchingStacks())));
+        iIngredients.setInputLists(VanillaTypes.ITEM, Arrays.asList(Arrays.asList(recipe.input.getItems())));
         iIngredients.setInput(VanillaTypes.FLUID, recipe.getFluid());
         iIngredients.setOutput(VanillaTypes.ITEM, recipe.getOutput());
     }
@@ -82,11 +83,11 @@ public class FermentationBarrelCategory implements IRecipeCategory<FermentingBar
     }
 
     @Override
-    public void draw(FermentingBarrelRecipe recipe, MatrixStack matrixStack, double mouseX, double mouseY) {
-        SlotsScreenAddon.drawAsset(matrixStack, Minecraft.getInstance().currentScreen, DefaultAssetProvider.DEFAULT_PROVIDER, 4, 16, 0, 0, 1, integer -> Pair.of(0, 0), integer -> ItemStack.EMPTY, true, integer -> new Color(DyeColor.BLUE.getFireworkColor()), integer -> true);
-        AssetUtil.drawAsset(matrixStack, Minecraft.getInstance().currentScreen, DefaultAssetProvider.DEFAULT_PROVIDER.getAsset(AssetTypes.TANK_SMALL), 26, 15);
-        AssetUtil.drawAsset(matrixStack, Minecraft.getInstance().currentScreen, IAssetProvider.getAsset(DefaultAssetProvider.DEFAULT_PROVIDER, AssetTypes.PROGRESS_BAR_BACKGROUND_ARROW_HORIZONTAL), 51, 16);
-        SlotsScreenAddon.drawAsset(matrixStack, Minecraft.getInstance().currentScreen, DefaultAssetProvider.DEFAULT_PROVIDER, 81, 16, 0, 0, 1, integer -> Pair.of(0, 0), integer -> ItemStack.EMPTY, true, integer -> new Color(DyeColor.ORANGE.getFireworkColor()), integer -> true);
+    public void draw(FermentingBarrelRecipe recipe, PoseStack matrixStack, double mouseX, double mouseY) {
+        SlotsScreenAddon.drawAsset(matrixStack, Minecraft.getInstance().screen, DefaultAssetProvider.DEFAULT_PROVIDER, 4, 16, 0, 0, 1, integer -> Pair.of(0, 0), integer -> ItemStack.EMPTY, true, integer -> new Color(DyeColor.BLUE.getFireworkColor()), integer -> true);
+        AssetUtil.drawAsset(matrixStack, Minecraft.getInstance().screen, DefaultAssetProvider.DEFAULT_PROVIDER.getAsset(AssetTypes.TANK_SMALL), 26, 15);
+        AssetUtil.drawAsset(matrixStack, Minecraft.getInstance().screen, IAssetProvider.getAsset(DefaultAssetProvider.DEFAULT_PROVIDER, AssetTypes.PROGRESS_BAR_BACKGROUND_ARROW_HORIZONTAL), 51, 16);
+        SlotsScreenAddon.drawAsset(matrixStack, Minecraft.getInstance().screen, DefaultAssetProvider.DEFAULT_PROVIDER, 81, 16, 0, 0, 1, integer -> Pair.of(0, 0), integer -> ItemStack.EMPTY, true, integer -> new Color(DyeColor.ORANGE.getFireworkColor()), integer -> true);
     }
 
 }

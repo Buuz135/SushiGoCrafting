@@ -1,5 +1,5 @@
 {
-  "fluid": "{FluidName:\"minecraft:milk\",Amount:250}",
+  "fluid": "{Amount:250,FluidName:\"minecraft:milk\"}",
   "output": {
     "item": "sushigocrafting:cheese",
     "count": 1

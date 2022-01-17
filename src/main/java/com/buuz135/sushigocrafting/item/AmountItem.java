@@ -4,20 +4,20 @@ import com.buuz135.sushigocrafting.api.IFoodIngredient;
 import com.buuz135.sushigocrafting.api.impl.FoodAPI;
 import com.buuz135.sushigocrafting.proxy.SushiContent;
 import com.mojang.datafixers.util.Pair;
-import net.minecraft.client.util.ITooltipFlag;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.Food;
-import net.minecraft.item.ItemGroup;
-import net.minecraft.item.ItemStack;
-import net.minecraft.potion.EffectInstance;
-import net.minecraft.potion.Effects;
-import net.minecraft.util.NonNullList;
-import net.minecraft.util.SoundCategory;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.StringTextComponent;
-import net.minecraft.util.text.TextFormatting;
-import net.minecraft.world.World;
+import net.minecraft.ChatFormatting;
+import net.minecraft.core.NonNullList;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TextComponent;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffects;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.food.FoodProperties;
+import net.minecraft.world.item.CreativeModeTab;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.level.Level;
 
 import java.awt.*;
 import java.util.List;
@@ -31,45 +31,46 @@ public class AmountItem extends SushiItem {
     private final int maxCombineAmount;
 
     public AmountItem(Properties properties, String category, int minAmount, int maxAmount, int maxCombineAmount, boolean foodHurts) {
-        super(properties.food((new Food.Builder()).hunger(2).saturation(0.3F).effect(new EffectInstance(Effects.POISON, 100, 0), foodHurts ? 0.6f : 0.01f).build()), category);
+        super(properties.food((new FoodProperties.Builder()).nutrition(2).saturationMod(0.3F).effect(new MobEffectInstance(MobEffects.POISON, 100, 0), foodHurts ? 0.6f : 0.01f).build()), category);
         this.minAmount = minAmount;
         this.maxAmount = maxAmount;
         this.maxCombineAmount = maxCombineAmount;
     }
 
     @Override
-    public void onCreated(ItemStack stack, World worldIn, PlayerEntity playerIn) {
-        super.onCreated(stack, worldIn, playerIn);
+    public void onCraftedBy(ItemStack stack, Level worldIn, Player playerIn) {
+        super.onCraftedBy(stack, worldIn, playerIn);
         if (!stack.hasTag())
-            stack.getOrCreateTag().putInt(NBT_AMOUNT, worldIn.rand.nextInt(maxAmount - minAmount) + minAmount);
+            stack.getOrCreateTag().putInt(NBT_AMOUNT, worldIn.random.nextInt(maxAmount - minAmount) + minAmount);
     }
 
+
     @Override
-    public boolean showDurabilityBar(ItemStack stack) {
+    public boolean isBarVisible(ItemStack stack) {
         return stack.hasTag() && stack.getTag().contains(NBT_AMOUNT);
     }
 
     @Override
-    public double getDurabilityForDisplay(ItemStack stack) {
-        return 1 - stack.getOrCreateTag().getInt(NBT_AMOUNT) / (double) maxCombineAmount;
+    public int getBarWidth(ItemStack stack) {
+        return  Math.round( (float)stack.getOrCreateTag().getInt(NBT_AMOUNT) * 13.0F / (float)this.maxCombineAmount);
     }
 
     @Override
-    public int getRGBDurabilityForDisplay(ItemStack stack) {
-        return Color.YELLOW.getRGB();
+    public int getBarColor(ItemStack stack) {
+        return  Color.YELLOW.getRGB();
     }
 
     @Override
-    public void addInformation(ItemStack stack, World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
-        super.addInformation(stack, worldIn, tooltip, flagIn);
+    public void appendHoverText(ItemStack stack, Level worldIn, List<Component> tooltip, TooltipFlag flagIn) {
+        super.appendHoverText(stack, worldIn, tooltip, flagIn);
         if (stack.hasTag()) {
-            tooltip.add(new StringTextComponent(TextFormatting.GRAY + "Amount: " + stack.getTag().getInt(NBT_AMOUNT) + "/" + maxCombineAmount + " gr.")); //TODO Localize
+            tooltip.add(new TextComponent(ChatFormatting.GRAY + "Amount: " + stack.getTag().getInt(NBT_AMOUNT) + "/" + maxCombineAmount + " gr.")); //TODO Localize
         }
     }
 
     @Override
-    public void fillItemGroup(ItemGroup group, NonNullList<ItemStack> items) {
-        if (isInGroup(group)) {
+    public void fillItemCategory(CreativeModeTab group, NonNullList<ItemStack> items) {
+        if (allowdedIn(group)) {
             ItemStack stack = new ItemStack(this);
             stack.getOrCreateTag().putInt(NBT_AMOUNT, maxAmount / 2);
             items.add(stack);
@@ -98,12 +99,12 @@ public class AmountItem extends SushiItem {
         return stack;
     }
 
-    public ItemStack random(PlayerEntity entity, World world) {
+    public ItemStack random(Player entity, Level world) {
         int extra = 0;
-        if (entity != null && entity.isPotionActive(SushiContent.Effects.STEADY_HANDS.get())) {
-            extra += (entity.getActivePotionEffect(SushiContent.Effects.STEADY_HANDS.get()).getAmplifier() + 1) * getMinAmount();
+        if (entity != null && entity.hasEffect(SushiContent.Effects.STEADY_HANDS.get())) {
+            extra += (entity.getEffect(SushiContent.Effects.STEADY_HANDS.get()).getAmplifier() + 1) * getMinAmount();
         }
-        return withAmount(Math.min(getMaxCombineAmount(), extra + world.rand.nextInt(getMaxAmount() - getMinAmount()) + getMinAmount()));
+        return withAmount(Math.min(getMaxCombineAmount(), extra + world.random.nextInt(getMaxAmount() - getMinAmount()) + getMinAmount()));
     }
 
     public void consume(IFoodIngredient ingredient, ItemStack stack, int amountLevel) {
@@ -120,16 +121,16 @@ public class AmountItem extends SushiItem {
     }
 
     @Override
-    public ItemStack onItemUseFinish(ItemStack stack, World worldIn, LivingEntity entityLiving) {
-        if (entityLiving instanceof PlayerEntity) {
-            worldIn.playSound((PlayerEntity) null, entityLiving.getPosX(), entityLiving.getPosY(), entityLiving.getPosZ(), this.getEatSound(), SoundCategory.NEUTRAL, 1.0F, 1.0F + (worldIn.rand.nextFloat() - worldIn.rand.nextFloat()) * 0.4F);
-            ((PlayerEntity) entityLiving).getFoodStats().addStats(stack.getItem().getFood().getHealing(), stack.getItem().getFood().getSaturation());
-            for (Pair<EffectInstance, Float> pair : stack.getItem().getFood().getEffects()) {
-                if (!worldIn.isRemote && pair.getFirst() != null && worldIn.rand.nextFloat() < pair.getSecond()) {
-                    entityLiving.addPotionEffect(new EffectInstance(pair.getFirst()));
+    public ItemStack finishUsingItem(ItemStack stack, Level worldIn, LivingEntity entityLiving) {
+        if (entityLiving instanceof Player) {
+            worldIn.playSound((Player) null, entityLiving.getX(), entityLiving.getY(), entityLiving.getZ(), this.getEatingSound(), SoundSource.NEUTRAL, 1.0F, 1.0F + (worldIn.random.nextFloat() - worldIn.random.nextFloat()) * 0.4F);
+            ((Player) entityLiving).getFoodData().eat(stack.getItem().getFoodProperties().getNutrition(), stack.getItem().getFoodProperties().getSaturationModifier());
+            for (Pair<MobEffectInstance, Float> pair : stack.getItem().getFoodProperties().getEffects()) {
+                if (!worldIn.isClientSide && pair.getFirst() != null && worldIn.random.nextFloat() < pair.getSecond()) {
+                    entityLiving.addEffect(new MobEffectInstance(pair.getFirst()));
                 }
             }
-            if (!((PlayerEntity) entityLiving).abilities.isCreativeMode) {
+            if (!((Player) entityLiving).getAbilities().instabuild) {
                 consume(FoodAPI.get().getIngredientFromItem(this), stack, 6);
             }
         }

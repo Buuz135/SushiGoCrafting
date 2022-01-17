@@ -5,7 +5,8 @@ import com.buuz135.sushigocrafting.api.impl.FoodAPI;
 import com.buuz135.sushigocrafting.proxy.SushiContent;
 import com.buuz135.sushigocrafting.recipe.CuttingBoardRecipe;
 import com.buuz135.sushigocrafting.util.ItemStackUtil;
-import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.systems.RenderSystem;
+import com.mojang.blaze3d.vertex.PoseStack;
 import mezz.jei.api.constants.VanillaTypes;
 import mezz.jei.api.gui.IRecipeLayout;
 import mezz.jei.api.gui.drawable.IDrawable;
@@ -14,9 +15,10 @@ import mezz.jei.api.helpers.IGuiHelper;
 import mezz.jei.api.ingredients.IIngredients;
 import mezz.jei.api.recipe.category.IRecipeCategory;
 import net.minecraft.client.Minecraft;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.ItemStack;
 
 import java.util.Arrays;
 
@@ -41,8 +43,8 @@ public class CuttingBoardCategory implements IRecipeCategory<CuttingBoardRecipe>
     }
 
     @Override
-    public String getTitle() {
-        return new TranslationTextComponent(SushiContent.Blocks.CUTTING_BOARD.get().getTranslationKey()).getString();
+    public Component getTitle() {
+        return new TranslatableComponent(SushiContent.Blocks.CUTTING_BOARD.get().getDescriptionId());
     }
 
     @Override
@@ -57,7 +59,7 @@ public class CuttingBoardCategory implements IRecipeCategory<CuttingBoardRecipe>
 
     @Override
     public void setIngredients(CuttingBoardRecipe cuttingBoardRecipe, IIngredients iIngredients) {
-        iIngredients.setInputLists(VanillaTypes.ITEM, Arrays.asList(Arrays.asList(cuttingBoardRecipe.input.getMatchingStacks())));
+        iIngredients.setInputLists(VanillaTypes.ITEM, Arrays.asList(Arrays.asList(cuttingBoardRecipe.input.getItems())));
         iIngredients.setOutput(VanillaTypes.ITEM, new ItemStack(FoodAPI.get().getIngredientFromName(cuttingBoardRecipe.ingredient).getItem()));
     }
 
@@ -71,10 +73,10 @@ public class CuttingBoardCategory implements IRecipeCategory<CuttingBoardRecipe>
     }
 
     @Override
-    public void draw(CuttingBoardRecipe recipe, MatrixStack matrixStack, double mouseX, double mouseY) {
+    public void draw(CuttingBoardRecipe recipe, PoseStack matrixStack, double mouseX, double mouseY) {
 
-        Minecraft.getInstance().getTextureManager().bindTexture(new ResourceLocation(SushiGoCrafting.MOD_ID, "textures/gui/jei.png"));
-        Minecraft.getInstance().currentScreen.blit(matrixStack, 31, 22, 0, 0, 15, 22);
+        RenderSystem.setShaderTexture(0, new ResourceLocation(SushiGoCrafting.MOD_ID, "textures/gui/jei.png"));
+        Minecraft.getInstance().screen.blit(matrixStack, 31, 22, 0, 0, 15, 22);
         float scale = 4;
         //matrixStack.translate(0,0, 100);
         //matrixStack.translate(0,0, -200);

@@ -1,21 +1,21 @@
 package com.buuz135.sushigocrafting.block.plant;
 
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.RotatedPillarBlock;
-import net.minecraft.util.Direction;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.shapes.ISelectionContext;
-import net.minecraft.util.math.shapes.VoxelShape;
-import net.minecraft.world.IBlockReader;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.RotatedPillarBlock;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.shapes.CollisionContext;
+import net.minecraft.world.phys.shapes.VoxelShape;
 
 import javax.annotation.Nonnull;
 
 public class AvocadoLogBlock extends RotatedPillarBlock {
 
-    public static VoxelShape SHAPE_Y = Block.makeCuboidShape(3, 0, 3, 13, 16, 13);
-    public static VoxelShape SHAPE_Z = Block.makeCuboidShape(3, 3, 0, 13, 13, 16);
-    public static VoxelShape SHAPE_X = Block.makeCuboidShape(0, 3, 3, 16, 13, 13);
+    public static VoxelShape SHAPE_Y = Block.box(3, 0, 3, 13, 16, 13);
+    public static VoxelShape SHAPE_Z = Block.box(3, 3, 0, 13, 13, 16);
+    public static VoxelShape SHAPE_X = Block.box(0, 3, 3, 16, 13, 13);
 
     public AvocadoLogBlock(Properties properties) {
         super(properties);
@@ -23,8 +23,8 @@ public class AvocadoLogBlock extends RotatedPillarBlock {
 
     @Nonnull
     @Override
-    public VoxelShape getCollisionShape(BlockState state, IBlockReader world, BlockPos pos, ISelectionContext selectionContext) {
-        Direction.Axis axis = state.get(AXIS);
+    public VoxelShape getCollisionShape(BlockState state, BlockGetter world, BlockPos pos, CollisionContext selectionContext) {
+        Direction.Axis axis = state.getValue(AXIS);
         if (axis == Direction.Axis.Z) {
             return SHAPE_Z;
         }
@@ -35,8 +35,8 @@ public class AvocadoLogBlock extends RotatedPillarBlock {
     }
 
     @Override
-    public VoxelShape getShape(BlockState state, IBlockReader worldIn, BlockPos pos, ISelectionContext context) {
-        Direction.Axis axis = state.get(AXIS);
+    public VoxelShape getShape(BlockState state, BlockGetter worldIn, BlockPos pos, CollisionContext context) {
+        Direction.Axis axis = state.getValue(AXIS);
         if (axis == Direction.Axis.Z) {
             return SHAPE_Z;
         }

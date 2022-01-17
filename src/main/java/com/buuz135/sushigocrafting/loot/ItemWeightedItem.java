@@ -21,19 +21,27 @@
  */
 package com.buuz135.sushigocrafting.loot;
 
-import net.minecraft.item.Item;
-import net.minecraft.util.WeightedRandom;
+import net.minecraft.util.random.Weight;
+import net.minecraft.util.random.WeightedEntry;
+import net.minecraft.world.item.Item;
 
-public class ItemWeightedItem extends WeightedRandom.Item {
+
+public class ItemWeightedItem implements WeightedEntry {
 
     private Item stack;
+    private int weight;
 
     public ItemWeightedItem(Item stack, int itemWeightIn) {
-        super(itemWeightIn);
         this.stack = stack;
+        this.weight = itemWeightIn;
     }
 
     public Item getStack() {
         return stack;
+    }
+
+    @Override
+    public Weight getWeight() {
+        return Weight.of(weight);
     }
 }

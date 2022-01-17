@@ -2,27 +2,31 @@ package com.buuz135.sushigocrafting.block.plant;
 
 import com.buuz135.sushigocrafting.block.SushiGoCraftingBlock;
 import com.buuz135.sushigocrafting.proxy.SushiContent;
-import net.minecraft.block.*;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.BlockItemUseContext;
-import net.minecraft.item.ItemStack;
-import net.minecraft.particles.ParticleTypes;
-import net.minecraft.state.BooleanProperty;
-import net.minecraft.state.IntegerProperty;
-import net.minecraft.state.StateContainer;
-import net.minecraft.state.properties.BlockStateProperties;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.tags.BlockTags;
-import net.minecraft.util.ActionResultType;
-import net.minecraft.util.Direction;
-import net.minecraft.util.Hand;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.BlockRayTraceResult;
-import net.minecraft.util.math.shapes.VoxelShape;
-import net.minecraft.util.math.shapes.VoxelShapes;
-import net.minecraft.world.IBlockReader;
-import net.minecraft.world.IWorld;
-import net.minecraft.world.World;
-import net.minecraft.world.server.ServerWorld;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.context.BlockPlaceContext;
+import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.LevelAccessor;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.BonemealableBlock;
+import net.minecraft.world.level.block.LeavesBlock;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.StateDefinition;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+import net.minecraft.world.level.block.state.properties.BooleanProperty;
+import net.minecraft.world.level.block.state.properties.IntegerProperty;
+import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.shapes.Shapes;
+import net.minecraft.world.phys.shapes.VoxelShape;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.IForgeShearable;
@@ -30,86 +34,88 @@ import net.minecraftforge.items.ItemHandlerHelper;
 
 import java.util.Random;
 
-public class AvocadoLeavesBlock extends SushiGoCraftingBlock implements IForgeShearable, IGrowable {
-    public static final IntegerProperty DISTANCE = BlockStateProperties.DISTANCE_1_7;
+public class AvocadoLeavesBlock extends SushiGoCraftingBlock implements IForgeShearable, BonemealableBlock {
+    public static final IntegerProperty DISTANCE = BlockStateProperties.DISTANCE;
     public static final BooleanProperty PERSISTENT = BlockStateProperties.PERSISTENT;
     public static final IntegerProperty STAGE = IntegerProperty.create("stage", 0, 2);
 
     public AvocadoLeavesBlock() {
-        super(Properties.from(Blocks.OAK_LEAVES));
-        this.setDefaultState(this.stateContainer.getBaseState().with(DISTANCE, Integer.valueOf(7)).with(PERSISTENT, Boolean.valueOf(false)).with(STAGE, 0));
+        super("avocado_leaves", Properties.copy(Blocks.OAK_LEAVES));
+        this.registerDefaultState(this.stateDefinition.any().setValue(DISTANCE, Integer.valueOf(7)).setValue(PERSISTENT, Boolean.valueOf(false)).setValue(STAGE, 0));
     }
 
-    private static BlockState updateDistance(BlockState state, IWorld worldIn, BlockPos pos) {
+    private static BlockState updateDistance(BlockState state, LevelAccessor worldIn, BlockPos pos) {
         int i = 7;
-        BlockPos.Mutable blockpos$mutable = new BlockPos.Mutable();
+        BlockPos.MutableBlockPos blockpos$mutable = new BlockPos.MutableBlockPos();
 
         for (Direction direction : Direction.values()) {
-            blockpos$mutable.setAndMove(pos, direction);
+            blockpos$mutable.setWithOffset(pos, direction);
             i = Math.min(i, getDistance(worldIn.getBlockState(blockpos$mutable)) + 1);
             if (i == 1) {
                 break;
             }
         }
 
-        return state.with(DISTANCE, Integer.valueOf(i));
+        return state.setValue(DISTANCE, Integer.valueOf(i));
     }
 
     private static int getDistance(BlockState neighbor) {
         if (BlockTags.LOGS.contains(neighbor.getBlock())) {
             return 0;
         } else {
-            return neighbor.getBlock() instanceof AvocadoLeavesBlock || neighbor.getBlock() instanceof LeavesBlock ? neighbor.get(DISTANCE) : 7;
+            return neighbor.getBlock() instanceof AvocadoLeavesBlock || neighbor.getBlock() instanceof LeavesBlock ? neighbor.getValue(DISTANCE) : 7;
         }
     }
 
     @Override
-    public VoxelShape getCollisionShape(BlockState state, IBlockReader reader, BlockPos pos) {
-        return VoxelShapes.empty();
+    public VoxelShape getBlockSupportShape(BlockState state, BlockGetter reader, BlockPos pos) {
+        return Shapes.empty();
     }
 
     @Override
-    public boolean ticksRandomly(BlockState state) {
-        return (state.get(DISTANCE) == 7 && !state.get(PERSISTENT)) || state.get(STAGE) == 1;
+    public boolean isRandomlyTicking(BlockState state) {
+        return (state.getValue(DISTANCE) == 7 && !state.getValue(PERSISTENT)) || state.getValue(STAGE) == 1;
     }
 
     @Override
-    public void randomTick(BlockState state, ServerWorld worldIn, BlockPos pos, Random random) {
-        if (!state.get(PERSISTENT) && state.get(DISTANCE) == 7) {
-            spawnDrops(state, worldIn, pos);
+    public void randomTick(BlockState state, ServerLevel worldIn, BlockPos pos, Random random) {
+        worldIn.setBlock(pos, updateDistance(state, worldIn, pos), 3);
+        state = worldIn.getBlockState(pos);
+        if (!state.getValue(PERSISTENT) && state.getValue(DISTANCE) == 7) {
+            dropResources(state, worldIn, pos);
             worldIn.removeBlock(pos, false);
         }
-        if (state.get(STAGE) == 1 && random.nextInt(3) == 0) {
-            worldIn.setBlockState(pos, state.with(STAGE, 2));
+        if (state.getValue(STAGE) == 1 && random.nextInt(3) == 0) {
+            worldIn.setBlockAndUpdate(pos, state.setValue(STAGE, 2));
         }
     }
 
     @Override
-    public void tick(BlockState state, ServerWorld worldIn, BlockPos pos, Random rand) {
-        worldIn.setBlockState(pos, updateDistance(state, worldIn, pos), 3);
+    public void tick(BlockState state, ServerLevel worldIn, BlockPos pos, Random rand) {
+        worldIn.setBlock(pos, updateDistance(state, worldIn, pos), 3);
     }
 
     @Override
-    public int getOpacity(BlockState state, IBlockReader worldIn, BlockPos pos) {
+    public int getLightBlock(BlockState state, BlockGetter worldIn, BlockPos pos) {
         return 1;
     }
 
     @Override
-    public BlockState updatePostPlacement(BlockState stateIn, Direction facing, BlockState facingState, IWorld worldIn, BlockPos currentPos, BlockPos facingPos) {
+    public BlockState updateShape(BlockState stateIn, Direction facing, BlockState facingState, LevelAccessor worldIn, BlockPos currentPos, BlockPos facingPos) {
         int i = getDistance(facingState) + 1;
-        if (i != 1 || stateIn.get(DISTANCE) != i) {
-            worldIn.getPendingBlockTicks().scheduleTick(currentPos, this, 1);
+        if (i != 1 || stateIn.getValue(DISTANCE) != i) {
+            worldIn.scheduleTick(currentPos, this, 1);
         }
         return stateIn;
     }
 
     @OnlyIn(Dist.CLIENT)
-    public void animateTick(BlockState stateIn, World worldIn, BlockPos pos, Random rand) {
-        if (worldIn.isRainingAt(pos.up())) {
+    public void animateTick(BlockState stateIn, Level worldIn, BlockPos pos, Random rand) {
+        if (worldIn.isRainingAt(pos.above())) {
             if (rand.nextInt(15) == 1) {
-                BlockPos blockpos = pos.down();
+                BlockPos blockpos = pos.below();
                 BlockState blockstate = worldIn.getBlockState(blockpos);
-                if (!blockstate.isSolid() || !blockstate.isSolidSide(worldIn, blockpos, Direction.UP)) {
+                if (!blockstate.canOcclude() || !blockstate.isFaceSturdy(worldIn, blockpos, Direction.UP)) {
                     double d0 = (double) pos.getX() + rand.nextDouble();
                     double d1 = (double) pos.getY() - 0.05D;
                     double d2 = (double) pos.getZ() + rand.nextDouble();
@@ -120,38 +126,38 @@ public class AvocadoLeavesBlock extends SushiGoCraftingBlock implements IForgeSh
     }
 
     @Override
-    protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder) {
+    protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
         builder.add(DISTANCE, PERSISTENT, STAGE);
     }
 
     @Override
-    public BlockState getStateForPlacement(BlockItemUseContext context) {
-        return updateDistance(this.getDefaultState().with(PERSISTENT, Boolean.valueOf(true)), context.getWorld(), context.getPos());
+    public BlockState getStateForPlacement(BlockPlaceContext context) {
+        return updateDistance(this.defaultBlockState().setValue(PERSISTENT, Boolean.valueOf(true)), context.getLevel(), context.getClickedPos());
     }
 
     @Override
-    public ActionResultType onBlockActivated(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand handIn, BlockRayTraceResult hit) {
-        if (state.get(STAGE) == 2) {
+    public InteractionResult use(BlockState state, Level worldIn, BlockPos pos, Player player, InteractionHand handIn, BlockHitResult hit) {
+        if (state.getValue(STAGE) == 2) {
             ItemHandlerHelper.giveItemToPlayer(player, new ItemStack(SushiContent.Items.AVOCADO.get()));
-            worldIn.setBlockState(pos, state.with(STAGE, 1));
-            return ActionResultType.SUCCESS;
+            worldIn.setBlockAndUpdate(pos, state.setValue(STAGE, 1));
+            return InteractionResult.SUCCESS;
         }
-        return super.onBlockActivated(state, worldIn, pos, player, handIn, hit);
+        return super.use(state, worldIn, pos, player, handIn, hit);
     }
 
     @Override
-    public boolean canGrow(IBlockReader worldIn, BlockPos pos, BlockState state, boolean isClient) {
-        return state.get(STAGE) > 0;
+    public boolean isValidBonemealTarget(BlockGetter worldIn, BlockPos pos, BlockState state, boolean isClient) {
+        return state.getValue(STAGE) > 0;
     }
 
     @Override
-    public boolean canUseBonemeal(World worldIn, Random rand, BlockPos pos, BlockState state) {
-        return state.get(STAGE) == 1;
+    public boolean isBonemealSuccess(Level worldIn, Random rand, BlockPos pos, BlockState state) {
+        return state.getValue(STAGE) == 1;
     }
 
     @Override
-    public void grow(ServerWorld worldIn, Random rand, BlockPos pos, BlockState state) {
-        worldIn.setBlockState(pos, state.with(STAGE, 2));
+    public void performBonemeal(ServerLevel worldIn, Random rand, BlockPos pos, BlockState state) {
+        worldIn.setBlockAndUpdate(pos, state.setValue(STAGE, 2));
     }
 
 

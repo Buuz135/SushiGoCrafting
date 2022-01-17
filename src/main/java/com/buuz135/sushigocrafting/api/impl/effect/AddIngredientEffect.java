@@ -1,27 +1,27 @@
 package com.buuz135.sushigocrafting.api.impl.effect;
 
 import com.buuz135.sushigocrafting.api.IIngredientEffect;
-import net.minecraft.potion.Effect;
-import net.minecraft.potion.EffectInstance;
+import net.minecraft.world.effect.MobEffect;
+import net.minecraft.world.effect.MobEffectInstance;
 
 import java.util.List;
 import java.util.function.Supplier;
 
 public class AddIngredientEffect implements IIngredientEffect {
 
-    private final Supplier<Effect> effect;
+    private final Supplier<MobEffect> effect;
     private final int duration;
     private final int level;
 
-    public AddIngredientEffect(Supplier<Effect> effect, int durationSeconds, int level) {
+    public AddIngredientEffect(Supplier<MobEffect> effect, int durationSeconds, int level) {
         this.effect = effect;
         this.duration = durationSeconds * 20;
         this.level = level;
     }
 
     @Override
-    public void accept(List<EffectInstance> effects) {
-        effects.add(new EffectInstance(effect.get(), duration, level, false, false));
+    public void accept(List<MobEffectInstance> effects) {
+        effects.add(new MobEffectInstance(effect.get(), duration, level, false, false));
     }
 
     @Override
@@ -29,7 +29,7 @@ public class AddIngredientEffect implements IIngredientEffect {
         return 0;
     }
 
-    public Supplier<Effect> getEffect() {
+    public Supplier<MobEffect> getEffect() {
         return effect;
     }
 

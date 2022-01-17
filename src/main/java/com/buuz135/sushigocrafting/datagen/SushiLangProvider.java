@@ -2,9 +2,9 @@ package com.buuz135.sushigocrafting.datagen;
 
 import com.buuz135.sushigocrafting.proxy.SushiContent;
 import net.minecraft.data.DataGenerator;
-import net.minecraft.item.BlockItem;
+import net.minecraft.world.item.BlockItem;
 import net.minecraftforge.common.data.LanguageProvider;
-import net.minecraftforge.fml.RegistryObject;
+import net.minecraftforge.registries.RegistryObject;
 import org.apache.commons.lang3.text.WordUtils;
 
 public class SushiLangProvider extends LanguageProvider {

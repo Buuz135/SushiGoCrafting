@@ -1,77 +1,83 @@
 package com.buuz135.sushigocrafting.entity;
 
 import com.buuz135.sushigocrafting.proxy.SushiContent;
-import net.minecraft.entity.*;
-import net.minecraft.entity.ai.attributes.Attributes;
-import net.minecraft.entity.passive.fish.AbstractGroupFishEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.network.datasync.DataParameter;
-import net.minecraft.network.datasync.DataSerializers;
-import net.minecraft.network.datasync.EntityDataManager;
-import net.minecraft.util.*;
-import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.world.World;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.syncher.EntityDataAccessor;
+import net.minecraft.network.syncher.EntityDataSerializers;
+import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.entity.*;
+import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.animal.AbstractSchoolingFish;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.vehicle.DismountHelper;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.phys.AABB;
+import net.minecraft.world.phys.Vec3;
 
 import javax.annotation.Nullable;
 
-public class ShrimpEntity extends AbstractGroupFishEntity implements IRideable, IEquipable {
+public class ShrimpEntity extends AbstractSchoolingFish implements ItemSteerable, Saddleable {
 
-    private static final DataParameter<Boolean> SADDLED = EntityDataManager.createKey(ShrimpEntity.class, DataSerializers.BOOLEAN);
-    private static final DataParameter<Integer> BOOST_TIME = EntityDataManager.createKey(ShrimpEntity.class, DataSerializers.VARINT);
+    private static final EntityDataAccessor<Boolean> SADDLED = SynchedEntityData.defineId(ShrimpEntity.class, EntityDataSerializers.BOOLEAN);
+    private static final EntityDataAccessor<Integer> BOOST_TIME = SynchedEntityData.defineId(ShrimpEntity.class, EntityDataSerializers.INT);
 
-    private final BoostHelper field_234214_bx_ = new BoostHelper(this.dataManager, BOOST_TIME, SADDLED);
+    private final ItemBasedSteering steering = new ItemBasedSteering(this.entityData, BOOST_TIME, SADDLED);
 
-    public ShrimpEntity(EntityType<? extends AbstractGroupFishEntity> type, World worldIn) {
+    public ShrimpEntity(EntityType<? extends AbstractSchoolingFish> type, Level worldIn) {
         super(type, worldIn);
     }
 
     @Override
-    protected void registerData() {
-        super.registerData();
-        this.dataManager.register(SADDLED, false);
-        this.dataManager.register(BOOST_TIME, 0);
+    protected void defineSynchedData() {
+        super.defineSynchedData();
+        this.entityData.define(SADDLED, false);
+        this.entityData.define(BOOST_TIME, 0);
     }
 
     @Override
-    protected ItemStack getFishBucket() {
+    public ItemStack getBucketItemStack() {
         return new ItemStack(SushiContent.Items.SHRIMP_BUCKET.get());
     }
 
     @Override
     protected SoundEvent getFlopSound() {
-        return SoundEvents.ENTITY_COD_FLOP;
+        return SoundEvents.COD_FLOP;
     }
 
     @Override
-    public boolean func_230264_L__() {
+    public boolean isSaddleable() {
         return this.isAlive();
     }
 
     @Override
-    public void func_230266_a_(@Nullable SoundCategory p_230266_1_) {
-        this.field_234214_bx_.setSaddledFromBoolean(true);
+    public void equipSaddle(@Nullable SoundSource p_230266_1_) {
+        this.steering.setSaddle(true);
         if (p_230266_1_ != null) {
-            this.world.playMovingSound((PlayerEntity) null, this, SoundEvents.ENTITY_PIG_SADDLE, p_230266_1_, 0.5F, 1.0F);
+            this.level.playSound((Player) null, this, SoundEvents.PIG_SADDLE, p_230266_1_, 0.5F, 1.0F);
         }
     }
 
     @Override
-    public ActionResultType getEntityInteractionResult(PlayerEntity playerIn, Hand hand) {
-        if (this.isHorseSaddled() && !this.isBeingRidden() && !playerIn.isSecondaryUseActive()) {
-            if (!this.world.isRemote) {
+    public InteractionResult mobInteract(Player playerIn, InteractionHand hand) {
+        if (this.isSaddled() && !this.isVehicle() && !playerIn.isSecondaryUseActive()) {
+            if (!this.level.isClientSide) {
                 playerIn.startRiding(this);
             }
-            return ActionResultType.func_233537_a_(this.world.isRemote);
+            return InteractionResult.sidedSuccess(this.level.isClientSide);
         } else {
-            ActionResultType actionresulttype = super.getEntityInteractionResult(playerIn, hand);
-            if (!actionresulttype.isSuccessOrConsume()) {
-                ItemStack itemstack = playerIn.getHeldItem(hand);
-                return itemstack.getItem() == Items.SADDLE ? itemstack.interactWithEntity(playerIn, this, hand) : ActionResultType.PASS;
+            InteractionResult actionresulttype = super.mobInteract(playerIn, hand);
+            if (!actionresulttype.consumesAction()) {
+                ItemStack itemstack = playerIn.getItemInHand(hand);
+                return itemstack.getItem() == Items.SADDLE ? itemstack.interactLivingEntity(playerIn, this, hand) : InteractionResult.PASS;
             } else {
                 return actionresulttype;
             }
@@ -83,80 +89,80 @@ public class ShrimpEntity extends AbstractGroupFishEntity implements IRideable, 
         return this.getPassengers().isEmpty() ? null : this.getPassengers().get(0);
     }
 
-    public void notifyDataManagerChange(DataParameter<?> key) {
-        if (BOOST_TIME.equals(key) && this.world.isRemote) {
-            this.field_234214_bx_.updateData();
+    public void onSyncedDataUpdated(EntityDataAccessor<?> key) {
+        if (BOOST_TIME.equals(key) && this.level.isClientSide) {
+            this.steering.onSynced();
         }
 
-        super.notifyDataManagerChange(key);
+        super.onSyncedDataUpdated(key);
     }
 
-    public void writeAdditional(CompoundNBT compound) {
-        super.writeAdditional(compound);
-        this.field_234214_bx_.setSaddledToNBT(compound);
+    public void addAdditionalSaveData(CompoundTag compound) {
+        super.addAdditionalSaveData(compound);
+        this.steering.addAdditionalSaveData(compound);
     }
 
-    public void readAdditional(CompoundNBT compound) {
-        super.readAdditional(compound);
-        this.field_234214_bx_.setSaddledFromNBT(compound);
+    public void readAdditionalSaveData(CompoundTag compound) {
+        super.readAdditionalSaveData(compound);
+        this.steering.readAdditionalSaveData(compound);
     }
 
-    protected void dropInventory() {
-        super.dropInventory();
-        if (this.isHorseSaddled()) {
-            this.entityDropItem(Items.SADDLE);
+    protected void dropEquipment() {
+        super.dropEquipment();
+        if (this.isSaddled()) {
+            this.spawnAtLocation(Items.SADDLE);
         }
     }
 
     @Override
-    public boolean isHorseSaddled() {
-        return this.field_234214_bx_.getSaddled();
+    public boolean isSaddled() {
+        return this.steering.hasSaddle();
     }
 
     @Override
-    public void travel(Vector3d travelVector) {
+    public void travel(Vec3 travelVector) {
         Entity entity = this.getPassengers().isEmpty() ? null : this.getPassengers().get(0);
-        if (this.isBeingRidden() && this.canBeSteered() && entity instanceof PlayerEntity) {
-            if (isInWater()) this.setMotion(this.getMotion().add(0, -entity.getPitchYaw().x / 500, 0));
-            //this.ride(this, this.field_234214_bx_, new Vector3d(0,-entity.getPitchYaw().x,0));
+        if (this.isVehicle() && this.canBeControlledByRider() && entity instanceof Player) {
+            if (isInWater()) this.setDeltaMovement(this.getDeltaMovement().add(0, -entity.getRotationVector().x / 500, 0));
+            //this.ride(this, this.steering, new Vector3d(0,-entity.getPitchYaw().x,0));
         }
-        this.ride(this, this.field_234214_bx_, travelVector);
+        this.travel(this, this.steering, travelVector);
     }
 
     @Override
-    public float getMountedSpeed() {
+    public float getSteeringSpeed() {
         return (float) this.getAttributeValue(Attributes.MOVEMENT_SPEED);
     }
 
     @Override
-    public void travelTowards(Vector3d travelVec) {
+    public void travelWithInput(Vec3 travelVec) {
         super.travel(travelVec);
     }
 
     @Override
     public boolean boost() {
-        return this.field_234214_bx_.boost(this.getRNG());
+        return this.steering.boost(this.getRandom());
     }
 
     @Override
-    public Vector3d getDismountPosition(LivingEntity livingEntity) {
-        Direction direction = this.getAdjustedHorizontalFacing();
+    public Vec3 getDismountLocationForPassenger(LivingEntity livingEntity) {
+        Direction direction = this.getMotionDirection();
         if (direction.getAxis() == Direction.Axis.Y) {
-            return super.getDismountPosition(livingEntity);
+            return super.getDismountLocationForPassenger(livingEntity);
         } else {
-            int[][] aint = TransportationHelper.func_234632_a_(direction);
-            BlockPos blockpos = this.getPosition();
-            BlockPos.Mutable blockpos$mutable = new BlockPos.Mutable();
+            int[][] aint = DismountHelper.offsetsForDirection(direction);
+            BlockPos blockpos = this.blockPosition();
+            BlockPos.MutableBlockPos blockpos$mutable = new BlockPos.MutableBlockPos();
 
-            for (Pose pose : livingEntity.getAvailablePoses()) {
-                AxisAlignedBB axisalignedbb = livingEntity.getPoseAABB(pose);
+            for (Pose pose : livingEntity.getDismountPoses()) {
+                AABB axisalignedbb = livingEntity.getLocalBoundsForPose(pose);
 
                 for (int[] aint1 : aint) {
-                    blockpos$mutable.setPos(blockpos.getX() + aint1[0], blockpos.getY(), blockpos.getZ() + aint1[1]);
-                    double d0 = this.world.func_242403_h(blockpos$mutable);
-                    if (TransportationHelper.func_234630_a_(d0)) {
-                        Vector3d vector3d = Vector3d.copyCenteredWithVerticalOffset(blockpos$mutable, d0);
-                        if (TransportationHelper.func_234631_a_(this.world, livingEntity, axisalignedbb.offset(vector3d))) {
+                    blockpos$mutable.set(blockpos.getX() + aint1[0], blockpos.getY(), blockpos.getZ() + aint1[1]);
+                    double d0 = this.level.getBlockFloorHeight(blockpos$mutable);
+                    if (DismountHelper.isBlockFloorValid(d0)) {
+                        Vec3 vector3d = Vec3.upFromBottomCenterOf(blockpos$mutable, d0);
+                        if (DismountHelper.canDismountTo(this.level, livingEntity, axisalignedbb.move(vector3d))) {
                             livingEntity.setPose(pose);
                             return vector3d;
                         }
@@ -164,28 +170,28 @@ public class ShrimpEntity extends AbstractGroupFishEntity implements IRideable, 
                 }
             }
 
-            return super.getDismountPosition(livingEntity);
+            return super.getDismountLocationForPassenger(livingEntity);
         }
     }
 
     @Override
-    public boolean canBeSteered() {
+    public boolean canBeControlledByRider() {
         Entity entity = this.getControllingPassenger();
-        if (!(entity instanceof PlayerEntity)) {
+        if (!(entity instanceof Player)) {
             return false;
         } else {
-            PlayerEntity playerentity = (PlayerEntity) entity;
-            return playerentity.getHeldItemMainhand().getItem() == SushiContent.Items.SEAWEED_ON_A_STICK.get() || playerentity.getHeldItemOffhand().getItem() == SushiContent.Items.SEAWEED_ON_A_STICK.get();
+            Player playerentity = (Player) entity;
+            return playerentity.getMainHandItem().getItem() == SushiContent.Items.SEAWEED_ON_A_STICK.get() || playerentity.getOffhandItem().getItem() == SushiContent.Items.SEAWEED_ON_A_STICK.get();
         }
     }
 
     @Override
-    public boolean canPassengerSteer() {
-        return super.canPassengerSteer();
+    public boolean isControlledByLocalInstance() {
+        return super.isControlledByLocalInstance();
     }
 
     @Override
-    public boolean canBeRiddenInWater() {
+    public boolean rideableUnderWater() {
         return true;
     }
 
@@ -195,7 +201,7 @@ public class ShrimpEntity extends AbstractGroupFishEntity implements IRideable, 
     }
 
     @Override
-    public double getMountedYOffset() {
-        return (double) this.getHeight() * 0.1D;
+    public double getPassengersRidingOffset() {
+        return (double) this.getBbHeight() * 0.1D;
     }
 }

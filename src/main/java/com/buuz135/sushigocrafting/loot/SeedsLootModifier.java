@@ -2,12 +2,12 @@ package com.buuz135.sushigocrafting.loot;
 
 import com.buuz135.sushigocrafting.proxy.SushiContent;
 import com.google.gson.JsonObject;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
-import net.minecraft.loot.LootContext;
-import net.minecraft.loot.conditions.ILootCondition;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.WeightedRandom;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.random.WeightedRandom;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.level.storage.loot.LootContext;
+import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 import net.minecraftforge.common.loot.GlobalLootModifierSerializer;
 import net.minecraftforge.common.loot.LootModifier;
 
@@ -19,7 +19,7 @@ public class SeedsLootModifier extends LootModifier {
 
     private List<ItemWeightedItem> seeds = new ArrayList<>();
 
-    public SeedsLootModifier(ILootCondition[] conditionsIn) {
+    public SeedsLootModifier(LootItemCondition[] conditionsIn) {
         super(conditionsIn);
         seeds.add(new ItemWeightedItem(Items.WHEAT_SEEDS, 150));
         seeds.add(new ItemWeightedItem(SushiContent.Items.RICE_SEEDS.get(), 25));
@@ -35,10 +35,11 @@ public class SeedsLootModifier extends LootModifier {
         List<ItemStack> customLoot = new ArrayList<>();
         for (ItemStack stack : generatedLoot) {
             if (stack.getItem() == Items.WHEAT_SEEDS) {
-                ItemWeightedItem weightedItem = WeightedRandom.getRandomItem(context.getRandom(), seeds);
-                ItemStack weightedStack = new ItemStack(weightedItem.getStack());
-                weightedStack.setCount(stack.getCount());
-                customLoot.add(weightedStack);
+                WeightedRandom.getRandomItem(context.getRandom(), seeds).ifPresent(itemWeightedItem -> {
+                    ItemStack weightedStack = new ItemStack(itemWeightedItem.getStack());
+                    weightedStack.setCount(stack.getCount());
+                    customLoot.add(weightedStack);
+                });
             } else {
                 customLoot.add(stack);
             }
@@ -49,7 +50,7 @@ public class SeedsLootModifier extends LootModifier {
     public static class Serializer extends GlobalLootModifierSerializer<SeedsLootModifier> {
 
         @Override
-        public SeedsLootModifier read(ResourceLocation location, JsonObject object, ILootCondition[] ailootcondition) {
+        public SeedsLootModifier read(ResourceLocation location, JsonObject object, LootItemCondition[] ailootcondition) {
             return new SeedsLootModifier(ailootcondition);
         }
 

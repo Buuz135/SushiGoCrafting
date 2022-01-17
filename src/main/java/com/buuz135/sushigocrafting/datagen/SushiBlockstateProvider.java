@@ -3,11 +3,11 @@ package com.buuz135.sushigocrafting.datagen;
 import com.buuz135.sushigocrafting.block.plant.AvocadoLeavesBlock;
 import com.buuz135.sushigocrafting.proxy.SushiContent;
 import com.hrznstudio.titanium.block.RotatableBlock;
-import net.minecraft.block.Block;
-import net.minecraft.block.CropsBlock;
-import net.minecraft.block.RotatedPillarBlock;
+import net.minecraft.core.Direction;
 import net.minecraft.data.DataGenerator;
-import net.minecraft.util.Direction;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.CropBlock;
+import net.minecraft.world.level.block.RotatedPillarBlock;
 import net.minecraftforge.client.model.generators.BlockStateProvider;
 import net.minecraftforge.client.model.generators.ConfiguredModel;
 import net.minecraftforge.client.model.generators.ModelFile;
@@ -46,9 +46,9 @@ public class SushiBlockstateProvider extends BlockStateProvider {
         simpleBlockUn(SushiContent.Blocks.FERMENTATION_BARREL.get());
     }
 
-    private void crop(CropsBlock block) {
+    private void crop(CropBlock block) {
         getVariantBuilder(block).forAllStates(blockState -> {
-            int age = blockState.get(block.getAgeProperty());
+            int age = blockState.getValue(block.getAgeProperty());
             return ConfiguredModel.builder().modelFile(new ModelFile.UncheckedModelFile(modLoc("block/" + block.getRegistryName().getPath() + "_" + age))).build();
         });
     }
@@ -62,7 +62,7 @@ public class SushiBlockstateProvider extends BlockStateProvider {
         getVariantBuilder(block)
                 .forAllStates(state -> ConfiguredModel.builder()
                         .modelFile(file)
-                        .rotationY(((int) state.get(RotatableBlock.FACING_HORIZONTAL).getHorizontalAngle()) % 360)
+                        .rotationY(((int) state.getValue(RotatableBlock.FACING_HORIZONTAL).toYRot()) % 360)
                         .build()
                 );
     }
@@ -71,7 +71,7 @@ public class SushiBlockstateProvider extends BlockStateProvider {
         ModelFile file = new ModelFile.UncheckedModelFile(modLoc("block/" + block.getRegistryName().getPath()));
         getVariantBuilder(block)
                 .forAllStates(state -> {
-                            Direction.Axis axis = state.get(RotatedPillarBlock.AXIS);
+                            Direction.Axis axis = state.getValue(RotatedPillarBlock.AXIS);
                             if (axis == Direction.Axis.Y) {
                                 return ConfiguredModel.builder()
                                         .modelFile(file)

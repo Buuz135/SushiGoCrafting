@@ -2,51 +2,48 @@ package com.buuz135.sushigocrafting.block.machinery;
 
 import com.buuz135.sushigocrafting.proxy.SushiContent;
 import com.buuz135.sushigocrafting.tile.machinery.RollerTile;
-import com.hrznstudio.titanium.api.IFactory;
 import com.hrznstudio.titanium.block.RotatableBlock;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.BlockItem;
-import net.minecraft.item.Item;
-import net.minecraft.tileentity.TileEntityType;
-import net.minecraft.util.Direction;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.shapes.ISelectionContext;
-import net.minecraft.util.math.shapes.VoxelShape;
-import net.minecraft.world.IBlockReader;
-import net.minecraft.world.World;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.entity.BlockEntityType;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.shapes.CollisionContext;
+import net.minecraft.world.phys.shapes.VoxelShape;
 
 import javax.annotation.Nonnull;
 
 public class RollerBlock extends RotatableBlock<RollerTile> {
 
-    public static VoxelShape SHAPE_NORTH = Block.makeCuboidShape(2, 0, 1, 14, 0.5, 15);
-    public static VoxelShape SHAPE_EAST = Block.makeCuboidShape(1, 0, 2, 15, 0.5, 14);
+    public static VoxelShape SHAPE_NORTH = Block.box(2, 0, 1, 14, 0.5, 15);
+    public static VoxelShape SHAPE_EAST = Block.box(1, 0, 2, 15, 0.5, 14);
 
     public RollerBlock() {
-        super(Properties.from(Blocks.OAK_TRAPDOOR), RollerTile.class);
+        super("roller", Properties.copy(Blocks.OAK_TRAPDOOR), RollerTile.class);
     }
 
     @Override
-    public IFactory<RollerTile> getTileEntityFactory() {
+    public BlockEntityType.BlockEntitySupplier<?> getTileEntityFactory() {
         return RollerTile::new;
     }
 
     @Override
     public Item asItem() {
-        if (super.asItem() == null) setItem((BlockItem) Item.getItemFromBlock(this));
-        return super.asItem();
+        return Item.byBlock(this);
     }
 
     @Override
-    public TileEntityType getTileEntityType() {
+    public BlockEntityType getTileEntityType() {
         return SushiContent.TileEntities.ROLLER.get();
     }
 
     @Override
-    public void onBlockClicked(BlockState state, World worldIn, BlockPos pos, PlayerEntity player) {
+    public void attack(BlockState state, Level worldIn, BlockPos pos, Player player) {
         this.getTile(worldIn, pos).ifPresent(rollerTile -> rollerTile.onClick(player));
     }
 
@@ -58,14 +55,14 @@ public class RollerBlock extends RotatableBlock<RollerTile> {
 
     @Nonnull
     @Override
-    public VoxelShape getCollisionShape(BlockState state, IBlockReader world, BlockPos pos, ISelectionContext selectionContext) {
-        Direction direction = state.get(RotatableBlock.FACING_HORIZONTAL);
+    public VoxelShape getCollisionShape(BlockState state, BlockGetter world, BlockPos pos, CollisionContext selectionContext) {
+        Direction direction = state.getValue(RotatableBlock.FACING_HORIZONTAL);
         return direction == Direction.NORTH || direction == Direction.SOUTH ? SHAPE_NORTH : SHAPE_EAST;
     }
 
     @Override
-    public VoxelShape getShape(BlockState state, IBlockReader worldIn, BlockPos pos, ISelectionContext context) {
-        Direction direction = state.get(RotatableBlock.FACING_HORIZONTAL);
+    public VoxelShape getShape(BlockState state, BlockGetter worldIn, BlockPos pos, CollisionContext context) {
+        Direction direction = state.getValue(RotatableBlock.FACING_HORIZONTAL);
         return direction == Direction.NORTH || direction == Direction.SOUTH ? SHAPE_NORTH : SHAPE_EAST;
     }
 

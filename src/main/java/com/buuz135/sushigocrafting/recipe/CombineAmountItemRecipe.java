@@ -2,19 +2,19 @@ package com.buuz135.sushigocrafting.recipe;
 
 import com.buuz135.sushigocrafting.item.AmountItem;
 import com.google.common.collect.Lists;
-import net.minecraft.inventory.CraftingInventory;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.IRecipeSerializer;
-import net.minecraft.item.crafting.SpecialRecipe;
-import net.minecraft.item.crafting.SpecialRecipeSerializer;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.world.World;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.inventory.CraftingContainer;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.CustomRecipe;
+import net.minecraft.world.item.crafting.RecipeSerializer;
+import net.minecraft.world.item.crafting.SimpleRecipeSerializer;
+import net.minecraft.world.level.Level;
 
 import java.util.List;
 
-public class CombineAmountItemRecipe extends SpecialRecipe {
+public class CombineAmountItemRecipe extends CustomRecipe {
 
-    public static IRecipeSerializer<CombineAmountItemRecipe> SERIALIZER = new SpecialRecipeSerializer<>(CombineAmountItemRecipe::new);
+    public static RecipeSerializer<CombineAmountItemRecipe> SERIALIZER = new SimpleRecipeSerializer<>(CombineAmountItemRecipe::new);
 
     public CombineAmountItemRecipe(ResourceLocation idIn) {
         super(idIn);
@@ -42,10 +42,10 @@ public class CombineAmountItemRecipe extends SpecialRecipe {
     }
 
     @Override
-    public boolean matches(CraftingInventory inv, World worldIn) {
+    public boolean matches(CraftingContainer inv, Level worldIn) {
         List<ItemStack> list = Lists.newArrayList();
-        for (int i = 0; i < inv.getSizeInventory(); ++i) {
-            ItemStack itemstack = inv.getStackInSlot(i);
+        for (int i = 0; i < inv.getContainerSize(); ++i) {
+            ItemStack itemstack = inv.getItem(i);
             if (!itemstack.isEmpty()) {
                 list.add(itemstack);
                 if (list.size() > 1) {
@@ -60,10 +60,10 @@ public class CombineAmountItemRecipe extends SpecialRecipe {
     }
 
     @Override
-    public ItemStack getCraftingResult(CraftingInventory inv) {
+    public ItemStack assemble(CraftingContainer inv) {
         List<ItemStack> list = Lists.newArrayList();
-        for (int i = 0; i < inv.getSizeInventory(); ++i) {
-            ItemStack itemstack = inv.getStackInSlot(i);
+        for (int i = 0; i < inv.getContainerSize(); ++i) {
+            ItemStack itemstack = inv.getItem(i);
             if (!itemstack.isEmpty()) {
                 list.add(itemstack);
                 if (list.size() > 1) {
@@ -78,12 +78,12 @@ public class CombineAmountItemRecipe extends SpecialRecipe {
     }
 
     @Override
-    public boolean canFit(int width, int height) {
+    public boolean canCraftInDimensions(int width, int height) {
         return width * height >= 2;
     }
 
     @Override
-    public IRecipeSerializer<?> getSerializer() {
+    public RecipeSerializer<?> getSerializer() {
         return SERIALIZER;
     }
 }

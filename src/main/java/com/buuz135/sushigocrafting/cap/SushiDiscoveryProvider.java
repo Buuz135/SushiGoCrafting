@@ -1,7 +1,7 @@
 package com.buuz135.sushigocrafting.cap;
 
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.util.Direction;
+import net.minecraft.core.Direction;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.common.util.INBTSerializable;
@@ -10,7 +10,7 @@ import net.minecraftforge.common.util.LazyOptional;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-public class SushiDiscoveryProvider implements ICapabilityProvider, INBTSerializable<CompoundNBT> {
+public class SushiDiscoveryProvider implements ICapabilityProvider, INBTSerializable<CompoundTag> {
 
     private final ISushiWeightDiscovery discovery = new SushiWeightDiscoveryCapability();
     private final LazyOptional<ISushiWeightDiscovery> optional = LazyOptional.of(() -> discovery);
@@ -22,12 +22,12 @@ public class SushiDiscoveryProvider implements ICapabilityProvider, INBTSerializ
     }
 
     @Override
-    public CompoundNBT serializeNBT() {
+    public CompoundTag serializeNBT() {
         return discovery.serializeNBT();
     }
 
     @Override
-    public void deserializeNBT(CompoundNBT nbt) {
+    public void deserializeNBT(CompoundTag nbt) {
         discovery.deserializeNBT(nbt);
     }
 }

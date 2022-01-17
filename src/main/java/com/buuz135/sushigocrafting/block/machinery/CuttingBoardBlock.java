@@ -2,45 +2,42 @@ package com.buuz135.sushigocrafting.block.machinery;
 
 import com.buuz135.sushigocrafting.proxy.SushiContent;
 import com.buuz135.sushigocrafting.tile.machinery.CuttingBoardTile;
-import com.hrznstudio.titanium.api.IFactory;
 import com.hrznstudio.titanium.block.RotatableBlock;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
-import net.minecraft.item.BlockItem;
-import net.minecraft.item.Item;
-import net.minecraft.tileentity.TileEntityType;
-import net.minecraft.util.Direction;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.shapes.ISelectionContext;
-import net.minecraft.util.math.shapes.VoxelShape;
-import net.minecraft.world.IBlockReader;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.entity.BlockEntityType;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.shapes.CollisionContext;
+import net.minecraft.world.phys.shapes.VoxelShape;
 
 import javax.annotation.Nonnull;
 
 public class CuttingBoardBlock extends RotatableBlock<CuttingBoardTile> {
 
-    public static VoxelShape SHAPE_NORTH = Block.makeCuboidShape(1, 0, 3, 15, 1, 13);
-    public static VoxelShape SHAPE_EAST = Block.makeCuboidShape(3, 0, 1, 13, 1, 15);
+    public static VoxelShape SHAPE_NORTH = Block.box(1, 0, 3, 15, 1, 13);
+    public static VoxelShape SHAPE_EAST = Block.box(3, 0, 1, 13, 1, 15);
 
     public CuttingBoardBlock() {
-        super(Properties.from(Blocks.OAK_TRAPDOOR), CuttingBoardTile.class);
+        super("cutting_board", Properties.copy(Blocks.OAK_TRAPDOOR), CuttingBoardTile.class);
     }
 
     @Override
-    public IFactory<CuttingBoardTile> getTileEntityFactory() {
+    public BlockEntityType.BlockEntitySupplier<?> getTileEntityFactory() {
         return CuttingBoardTile::new;
     }
 
     @Override
-    public TileEntityType getTileEntityType() {
+    public BlockEntityType getTileEntityType() {
         return SushiContent.TileEntities.CUTTING_BOARD.get();
     }
 
     @Override
     public Item asItem() {
-        if (super.asItem() == null) setItem((BlockItem) Item.getItemFromBlock(this));
-        return super.asItem();
+        return Item.byBlock(this);
     }
 
     @Nonnull
@@ -51,14 +48,14 @@ public class CuttingBoardBlock extends RotatableBlock<CuttingBoardTile> {
 
     @Nonnull
     @Override
-    public VoxelShape getCollisionShape(BlockState state, IBlockReader world, BlockPos pos, ISelectionContext selectionContext) {
-        Direction direction = state.get(RotatableBlock.FACING_HORIZONTAL);
+    public VoxelShape getCollisionShape(BlockState state, BlockGetter world, BlockPos pos, CollisionContext selectionContext) {
+        Direction direction = state.getValue(RotatableBlock.FACING_HORIZONTAL);
         return direction == Direction.NORTH || direction == Direction.SOUTH ? SHAPE_NORTH : SHAPE_EAST;
     }
 
     @Override
-    public VoxelShape getShape(BlockState state, IBlockReader worldIn, BlockPos pos, ISelectionContext context) {
-        Direction direction = state.get(RotatableBlock.FACING_HORIZONTAL);
+    public VoxelShape getShape(BlockState state, BlockGetter worldIn, BlockPos pos, CollisionContext context) {
+        Direction direction = state.getValue(RotatableBlock.FACING_HORIZONTAL);
         return direction == Direction.NORTH || direction == Direction.SOUTH ? SHAPE_NORTH : SHAPE_EAST;
     }
 }

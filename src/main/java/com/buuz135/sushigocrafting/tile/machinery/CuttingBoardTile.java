@@ -9,29 +9,31 @@ import com.hrznstudio.titanium.block.tile.ActiveTile;
 import com.hrznstudio.titanium.component.inventory.InventoryComponent;
 import com.hrznstudio.titanium.util.RecipeUtil;
 import com.hrznstudio.titanium.util.TagUtil;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.tags.ITag;
-import net.minecraft.util.ActionResultType;
-import net.minecraft.util.Direction;
-import net.minecraft.util.Hand;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.tags.Tag;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.items.ItemHandlerHelper;
 
 import javax.annotation.Nonnull;
 
 public class CuttingBoardTile extends ActiveTile<CuttingBoardTile> {
 
-    public static ITag<Item> KNIFE = TagUtil.getItemTag(new ResourceLocation("forge", "tools/knife"));
+    public static Tag<Item> KNIFE = TagUtil.getItemTag(new ResourceLocation("forge", "tools/knife"));
 
     @Save
     private InventoryComponent<CuttingBoardTile> input;
     @Save
     private int click;
 
-    public CuttingBoardTile() {
-        super(SushiContent.Blocks.CUTTING_BOARD.get());
+    public CuttingBoardTile(BlockPos pos, BlockState state) {
+        super(SushiContent.Blocks.CUTTING_BOARD.get(), pos, state);
         this.addInventory(this.input = new InventoryComponent<CuttingBoardTile>("input", 0, 0, 1)
                 .setInputFilter((stack, integer) -> accepts(stack))
         );
@@ -39,17 +41,17 @@ public class CuttingBoardTile extends ActiveTile<CuttingBoardTile> {
     }
 
     @Override
-    public ActionResultType onActivated(PlayerEntity player, Hand hand, Direction facing, double hitX, double hitY, double hitZ) {
-        ItemStack stack = player.getHeldItem(hand);
+    public InteractionResult onActivated(Player player, InteractionHand hand, Direction facing, double hitX, double hitY, double hitZ) {
+        ItemStack stack = player.getItemInHand(hand);
         if (!stack.isEmpty()) {
-            if (!this.input.getStackInSlot(0).isEmpty() && stack.getItem().isIn(KNIFE)) {
+            if (!this.input.getStackInSlot(0).isEmpty() && stack.is(KNIFE)) {
                 ++click;
                 if (click > 5) {
-                    for (CuttingBoardRecipe recipe : RecipeUtil.getRecipes(this.world, CuttingBoardRecipe.SERIALIZER.getRecipeType())) {
+                    for (CuttingBoardRecipe recipe : RecipeUtil.getRecipes(this.level, CuttingBoardRecipe.SERIALIZER.getRecipeType())) {
                         if (recipe.getInput().test(this.input.getStackInSlot(0))) {
                             Item item = FoodAPI.get().getIngredientFromName(recipe.getIngredient()).getItem();
                             if (item instanceof AmountItem) {
-                                ItemHandlerHelper.giveItemToPlayer(player, ((AmountItem) item).random(player, world));
+                                ItemHandlerHelper.giveItemToPlayer(player, ((AmountItem) item).random(player, level));
                             } else {
                                 ItemHandlerHelper.giveItemToPlayer(player, new ItemStack(item));
                             }
@@ -59,19 +61,19 @@ public class CuttingBoardTile extends ActiveTile<CuttingBoardTile> {
                     click = 0;
                 }
                 syncObject(click);
-                return ActionResultType.SUCCESS;
+                return InteractionResult.SUCCESS;
             } else if (this.input.getStackInSlot(0).isEmpty() && accepts(stack)) {
                 this.input.insertItem(0, stack.copy(), false);
                 stack.setCount(0);
-                return ActionResultType.SUCCESS;
+                return InteractionResult.SUCCESS;
             }
-        } else if (player.isSneaking()) {
+        } else if (player.isShiftKeyDown()) {
             ItemStack inserted = this.input.getStackInSlot(0).copy();
             this.input.setStackInSlot(0, ItemStack.EMPTY);
             ItemHandlerHelper.giveItemToPlayer(player, inserted);
-            return ActionResultType.SUCCESS;
+            return InteractionResult.SUCCESS;
         }
-        return ActionResultType.FAIL;
+        return InteractionResult.FAIL;
     }
 
     @Nonnull
@@ -89,6 +91,6 @@ public class CuttingBoardTile extends ActiveTile<CuttingBoardTile> {
     }
 
     private boolean accepts(ItemStack input) {
-        return RecipeUtil.getRecipes(this.world, CuttingBoardRecipe.SERIALIZER.getRecipeType()).stream().anyMatch(cuttingBoardRecipe -> cuttingBoardRecipe.getInput().test(input));
+        return RecipeUtil.getRecipes(this.level, CuttingBoardRecipe.SERIALIZER.getRecipeType()).stream().anyMatch(cuttingBoardRecipe -> cuttingBoardRecipe.getInput().test(input));
     }
 }

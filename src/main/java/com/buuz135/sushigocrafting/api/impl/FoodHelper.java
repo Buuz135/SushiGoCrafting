@@ -4,7 +4,7 @@ import com.buuz135.sushigocrafting.SushiGoCrafting;
 import com.buuz135.sushigocrafting.api.IFoodIngredient;
 import com.buuz135.sushigocrafting.api.IFoodType;
 import com.buuz135.sushigocrafting.item.FoodItem;
-import net.minecraft.item.Item;
+import net.minecraft.world.item.Item;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -26,7 +26,7 @@ public class FoodHelper {
         List<FoodItem> items = new ArrayList<>();
         if (foodIngredients.size() == 1) {
             for (IFoodIngredient iFoodIngredient : foodIngredients.get(0)) {
-                FoodItem item = new FoodItem(new Item.Properties().group(SushiGoCrafting.TAB), type);
+                FoodItem item = new FoodItem(new Item.Properties().tab(SushiGoCrafting.TAB), type);
                 item.getIngredientList().add(iFoodIngredient);
                 items.add(item);
             }

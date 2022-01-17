@@ -1,7 +1,7 @@
 {
   "name": "Cutting Board",
   "icon": "sushigocrafting:cutting_board",
-  "category": "using_tools",
+  "category": "sushigocrafting:using_tools",
   "sortnum": 3,
   "read_by_default": false,
   "pages": [

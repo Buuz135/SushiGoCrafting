@@ -8,41 +8,60 @@ import com.buuz135.sushigocrafting.api.impl.effect.AddIngredientEffect;
 import com.buuz135.sushigocrafting.api.impl.effect.ModifyIngredientEffect;
 import com.buuz135.sushigocrafting.client.entity.ShrimpRenderer;
 import com.buuz135.sushigocrafting.client.entity.TunaRenderer;
+import com.buuz135.sushigocrafting.client.entity.model.ShrimpModel;
+import com.buuz135.sushigocrafting.client.render.ContributorsBackRender;
 import com.buuz135.sushigocrafting.client.tesr.CuttingBoardRenderer;
 import com.buuz135.sushigocrafting.proxy.SushiContent;
 import com.hrznstudio.titanium.event.handler.EventManager;
-import net.minecraft.client.gui.screen.Screen;
+import net.minecraft.ChatFormatting;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.client.model.geom.ModelLayerLocation;
+import net.minecraft.client.renderer.ItemBlockRenderTypes;
 import net.minecraft.client.renderer.RenderType;
-import net.minecraft.client.renderer.RenderTypeLookup;
-import net.minecraft.client.renderer.model.IBakedModel;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.StringTextComponent;
-import net.minecraft.util.text.TextFormatting;
+import net.minecraft.client.renderer.entity.player.PlayerRenderer;
+import net.minecraft.client.resources.model.BakedModel;
+import net.minecraft.network.chat.TextComponent;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraftforge.client.event.EntityRenderersEvent;
 import net.minecraftforge.client.event.ModelBakeEvent;
 import net.minecraftforge.event.entity.player.ItemTooltipEvent;
-import net.minecraftforge.fml.client.registry.ClientRegistry;
-import net.minecraftforge.fml.client.registry.RenderingRegistry;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 
 public class ClientProxy {
 
-    public static IBakedModel SALMON_BACK;
-    public static IBakedModel TUNA_BACK;
+    public static BakedModel SALMON_BACK;
+    public static BakedModel TUNA_BACK;
+
+    public static void register(){
+        EventManager.mod(EntityRenderersEvent.RegisterRenderers.class).process(event -> {
+            event.registerEntityRenderer(SushiContent.EntityTypes.TUNA.get(), TunaRenderer::new);
+            event.registerEntityRenderer(SushiContent.EntityTypes.SHRIMP.get(), ShrimpRenderer::new);
+            event.registerBlockEntityRenderer(SushiContent.TileEntities.CUTTING_BOARD.get(), p_173571_ -> new CuttingBoardRenderer());
+        }).subscribe();
+        EventManager.mod(EntityRenderersEvent.AddLayers.class).process(event -> {
+            Minecraft instance = Minecraft.getInstance();
+            for (String skin : event.getSkins()) {
+                PlayerRenderer renderer = event.getSkin(skin);
+                renderer.addLayer(new ContributorsBackRender(renderer));
+            }
+        }).subscribe();
+        EventManager.mod(EntityRenderersEvent.RegisterLayerDefinitions.class).process(event -> {
+            event.registerLayerDefinition(new ModelLayerLocation(new ResourceLocation(SushiGoCrafting.MOD_ID, "shrimp"), "main"), ShrimpModel::createBodyLayer);
+        }).subscribe();
+    }
 
     public void fmlClient(FMLClientSetupEvent fml) {
-        RenderTypeLookup.setRenderLayer(SushiContent.Blocks.RICE_CROP.get(), RenderType.getCutout());
-        RenderTypeLookup.setRenderLayer(SushiContent.Blocks.CUCUMBER_CROP.get(), RenderType.getCutout());
-        RenderTypeLookup.setRenderLayer(SushiContent.Blocks.SOY_CROP.get(), RenderType.getCutout());
-        RenderTypeLookup.setRenderLayer(SushiContent.Blocks.WASABI_CROP.get(), RenderType.getCutout());
-        RenderTypeLookup.setRenderLayer(SushiContent.Blocks.AVOCADO_LEAVES_LOG.get(), RenderType.getCutout());
-        RenderTypeLookup.setRenderLayer(SushiContent.Blocks.AVOCADO_LEAVES.get(), RenderType.getCutout());
-        RenderTypeLookup.setRenderLayer(SushiContent.Blocks.AVOCADO_SAPLING.get(), RenderType.getCutout());
-        RenderTypeLookup.setRenderLayer(SushiContent.Blocks.SEAWEED.get(), RenderType.getCutout());
-        RenderTypeLookup.setRenderLayer(SushiContent.Blocks.SEAWEED_PLANT.get(), RenderType.getCutout());
-        RenderTypeLookup.setRenderLayer(SushiContent.Blocks.SESAME_CROP.get(), RenderType.getCutout());
-        RenderingRegistry.registerEntityRenderingHandler(SushiContent.EntityTypes.TUNA.get(), TunaRenderer::new);
-        RenderingRegistry.registerEntityRenderingHandler(SushiContent.EntityTypes.SHRIMP.get(), ShrimpRenderer::new);
-        ClientRegistry.bindTileEntityRenderer(SushiContent.TileEntities.CUTTING_BOARD.get(), CuttingBoardRenderer::new);
+        ItemBlockRenderTypes.setRenderLayer(SushiContent.Blocks.RICE_CROP.get(), RenderType.cutout());
+        ItemBlockRenderTypes.setRenderLayer(SushiContent.Blocks.CUCUMBER_CROP.get(), RenderType.cutout());
+        ItemBlockRenderTypes.setRenderLayer(SushiContent.Blocks.SOY_CROP.get(), RenderType.cutout());
+        ItemBlockRenderTypes.setRenderLayer(SushiContent.Blocks.WASABI_CROP.get(), RenderType.cutout());
+        ItemBlockRenderTypes.setRenderLayer(SushiContent.Blocks.AVOCADO_LEAVES_LOG.get(), RenderType.cutout());
+        ItemBlockRenderTypes.setRenderLayer(SushiContent.Blocks.AVOCADO_LEAVES.get(), RenderType.cutout());
+        ItemBlockRenderTypes.setRenderLayer(SushiContent.Blocks.AVOCADO_SAPLING.get(), RenderType.cutout());
+        ItemBlockRenderTypes.setRenderLayer(SushiContent.Blocks.SEAWEED.get(), RenderType.cutout());
+        ItemBlockRenderTypes.setRenderLayer(SushiContent.Blocks.SEAWEED_PLANT.get(), RenderType.cutout());
+        ItemBlockRenderTypes.setRenderLayer(SushiContent.Blocks.SESAME_CROP.get(), RenderType.cutout());
         EventManager.mod(ModelBakeEvent.class).process(event -> {
             SALMON_BACK = event.getModelRegistry().get(new ResourceLocation(SushiGoCrafting.MOD_ID, "block/salmon_back"));
             TUNA_BACK = event.getModelRegistry().get(new ResourceLocation(SushiGoCrafting.MOD_ID, "block/tuna_back"));
@@ -50,23 +69,23 @@ public class ClientProxy {
         EventManager.forge(ItemTooltipEvent.class).process(event -> {
             IFoodIngredient ingredient = FoodAPI.get().getIngredientFromItem(event.getItemStack().getItem());
             if (!ingredient.isEmpty() && ingredient.getEffect() != null) {
-                event.getToolTip().add(new StringTextComponent(""));
+                event.getToolTip().add(new TextComponent(""));
                 if (Screen.hasShiftDown()) {
                     IIngredientEffect effect = ingredient.getEffect();
                     if (effect instanceof AddIngredientEffect) {
-                        event.getToolTip().add(new StringTextComponent(TextFormatting.DARK_AQUA + "Adds Food Effect:"));
-                        event.getToolTip().add(new StringTextComponent(TextFormatting.YELLOW + " - " + TextFormatting.GOLD + ((AddIngredientEffect) effect).getEffect().get().getDisplayName().getString() + TextFormatting.DARK_AQUA + " (" + TextFormatting.WHITE + ((AddIngredientEffect) effect).getDuration() / 20 + TextFormatting.YELLOW + "s" + TextFormatting.DARK_AQUA + ", " + TextFormatting.YELLOW + "Level " + TextFormatting.WHITE + (((AddIngredientEffect) effect).getLevel() + 1) + TextFormatting.DARK_AQUA + ")"));
+                        event.getToolTip().add(new TextComponent(ChatFormatting.DARK_AQUA + "Adds Food Effect:"));
+                        event.getToolTip().add(new TextComponent(ChatFormatting.YELLOW + " - " + ChatFormatting.GOLD + ((AddIngredientEffect) effect).getEffect().get().getDisplayName().getString() + ChatFormatting.DARK_AQUA + " (" + ChatFormatting.WHITE + ((AddIngredientEffect) effect).getDuration() / 20 + ChatFormatting.YELLOW + "s" + ChatFormatting.DARK_AQUA + ", " + ChatFormatting.YELLOW + "Level " + ChatFormatting.WHITE + (((AddIngredientEffect) effect).getLevel() + 1) + ChatFormatting.DARK_AQUA + ")"));
                     }
                     if (effect instanceof ModifyIngredientEffect) {
-                        event.getToolTip().add(new StringTextComponent(TextFormatting.DARK_AQUA + "Modifies Food Effect:"));
+                        event.getToolTip().add(new TextComponent(ChatFormatting.DARK_AQUA + "Modifies Food Effect:"));
                         if (((ModifyIngredientEffect) effect).getTimeModifier() != 1) {
-                            event.getToolTip().add(new StringTextComponent(TextFormatting.YELLOW + " - " + TextFormatting.GOLD + " Multiplies Time By " + TextFormatting.WHITE + ((ModifyIngredientEffect) effect).getTimeModifier()));
+                            event.getToolTip().add(new TextComponent(ChatFormatting.YELLOW + " - " + ChatFormatting.GOLD + " Multiplies Time By " + ChatFormatting.WHITE + ((ModifyIngredientEffect) effect).getTimeModifier()));
                         }
                         if (((ModifyIngredientEffect) effect).getLevelModifier() > 0)
-                            event.getToolTip().add(new StringTextComponent(TextFormatting.YELLOW + " - " + TextFormatting.GOLD + " Increases Level By " + TextFormatting.WHITE + ((ModifyIngredientEffect) effect).getLevelModifier()));
+                            event.getToolTip().add(new TextComponent(ChatFormatting.YELLOW + " - " + ChatFormatting.GOLD + " Increases Level By " + ChatFormatting.WHITE + ((ModifyIngredientEffect) effect).getLevelModifier()));
                     }
                 } else {
-                    event.getToolTip().add(new StringTextComponent(TextFormatting.YELLOW + "Hold " + TextFormatting.GOLD + "" + TextFormatting.ITALIC + "<Shift>" + TextFormatting.RESET + TextFormatting.YELLOW + " for sushi effect"));
+                    event.getToolTip().add(new TextComponent(ChatFormatting.YELLOW + "Hold " + ChatFormatting.GOLD + "" + ChatFormatting.ITALIC + "<Shift>" + ChatFormatting.RESET + ChatFormatting.YELLOW + " for sushi effect"));
                 }
             }
         }).subscribe();

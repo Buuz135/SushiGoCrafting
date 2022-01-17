@@ -2,10 +2,10 @@ package com.buuz135.sushigocrafting.loot;
 
 import com.buuz135.sushigocrafting.item.AmountItem;
 import com.google.gson.JsonObject;
-import net.minecraft.item.ItemStack;
-import net.minecraft.loot.LootContext;
-import net.minecraft.loot.conditions.ILootCondition;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.storage.loot.LootContext;
+import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 import net.minecraftforge.common.loot.GlobalLootModifierSerializer;
 import net.minecraftforge.common.loot.LootModifier;
 
@@ -15,7 +15,7 @@ import java.util.List;
 
 public class ItemAmountLootModifier extends LootModifier {
 
-    public ItemAmountLootModifier(ILootCondition[] conditionsIn) {
+    public ItemAmountLootModifier(LootItemCondition[] conditionsIn) {
         super(conditionsIn);
     }
 
@@ -25,7 +25,7 @@ public class ItemAmountLootModifier extends LootModifier {
         List<ItemStack> customLoot = new ArrayList<>();
         for (ItemStack stack : generatedLoot) {
             if (stack.getItem() instanceof AmountItem) {
-                customLoot.add(((AmountItem) stack.getItem()).random(null, context.getWorld()));
+                customLoot.add(((AmountItem) stack.getItem()).random(null, context.getLevel()));
             } else {
                 customLoot.add(stack);
             }
@@ -36,7 +36,7 @@ public class ItemAmountLootModifier extends LootModifier {
     public static class Serializer extends GlobalLootModifierSerializer<ItemAmountLootModifier> {
 
         @Override
-        public ItemAmountLootModifier read(ResourceLocation location, JsonObject object, ILootCondition[] ailootcondition) {
+        public ItemAmountLootModifier read(ResourceLocation location, JsonObject object, LootItemCondition[] ailootcondition) {
             return new ItemAmountLootModifier(ailootcondition);
         }
 

@@ -2,23 +2,20 @@ package com.buuz135.sushigocrafting.cap;
 
 import com.buuz135.sushigocrafting.SushiGoCrafting;
 import com.buuz135.sushigocrafting.network.CapabilitySyncMessage;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.nbt.INBT;
-import net.minecraft.util.Direction;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.common.capabilities.CapabilityInject;
-import net.minecraftforge.fml.network.NetworkDirection;
+import net.minecraftforge.common.capabilities.CapabilityManager;
+import net.minecraftforge.common.capabilities.CapabilityToken;
+import net.minecraftforge.network.NetworkDirection;
 
-import javax.annotation.Nullable;
 import java.util.HashMap;
 import java.util.Map;
 
 public class SushiWeightDiscoveryCapability implements ISushiWeightDiscovery {
 
-    @CapabilityInject(ISushiWeightDiscovery.class)
-    public static Capability<ISushiWeightDiscovery> CAPABILITY = null;
+    public static Capability<ISushiWeightDiscovery> CAPABILITY = CapabilityManager.get(new CapabilityToken<>(){});
 
     private Map<String, Integer> discoveryLevels;
 
@@ -27,8 +24,8 @@ public class SushiWeightDiscoveryCapability implements ISushiWeightDiscovery {
     }
 
     @Override
-    public void requestUpdate(ServerPlayerEntity entity, ItemStack discovery) {
-        SushiGoCrafting.NETWORK.get().sendTo(new CapabilitySyncMessage(serializeNBT(), discovery), entity.connection.getNetworkManager(), NetworkDirection.PLAY_TO_CLIENT);
+    public void requestUpdate(ServerPlayer entity, ItemStack discovery) {
+        SushiGoCrafting.NETWORK.get().sendTo(new CapabilitySyncMessage(serializeNBT(), discovery), entity.connection.getConnection(), NetworkDirection.PLAY_TO_CLIENT);
     }
 
     @Override
@@ -47,8 +44,8 @@ public class SushiWeightDiscoveryCapability implements ISushiWeightDiscovery {
     }
 
     @Override
-    public CompoundNBT serializeNBT() {
-        CompoundNBT compoundNBT = new CompoundNBT();
+    public CompoundTag serializeNBT() {
+        CompoundTag compoundNBT = new CompoundTag();
         for (String name : this.discoveryLevels.keySet()) {
             compoundNBT.putInt(name, this.discoveryLevels.get(name));
         }
@@ -56,24 +53,11 @@ public class SushiWeightDiscoveryCapability implements ISushiWeightDiscovery {
     }
 
     @Override
-    public void deserializeNBT(CompoundNBT nbt) {
+    public void deserializeNBT(CompoundTag nbt) {
         this.discoveryLevels.clear();
-        for (String name : nbt.keySet()) {
+        for (String name : nbt.getAllKeys()) {
             this.discoveryLevels.put(name, nbt.getInt(name));
         }
     }
 
-    public static class Storage implements Capability.IStorage<ISushiWeightDiscovery> {
-
-        @Nullable
-        @Override
-        public INBT writeNBT(Capability<ISushiWeightDiscovery> capability, ISushiWeightDiscovery instance, Direction side) {
-            return instance.serializeNBT();
-        }
-
-        @Override
-        public void readNBT(Capability<ISushiWeightDiscovery> capability, ISushiWeightDiscovery instance, Direction side, INBT nbt) {
-            instance.deserializeNBT((CompoundNBT) nbt);
-        }
-    }
 }

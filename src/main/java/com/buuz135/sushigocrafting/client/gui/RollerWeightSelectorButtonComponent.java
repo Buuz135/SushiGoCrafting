@@ -9,30 +9,29 @@ import com.buuz135.sushigocrafting.tile.machinery.RollerTile;
 import com.hrznstudio.titanium.Titanium;
 import com.hrznstudio.titanium.api.client.IAsset;
 import com.hrznstudio.titanium.client.screen.addon.BasicScreenAddon;
-import com.hrznstudio.titanium.client.screen.addon.interfaces.IClickable;
 import com.hrznstudio.titanium.client.screen.asset.IAssetProvider;
 import com.hrznstudio.titanium.component.inventory.InventoryComponent;
 import com.hrznstudio.titanium.network.locator.ILocatable;
 import com.hrznstudio.titanium.network.messages.ButtonClickNetworkMessage;
 import com.hrznstudio.titanium.util.AssetUtil;
-import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.PoseStack;
+import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.audio.SimpleSound;
-import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.client.gui.screen.inventory.ContainerScreen;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.util.SoundCategory;
-import net.minecraft.util.SoundEvents;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.StringTextComponent;
-import net.minecraft.util.text.TextFormatting;
+import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
+import net.minecraft.client.resources.sounds.SimpleSoundInstance;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TextComponent;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
 
 import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
-public abstract class RollerWeightSelectorButtonComponent extends BasicScreenAddon implements IClickable {
+public abstract class RollerWeightSelectorButtonComponent extends BasicScreenAddon  {
 
     private final InventoryComponent<RollerTile> inventoryComponent;
     private final int slot;
@@ -43,14 +42,14 @@ public abstract class RollerWeightSelectorButtonComponent extends BasicScreenAdd
         this.slot = slot;
     }
 
-    public static void drawBackground(MatrixStack matrixStack, Screen screen, IAssetProvider iAssetProvider, int guiX, int guiY, int posX, int posY) {
+    public static void drawBackground(PoseStack matrixStack, Screen screen, IAssetProvider iAssetProvider, int guiX, int guiY, int posX, int posY) {
         IAsset asset = iAssetProvider.getAsset(SushiAssetTypes.ROLLER_WEIGHT_PICKER_BG);
         if (asset != null) {
             AssetUtil.drawAsset(matrixStack, screen, asset, guiX + posX, guiY + posY);
         }
     }
 
-    public static void drawForeground(MatrixStack matrixStack, Screen screen, IAssetProvider iAssetProvider, int guiX, int guiY, int posX, int posY, int weight, int ySize, String type, int slot) {
+    public static void drawForeground(PoseStack matrixStack, Screen screen, IAssetProvider iAssetProvider, int guiX, int guiY, int posX, int posY, int weight, int ySize, String type, int slot) {
         IAsset asset = iAssetProvider.getAsset(SushiAssetTypes.ROLLER_WEIGHT_PICKER_POINTER);
         if (asset != null && weight != Integer.MIN_VALUE) {
             AssetUtil.drawAsset(matrixStack, screen, asset, posX, posY + (4 - weight) * (ySize / 4) - 1);
@@ -64,12 +63,12 @@ public abstract class RollerWeightSelectorButtonComponent extends BasicScreenAdd
     }
 
     @Override
-    public void drawBackgroundLayer(MatrixStack matrixStack, Screen screen, IAssetProvider iAssetProvider, int guiX, int guiY, int mouseX, int mouseY, float v) {
+    public void drawBackgroundLayer(PoseStack matrixStack, Screen screen, IAssetProvider iAssetProvider, int guiX, int guiY, int mouseX, int mouseY, float v) {
         drawBackground(matrixStack, screen, iAssetProvider, guiX, guiY, getPosX(), getPosY());
     }
 
     @Override
-    public void drawForegroundLayer(MatrixStack matrixStack, Screen screen, IAssetProvider iAssetProvider, int guiX, int guiY, int mouseX, int mouseY) {
+    public void drawForegroundLayer(PoseStack matrixStack, Screen screen, IAssetProvider iAssetProvider, int guiX, int guiY, int mouseX, int mouseY, float v) {
         drawForeground(matrixStack, screen, iAssetProvider, guiX, guiY, getPosX(), getPosY(), getWeight(), getYSize(), getType(), slot);
     }
 
@@ -94,32 +93,42 @@ public abstract class RollerWeightSelectorButtonComponent extends BasicScreenAdd
     }
 
     @Override
-    public void handleClick(Screen screen, int guiX, int guiY, double mouseX, double mouseY, int button) {
-        Minecraft.getInstance().getSoundHandler().play(new SimpleSound(SoundEvents.BLOCK_WOOD_FALL, SoundCategory.PLAYERS, 0.5F, 1.0F, Minecraft.getInstance().player.getPosition()));
-        if (screen instanceof ContainerScreen && ((ContainerScreen) screen).getContainer() instanceof ILocatable) {
-            ILocatable locatable = (ILocatable) ((ContainerScreen) screen).getContainer();
-            CompoundNBT nbt = new CompoundNBT();
+    public boolean mouseClicked(double mouseX, double mouseY, int button) {
+        Screen screen = Minecraft.getInstance().screen;
+        if (screen instanceof AbstractContainerScreen && ((AbstractContainerScreen) screen).getMenu() instanceof ILocatable) {
+            if (!isMouseOver(mouseX - ((AbstractContainerScreen<?>) screen).getGuiLeft(), mouseY - ((AbstractContainerScreen<?>) screen).getGuiTop()))
+                return false;
+            Minecraft.getInstance().getSoundManager().play(new SimpleSoundInstance(SoundEvents.WOOD_FALL, SoundSource.PLAYERS, 0.5F, 1.0F, Minecraft.getInstance().player.blockPosition()));
+            ILocatable locatable = (ILocatable) ((AbstractContainerScreen) screen).getMenu();
+            CompoundTag nbt = new CompoundTag();
             nbt.putInt("WeightSlot", slot);
             nbt.putInt("Button", button);
             Titanium.NETWORK.get().sendToServer(new ButtonClickNetworkMessage(locatable.getLocatorInstance(), 100, nbt));
+            return true;
         }
+        return super.mouseClicked(mouseX, mouseY, button);
     }
 
     @Override
-    public List<ITextComponent> getTooltipLines() {
-        List<ITextComponent> lines = new ArrayList<>();
+    public boolean isMouseOver(double mouseX, double mouseY) {
+        return mouseX >= this.getPosX() && mouseX <= this.getPosX() + getXSize() && mouseY >= this.getPosY() && mouseY <= this.getPosY() + getYSize();
+    }
+
+    @Override
+    public List<Component> getTooltipLines() {
+        List<Component> lines = new ArrayList<>();
         if (inventoryComponent.getStackInSlot(slot).isEmpty()) {
-            lines.add(new StringTextComponent(NumberFormat.getInstance(Locale.getDefault()).format(((getWeight() + 1) / 5D) * 100) + TextFormatting.DARK_AQUA + "%" + TextFormatting.GOLD + " Weight"));
+            lines.add(new TextComponent(NumberFormat.getInstance(Locale.getDefault()).format(((getWeight() + 1) / 5D) * 100) + ChatFormatting.DARK_AQUA + "%" + ChatFormatting.GOLD + " Weight"));
         } else {
             IFoodIngredient ingredient = FoodAPI.get().getIngredientFromItem(inventoryComponent.getStackInSlot(slot).getItem());
             if (!ingredient.isEmpty()) {
                 String unit = ingredient.getIngredientConsumer() == IIngredientConsumer.STACK ? "u" : "gr";
                 double amount = ingredient.getIngredientConsumer() == IIngredientConsumer.STACK ? ingredient.getDefaultAmount() * (getWeight() + 1) : ingredient.getDefaultAmount() * (getWeight() + 1) / 5D;
-                lines.add(new StringTextComponent(TextFormatting.GOLD + "Consumes " + TextFormatting.WHITE + NumberFormat.getInstance(Locale.getDefault()).format(amount) + TextFormatting.YELLOW + unit));
+                lines.add(new TextComponent(ChatFormatting.GOLD + "Consumes " + ChatFormatting.WHITE + NumberFormat.getInstance(Locale.getDefault()).format(amount) + ChatFormatting.YELLOW + unit));
             }
         }
-        lines.add(new StringTextComponent(TextFormatting.DARK_GRAY + "*Left Click to Increase*"));
-        lines.add(new StringTextComponent(TextFormatting.DARK_GRAY + "*Right Click to Decrease*"));
+        lines.add(new TextComponent(ChatFormatting.DARK_GRAY + "*Left Click to Increase*"));
+        lines.add(new TextComponent(ChatFormatting.DARK_GRAY + "*Right Click to Decrease*"));
         return lines;
     }
 

@@ -2,29 +2,27 @@ package com.buuz135.sushigocrafting.block.machinery;
 
 import com.buuz135.sushigocrafting.proxy.SushiContent;
 import com.buuz135.sushigocrafting.tile.machinery.CoolerBoxTile;
-import com.hrznstudio.titanium.api.IFactory;
 import com.hrznstudio.titanium.block.RotatableBlock;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
-import net.minecraft.client.util.ITooltipFlag;
-import net.minecraft.inventory.ItemStackHelper;
-import net.minecraft.item.BlockItem;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.tileentity.TileEntityType;
-import net.minecraft.util.Direction;
-import net.minecraft.util.NonNullList;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.shapes.ISelectionContext;
-import net.minecraft.util.math.shapes.VoxelShape;
-import net.minecraft.util.text.IFormattableTextComponent;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TextFormatting;
-import net.minecraft.util.text.TranslationTextComponent;
-import net.minecraft.world.IBlockReader;
-import net.minecraft.world.World;
+import net.minecraft.ChatFormatting;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.core.NonNullList;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.world.ContainerHelper;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.entity.BlockEntityType;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.shapes.CollisionContext;
+import net.minecraft.world.phys.shapes.VoxelShape;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
@@ -34,26 +32,25 @@ import java.util.List;
 
 public class CoolerBoxBlock extends RotatableBlock<CoolerBoxTile> {
 
-    public static VoxelShape SHAPE_NORTH = Block.makeCuboidShape(0.5, 0, 1.5, 15.5, 14, 14.5);
-    public static VoxelShape SHAPE_EAST = Block.makeCuboidShape(1.5, 0, 0.5, 14.5, 14, 15.5);
+    public static VoxelShape SHAPE_NORTH = Block.box(0.5, 0, 1.5, 15.5, 14, 14.5);
+    public static VoxelShape SHAPE_EAST = Block.box(1.5, 0, 0.5, 14.5, 14, 15.5);
 
     public CoolerBoxBlock() {
-        super(Properties.from(Blocks.STONE), CoolerBoxTile.class);
+        super("cooler_box", Properties.copy(Blocks.STONE), CoolerBoxTile.class);
     }
 
     @Override
-    public IFactory<CoolerBoxTile> getTileEntityFactory() {
+    public BlockEntityType.BlockEntitySupplier<?> getTileEntityFactory() {
         return CoolerBoxTile::new;
     }
 
     @Override
     public Item asItem() {
-        if (super.asItem() == null) setItem((BlockItem) Item.getItemFromBlock(this));
-        return super.asItem();
+        return   Item.byBlock(this);
     }
 
     @Override
-    public TileEntityType getTileEntityType() {
+    public BlockEntityType getTileEntityType() {
         return SushiContent.TileEntities.COOLER_BOX.get();
     }
 
@@ -66,30 +63,30 @@ public class CoolerBoxBlock extends RotatableBlock<CoolerBoxTile> {
 
     @Nonnull
     @Override
-    public VoxelShape getCollisionShape(BlockState state, IBlockReader world, BlockPos pos, ISelectionContext selectionContext) {
-        Direction direction = state.get(RotatableBlock.FACING_HORIZONTAL);
+    public VoxelShape getCollisionShape(BlockState state, BlockGetter world, BlockPos pos, CollisionContext selectionContext) {
+        Direction direction = state.getValue(RotatableBlock.FACING_HORIZONTAL);
         return direction == Direction.NORTH || direction == Direction.SOUTH ? SHAPE_NORTH : SHAPE_EAST;
     }
 
     @Override
-    public VoxelShape getShape(BlockState state, IBlockReader worldIn, BlockPos pos, ISelectionContext context) {
-        Direction direction = state.get(RotatableBlock.FACING_HORIZONTAL);
+    public VoxelShape getShape(BlockState state, BlockGetter worldIn, BlockPos pos, CollisionContext context) {
+        Direction direction = state.getValue(RotatableBlock.FACING_HORIZONTAL);
         return direction == Direction.NORTH || direction == Direction.SOUTH ? SHAPE_NORTH : SHAPE_EAST;
     }
 
     @Override
-    public NonNullList<ItemStack> getDynamicDrops(BlockState state, World worldIn, BlockPos pos, BlockState newState, boolean isMoving) {
+    public NonNullList<ItemStack> getDynamicDrops(BlockState state, Level worldIn, BlockPos pos, BlockState newState, boolean isMoving) {
         return NonNullList.create();
     }
 
     @OnlyIn(Dist.CLIENT)
-    public void addInformation(ItemStack stack, @Nullable IBlockReader worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
-        super.addInformation(stack, worldIn, tooltip, flagIn);
-        CompoundNBT compoundnbt = stack.getChildTag("BlockEntityTag");
+    public void appendHoverText(ItemStack stack, @Nullable BlockGetter worldIn, List<Component> tooltip, TooltipFlag flagIn) {
+        super.appendHoverText(stack, worldIn, tooltip, flagIn);
+        CompoundTag compoundnbt = stack.getTagElement("BlockEntityTag");
         if (compoundnbt != null) {
             if (compoundnbt.contains("input")) {
                 NonNullList<ItemStack> nonnulllist = NonNullList.withSize(27, ItemStack.EMPTY);
-                ItemStackHelper.loadAllItems(compoundnbt.getCompound("input"), nonnulllist);
+                ContainerHelper.loadAllItems(compoundnbt.getCompound("input"), nonnulllist);
                 int i = 0;
                 int j = 0;
 
@@ -98,15 +95,15 @@ public class CoolerBoxBlock extends RotatableBlock<CoolerBoxTile> {
                         ++j;
                         if (i <= 4) {
                             ++i;
-                            IFormattableTextComponent iformattabletextcomponent = itemstack.getDisplayName().deepCopy();
-                            iformattabletextcomponent.appendString(" x").appendString(String.valueOf(itemstack.getCount())).mergeStyle(TextFormatting.DARK_AQUA);
+                            MutableComponent iformattabletextcomponent = itemstack.getHoverName().copy();
+                            iformattabletextcomponent.append(" x").append(String.valueOf(itemstack.getCount())).withStyle(ChatFormatting.DARK_AQUA);
                             tooltip.add(iformattabletextcomponent);
                         }
                     }
                 }
 
                 if (j - i > 0) {
-                    tooltip.add((new TranslationTextComponent("container.shulkerBox.more", j - i)).mergeStyle(TextFormatting.ITALIC, TextFormatting.DARK_AQUA));
+                    tooltip.add((new TranslatableComponent("container.shulkerBox.more", j - i)).withStyle(ChatFormatting.ITALIC, ChatFormatting.DARK_AQUA));
                 }
             }
         }

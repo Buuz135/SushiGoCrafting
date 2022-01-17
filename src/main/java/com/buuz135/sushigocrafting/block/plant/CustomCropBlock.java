@@ -1,32 +1,32 @@
 package com.buuz135.sushigocrafting.block.plant;
 
 
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.CropsBlock;
-import net.minecraft.item.Item;
-import net.minecraft.state.IntegerProperty;
-import net.minecraft.state.StateContainer;
-import net.minecraft.util.IItemProvider;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.shapes.ISelectionContext;
-import net.minecraft.util.math.shapes.VoxelShape;
-import net.minecraft.world.IBlockReader;
-import net.minecraft.world.World;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.ItemLike;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.CropBlock;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.StateDefinition;
+import net.minecraft.world.level.block.state.properties.IntegerProperty;
+import net.minecraft.world.phys.shapes.CollisionContext;
+import net.minecraft.world.phys.shapes.VoxelShape;
 
 import java.util.Collections;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
 
-public class CustomCropBlock extends CropsBlock {
+public class CustomCropBlock extends CropBlock {
 
     public static final IntegerProperty AGE = IntegerProperty.create("age", 0, 3);
 
     private static final VoxelShape[] SHAPE_BY_AGE = new VoxelShape[]{
-            Block.makeCuboidShape(0.0D, 0.0D, 0.0D, 16.0D, 2.0D, 16.0D),
-            Block.makeCuboidShape(0.0D, 0.0D, 0.0D, 16.0D, 6.0D, 16.0D),
-            Block.makeCuboidShape(0.0D, 0.0D, 0.0D, 16.0D, 12.0D, 16.0D),
-            Block.makeCuboidShape(0.0D, 0.0D, 0.0D, 16.0D, 16.0D, 16.0D)};
+            Block.box(0.0D, 0.0D, 0.0D, 16.0D, 2.0D, 16.0D),
+            Block.box(0.0D, 0.0D, 0.0D, 16.0D, 6.0D, 16.0D),
+            Block.box(0.0D, 0.0D, 0.0D, 16.0D, 12.0D, 16.0D),
+            Block.box(0.0D, 0.0D, 0.0D, 16.0D, 16.0D, 16.0D)};
 
     private final int maxAge;
     private final Supplier<? extends Item> seedSupplier;
@@ -34,13 +34,13 @@ public class CustomCropBlock extends CropsBlock {
 
     public CustomCropBlock(Properties builder, Supplier<? extends Item> seedSupplier, Predicate<BlockState> groundPredicate) {
         super(builder);
-        this.maxAge = Collections.max(getAgeProperty().getAllowedValues());
+        this.maxAge = Collections.max(getAgeProperty().getPossibleValues());
         this.seedSupplier = seedSupplier;
         this.groundPredicate = groundPredicate;
     }
 
-    public VoxelShape getShape(BlockState state, IBlockReader worldIn, BlockPos pos, ISelectionContext context) {
-        return SHAPE_BY_AGE[state.get(this.getAgeProperty())];
+    public VoxelShape getShape(BlockState state, BlockGetter worldIn, BlockPos pos, CollisionContext context) {
+        return SHAPE_BY_AGE[state.getValue(this.getAgeProperty())];
     }
 
     @Override
@@ -49,17 +49,17 @@ public class CustomCropBlock extends CropsBlock {
     }
 
     @Override
-    public IItemProvider getSeedsItem() {
+    public ItemLike getBaseSeedId() {
         return seedSupplier.get();
     }
 
     @Override
-    protected boolean isValidGround(BlockState state, IBlockReader worldIn, BlockPos pos) {
+    protected boolean mayPlaceOn(BlockState state, BlockGetter worldIn, BlockPos pos) {
         return groundPredicate.test(state);
     }
 
     @Override
-    protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder) {
+    protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
         builder.add(getAgeProperty());
     }
 
@@ -70,11 +70,11 @@ public class CustomCropBlock extends CropsBlock {
 
     @Override
     public boolean isMaxAge(BlockState state) {
-        return state.get(getAgeProperty()) == getMaxAge();
+        return state.getValue(getAgeProperty()) == getMaxAge();
     }
 
     @Override
-    protected int getBonemealAgeIncrease(World worldIn) {
+    protected int getBonemealAgeIncrease(Level worldIn) {
         return super.getBonemealAgeIncrease(worldIn) / 3;
     }
 

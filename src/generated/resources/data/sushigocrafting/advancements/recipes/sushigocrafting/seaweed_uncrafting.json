@@ -11,7 +11,9 @@
       "conditions": {
         "items": [
           {
-            "item": "sushigocrafting:dried_seaweed_block"
+            "items": [
+              "sushigocrafting:dried_seaweed_block"
+            ]
           }
         ]
       }

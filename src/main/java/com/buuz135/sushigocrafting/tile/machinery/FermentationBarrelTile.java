@@ -9,11 +9,13 @@ import com.hrznstudio.titanium.component.fluid.FluidTankComponent;
 import com.hrznstudio.titanium.component.inventory.InventoryComponent;
 import com.hrznstudio.titanium.component.progress.ProgressBarComponent;
 import com.hrznstudio.titanium.util.RecipeUtil;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.DyeColor;
-import net.minecraft.util.ActionResultType;
-import net.minecraft.util.Direction;
-import net.minecraft.util.Hand;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.DyeColor;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.items.ItemHandlerHelper;
 
@@ -30,8 +32,8 @@ public class FermentationBarrelTile extends ActiveTile<FermentationBarrelTile> {
     @Save
     private InventoryComponent<FermentationBarrelTile> output;
 
-    public FermentationBarrelTile() {
-        super(SushiContent.Blocks.FERMENTATION_BARREL.get());
+    public FermentationBarrelTile(BlockPos pos, BlockState state) {
+        super(SushiContent.Blocks.FERMENTATION_BARREL.get(), pos, state);
         addProgressBar(this.bar = new ProgressBarComponent<FermentationBarrelTile>(93, 48, 100)
                 .setCanIncrease(FermentationBarrelTile::canStart)
                 .setCanReset(FermentationBarrelTile::canStart)
@@ -40,7 +42,7 @@ public class FermentationBarrelTile extends ActiveTile<FermentationBarrelTile> {
                 .setOnFinishWork(() -> {
                     onFinish();
                     syncObject(this.bar);
-                    markDirty();
+                    setChanged();
                 }));
         addInventory(this.input = new InventoryComponent<FermentationBarrelTile>("input", 30, 48, 1)
                 .setSlotToColorRender(0, DyeColor.BLUE)
@@ -63,17 +65,17 @@ public class FermentationBarrelTile extends ActiveTile<FermentationBarrelTile> {
     }
 
     @Override
-    public ActionResultType onActivated(PlayerEntity player, Hand hand, Direction facing, double hitX, double hitY, double hitZ) {
-        ActionResultType type = super.onActivated(player, hand, facing, hitX, hitY, hitZ);
-        if (!type.isSuccess()) {
+    public InteractionResult onActivated(Player player, InteractionHand hand, Direction facing, double hitX, double hitY, double hitZ) {
+        InteractionResult type = super.onActivated(player, hand, facing, hitX, hitY, hitZ);
+        if (!type.shouldSwing()) {
             openGui(player);
-            return ActionResultType.SUCCESS;
+            return InteractionResult.SUCCESS;
         }
         return type;
     }
 
     public boolean canStart() {
-        return RecipeUtil.getRecipes(this.world, FermentingBarrelRecipe.SERIALIZER.getRecipeType()).stream()
+        return RecipeUtil.getRecipes(this.level, FermentingBarrelRecipe.SERIALIZER.getRecipeType()).stream()
                 .anyMatch(fermentingBarrelRecipe -> fermentingBarrelRecipe.input.test(this.input.getStackInSlot(0))
                         && (fermentingBarrelRecipe.fluid.isEmpty() || (fermentingBarrelRecipe.fluid.isFluidEqual(this.fluid.getFluid()) && this.fluid.getFluid().getAmount() >= fermentingBarrelRecipe.fluid.getAmount()))
                         && (this.output.getStackInSlot(0).isEmpty())
@@ -81,7 +83,7 @@ public class FermentationBarrelTile extends ActiveTile<FermentationBarrelTile> {
     }
 
     public void onFinish() {
-        RecipeUtil.getRecipes(this.world, FermentingBarrelRecipe.SERIALIZER.getRecipeType()).stream()
+        RecipeUtil.getRecipes(this.level, FermentingBarrelRecipe.SERIALIZER.getRecipeType()).stream()
                 .filter(fermentingBarrelRecipe -> fermentingBarrelRecipe.input.test(this.input.getStackInSlot(0))
                         && (fermentingBarrelRecipe.fluid.isEmpty() || (fermentingBarrelRecipe.fluid.isFluidEqual(this.fluid.getFluid()) && this.fluid.getFluid().getAmount() >= fermentingBarrelRecipe.fluid.getAmount()))
                         && (this.output.getStackInSlot(0).isEmpty())
@@ -91,7 +93,7 @@ public class FermentationBarrelTile extends ActiveTile<FermentationBarrelTile> {
                     this.input.getStackInSlot(0).shrink(1);
                     this.fluid.drainForced(fermentingBarrelRecipe.getFluid().getAmount(), IFluidHandler.FluidAction.EXECUTE);
                     if (fermentingBarrelRecipe.output.getItem() instanceof AmountItem) {
-                        ItemHandlerHelper.insertItem(this.output, ((AmountItem) fermentingBarrelRecipe.output.getItem()).random(null, world), false);
+                        ItemHandlerHelper.insertItem(this.output, ((AmountItem) fermentingBarrelRecipe.output.getItem()).random(null, level), false);
                     } else {
                         ItemHandlerHelper.insertItem(this.output, fermentingBarrelRecipe.output.copy(), false);
                     }

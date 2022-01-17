@@ -1,15 +1,15 @@
 package com.buuz135.sushigocrafting.compat.crafttweaker.manager;
 
 import com.blamejared.crafttweaker.api.CraftTweakerAPI;
-import com.blamejared.crafttweaker.api.annotations.ZenRegister;
+import com.blamejared.crafttweaker.api.action.recipe.ActionAddRecipe;
+import com.blamejared.crafttweaker.api.annotation.ZenRegister;
 import com.blamejared.crafttweaker.api.fluid.IFluidStack;
-import com.blamejared.crafttweaker.api.item.IIngredient;
+import com.blamejared.crafttweaker.api.ingredient.IIngredient;
 import com.blamejared.crafttweaker.api.item.IItemStack;
-import com.blamejared.crafttweaker.api.managers.IRecipeManager;
-import com.blamejared.crafttweaker.impl.actions.recipes.ActionAddRecipe;
+import com.blamejared.crafttweaker.api.recipe.manager.base.IRecipeManager;
 import com.buuz135.sushigocrafting.recipe.FermentingBarrelRecipe;
-import net.minecraft.item.crafting.IRecipeType;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.crafting.RecipeType;
 import org.openzen.zencode.java.ZenCodeType;
 
 @ZenRegister
@@ -23,12 +23,12 @@ public class FermentingBarrelManager implements IRecipeManager {
     }
     
     @Override
-    public void removeRecipe(IIngredient output) {
+    public void remove(IIngredient output) {
         throw new RuntimeException("Fermenting Barrel recipes can only be removed by name, not output!");
     }
     
     @Override
-    public IRecipeType<FermentingBarrelRecipe> getRecipeType() {
+    public RecipeType<FermentingBarrelRecipe> getRecipeType() {
         return FermentingBarrelRecipe.SERIALIZER.getRecipeType();
     }
 }

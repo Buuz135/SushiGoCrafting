@@ -1,7 +1,7 @@
 {
   "name": "Tobiko",
   "icon": "sushigocrafting:tobiko",
-  "category": "world",
+  "category": "sushigocrafting:world",
   "sortnum": 2,
   "read_by_default": false,
   "pages": [

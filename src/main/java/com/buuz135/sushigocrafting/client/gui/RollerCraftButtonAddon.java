@@ -10,18 +10,18 @@ import com.hrznstudio.titanium.client.screen.asset.IAssetProvider;
 import com.hrznstudio.titanium.network.locator.ILocatable;
 import com.hrznstudio.titanium.network.messages.ButtonClickNetworkMessage;
 import com.hrznstudio.titanium.util.AssetUtil;
-import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.PoseStack;
+import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.audio.SimpleSound;
-import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.client.gui.screen.inventory.ContainerScreen;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.util.SoundCategory;
-import net.minecraft.util.SoundEvents;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.StringTextComponent;
-import net.minecraft.util.text.TextFormatting;
+import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
+import net.minecraft.client.resources.sounds.SimpleSoundInstance;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TextComponent;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.world.item.ItemStack;
 
 import java.util.Arrays;
 import java.util.List;
@@ -35,7 +35,7 @@ public class RollerCraftButtonAddon extends BasicButtonAddon {
     }
 
     @Override
-    public void drawBackgroundLayer(MatrixStack stack, Screen screen, IAssetProvider provider, int guiX, int guiY, int mouseX, int mouseY, float partialTicks) {
+    public void drawBackgroundLayer(PoseStack stack, Screen screen, IAssetProvider provider, int guiX, int guiY, int mouseX, int mouseY, float partialTicks) {
         super.drawBackgroundLayer(stack, screen, provider, guiX, guiY, mouseX, mouseY, partialTicks);
         IAsset asset = provider.getAsset(SushiAssetTypes.ROLLER_TYPE_BG);
         if (asset != null) {
@@ -45,22 +45,28 @@ public class RollerCraftButtonAddon extends BasicButtonAddon {
         if (asset != null) {
             AssetUtil.drawAsset(stack, screen, asset, guiX + getPosX() - 1, guiY + getPosY() - 1);
         }
-        Minecraft.getInstance().getItemRenderer().renderItemAndEffectIntoGUI(new ItemStack(SushiContent.Items.ROLLER.get()), guiX + getPosX(), guiY + getPosY() - 4);
-    }
-
-    public void handleClick(Screen screen, int guiX, int guiY, double mouseX, double mouseY, int button) {
-        Minecraft.getInstance().getSoundHandler().play(new SimpleSound(SoundEvents.UI_BUTTON_CLICK, SoundCategory.PLAYERS, 0.5F, 1.0F, Minecraft.getInstance().player.getPosition()));
-        if (screen instanceof ContainerScreen && ((ContainerScreen) screen).getContainer() instanceof ILocatable) {
-            ILocatable locatable = (ILocatable) ((ContainerScreen) screen).getContainer();
-            CompoundNBT nbt = new CompoundNBT();
-            nbt.putInt("Button", button);
-            Titanium.NETWORK.get().sendToServer(new ButtonClickNetworkMessage(locatable.getLocatorInstance(), this.getButton().getId(), nbt));
-        }
+        Minecraft.getInstance().getItemRenderer().renderAndDecorateItem(new ItemStack(SushiContent.Items.ROLLER.get()), guiX + getPosX(), guiY + getPosY() - 4);
     }
 
     @Override
-    public List<ITextComponent> getTooltipLines() {
-        return Arrays.asList(new StringTextComponent("Roll"), new StringTextComponent(TextFormatting.DARK_GRAY + "*Left Click to make 1*"), new StringTextComponent(TextFormatting.DARK_GRAY + "*Right Click to make 64*"));
+    public boolean mouseClicked(double mouseX, double mouseY, int button) {
+        Screen screen = Minecraft.getInstance().screen;
+        if (screen instanceof AbstractContainerScreen && ((AbstractContainerScreen) screen).getMenu() instanceof ILocatable) {
+            if (!isMouseOver(mouseX - ((AbstractContainerScreen<?>) screen).getGuiLeft(), mouseY - ((AbstractContainerScreen<?>) screen).getGuiTop()))
+                return false;
+            Minecraft.getInstance().getSoundManager().play(new SimpleSoundInstance(SoundEvents.UI_BUTTON_CLICK, SoundSource.PLAYERS, 0.2F, 1.0F, Minecraft.getInstance().player.blockPosition()));
+            ILocatable locatable = (ILocatable) ((AbstractContainerScreen) screen).getMenu();
+            CompoundTag nbt = new CompoundTag();
+            nbt.putInt("Button", button);
+            Titanium.NETWORK.get().sendToServer(new ButtonClickNetworkMessage(locatable.getLocatorInstance(), this.getButton().getId(), nbt));
+            return true;
+        }
+        return super.mouseClicked(mouseX, mouseY, button);
+    }
+
+    @Override
+    public List<Component> getTooltipLines() {
+        return Arrays.asList(new TextComponent("Roll"), new TextComponent(ChatFormatting.DARK_GRAY + "*Left Click to make 1*"), new TextComponent(ChatFormatting.DARK_GRAY + "*Right Click to make 64*"));
     }
 
     @Override

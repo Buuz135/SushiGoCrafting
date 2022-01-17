@@ -6,7 +6,7 @@ import com.buuz135.sushigocrafting.client.gui.provider.RollerAssetProvider;
 import com.buuz135.sushigocrafting.item.FoodItem;
 import com.buuz135.sushigocrafting.proxy.SushiContent;
 import com.hrznstudio.titanium.client.screen.addon.SlotsScreenAddon;
-import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.PoseStack;
 import mezz.jei.api.constants.VanillaTypes;
 import mezz.jei.api.gui.IRecipeLayout;
 import mezz.jei.api.gui.drawable.IDrawable;
@@ -15,10 +15,11 @@ import mezz.jei.api.helpers.IGuiHelper;
 import mezz.jei.api.ingredients.IIngredients;
 import mezz.jei.api.recipe.category.IRecipeCategory;
 import net.minecraft.client.Minecraft;
-import net.minecraft.item.DyeColor;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.DyeColor;
+import net.minecraft.world.item.ItemStack;
 import org.apache.commons.lang3.tuple.Pair;
 
 import java.awt.*;
@@ -47,8 +48,8 @@ public class RollerCategory implements IRecipeCategory<Recipe> {
     }
 
     @Override
-    public String getTitle() {
-        return new TranslationTextComponent(SushiContent.Blocks.ROLLER.get().getTranslationKey()).getString();
+    public Component getTitle() {
+        return new TranslatableComponent(SushiContent.Blocks.ROLLER.get().getDescriptionId());
     }
 
     @Override
@@ -81,12 +82,12 @@ public class RollerCategory implements IRecipeCategory<Recipe> {
     }
 
     @Override
-    public void draw(Recipe recipe, MatrixStack matrixStack, double mouseX, double mouseY) {
-        SlotsScreenAddon.drawAsset(matrixStack, Minecraft.getInstance().currentScreen, RollerAssetProvider.INSTANCE, 5, 3, 0, 0, 1, integer -> Pair.of(0, 0), integer -> ItemStack.EMPTY, true, integer -> new Color(DyeColor.ORANGE.getFireworkColor()), integer -> true);
-        SlotsScreenAddon.drawAsset(matrixStack, Minecraft.getInstance().currentScreen, RollerAssetProvider.INSTANCE, -7, -17, 0, 0, recipe.stack.getIngredientList().size(), recipe.stack.getType().getSlotPosition(), integer -> ItemStack.EMPTY, true, integer -> new Color(DyeColor.LIGHT_BLUE.getFireworkColor()), integer -> true);
+    public void draw(Recipe recipe, PoseStack matrixStack, double mouseX, double mouseY) {
+        SlotsScreenAddon.drawAsset(matrixStack, Minecraft.getInstance().screen, RollerAssetProvider.INSTANCE, 5, 3, 0, 0, 1, integer -> Pair.of(0, 0), integer -> ItemStack.EMPTY, true, integer -> new Color(DyeColor.ORANGE.getFireworkColor()), integer -> true);
+        SlotsScreenAddon.drawAsset(matrixStack, Minecraft.getInstance().screen, RollerAssetProvider.INSTANCE, -7, -17, 0, 0, recipe.stack.getIngredientList().size(), recipe.stack.getType().getSlotPosition(), integer -> ItemStack.EMPTY, true, integer -> new Color(DyeColor.LIGHT_BLUE.getFireworkColor()), integer -> true);
         for (int i = 0; i < recipe.stack.getIngredientList().size(); i++) {
-            RollerWeightSelectorButtonComponent.drawBackground(matrixStack, Minecraft.getInstance().currentScreen, RollerAssetProvider.INSTANCE, 0, 0, recipe.stack.getType().getSlotPosition().apply(i).getLeft() - 8 + 18, recipe.stack.getType().getSlotPosition().apply(i).getRight() - 18);
-            RollerWeightSelectorButtonComponent.drawForeground(matrixStack, Minecraft.getInstance().currentScreen, RollerAssetProvider.INSTANCE, 0, 0, recipe.stack.getType().getSlotPosition().apply(i).getLeft() - 8 + 18, recipe.stack.getType().getSlotPosition().apply(i).getRight() - 18, Integer.MIN_VALUE, 18, recipe.stack.getType().getName(), i);
+            RollerWeightSelectorButtonComponent.drawBackground(matrixStack, Minecraft.getInstance().screen, RollerAssetProvider.INSTANCE, 0, 0, recipe.stack.getType().getSlotPosition().apply(i).getLeft() - 8 + 18, recipe.stack.getType().getSlotPosition().apply(i).getRight() - 18);
+            RollerWeightSelectorButtonComponent.drawForeground(matrixStack, Minecraft.getInstance().screen, RollerAssetProvider.INSTANCE, 0, 0, recipe.stack.getType().getSlotPosition().apply(i).getLeft() - 8 + 18, recipe.stack.getType().getSlotPosition().apply(i).getRight() - 18, Integer.MIN_VALUE, 18, recipe.stack.getType().getName(), i);
         }
     }
 

@@ -3,22 +3,29 @@ package com.buuz135.sushigocrafting.datagen;
 import com.buuz135.sushigocrafting.block.plant.CustomCropBlock;
 import com.buuz135.sushigocrafting.proxy.SushiContent;
 import com.mojang.datafixers.util.Pair;
-import net.minecraft.advancements.criterion.StatePropertiesPredicate;
-import net.minecraft.block.Block;
+import net.minecraft.advancements.critereon.StatePropertiesPredicate;
 import net.minecraft.data.DataGenerator;
-import net.minecraft.data.LootTableProvider;
-import net.minecraft.data.loot.BlockLootTables;
-import net.minecraft.data.loot.EntityLootTables;
-import net.minecraft.entity.EntityType;
-import net.minecraft.item.Item;
-import net.minecraft.item.Items;
-import net.minecraft.loot.*;
-import net.minecraft.loot.conditions.BlockStateProperty;
-import net.minecraft.loot.conditions.ILootCondition;
-import net.minecraft.loot.conditions.RandomChance;
-import net.minecraft.loot.functions.CopyNbt;
-import net.minecraft.util.IItemProvider;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.data.loot.BlockLoot;
+import net.minecraft.data.loot.EntityLoot;
+import net.minecraft.data.loot.LootTableProvider;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.level.ItemLike;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.storage.loot.LootPool;
+import net.minecraft.world.level.storage.loot.LootTable;
+import net.minecraft.world.level.storage.loot.ValidationContext;
+import net.minecraft.world.level.storage.loot.entries.LootItem;
+import net.minecraft.world.level.storage.loot.functions.CopyNbtFunction;
+import net.minecraft.world.level.storage.loot.parameters.LootContextParamSet;
+import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
+import net.minecraft.world.level.storage.loot.predicates.LootItemBlockStatePropertyCondition;
+import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
+import net.minecraft.world.level.storage.loot.predicates.LootItemRandomChanceCondition;
+import net.minecraft.world.level.storage.loot.providers.nbt.ContextNbtProvider;
+import net.minecraft.world.level.storage.loot.providers.number.ConstantValue;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -35,16 +42,16 @@ public class SushiLootTableProvider extends LootTableProvider {
     }
 
     @Override
-    protected List<Pair<Supplier<Consumer<BiConsumer<ResourceLocation, LootTable.Builder>>>, LootParameterSet>> getTables() {
-        return Arrays.asList(Pair.of(SushiBlockLootTables::new, LootParameterSets.BLOCK), Pair.of(SushiEntityLootTables::new, LootParameterSets.ENTITY));
+    protected List<Pair<Supplier<Consumer<BiConsumer<ResourceLocation, LootTable.Builder>>>, LootContextParamSet>> getTables() {
+        return Arrays.asList(Pair.of(SushiBlockLootTables::new, LootContextParamSets.BLOCK), Pair.of(SushiEntityLootTables::new, LootContextParamSets.ENTITY));
     }
 
     @Override
-    protected void validate(Map<ResourceLocation, LootTable> map, ValidationTracker validationtracker) {
+    protected void validate(Map<ResourceLocation, LootTable> map, ValidationContext validationtracker) {
         //super.validate(map, validationtracker);
     }
 
-    private static class SushiBlockLootTables extends BlockLootTables {
+    private static class SushiBlockLootTables extends BlockLoot {
 
         private List<Block> knownBlocks = new ArrayList<>();
 
@@ -66,41 +73,41 @@ public class SushiLootTableProvider extends LootTableProvider {
             this.dropSelf(SushiContent.Blocks.FERMENTATION_BARREL);
             this.dropLeaves(SushiContent.Blocks.AVOCADO_LEAVES, SushiContent.Blocks.AVOCADO_SAPLING);
             this.dropLeavesSpecial(SushiContent.Blocks.AVOCADO_LEAVES_LOG, SushiContent.Blocks.AVOCADO_LOG);
-            CopyNbt.Builder nbtBuilder = CopyNbt.builder(CopyNbt.Source.BLOCK_ENTITY);
-            nbtBuilder.replaceOperation("input", "BlockEntityTag.input");
+            CopyNbtFunction.Builder nbtBuilder = CopyNbtFunction.copyData(ContextNbtProvider.BLOCK_ENTITY);
+            nbtBuilder.copy("input", "BlockEntityTag.input");
             this.droppingSelfWithNbt(SushiContent.Blocks.COOLER_BOX, nbtBuilder);
         }
 
         private void crop(Supplier<CustomCropBlock> blockSupplier, Supplier<? extends Item> extra) {
-            ILootCondition.IBuilder condition = BlockStateProperty.builder(blockSupplier.get()).fromProperties(StatePropertiesPredicate.Builder.newBuilder().withIntProp(blockSupplier.get().getAgeProperty(), blockSupplier.get().getMaxAge()));
-            this.registerLootTable(blockSupplier.get(), droppingAndBonusWhen(blockSupplier.get(), extra.get(), blockSupplier.get().getSeedsItem().asItem(), condition));
+            LootItemCondition.Builder condition = LootItemBlockStatePropertyCondition.hasBlockStateProperties(blockSupplier.get()).setProperties(StatePropertiesPredicate.Builder.properties().hasProperty(blockSupplier.get().getAgeProperty(), blockSupplier.get().getMaxAge()));
+            this.add(blockSupplier.get(), createCropDrops(blockSupplier.get(), extra.get(), blockSupplier.get().getBaseSeedId().asItem(), condition));
             knownBlocks.add(blockSupplier.get());
         }
 
         private void dropSelf(Supplier<? extends Block> blockSupplier) {
-            this.registerDropSelfLootTable(blockSupplier.get());
+            this.dropSelf(blockSupplier.get());
             knownBlocks.add(blockSupplier.get());
         }
 
-        private void dropOther(Supplier<Block> blockSupplier, Supplier<? extends IItemProvider> other) {
-            this.registerDropping(blockSupplier.get(), other.get());
+        private void dropOther(Supplier<Block> blockSupplier, Supplier<? extends ItemLike> other) {
+            this.dropOther(blockSupplier.get(), other.get());
             knownBlocks.add(blockSupplier.get());
         }
 
         private void dropLeaves(Supplier<Block> blockSupplier, Supplier<Block> sapling) {
-            this.registerLootTable(blockSupplier.get(), (leaves) -> droppingWithChancesAndSticks(leaves, sapling.get(), 0.15F, 0.2F, 0.3F, 0.4F));
+            this.add(blockSupplier.get(), (leaves) -> createLeavesDrops(leaves, sapling.get(), 0.15F, 0.2F, 0.3F, 0.4F));
             knownBlocks.add(blockSupplier.get());
         }
 
         private void dropLeavesSpecial(Supplier<? extends Block> blockSupplier, Supplier<? extends Block> extra) {
-            this.registerLootTable(blockSupplier.get(), (block) -> {
-                return droppingWithSilkTouchOrShears(block, withSurvivesExplosion(block, ItemLootEntry.builder(extra.get())));
+            this.add(blockSupplier.get(), (block) -> {
+                return createSilkTouchOrShearsDispatchTable(block, applyExplosionCondition(block, LootItem.lootTableItem(extra.get())));
             });
             knownBlocks.add(blockSupplier.get());
         }
 
-        public void droppingSelfWithNbt(Supplier<? extends Block> itemProvider, CopyNbt.Builder nbtBuilder) {
-            this.registerLootTable(itemProvider.get(), LootTable.builder().addLootPool(withSurvivesExplosion(itemProvider.get(), LootPool.builder().rolls(ConstantRange.of(1)).addEntry(ItemLootEntry.builder(itemProvider.get()).acceptFunction(nbtBuilder)))));
+        public void droppingSelfWithNbt(Supplier<? extends Block> itemProvider, CopyNbtFunction.Builder nbtBuilder) {
+            this.add(itemProvider.get(), LootTable.lootTable().withPool(applyExplosionCondition(itemProvider.get(), LootPool.lootPool().setRolls(ConstantValue.exactly(1)).add(LootItem.lootTableItem(itemProvider.get()).apply(nbtBuilder)))));
             knownBlocks.add(itemProvider.get());
         }
 
@@ -110,12 +117,12 @@ public class SushiLootTableProvider extends LootTableProvider {
         }
     }
 
-    private class SushiEntityLootTables extends EntityLootTables {
+    private class SushiEntityLootTables extends EntityLoot {
 
         @Override
         protected void addTables() {
-            this.registerLootTable(SushiContent.EntityTypes.TUNA.get(), LootTable.builder().addLootPool(LootPool.builder().rolls(ConstantRange.of(1)).addEntry(ItemLootEntry.builder(SushiContent.Items.RAW_TUNA.get()))).addLootPool(LootPool.builder().rolls(ConstantRange.of(1)).addEntry(ItemLootEntry.builder(Items.BONE_MEAL)).acceptCondition(RandomChance.builder(0.05F))));
-            this.registerLootTable(SushiContent.EntityTypes.SHRIMP.get(), LootTable.builder().addLootPool(LootPool.builder().rolls(ConstantRange.of(1)).addEntry(ItemLootEntry.builder(SushiContent.Items.SHRIMP.get()))));
+            this.add(SushiContent.EntityTypes.TUNA.get(), LootTable.lootTable().withPool(LootPool.lootPool().setRolls(ConstantValue.exactly(1)).add(LootItem.lootTableItem(SushiContent.Items.RAW_TUNA.get()))).withPool(LootPool.lootPool().setRolls(ConstantValue.exactly(1)).add(LootItem.lootTableItem(Items.BONE_MEAL)).when(LootItemRandomChanceCondition.randomChance(0.05F))));
+            this.add(SushiContent.EntityTypes.SHRIMP.get(), LootTable.lootTable().withPool(LootPool.lootPool().setRolls(ConstantValue.exactly(1)).add(LootItem.lootTableItem(SushiContent.Items.SHRIMP.get()))));
         }
 
         @Override

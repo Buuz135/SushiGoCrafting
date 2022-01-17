@@ -1,7 +1,7 @@
 {
   "name": "Roller",
   "icon": "sushigocrafting:roller",
-  "category": "using_tools",
+  "category": "sushigocrafting:using_tools",
   "sortnum": 4,
   "read_by_default": true,
   "pages": [

@@ -16,9 +16,9 @@ import mezz.jei.api.registration.IRecipeCatalystRegistration;
 import mezz.jei.api.registration.IRecipeCategoryRegistration;
 import mezz.jei.api.registration.IRecipeRegistration;
 import net.minecraft.client.Minecraft;
-import net.minecraft.item.ItemStack;
-import net.minecraft.tileentity.FurnaceTileEntity;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.block.entity.FurnaceBlockEntity;
 import net.minecraftforge.registries.ForgeRegistries;
 
 import java.util.Collection;
@@ -41,15 +41,15 @@ public class JEIModPlugin implements IModPlugin {
         registry.addRecipeCategories(this.rollerCategory = new RollerCategory(registry.getJeiHelpers().getGuiHelper()));
         registry.addRecipeCategories(this.riceCookerCategory = new RiceCookerCategory(registry.getJeiHelpers().getGuiHelper()));
         registry.addRecipeCategories(this.fermentationBarrelCategory = new FermentationBarrelCategory(registry.getJeiHelpers().getGuiHelper()));
-        FUELS = ForgeRegistries.ITEMS.getValues().stream().filter(item -> FurnaceTileEntity.isFuel(new ItemStack(item))).map(item -> new ItemStack(item)).collect(Collectors.toList());
+        FUELS = ForgeRegistries.ITEMS.getValues().stream().filter(item -> FurnaceBlockEntity.isFuel(new ItemStack(item))).map(item -> new ItemStack(item)).collect(Collectors.toList());
     }
 
     @Override
     public void registerRecipes(IRecipeRegistration registration) {
         registration.addRecipes(Collections.singleton(new RiceCookerCategory.RiceCookerRecipe()), riceCookerCategory.getUid());
-        registration.addRecipes(RecipeUtil.getRecipes(Minecraft.getInstance().world, CuttingBoardRecipe.SERIALIZER.getRecipeType()), cuttingBoardRecipe.getUid());
+        registration.addRecipes(RecipeUtil.getRecipes(Minecraft.getInstance().level, CuttingBoardRecipe.SERIALIZER.getRecipeType()), cuttingBoardRecipe.getUid());
         registration.addRecipes(FoodHelper.REGISTERED.values().stream().flatMap(Collection::stream).map(RollerCategory.Recipe::new).collect(Collectors.toList()), rollerCategory.getUid());
-        registration.addRecipes(RecipeUtil.getRecipes(Minecraft.getInstance().world, FermentingBarrelRecipe.SERIALIZER.getRecipeType()), fermentationBarrelCategory.getUid());
+        registration.addRecipes(RecipeUtil.getRecipes(Minecraft.getInstance().level, FermentingBarrelRecipe.SERIALIZER.getRecipeType()), fermentationBarrelCategory.getUid());
     }
 
     @Override

@@ -11,11 +11,11 @@ import com.hrznstudio.titanium.recipe.generator.IJSONGenerator;
 import com.hrznstudio.titanium.recipe.generator.IJsonFile;
 import com.hrznstudio.titanium.recipe.generator.TitaniumSerializableProvider;
 import net.minecraft.data.DataGenerator;
-import net.minecraft.fluid.Fluids;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.Ingredient;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.ItemTags;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.level.material.Fluids;
 import net.minecraftforge.common.ForgeMod;
 import net.minecraftforge.fluids.FluidStack;
 
@@ -37,7 +37,7 @@ public class SushiSerializableProvider extends TitaniumSerializableProvider {
             }
         }
         new FermentingBarrelRecipe(new ResourceLocation(SushiGoCrafting.MOD_ID, "cheese"), Ingredient.EMPTY, new FluidStack(ForgeMod.MILK.get(), 250), new ItemStack(SushiContent.Items.CHEESE.get()));
-        new FermentingBarrelRecipe(new ResourceLocation(SushiGoCrafting.MOD_ID, "soy"), Ingredient.fromTag(ItemTags.createOptional(new ResourceLocation("forge", "crops/soy_bean"))), new FluidStack(Fluids.WATER, 250), new ItemStack(SushiContent.Items.SOY_SAUCE.get()));
+        new FermentingBarrelRecipe(new ResourceLocation(SushiGoCrafting.MOD_ID, "soy"), Ingredient.of(ItemTags.createOptional(new ResourceLocation("forge", "crops/soy_bean"))), new FluidStack(Fluids.WATER, 250), new ItemStack(SushiContent.Items.SOY_SAUCE.get()));
         FermentingBarrelRecipe.RECIPES.forEach(fermentingBarrelRecipe -> map.put(fermentingBarrelRecipe, fermentingBarrelRecipe));
     }
 }

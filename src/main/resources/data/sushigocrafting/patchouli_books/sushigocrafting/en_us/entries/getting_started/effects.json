@@ -1,7 +1,7 @@
 {
   "name": "Eating Effects",
   "icon": "sushigocrafting:avocado_slices",
-  "category": "getting_started",
+  "category": "sushigocrafting:getting_started",
   "sortnum": 0,
   "read_by_default": false,
   "pages": [

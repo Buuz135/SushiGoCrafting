@@ -2,7 +2,7 @@ package com.buuz135.sushigocrafting.api.impl;
 
 import com.buuz135.sushigocrafting.api.IFoodIngredient;
 import com.buuz135.sushigocrafting.api.IFoodType;
-import net.minecraft.item.ItemStack;
+import net.minecraft.world.item.ItemStack;
 import org.apache.commons.lang3.tuple.Pair;
 
 import java.util.ArrayList;
