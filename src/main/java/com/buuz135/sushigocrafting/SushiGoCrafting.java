@@ -107,7 +107,7 @@ public class SushiGoCrafting extends ModuleController {
         EventManager.mod(FMLCommonSetupEvent.class).process(this::fmlCommon).subscribe();
         EventManager.mod(GatherDataEvent.class).process(this::dataGen).subscribe();
         EventManager.modGeneric(RegistryEvent.Register.class, RecipeSerializer.class)
-                .process(register -> register.getRegistry()
+                .process(register -> ((RegistryEvent.Register) register).getRegistry()
                         .registerAll(CombineAmountItemRecipe.SERIALIZER.setRegistryName(new ResourceLocation(MOD_ID, "amount_combine_recipe")),
                                 CuttingBoardRecipe.SERIALIZER,
                                 FermentingBarrelRecipe.SERIALIZER
@@ -197,8 +197,8 @@ public class SushiGoCrafting extends ModuleController {
             registerCapabilitiesEvent.register(ISushiWeightDiscovery.class);
         }).subscribe();
         EventManager.forgeGeneric(AttachCapabilitiesEvent.class, Entity.class)
-                .filter(attachCapabilitiesEvent -> attachCapabilitiesEvent.getObject() instanceof Player)
-                .process(attachCapabilitiesEvent -> attachCapabilitiesEvent.addCapability(new ResourceLocation(MOD_ID, "weight_discovery"), new SushiDiscoveryProvider()))
+                .filter(attachCapabilitiesEvent -> ((AttachCapabilitiesEvent) attachCapabilitiesEvent).getObject() instanceof Player)
+                .process(attachCapabilitiesEvent -> ((AttachCapabilitiesEvent) attachCapabilitiesEvent).addCapability(new ResourceLocation(MOD_ID, "weight_discovery"), new SushiDiscoveryProvider()))
                 .subscribe();
         EventManager.forge(PlayerEvent.Clone.class).process(clone -> {
             clone.getOriginal().getCapability(SushiWeightDiscoveryCapability.CAPABILITY).ifPresent(original -> {
