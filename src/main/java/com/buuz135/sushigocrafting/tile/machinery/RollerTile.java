@@ -27,6 +27,8 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.util.INBTSerializable;
 import net.minecraftforge.items.ItemHandlerHelper;
 
@@ -55,12 +57,6 @@ public class RollerTile extends ActiveTile<RollerTile> {
         int max = 0;
         this.craftProgress = 0;
         for (IFoodType foodType : FoodAPI.get().getFoodTypes()) {
-            addButton(new FoodTypeButtonComponent(foodType, -20, i * 20 + 10, 18, 18) {
-                @Override
-                public Supplier<String> getSelected() {
-                    return () -> selected;
-                }
-            }.setComponent(this::getSlots));
             if (selected == null) selected = foodType.getName();
             max = Math.max(max,foodType.getFoodIngredients().size());
             ++i;
@@ -77,6 +73,41 @@ public class RollerTile extends ActiveTile<RollerTile> {
                 }
                 return false;
             });
+        addInventory(slots);
+        addInventory(this.spices = new InventoryComponent<RollerTile>("spices", 130, 76, 2)
+                .setSlotLimit(1)
+                .setSlotToColorRender(0, DyeColor.YELLOW)
+                .setSlotToColorRender(1, DyeColor.YELLOW)
+                .setSlotToItemStackRender(0, new ItemStack(SushiContent.Items.SOY_SAUCE.get()))
+                .setSlotToItemStackRender(1, new ItemStack(SushiContent.Items.WASABI_PASTE.get()))
+                .setInputFilter((stack, integer) -> {
+                    if (integer == 0) return stack.getItem().equals(SushiContent.Items.SOY_SAUCE.get());
+                    if (integer == 1) return stack.getItem().equals(SushiContent.Items.WASABI_PASTE.get());
+                    return false;
+                })
+        );
+        FoodAPI.get().getTypeFromName(this.selected).ifPresent(iFoodType -> {
+            for (int slot = 0; slot < slots.getSlots(); slot++) {
+                slots.setSlotToItemStackRender(slot, iFoodType.getSlotStackRender().apply(slot));
+                slots.setSlotToColorRender(slot, 0xffc769);
+            }
+        });
+    }
+
+    @OnlyIn(Dist.CLIENT)
+    @Override
+    public void initClient() {
+        super.initClient();
+        int i = 0;
+        for (IFoodType foodType : FoodAPI.get().getFoodTypes()) {
+            addButton(new FoodTypeButtonComponent(foodType, -20, i * 20 + 10, 18, 18) {
+                @Override
+                public Supplier<String> getSelected() {
+                    return () -> selected;
+                }
+            }.setComponent(this::getSlots));
+            ++i;
+        }
         FoodAPI.get().getTypeFromName(selected).ifPresent(iFoodType -> {
             for (int i1 = 0; i1 < slots.getSlots(); i1++) {
                 int finalI = i1;
@@ -93,26 +124,7 @@ public class RollerTile extends ActiveTile<RollerTile> {
                 });
             }
         });
-        addInventory(slots);
-        addInventory(this.spices = new InventoryComponent<RollerTile>("spices", 130, 76, 2)
-                .setSlotLimit(1)
-                .setSlotToColorRender(0, DyeColor.YELLOW)
-                .setSlotToColorRender(1, DyeColor.YELLOW)
-                .setSlotToItemStackRender(0, new ItemStack(SushiContent.Items.SOY_SAUCE.get()))
-                .setSlotToItemStackRender(1, new ItemStack(SushiContent.Items.WASABI_PASTE.get()))
-                .setInputFilter((stack, integer) -> {
-                    if (integer == 0) return stack.getItem().equals(SushiContent.Items.SOY_SAUCE.get());
-                    if (integer == 1) return stack.getItem().equals(SushiContent.Items.WASABI_PASTE.get());
-                    return false;
-                })
-        );
         addButton(new RollerCraftButtonComponent(148, 20, 18, 18).setId(101));
-        FoodAPI.get().getTypeFromName(this.selected).ifPresent(iFoodType -> {
-            for (int slot = 0; slot < slots.getSlots(); slot++) {
-                slots.setSlotToItemStackRender(slot, iFoodType.getSlotStackRender().apply(slot));
-                slots.setSlotToColorRender(slot, 0xffc769);
-            }
-        });
     }
 
     @Override
