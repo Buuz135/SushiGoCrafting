@@ -30,7 +30,7 @@ public class ShrimpRenderer extends MobRenderer<ShrimpEntity, ShrimpModel> {
         float f = Mth.sin(0.3F * ageInTicks);
         matrixStackIn.mulPose(Vector3f.XP.rotationDegrees(f));
         if (!entityLiving.isInWater()) {
-            matrixStackIn.translate((double) 0.1F, (double) 0.1F, (double) -0.1F);
+            matrixStackIn.translate(0.1F, 0.1F, -0.1F);
             matrixStackIn.mulPose(Vector3f.ZP.rotationDegrees(90.0F));
         }
     }

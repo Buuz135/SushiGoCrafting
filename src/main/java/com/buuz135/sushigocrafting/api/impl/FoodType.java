@@ -36,10 +36,10 @@ public class FoodType implements IFoodType {
     public static FoodType GUNKAN = new FoodType(
             "gunkan",
             new int[]{2}, integer -> {
-                if (integer > 2)
-                    return Pair.of(-Integer.MAX_VALUE, -Integer.MAX_VALUE);
-                return Pair.of(78 - (int) (30 * (integer - (2 / 2D))), 49);
-            },
+        if (integer > 2)
+            return Pair.of(-Integer.MAX_VALUE, -Integer.MAX_VALUE);
+        return Pair.of(78 - (int) (30 * (integer - (2 / 2D))), 49);
+    },
             integer -> {
                 switch (integer) {
                     case 0:
@@ -153,7 +153,7 @@ public class FoodType implements IFoodType {
     private final int[] index;
     private final String name;
     private final Function<Integer, Pair<Integer, Integer>> slotPos;
-    private List<IFoodIngredient[]> ingredients;
+    private final List<IFoodIngredient[]> ingredients;
 
     public FoodType(String name, int[] index, Function<Integer, Pair<Integer, Integer>> slotPos, Function<Integer, ItemStack> slotStackRender, IFoodIngredient[]... ingredients) {
         this.index = index;

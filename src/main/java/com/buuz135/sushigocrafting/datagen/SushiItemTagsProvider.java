@@ -25,7 +25,7 @@ import java.util.Map;
 public class SushiItemTagsProvider extends ItemTagsProvider {
 
     public SushiItemTagsProvider(DataGenerator gen, BlockTagsProvider blockTagsProvider, ExistingFileHelper existingFileHelper) {
-        super(gen, blockTagsProvider, SushiGoCrafting.MOD_ID,existingFileHelper);
+        super(gen, blockTagsProvider, SushiGoCrafting.MOD_ID, existingFileHelper);
     }
 
     @Override

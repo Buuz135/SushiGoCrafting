@@ -14,7 +14,7 @@ import java.awt.*;
 public class RollerAssetProvider implements IAssetProvider {
 
     public static RollerAssetProvider INSTANCE = new RollerAssetProvider();
-    private static ResourceLocation TEXTURE = new ResourceLocation(SushiGoCrafting.MOD_ID, "textures/gui/roller.png");
+    private static final ResourceLocation TEXTURE = new ResourceLocation(SushiGoCrafting.MOD_ID, "textures/gui/roller.png");
 
     private final IAsset SLOT = new IAsset() {
         @Override

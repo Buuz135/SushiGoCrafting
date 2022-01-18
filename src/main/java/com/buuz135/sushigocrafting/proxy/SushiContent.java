@@ -222,16 +222,17 @@ public class SushiContent {
 
         public static final DeferredRegister<EntityType<?>> REGISTRY = DeferredRegister.create(ForgeRegistries.ENTITIES, SushiGoCrafting.MOD_ID);
 
-        public static final RegistryObject<EntityType<TunaEntity>> TUNA = entity("tuna", () -> EntityType.Builder.of(TunaEntity::new, MobCategory.WATER_AMBIENT).sized(0.7F, 0.4F).clientTrackingRange(4).setCustomClientFactory((spawnEntity, world) -> new TunaEntity(getTuna().get(), world)).build("tuna"));
-        public static final RegistryObject<EntityType<ShrimpEntity>> SHRIMP = entity("shrimp", () -> EntityType.Builder.of(ShrimpEntity::new, MobCategory.WATER_AMBIENT).sized(0.7F, 0.4F).clientTrackingRange(4).setCustomClientFactory((spawnEntity, world) -> new ShrimpEntity(getShrimp().get(), world)).build("shrimp"));
-
         public static RegistryObject<EntityType<TunaEntity>> getTuna() {
             return TUNA;
-        }
+        }        public static final RegistryObject<EntityType<TunaEntity>> TUNA = entity("tuna", () -> EntityType.Builder.of(TunaEntity::new, MobCategory.WATER_AMBIENT).sized(0.7F, 0.4F).clientTrackingRange(4).setCustomClientFactory((spawnEntity, world) -> new TunaEntity(getTuna().get(), world)).build("tuna"));
 
         public static RegistryObject<EntityType<ShrimpEntity>> getShrimp() {
             return SHRIMP;
-        }
+        }        public static final RegistryObject<EntityType<ShrimpEntity>> SHRIMP = entity("shrimp", () -> EntityType.Builder.of(ShrimpEntity::new, MobCategory.WATER_AMBIENT).sized(0.7F, 0.4F).clientTrackingRange(4).setCustomClientFactory((spawnEntity, world) -> new ShrimpEntity(getShrimp().get(), world)).build("shrimp"));
+
+
+
+
     }
 
     public static class LootSerializers {

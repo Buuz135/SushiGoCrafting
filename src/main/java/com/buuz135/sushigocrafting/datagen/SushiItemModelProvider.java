@@ -17,7 +17,7 @@ public class SushiItemModelProvider extends ItemModelProvider {
 
 
     public SushiItemModelProvider(DataGenerator generator, String modid, ExistingFileHelper existingFileHelper) {
-        super(generator, modid,  existingFileHelper);
+        super(generator, modid, existingFileHelper);
     }
 
     @Override

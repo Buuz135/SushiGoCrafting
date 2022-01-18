@@ -41,15 +41,15 @@ import java.util.function.Supplier;
 public class RollerTile extends ActiveTile<RollerTile> {
 
     @Save
-    private InventoryComponent<RollerTile> slots;
+    private final InventoryComponent<RollerTile> slots;
     @Save
     private String selected;
     @Save
-    private WeightTracker weightTracker;
+    private final WeightTracker weightTracker;
     @Save
     private int craftProgress;
     @Save
-    private InventoryComponent<RollerTile> spices;
+    private final InventoryComponent<RollerTile> spices;
 
     public RollerTile(BlockPos pos, BlockState state) {
         super(SushiContent.Blocks.ROLLER.get(), pos, state);
@@ -58,21 +58,21 @@ public class RollerTile extends ActiveTile<RollerTile> {
         this.craftProgress = 0;
         for (IFoodType foodType : FoodAPI.get().getFoodTypes()) {
             if (selected == null) selected = foodType.getName();
-            max = Math.max(max,foodType.getFoodIngredients().size());
+            max = Math.max(max, foodType.getFoodIngredients().size());
             ++i;
         }
         weightTracker = new WeightTracker(max);
         slots = new InventoryComponent<RollerTile>("slots", 0, 0, max)
-            .setSlotPosition(FoodAPI.get().getTypeFromName(selected).get().getSlotPosition())
-            .setInputFilter((stack, integer) -> {
-                List<IFoodIngredient[]> ingredients = FoodAPI.get().getTypeFromName(selected).get().getFoodIngredients();
-                if (integer>=ingredients.size()) return false;
-                for (IFoodIngredient ingredient : ingredients.get(integer)){
-                    if (ingredient.isEmpty()) continue;
-                    if (ingredient.getItem().equals(stack.getItem())) return true;
-                }
-                return false;
-            });
+                .setSlotPosition(FoodAPI.get().getTypeFromName(selected).get().getSlotPosition())
+                .setInputFilter((stack, integer) -> {
+                    List<IFoodIngredient[]> ingredients = FoodAPI.get().getTypeFromName(selected).get().getFoodIngredients();
+                    if (integer >= ingredients.size()) return false;
+                    for (IFoodIngredient ingredient : ingredients.get(integer)) {
+                        if (ingredient.isEmpty()) continue;
+                        if (ingredient.getItem().equals(stack.getItem())) return true;
+                    }
+                    return false;
+                });
         addInventory(slots);
         addInventory(this.spices = new InventoryComponent<RollerTile>("spices", 130, 76, 2)
                 .setSlotLimit(1)

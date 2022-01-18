@@ -36,11 +36,11 @@ public class SushiBlockstateProvider extends BlockStateProvider {
         getVariantBuilder(SushiContent.Blocks.AVOCADO_LEAVES.get())
                 .partialState()
                 .with(AvocadoLeavesBlock.STAGE, 0).addModels(
-                ConfiguredModel.builder().modelFile(new ModelFile.UncheckedModelFile(modLoc("block/" + SushiContent.Blocks.AVOCADO_LEAVES.get().getRegistryName().getPath() + "_0"))).build())
+                        ConfiguredModel.builder().modelFile(new ModelFile.UncheckedModelFile(modLoc("block/" + SushiContent.Blocks.AVOCADO_LEAVES.get().getRegistryName().getPath() + "_0"))).build())
                 .partialState().with(AvocadoLeavesBlock.STAGE, 1).addModels(
-                ConfiguredModel.builder().modelFile(new ModelFile.UncheckedModelFile(modLoc("block/" + SushiContent.Blocks.AVOCADO_LEAVES.get().getRegistryName().getPath() + "_1"))).build())
+                        ConfiguredModel.builder().modelFile(new ModelFile.UncheckedModelFile(modLoc("block/" + SushiContent.Blocks.AVOCADO_LEAVES.get().getRegistryName().getPath() + "_1"))).build())
                 .partialState().with(AvocadoLeavesBlock.STAGE, 2).addModels(
-                ConfiguredModel.builder().modelFile(new ModelFile.UncheckedModelFile(modLoc("block/" + SushiContent.Blocks.AVOCADO_LEAVES.get().getRegistryName().getPath() + "_2"))).build());
+                        ConfiguredModel.builder().modelFile(new ModelFile.UncheckedModelFile(modLoc("block/" + SushiContent.Blocks.AVOCADO_LEAVES.get().getRegistryName().getPath() + "_2"))).build());
         horizontalBlock(SushiContent.Blocks.CUTTING_BOARD.get());
         horizontalBlock(SushiContent.Blocks.ROLLER.get());
         simpleBlockUn(SushiContent.Blocks.FERMENTATION_BARREL.get());

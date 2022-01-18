@@ -12,22 +12,22 @@ import java.util.Optional;
 
 public class FoodAPI {
 
-    private static FoodAPI INSTACE = new FoodAPI();
-    private List<IFoodType> foodTypes = new ArrayList<>();
-    private List<IFoodIngredient> foodIngredients = new ArrayList<>();
+    private static final FoodAPI INSTACE = new FoodAPI();
+    private final List<IFoodType> foodTypes = new ArrayList<>();
+    private final List<IFoodIngredient> foodIngredients = new ArrayList<>();
 
     private FoodAPI() {
 
+    }
+
+    public static FoodAPI get() {
+        return INSTACE;
     }
 
     public FoodAPI init() {
         FoodIngredient.init();
         FoodType.init();
         return this;
-    }
-
-    public static FoodAPI get() {
-        return INSTACE;
     }
 
     public void addFoodIngredient(IFoodIngredient iFoodIngredient) {

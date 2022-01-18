@@ -17,7 +17,7 @@ import java.util.List;
 
 public class SeedsLootModifier extends LootModifier {
 
-    private List<ItemWeightedItem> seeds = new ArrayList<>();
+    private final List<ItemWeightedItem> seeds = new ArrayList<>();
 
     public SeedsLootModifier(LootItemCondition[] conditionsIn) {
         super(conditionsIn);

@@ -28,8 +28,8 @@ import net.minecraft.world.item.Item;
 
 public class ItemWeightedItem implements WeightedEntry {
 
-    private Item stack;
-    private int weight;
+    private final Item stack;
+    private final int weight;
 
     public ItemWeightedItem(Item stack, int itemWeightIn) {
         this.stack = stack;

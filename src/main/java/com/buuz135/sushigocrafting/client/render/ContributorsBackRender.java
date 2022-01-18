@@ -41,7 +41,7 @@ import net.minecraft.resources.ResourceLocation;
 
 public class ContributorsBackRender extends RenderLayer<AbstractClientPlayer, PlayerModel<AbstractClientPlayer>> {
 
-    private PlayerModel<AbstractClientPlayer> model;
+    private final PlayerModel<AbstractClientPlayer> model;
 
     public ContributorsBackRender(RenderLayerParent<AbstractClientPlayer, PlayerModel<AbstractClientPlayer>> p_i50926_1_) {
         super(p_i50926_1_);

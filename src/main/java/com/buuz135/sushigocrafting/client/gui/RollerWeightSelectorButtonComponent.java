@@ -31,7 +31,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
-public abstract class RollerWeightSelectorButtonComponent extends BasicScreenAddon  {
+public abstract class RollerWeightSelectorButtonComponent extends BasicScreenAddon {
 
     private final InventoryComponent<RollerTile> inventoryComponent;
     private final int slot;

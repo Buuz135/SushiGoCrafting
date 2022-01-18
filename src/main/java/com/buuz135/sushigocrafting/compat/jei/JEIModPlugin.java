@@ -29,9 +29,9 @@ import java.util.stream.Collectors;
 @JeiPlugin
 public class JEIModPlugin implements IModPlugin {
 
+    public static List<ItemStack> FUELS;
     private CuttingBoardCategory cuttingBoardRecipe;
     private RollerCategory rollerCategory;
-    public static List<ItemStack> FUELS;
     private RiceCookerCategory riceCookerCategory;
     private FermentationBarrelCategory fermentationBarrelCategory;
 

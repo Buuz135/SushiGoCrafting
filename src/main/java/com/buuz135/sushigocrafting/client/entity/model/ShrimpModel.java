@@ -59,21 +59,21 @@ public class ShrimpModel extends HierarchicalModel<ShrimpEntity> {
         PartDefinition partdefinition = meshdefinition.getRoot();
         int i = 22;
         partdefinition.addOrReplaceChild("body1", CubeListBuilder.create()
-                .texOffs(0, 0).addBox(-1.5F, 0.0F, 1.0F, 3.0F, 2.0F, 2.0F)
-                .texOffs(21, 5).addBox(-1.5F, 2.0F, 1.0F, 3.0F, 1.0F, 2.0F)
-                .texOffs(20, 0).addBox(-1.5F, 1.0F, -2.0F, 3.0F, 2.0F, 3.0F),
+                        .texOffs(0, 0).addBox(-1.5F, 0.0F, 1.0F, 3.0F, 2.0F, 2.0F)
+                        .texOffs(21, 5).addBox(-1.5F, 2.0F, 1.0F, 3.0F, 1.0F, 2.0F)
+                        .texOffs(20, 0).addBox(-1.5F, 1.0F, -2.0F, 3.0F, 2.0F, 3.0F),
                 PartPose.offset(0.0F, 22.0F, -3.5F));
         partdefinition.addOrReplaceChild("body2", CubeListBuilder.create()
-                .texOffs(0, 4).addBox(-1.5F, 1.0F, 1.0F, 3.0F, 2.0F, 2.0F)
-                .texOffs(21, 8).addBox(-1.5F, 3.0F, 1.0F, 3.0F, 1.0F, 2.0F),
+                        .texOffs(0, 4).addBox(-1.5F, 1.0F, 1.0F, 3.0F, 2.0F, 2.0F)
+                        .texOffs(21, 8).addBox(-1.5F, 3.0F, 1.0F, 3.0F, 1.0F, 2.0F),
                 PartPose.offset(0.0F, 21.0F, -1.5F));
         partdefinition.addOrReplaceChild("body3", CubeListBuilder.create()
-                .texOffs(0, 8).addBox(-1.0F, 0.0F, -5.5F, 2.0F, 2.0F, 3.0F )
-                .texOffs(21, 11).addBox(-1.0F, 2.0F, -5.5F, 2.0F, 1.0F, 3.0F),
+                        .texOffs(0, 8).addBox(-1.0F, 0.0F, -5.5F, 2.0F, 2.0F, 3.0F)
+                        .texOffs(21, 11).addBox(-1.0F, 2.0F, -5.5F, 2.0F, 1.0F, 3.0F),
                 PartPose.offset(0.0F, 22.0F, 7.0F));
         partdefinition.addOrReplaceChild("body4", CubeListBuilder.create()
-                .texOffs(1, 13).addBox(-1.0F, 0.0F, 0.0F, 2.0F, 1.0F, 2.0F)
-                .texOffs(21, 15).addBox(-1.5F, 1.0F, 2.0F, 3.0F, 0.0F, 2.0F),
+                        .texOffs(1, 13).addBox(-1.0F, 0.0F, 0.0F, 2.0F, 1.0F, 2.0F)
+                        .texOffs(21, 15).addBox(-1.5F, 1.0F, 2.0F, 3.0F, 0.0F, 2.0F),
                 PartPose.offset(0.0F, 23.0F, 4.5F));
         return LayerDefinition.create(meshdefinition, 32, 32);
     }

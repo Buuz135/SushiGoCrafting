@@ -43,7 +43,7 @@ public class FermentationBarrelBlock extends RotatableBlock<FermentationBarrelTi
 
     @Override
     public Item asItem() {
-        return   Item.byBlock(this);
+        return Item.byBlock(this);
     }
 
     @Override

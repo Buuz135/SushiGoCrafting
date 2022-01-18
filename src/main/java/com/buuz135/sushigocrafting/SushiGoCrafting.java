@@ -107,7 +107,7 @@ public class SushiGoCrafting extends ModuleController {
         EventManager.mod(FMLCommonSetupEvent.class).process(this::fmlCommon).subscribe();
         EventManager.mod(GatherDataEvent.class).process(this::dataGen).subscribe();
         EventManager.modGeneric(RegistryEvent.Register.class, RecipeSerializer.class)
-                .process(register -> ((RegistryEvent.Register) register).getRegistry()
+                .process(register -> register.getRegistry()
                         .registerAll(CombineAmountItemRecipe.SERIALIZER.setRegistryName(new ResourceLocation(MOD_ID, "amount_combine_recipe")),
                                 CuttingBoardRecipe.SERIALIZER,
                                 FermentingBarrelRecipe.SERIALIZER
@@ -123,7 +123,7 @@ public class SushiGoCrafting extends ModuleController {
         EventManager.forge(BiomeLoadingEvent.class).filter(biomeLoadingEvent -> biomeLoadingEvent.getCategory() == Biome.BiomeCategory.OCEAN).process(biomeLoadingEvent -> {
             biomeLoadingEvent.getGeneration().addFeature(GenerationStep.Decoration.VEGETAL_DECORATION,
                     SushiContent.Features.SEAWEED.get().configured(FeatureConfiguration.NONE).placed(NoiseBasedCountPlacement.of(80, 80.0D, 0.0D), InSquarePlacement.spread(), PlacementUtils.HEIGHTMAP_TOP_SOLID, BiomeFilter.biome()));
-                            //.decorated(Features.Decorators.TOP_SOLID_HEIGHTMAP.squared().decorated(FeatureDecorator.COUNT_NOISE_BIASED.configured(new NoiseCountFactorDecoratorConfiguration(80, 80.0D, 0.0D)))));
+            //.decorated(Features.Decorators.TOP_SOLID_HEIGHTMAP.squared().decorated(FeatureDecorator.COUNT_NOISE_BIASED.configured(new NoiseCountFactorDecoratorConfiguration(80, 80.0D, 0.0D)))));
         }).subscribe();
         EventManager.forge(BiomeLoadingEvent.class).filter(biomeLoadingEvent -> biomeLoadingEvent.getCategory() == Biome.BiomeCategory.OCEAN || biomeLoadingEvent.getCategory() == Biome.BiomeCategory.RIVER).process(biomeLoadingEvent -> {
             biomeLoadingEvent.getSpawns().addSpawn(MobCategory.WATER_AMBIENT, new MobSpawnSettings.SpawnerData(SushiContent.EntityTypes.TUNA.get(), 8, 3, 6));
@@ -137,8 +137,8 @@ public class SushiGoCrafting extends ModuleController {
         EventManager.forge(BiomeLoadingEvent.class).filter(biomeLoadingEvent -> biomeLoadingEvent.getCategory() == Biome.BiomeCategory.PLAINS).process(biomeLoadingEvent -> {
             biomeLoadingEvent.getGeneration().addFeature(GenerationStep.Decoration.VEGETAL_DECORATION,
                     Feature.TREE.configured(AvocadoTree.TREE).placed(PlacementUtils.countExtra(0, 0.05F, 1), InSquarePlacement.spread(), SurfaceWaterDepthFilter.forMaxDepth(0), PlacementUtils.HEIGHTMAP_OCEAN_FLOOR, BlockPredicateFilter.forPredicate(BlockPredicate.wouldSurvive(Blocks.OAK_SAPLING.defaultBlockState(), BlockPos.ZERO)), BiomeFilter.biome()));
-                            //.decorated(Features.Decorators.HEIGHTMAP_SQUARE)
-                            //.decorated(FeatureDecorator.CHANCE.configured(new ChanceDecoratorConfiguration(6))));
+            //.decorated(Features.Decorators.HEIGHTMAP_SQUARE)
+            //.decorated(FeatureDecorator.CHANCE.configured(new ChanceDecoratorConfiguration(6))));
         }).subscribe();
         EventManager.forge(PistonEvent.Pre.class).process(pre -> {
             if (pre.getWorld().getBlockState(pre.getFaceOffsetPos()).getBlock().equals(SushiContent.Blocks.SEAWEED_BLOCK.get()) && pre.getWorld().getBlockState(pre.getPos().relative(pre.getDirection(), 2)).getBlock().equals(Blocks.IRON_BLOCK)) {
@@ -169,12 +169,12 @@ public class SushiGoCrafting extends ModuleController {
         //    itemTooltipEvent.getToolTip().addAll(itemTooltipEvent.getItemStack().getItem().getTags().stream().map(resourceLocation -> new StringTextComponent(resourceLocation.toString())).collect(Collectors.toList()));
         //}).subscribe();
     }
-    
+
     @Override
     protected void initModules() {
-    
+
     }
-    
+
     public void fmlCommon(FMLCommonSetupEvent event) {
         registerCapability();
     }
@@ -197,8 +197,8 @@ public class SushiGoCrafting extends ModuleController {
             registerCapabilitiesEvent.register(ISushiWeightDiscovery.class);
         }).subscribe();
         EventManager.forgeGeneric(AttachCapabilitiesEvent.class, Entity.class)
-                .filter(attachCapabilitiesEvent -> ((AttachCapabilitiesEvent) attachCapabilitiesEvent).getObject() instanceof Player)
-                .process(attachCapabilitiesEvent -> ((AttachCapabilitiesEvent) attachCapabilitiesEvent).addCapability(new ResourceLocation(MOD_ID, "weight_discovery"), new SushiDiscoveryProvider()))
+                .filter(attachCapabilitiesEvent -> attachCapabilitiesEvent.getObject() instanceof Player)
+                .process(attachCapabilitiesEvent -> attachCapabilitiesEvent.addCapability(new ResourceLocation(MOD_ID, "weight_discovery"), new SushiDiscoveryProvider()))
                 .subscribe();
         EventManager.forge(PlayerEvent.Clone.class).process(clone -> {
             clone.getOriginal().getCapability(SushiWeightDiscoveryCapability.CAPABILITY).ifPresent(original -> {

@@ -29,7 +29,7 @@ public class TunaRenderer extends MobRenderer<TunaEntity, CodModel<TunaEntity>> 
         float f = 4.3F * Mth.sin(0.6F * ageInTicks);
         matrixStackIn.mulPose(Vector3f.YP.rotationDegrees(f));
         if (!entityLiving.isInWater()) {
-            matrixStackIn.translate((double) 0.1F, (double) 0.1F, (double) -0.1F);
+            matrixStackIn.translate(0.1F, 0.1F, -0.1F);
             matrixStackIn.mulPose(Vector3f.ZP.rotationDegrees(90.0F));
         }
 

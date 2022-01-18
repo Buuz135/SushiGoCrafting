@@ -12,7 +12,7 @@ import net.minecraftforge.common.data.ExistingFileHelper;
 public class SushiBlockTagsProvider extends BlockTagsProvider {
 
     public SushiBlockTagsProvider(DataGenerator gen, ExistingFileHelper existingFileHelper) {
-        super(gen, SushiGoCrafting.MOD_ID,existingFileHelper);
+        super(gen, SushiGoCrafting.MOD_ID, existingFileHelper);
     }
 
     @Override

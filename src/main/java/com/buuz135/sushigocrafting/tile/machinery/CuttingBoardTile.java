@@ -28,7 +28,7 @@ public class CuttingBoardTile extends ActiveTile<CuttingBoardTile> {
     public static Tag<Item> KNIFE = TagUtil.getItemTag(new ResourceLocation("forge", "tools/knife"));
 
     @Save
-    private InventoryComponent<CuttingBoardTile> input;
+    private final InventoryComponent<CuttingBoardTile> input;
     @Save
     private int click;
 

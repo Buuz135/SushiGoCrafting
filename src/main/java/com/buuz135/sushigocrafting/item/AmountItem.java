@@ -52,12 +52,12 @@ public class AmountItem extends SushiItem {
 
     @Override
     public int getBarWidth(ItemStack stack) {
-        return  Math.round( (float)stack.getOrCreateTag().getInt(NBT_AMOUNT) * 13.0F / (float)this.maxCombineAmount);
+        return Math.round((float) stack.getOrCreateTag().getInt(NBT_AMOUNT) * 13.0F / (float) this.maxCombineAmount);
     }
 
     @Override
     public int getBarColor(ItemStack stack) {
-        return  Color.YELLOW.getRGB();
+        return Color.YELLOW.getRGB();
     }
 
     @Override
@@ -123,7 +123,7 @@ public class AmountItem extends SushiItem {
     @Override
     public ItemStack finishUsingItem(ItemStack stack, Level worldIn, LivingEntity entityLiving) {
         if (entityLiving instanceof Player) {
-            worldIn.playSound((Player) null, entityLiving.getX(), entityLiving.getY(), entityLiving.getZ(), this.getEatingSound(), SoundSource.NEUTRAL, 1.0F, 1.0F + (worldIn.random.nextFloat() - worldIn.random.nextFloat()) * 0.4F);
+            worldIn.playSound(null, entityLiving.getX(), entityLiving.getY(), entityLiving.getZ(), this.getEatingSound(), SoundSource.NEUTRAL, 1.0F, 1.0F + (worldIn.random.nextFloat() - worldIn.random.nextFloat()) * 0.4F);
             ((Player) entityLiving).getFoodData().eat(stack.getItem().getFoodProperties().getNutrition(), stack.getItem().getFoodProperties().getSaturationModifier());
             for (Pair<MobEffectInstance, Float> pair : stack.getItem().getFoodProperties().getEffects()) {
                 if (!worldIn.isClientSide && pair.getFirst() != null && worldIn.random.nextFloat() < pair.getSecond()) {

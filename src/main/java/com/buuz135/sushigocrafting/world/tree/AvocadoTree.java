@@ -20,12 +20,12 @@ import java.util.Random;
 public class AvocadoTree extends AbstractTreeGrower {
 
     public static TreeConfiguration TREE = new TreeConfiguration.TreeConfigurationBuilder(
-                SimpleStateProvider.simple(SushiContent.Blocks.AVOCADO_LOG.get().defaultBlockState()),
+            SimpleStateProvider.simple(SushiContent.Blocks.AVOCADO_LOG.get().defaultBlockState()),
             new AvocadoTreeTrunkPlacer(4, 1, 0),
             new WeightedStateProvider(SimpleWeightedRandomList.<BlockState>builder()
-                        .add(SushiContent.Blocks.AVOCADO_LEAVES.get().defaultBlockState(), 6)
-                        .add(SushiContent.Blocks.AVOCADO_LEAVES.get().defaultBlockState().setValue(AvocadoLeavesBlock.STAGE, 1), 3)
-                        .add(SushiContent.Blocks.AVOCADO_LEAVES.get().defaultBlockState().setValue(AvocadoLeavesBlock.STAGE, 2), 1)),
+                    .add(SushiContent.Blocks.AVOCADO_LEAVES.get().defaultBlockState(), 6)
+                    .add(SushiContent.Blocks.AVOCADO_LEAVES.get().defaultBlockState().setValue(AvocadoLeavesBlock.STAGE, 1), 3)
+                    .add(SushiContent.Blocks.AVOCADO_LEAVES.get().defaultBlockState().setValue(AvocadoLeavesBlock.STAGE, 2), 1)),
             new BlobFoliagePlacer(ConstantInt.of(1), ConstantInt.of(0), 3), new TwoLayersFeatureSize(1, 0, 1)).ignoreVines().build();
 
     @Nullable

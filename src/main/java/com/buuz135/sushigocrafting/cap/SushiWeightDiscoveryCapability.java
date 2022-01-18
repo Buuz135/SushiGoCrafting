@@ -15,9 +15,10 @@ import java.util.Map;
 
 public class SushiWeightDiscoveryCapability implements ISushiWeightDiscovery {
 
-    public static Capability<ISushiWeightDiscovery> CAPABILITY = CapabilityManager.get(new CapabilityToken<>(){});
+    public static Capability<ISushiWeightDiscovery> CAPABILITY = CapabilityManager.get(new CapabilityToken<>() {
+    });
 
-    private Map<String, Integer> discoveryLevels;
+    private final Map<String, Integer> discoveryLevels;
 
     public SushiWeightDiscoveryCapability() {
         this.discoveryLevels = new HashMap<>();

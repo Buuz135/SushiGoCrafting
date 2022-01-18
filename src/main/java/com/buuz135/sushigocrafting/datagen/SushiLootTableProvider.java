@@ -53,7 +53,7 @@ public class SushiLootTableProvider extends LootTableProvider {
 
     private static class SushiBlockLootTables extends BlockLoot {
 
-        private List<Block> knownBlocks = new ArrayList<>();
+        private final List<Block> knownBlocks = new ArrayList<>();
 
         @Override
         protected void addTables() {

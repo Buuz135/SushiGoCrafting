@@ -33,7 +33,7 @@ public class ClientProxy {
     public static BakedModel SALMON_BACK;
     public static BakedModel TUNA_BACK;
 
-    public static void register(){
+    public static void register() {
         EventManager.mod(EntityRenderersEvent.RegisterRenderers.class).process(event -> {
             event.registerEntityRenderer(SushiContent.EntityTypes.TUNA.get(), TunaRenderer::new);
             event.registerEntityRenderer(SushiContent.EntityTypes.SHRIMP.get(), ShrimpRenderer::new);

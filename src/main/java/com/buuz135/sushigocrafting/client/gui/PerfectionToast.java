@@ -17,7 +17,7 @@ public class PerfectionToast implements Toast {
     private Toast.Visibility visibility = Toast.Visibility.SHOW;
     private long lastDelta;
     private float displayedProgress;
-    private ItemStack display;
+    private final ItemStack display;
 
     public PerfectionToast(ItemStack stack, Component titleComponent, @Nullable Component subtitleComponent, boolean drawProgressBar) {
         this.title = titleComponent;

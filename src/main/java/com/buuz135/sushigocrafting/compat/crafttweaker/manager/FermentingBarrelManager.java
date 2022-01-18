@@ -15,18 +15,18 @@ import org.openzen.zencode.java.ZenCodeType;
 @ZenRegister
 @ZenCodeType.Name("mods.sushigocrafting.FermentingBarrel")
 public class FermentingBarrelManager implements IRecipeManager<FermentingBarrelRecipe> {
-    
+
     @ZenCodeType.Method
     public void addRecipe(String name, IIngredient input, IFluidStack stack, IItemStack output) {
         name = fixRecipeName(name);
         CraftTweakerAPI.apply(new ActionAddRecipe<>(this, new FermentingBarrelRecipe(new ResourceLocation("crafttweaker", name), input.asVanillaIngredient(), stack.getInternal(), output.getInternal())));
     }
-    
+
     @Override
     public void remove(IIngredient output) {
         throw new RuntimeException("Fermenting Barrel recipes can only be removed by name, not output!");
     }
-    
+
     @Override
     public RecipeType<FermentingBarrelRecipe> getRecipeType() {
         return FermentingBarrelRecipe.SERIALIZER.getRecipeType();

@@ -31,7 +31,7 @@ public class RiceCookerTile extends ActiveTile<RiceCookerTile> {
     public static Tag<Item> RICE = TagUtil.getItemTag(new ResourceLocation("forge", "crops/rice"));
 
     @Save
-    private InventoryComponent<RiceCookerTile> input;
+    private final InventoryComponent<RiceCookerTile> input;
     @Save
     private ProgressBarComponent<RiceCookerTile> bar;
     @Save
@@ -39,7 +39,7 @@ public class RiceCookerTile extends ActiveTile<RiceCookerTile> {
     @Save
     private FluidTankComponent<RiceCookerTile> water;
     @Save
-    private InventoryComponent<RiceCookerTile> fuel;
+    private final InventoryComponent<RiceCookerTile> fuel;
     @Save
     private double burnTime;
 

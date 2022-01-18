@@ -46,7 +46,7 @@ public class CoolerBoxBlock extends RotatableBlock<CoolerBoxTile> {
 
     @Override
     public Item asItem() {
-        return   Item.byBlock(this);
+        return Item.byBlock(this);
     }
 
     @Override

@@ -41,14 +41,6 @@ public class FoodItem extends SushiItem {
         this.ingredientList = new ArrayList<>();
     }
 
-    public List<IFoodIngredient> getIngredientList() {
-        return ingredientList;
-    }
-
-    public IFoodType getType() {
-        return type;
-    }
-
     public static String getWeightText(int weight) {
         if (weight < 0) {
             return (weight == -1 ? ChatFormatting.RED : ChatFormatting.DARK_RED) + TextUtil.ARROW_DOWN;
@@ -97,6 +89,14 @@ public class FoodItem extends SushiItem {
             return 0.9f;
         }
         return 0.8f;
+    }
+
+    public List<IFoodIngredient> getIngredientList() {
+        return ingredientList;
+    }
+
+    public IFoodType getType() {
+        return type;
     }
 
     @Override
@@ -168,8 +168,8 @@ public class FoodItem extends SushiItem {
         private final List<MobEffectInstance> effectInstances;
         private ModifyIngredientEffect modifyIngredientEffect;
         private int positive, negative = 0;
-        private float saturation;
-        private float hunger;
+        private final float saturation;
+        private final float hunger;
 
         public Info(ItemStack stack, boolean calculateEffects) {
             this.stack = stack;

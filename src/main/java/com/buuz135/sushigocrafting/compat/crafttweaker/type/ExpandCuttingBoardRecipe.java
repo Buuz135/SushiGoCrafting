@@ -4,7 +4,6 @@ import com.blamejared.crafttweaker.api.annotation.ZenRegister;
 import com.blamejared.crafttweaker.api.ingredient.IIngredient;
 import com.blamejared.crafttweaker_annotations.annotations.NativeTypeRegistration;
 import com.buuz135.sushigocrafting.recipe.CuttingBoardRecipe;
-import net.minecraft.world.item.crafting.Ingredient;
 import org.openzen.zencode.java.ZenCodeType;
 
 @ZenRegister

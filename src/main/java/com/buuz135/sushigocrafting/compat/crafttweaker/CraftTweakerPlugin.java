@@ -2,7 +2,6 @@ package com.buuz135.sushigocrafting.compat.crafttweaker;
 
 import com.blamejared.crafttweaker.api.CraftTweakerAPI;
 import com.blamejared.crafttweaker.api.command.CommandUtilities;
-import com.blamejared.crafttweaker.api.command.boilerplate.CommandCaller;
 import com.blamejared.crafttweaker.api.command.boilerplate.CommandImpl;
 import com.blamejared.crafttweaker.api.event.type.CTCommandRegisterEvent;
 import com.buuz135.sushigocrafting.api.impl.FoodAPI;
@@ -11,7 +10,6 @@ import com.hrznstudio.titanium.plugin.FeaturePluginInstance;
 import com.hrznstudio.titanium.plugin.PluginPhase;
 import com.mojang.brigadier.Command;
 import net.minecraft.ChatFormatting;
-import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.network.chat.TextComponent;
 import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.server.level.ServerPlayer;
@@ -23,7 +21,7 @@ public class CraftTweakerPlugin implements FeaturePluginInstance {
 
     @Override
     public void execute(PluginPhase phase) {
-        if(phase == PluginPhase.COMMON_SETUP) {
+        if (phase == PluginPhase.COMMON_SETUP) {
             MinecraftForge.EVENT_BUS.register(this);
         }
     }

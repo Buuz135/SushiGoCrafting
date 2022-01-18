@@ -21,7 +21,7 @@ import java.util.Arrays;
 public class CoolerBoxTile extends ActiveTile<CoolerBoxTile> {
 
     @Save
-    private InventoryComponent<CoolerBoxTile> input;
+    private final InventoryComponent<CoolerBoxTile> input;
 
     public CoolerBoxTile(BlockPos pos, BlockState state) {
         super(SushiContent.Blocks.COOLER_BOX.get(), pos, state);

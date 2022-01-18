@@ -26,11 +26,11 @@ public class FermentationBarrelTile extends ActiveTile<FermentationBarrelTile> {
     @Save
     private ProgressBarComponent<FermentationBarrelTile> bar;
     @Save
-    private FluidTankComponent<FermentationBarrelTile> fluid;
+    private final FluidTankComponent<FermentationBarrelTile> fluid;
     @Save
-    private InventoryComponent<FermentationBarrelTile> input;
+    private final InventoryComponent<FermentationBarrelTile> input;
     @Save
-    private InventoryComponent<FermentationBarrelTile> output;
+    private final InventoryComponent<FermentationBarrelTile> output;
 
     public FermentationBarrelTile(BlockPos pos, BlockState state) {
         super(SushiContent.Blocks.FERMENTATION_BARREL.get(), pos, state);

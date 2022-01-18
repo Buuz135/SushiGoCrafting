@@ -62,7 +62,7 @@ public class ShrimpEntity extends AbstractSchoolingFish implements ItemSteerable
     public void equipSaddle(@Nullable SoundSource p_230266_1_) {
         this.steering.setSaddle(true);
         if (p_230266_1_ != null) {
-            this.level.playSound((Player) null, this, SoundEvents.PIG_SADDLE, p_230266_1_, 0.5F, 1.0F);
+            this.level.playSound(null, this, SoundEvents.PIG_SADDLE, p_230266_1_, 0.5F, 1.0F);
         }
     }
 
@@ -123,7 +123,8 @@ public class ShrimpEntity extends AbstractSchoolingFish implements ItemSteerable
     public void travel(Vec3 travelVector) {
         Entity entity = this.getPassengers().isEmpty() ? null : this.getPassengers().get(0);
         if (this.isVehicle() && this.canBeControlledByRider() && entity instanceof Player) {
-            if (isInWater()) this.setDeltaMovement(this.getDeltaMovement().add(0, -entity.getRotationVector().x / 500, 0));
+            if (isInWater())
+                this.setDeltaMovement(this.getDeltaMovement().add(0, -entity.getRotationVector().x / 500, 0));
             //this.ride(this, this.steering, new Vector3d(0,-entity.getPitchYaw().x,0));
         }
         this.travel(this, this.steering, travelVector);
