@@ -52,7 +52,7 @@ public class ContributorsBackRender extends RenderLayer<AbstractClientPlayer, Pl
     public void render(PoseStack stack, MultiBufferSource buffer, int p_225628_3_, AbstractClientPlayer entitylivingbaseIn, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch) {
         if (!ClientRewardStorage.REWARD_STORAGE.getRewards().containsKey(entitylivingbaseIn.getUUID())) return;
         if (!ClientRewardStorage.REWARD_STORAGE.getRewards().get(entitylivingbaseIn.getUUID()).getEnabled().containsKey(new ResourceLocation(SushiGoCrafting.MOD_ID, "back")))
-            return;
+           return;
         stack.pushPose();
         if (entitylivingbaseIn.isCrouching()) {
             stack.translate(0D, 0.2D, 0D);
@@ -62,6 +62,7 @@ public class ContributorsBackRender extends RenderLayer<AbstractClientPlayer, Pl
         stack.translate(-0.53, -0.55, -0.37);
         RenderSystem.setShaderTexture(0, TextureAtlas.LOCATION_BLOCKS);
         BakedModel selected = null;
+
         switch (ClientRewardStorage.REWARD_STORAGE.getRewards().get(entitylivingbaseIn.getUUID()).getEnabled().getOrDefault(new ResourceLocation(SushiGoCrafting.MOD_ID, "back"), "salmon")) {
             case "tuna":
                 selected = ClientProxy.TUNA_BACK;

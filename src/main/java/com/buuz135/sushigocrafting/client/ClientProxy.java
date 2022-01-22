@@ -14,7 +14,6 @@ import com.buuz135.sushigocrafting.client.tesr.CuttingBoardRenderer;
 import com.buuz135.sushigocrafting.proxy.SushiContent;
 import com.hrznstudio.titanium.event.handler.EventManager;
 import net.minecraft.ChatFormatting;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.model.geom.ModelLayerLocation;
 import net.minecraft.client.renderer.ItemBlockRenderTypes;
@@ -25,6 +24,8 @@ import net.minecraft.network.chat.TextComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.client.event.EntityRenderersEvent;
 import net.minecraftforge.client.event.ModelBakeEvent;
+import net.minecraftforge.client.event.ModelRegistryEvent;
+import net.minecraftforge.client.model.ForgeModelBakery;
 import net.minecraftforge.event.entity.player.ItemTooltipEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 
@@ -40,7 +41,6 @@ public class ClientProxy {
             event.registerBlockEntityRenderer(SushiContent.TileEntities.CUTTING_BOARD.get(), p_173571_ -> new CuttingBoardRenderer());
         }).subscribe();
         EventManager.mod(EntityRenderersEvent.AddLayers.class).process(event -> {
-            Minecraft instance = Minecraft.getInstance();
             for (String skin : event.getSkins()) {
                 PlayerRenderer renderer = event.getSkin(skin);
                 renderer.addLayer(new ContributorsBackRender(renderer));
@@ -48,6 +48,14 @@ public class ClientProxy {
         }).subscribe();
         EventManager.mod(EntityRenderersEvent.RegisterLayerDefinitions.class).process(event -> {
             event.registerLayerDefinition(new ModelLayerLocation(new ResourceLocation(SushiGoCrafting.MOD_ID, "shrimp"), "main"), ShrimpModel::createBodyLayer);
+        }).subscribe();
+        EventManager.mod(ModelRegistryEvent.class).process(event -> {
+            ForgeModelBakery.addSpecialModel(new ResourceLocation(SushiGoCrafting.MOD_ID, "block/salmon_back"));
+            ForgeModelBakery.addSpecialModel(new ResourceLocation(SushiGoCrafting.MOD_ID, "block/tuna_back"));
+        }).subscribe();
+        EventManager.mod(ModelBakeEvent.class).process(event -> {
+            SALMON_BACK = event.getModelRegistry().get(new ResourceLocation(SushiGoCrafting.MOD_ID, "block/salmon_back"));
+            TUNA_BACK = event.getModelRegistry().get(new ResourceLocation(SushiGoCrafting.MOD_ID, "block/tuna_back"));
         }).subscribe();
     }
 
@@ -62,10 +70,6 @@ public class ClientProxy {
         ItemBlockRenderTypes.setRenderLayer(SushiContent.Blocks.SEAWEED.get(), RenderType.cutout());
         ItemBlockRenderTypes.setRenderLayer(SushiContent.Blocks.SEAWEED_PLANT.get(), RenderType.cutout());
         ItemBlockRenderTypes.setRenderLayer(SushiContent.Blocks.SESAME_CROP.get(), RenderType.cutout());
-        EventManager.mod(ModelBakeEvent.class).process(event -> {
-            SALMON_BACK = event.getModelRegistry().get(new ResourceLocation(SushiGoCrafting.MOD_ID, "block/salmon_back"));
-            TUNA_BACK = event.getModelRegistry().get(new ResourceLocation(SushiGoCrafting.MOD_ID, "block/tuna_back"));
-        }).subscribe();
         EventManager.forge(ItemTooltipEvent.class).process(event -> {
             IFoodIngredient ingredient = FoodAPI.get().getIngredientFromItem(event.getItemStack().getItem());
             if (!ingredient.isEmpty() && ingredient.getEffect() != null) {
