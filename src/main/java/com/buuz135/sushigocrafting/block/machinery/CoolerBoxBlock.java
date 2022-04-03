@@ -1,6 +1,5 @@
 package com.buuz135.sushigocrafting.block.machinery;
 
-import com.buuz135.sushigocrafting.proxy.SushiContent;
 import com.buuz135.sushigocrafting.tile.machinery.CoolerBoxTile;
 import com.hrznstudio.titanium.block.RotatableBlock;
 import net.minecraft.ChatFormatting;
@@ -48,12 +47,6 @@ public class CoolerBoxBlock extends RotatableBlock<CoolerBoxTile> {
     public Item asItem() {
         return Item.byBlock(this);
     }
-
-    @Override
-    public BlockEntityType getTileEntityType() {
-        return SushiContent.TileEntities.COOLER_BOX.get();
-    }
-
 
     @Nonnull
     @Override

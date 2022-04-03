@@ -10,6 +10,7 @@ import net.minecraft.world.level.levelgen.feature.TreeFeature;
 import net.minecraft.world.level.levelgen.feature.configurations.TreeConfiguration;
 import net.minecraft.world.level.levelgen.feature.foliageplacers.FoliagePlacer;
 import net.minecraft.world.level.levelgen.feature.trunkplacers.StraightTrunkPlacer;
+import net.minecraft.world.level.levelgen.feature.trunkplacers.TrunkPlacerType;
 
 import java.util.List;
 import java.util.Random;
@@ -47,5 +48,8 @@ public class AvocadoTreeTrunkPlacer extends StraightTrunkPlacer {
         return ImmutableList.of(new FoliagePlacer.FoliageAttachment(pos.above(treeHeight), 0, false));
     }
 
-
+    @Override
+    protected TrunkPlacerType<?> type() {
+        return TrunkPlacerType.STRAIGHT_TRUNK_PLACER;
+    }
 }

@@ -14,6 +14,7 @@ import com.buuz135.sushigocrafting.recipe.CombineAmountItemRecipe;
 import com.buuz135.sushigocrafting.recipe.CuttingBoardRecipe;
 import com.buuz135.sushigocrafting.recipe.FermentingBarrelRecipe;
 import com.buuz135.sushigocrafting.tile.machinery.*;
+import com.buuz135.sushigocrafting.world.SeaWeedFeatureHolders;
 import com.buuz135.sushigocrafting.world.SushiTab;
 import com.buuz135.sushigocrafting.world.tree.AvocadoTree;
 import com.hrznstudio.titanium.event.handler.EventManager;
@@ -23,10 +24,8 @@ import com.hrznstudio.titanium.network.NetworkHandler;
 import com.hrznstudio.titanium.reward.Reward;
 import com.hrznstudio.titanium.reward.RewardGiver;
 import com.hrznstudio.titanium.reward.RewardManager;
-import net.minecraft.core.BlockPos;
 import net.minecraft.core.NonNullList;
 import net.minecraft.data.tags.BlockTagsProvider;
-import net.minecraft.data.worldgen.placement.PlacementUtils;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.Containers;
@@ -38,6 +37,7 @@ import net.minecraft.world.entity.animal.AbstractFish;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.CreativeModeTab;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.level.Level;
@@ -46,10 +46,6 @@ import net.minecraft.world.level.biome.MobSpawnSettings;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.levelgen.GenerationStep;
 import net.minecraft.world.level.levelgen.Heightmap;
-import net.minecraft.world.level.levelgen.blockpredicates.BlockPredicate;
-import net.minecraft.world.level.levelgen.feature.Feature;
-import net.minecraft.world.level.levelgen.feature.configurations.FeatureConfiguration;
-import net.minecraft.world.level.levelgen.placement.*;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.ForgeMod;
 import net.minecraftforge.common.capabilities.RegisterCapabilitiesEvent;
@@ -112,17 +108,22 @@ public class SushiGoCrafting extends ModuleController {
                                 CuttingBoardRecipe.SERIALIZER,
                                 FermentingBarrelRecipe.SERIALIZER
                         )).subscribe();
-        for (IFoodType value : FoodAPI.get().getFoodTypes()) {
-            FoodHelper.generateFood(value).forEach(item -> SushiContent.Items.REGISTRY.register(FoodHelper.getName(item), () -> item));
-        }
+        EventManager.modGeneric(RegistryEvent.Register.class, Item.class).process(register -> {
+            for (IFoodType value : FoodAPI.get().getFoodTypes()) {
+                FoodHelper.generateFood(value).forEach(item -> {
+                    var itemConfigured = item.setRegistryName(new ResourceLocation(MOD_ID, FoodHelper.getName(item)));
+                    ((RegistryEvent.Register<Item>) register).getRegistry().register(itemConfigured);
+                });
+            }
+        }).subscribe();
         NBTManager.getInstance().scanTileClassForAnnotations(RollerTile.class);
         NBTManager.getInstance().scanTileClassForAnnotations(RiceCookerTile.class);
         NBTManager.getInstance().scanTileClassForAnnotations(CuttingBoardTile.class);
         NBTManager.getInstance().scanTileClassForAnnotations(CoolerBoxTile.class);
         NBTManager.getInstance().scanTileClassForAnnotations(FermentationBarrelTile.class);
         EventManager.forge(BiomeLoadingEvent.class).filter(biomeLoadingEvent -> biomeLoadingEvent.getCategory() == Biome.BiomeCategory.OCEAN).process(biomeLoadingEvent -> {
-            biomeLoadingEvent.getGeneration().addFeature(GenerationStep.Decoration.VEGETAL_DECORATION,
-                    SushiContent.Features.SEAWEED.get().configured(FeatureConfiguration.NONE).placed(NoiseBasedCountPlacement.of(80, 80.0D, 0.0D), InSquarePlacement.spread(), PlacementUtils.HEIGHTMAP_TOP_SOLID, BiomeFilter.biome()));
+            biomeLoadingEvent.getGeneration().addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, SeaWeedFeatureHolders.PLACEMENT);
+            //holder.configured(FeatureConfiguration.NONE).placed(NoiseBasedCountPlacement.of(80, 80.0D, 0.0D), InSquarePlacement.spread(), PlacementUtils.HEIGHTMAP_TOP_SOLID, BiomeFilter.biome()));
             //.decorated(Features.Decorators.TOP_SOLID_HEIGHTMAP.squared().decorated(FeatureDecorator.COUNT_NOISE_BIASED.configured(new NoiseCountFactorDecoratorConfiguration(80, 80.0D, 0.0D)))));
         }).subscribe();
         EventManager.forge(BiomeLoadingEvent.class).filter(biomeLoadingEvent -> biomeLoadingEvent.getCategory() == Biome.BiomeCategory.OCEAN || biomeLoadingEvent.getCategory() == Biome.BiomeCategory.RIVER).process(biomeLoadingEvent -> {
@@ -135,8 +136,8 @@ public class SushiGoCrafting extends ModuleController {
                     SpawnPlacements.register(SushiContent.EntityTypes.TUNA.get(), SpawnPlacements.Type.IN_WATER, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, AbstractFish::checkMobSpawnRules);
                 }).subscribe();
         EventManager.forge(BiomeLoadingEvent.class).filter(biomeLoadingEvent -> biomeLoadingEvent.getCategory() == Biome.BiomeCategory.PLAINS).process(biomeLoadingEvent -> {
-            biomeLoadingEvent.getGeneration().addFeature(GenerationStep.Decoration.VEGETAL_DECORATION,
-                    Feature.TREE.configured(AvocadoTree.TREE).placed(PlacementUtils.countExtra(0, 0.05F, 1), InSquarePlacement.spread(), SurfaceWaterDepthFilter.forMaxDepth(0), PlacementUtils.HEIGHTMAP_OCEAN_FLOOR, BlockPredicateFilter.forPredicate(BlockPredicate.wouldSurvive(Blocks.OAK_SAPLING.defaultBlockState(), BlockPos.ZERO)), BiomeFilter.biome()));
+            biomeLoadingEvent.getGeneration().addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, AvocadoTree.PLACEMENT);
+            //Feature.TREE.configured(AvocadoTree.TREE).placed(PlacementUtils.countExtra(0, 0.05F, 1), InSquarePlacement.spread(), SurfaceWaterDepthFilter.forMaxDepth(0), PlacementUtils.HEIGHTMAP_OCEAN_FLOOR, BlockPredicateFilter.forPredicate(BlockPredicate.wouldSurvive(Blocks.OAK_SAPLING.defaultBlockState(), BlockPos.ZERO)), BiomeFilter.biome()));
             //.decorated(Features.Decorators.HEIGHTMAP_SQUARE)
             //.decorated(FeatureDecorator.CHANCE.configured(new ChanceDecoratorConfiguration(6))));
         }).subscribe();

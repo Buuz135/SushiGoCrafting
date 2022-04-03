@@ -11,7 +11,7 @@ import com.hrznstudio.titanium.util.TagUtil;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.tags.Tag;
+import net.minecraft.tags.TagKey;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
@@ -28,7 +28,7 @@ import javax.annotation.Nonnull;
 
 public class RiceCookerTile extends ActiveTile<RiceCookerTile> {
 
-    public static Tag<Item> RICE = TagUtil.getItemTag(new ResourceLocation("forge", "crops/rice"));
+    public static TagKey<Item> RICE = TagUtil.getItemTag(new ResourceLocation("forge", "crops/rice"));
 
     @Save
     private final InventoryComponent<RiceCookerTile> input;
@@ -45,7 +45,7 @@ public class RiceCookerTile extends ActiveTile<RiceCookerTile> {
 
 
     public RiceCookerTile(BlockPos pos, BlockState state) {
-        super(SushiContent.Blocks.RICE_COOKER.get(), pos, state);
+        super(SushiContent.Blocks.RICE_COOKER.get(), SushiContent.TileEntities.RICE_COOKER.get(), pos, state);
         this.burnTime = 0;
         addInventory(this.input = new InventoryComponent<RiceCookerTile>("input", 20, 38, 4)
                 .setRange(2, 2)

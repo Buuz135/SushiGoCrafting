@@ -1,6 +1,5 @@
 package com.buuz135.sushigocrafting.block.machinery;
 
-import com.buuz135.sushigocrafting.proxy.SushiContent;
 import com.buuz135.sushigocrafting.tile.machinery.RiceCookerTile;
 import com.hrznstudio.titanium.block.RotatableBlock;
 import net.minecraft.core.BlockPos;
@@ -124,11 +123,6 @@ public class RiceCookerBlock extends RotatableBlock<RiceCookerTile> {
     @Override
     public BlockEntityType.BlockEntitySupplier<?> getTileEntityFactory() {
         return RiceCookerTile::new;
-    }
-
-    @Override
-    public BlockEntityType getTileEntityType() {
-        return SushiContent.TileEntities.RICE_COOKER.get();
     }
 
     @Override

@@ -1,6 +1,5 @@
 package com.buuz135.sushigocrafting.block.machinery;
 
-import com.buuz135.sushigocrafting.proxy.SushiContent;
 import com.buuz135.sushigocrafting.tile.machinery.RollerTile;
 import com.hrznstudio.titanium.block.RotatableBlock;
 import net.minecraft.core.BlockPos;
@@ -35,11 +34,6 @@ public class RollerBlock extends RotatableBlock<RollerTile> {
     @Override
     public Item asItem() {
         return Item.byBlock(this);
-    }
-
-    @Override
-    public BlockEntityType getTileEntityType() {
-        return SushiContent.TileEntities.ROLLER.get();
     }
 
     @Override

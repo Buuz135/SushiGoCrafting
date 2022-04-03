@@ -31,6 +31,7 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.IForgeShearable;
 import net.minecraftforge.items.ItemHandlerHelper;
+import net.minecraftforge.registries.ForgeRegistries;
 
 import java.util.Random;
 
@@ -60,7 +61,7 @@ public class AvocadoLeavesBlock extends SushiGoCraftingBlock implements IForgeSh
     }
 
     private static int getDistance(BlockState neighbor) {
-        if (BlockTags.LOGS.contains(neighbor.getBlock())) {
+        if (ForgeRegistries.BLOCKS.tags().getTag(BlockTags.LOGS).contains(neighbor.getBlock())) {
             return 0;
         } else {
             return neighbor.getBlock() instanceof AvocadoLeavesBlock || neighbor.getBlock() instanceof LeavesBlock ? neighbor.getValue(DISTANCE) : 7;

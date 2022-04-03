@@ -24,7 +24,7 @@ public class CoolerBoxTile extends ActiveTile<CoolerBoxTile> {
     private final InventoryComponent<CoolerBoxTile> input;
 
     public CoolerBoxTile(BlockPos pos, BlockState state) {
-        super(SushiContent.Blocks.COOLER_BOX.get(), pos, state);
+        super(SushiContent.Blocks.COOLER_BOX.get(), SushiContent.TileEntities.COOLER_BOX.get(), pos, state);
         this.addInventory(this.input = new InventoryComponent<CoolerBoxTile>("input", 44, 20, 5 * 4)
                 .setRange(5, 4)
                 .setInputFilter((stack, integer) -> stack.getItem() instanceof AmountItem)

@@ -52,7 +52,7 @@ public class RollerTile extends ActiveTile<RollerTile> {
     private final InventoryComponent<RollerTile> spices;
 
     public RollerTile(BlockPos pos, BlockState state) {
-        super(SushiContent.Blocks.ROLLER.get(), pos, state);
+        super(SushiContent.Blocks.ROLLER.get(), SushiContent.TileEntities.ROLLER.get(), pos, state);
         int i = 0;
         int max = 0;
         this.craftProgress = 0;

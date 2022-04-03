@@ -33,7 +33,7 @@ public class FermentationBarrelTile extends ActiveTile<FermentationBarrelTile> {
     private final InventoryComponent<FermentationBarrelTile> output;
 
     public FermentationBarrelTile(BlockPos pos, BlockState state) {
-        super(SushiContent.Blocks.FERMENTATION_BARREL.get(), pos, state);
+        super(SushiContent.Blocks.FERMENTATION_BARREL.get(), SushiContent.TileEntities.FERMENTATION_BARREL.get(), pos, state);
         addProgressBar(this.bar = new ProgressBarComponent<FermentationBarrelTile>(93, 48, 100)
                 .setCanIncrease(FermentationBarrelTile::canStart)
                 .setCanReset(FermentationBarrelTile::canStart)

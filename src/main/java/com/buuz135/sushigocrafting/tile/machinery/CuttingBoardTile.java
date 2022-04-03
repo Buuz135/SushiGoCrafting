@@ -12,7 +12,7 @@ import com.hrznstudio.titanium.util.TagUtil;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.tags.Tag;
+import net.minecraft.tags.TagKey;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
@@ -20,12 +20,13 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.items.ItemHandlerHelper;
+import net.minecraftforge.registries.ForgeRegistries;
 
 import javax.annotation.Nonnull;
 
 public class CuttingBoardTile extends ActiveTile<CuttingBoardTile> {
 
-    public static Tag<Item> KNIFE = TagUtil.getItemTag(new ResourceLocation("forge", "tools/knife"));
+    public static TagKey<Item> KNIFE = TagUtil.getItemTag(new ResourceLocation("forge", "tools/knife"));
 
     @Save
     private final InventoryComponent<CuttingBoardTile> input;
@@ -33,7 +34,7 @@ public class CuttingBoardTile extends ActiveTile<CuttingBoardTile> {
     private int click;
 
     public CuttingBoardTile(BlockPos pos, BlockState state) {
-        super(SushiContent.Blocks.CUTTING_BOARD.get(), pos, state);
+        super(SushiContent.Blocks.CUTTING_BOARD.get(), SushiContent.TileEntities.CUTTING_BOARD.get(), pos, state);
         this.addInventory(this.input = new InventoryComponent<CuttingBoardTile>("input", 0, 0, 1)
                 .setInputFilter((stack, integer) -> accepts(stack))
         );
@@ -44,7 +45,7 @@ public class CuttingBoardTile extends ActiveTile<CuttingBoardTile> {
     public InteractionResult onActivated(Player player, InteractionHand hand, Direction facing, double hitX, double hitY, double hitZ) {
         ItemStack stack = player.getItemInHand(hand);
         if (!stack.isEmpty()) {
-            if (!this.input.getStackInSlot(0).isEmpty() && stack.is(KNIFE)) {
+            if (!this.input.getStackInSlot(0).isEmpty() && TagUtil.hasTag(ForgeRegistries.ITEMS, stack.getItem(), KNIFE)) {
                 ++click;
                 if (click > 5) {
                     for (CuttingBoardRecipe recipe : RecipeUtil.getRecipes(this.level, CuttingBoardRecipe.SERIALIZER.getRecipeType())) {

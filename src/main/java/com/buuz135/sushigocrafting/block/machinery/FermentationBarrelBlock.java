@@ -1,6 +1,5 @@
 package com.buuz135.sushigocrafting.block.machinery;
 
-import com.buuz135.sushigocrafting.proxy.SushiContent;
 import com.buuz135.sushigocrafting.tile.machinery.FermentationBarrelTile;
 import com.hrznstudio.titanium.block.RotatableBlock;
 import net.minecraft.core.BlockPos;
@@ -49,11 +48,6 @@ public class FermentationBarrelBlock extends RotatableBlock<FermentationBarrelTi
     @Override
     public BlockEntityType.BlockEntitySupplier<?> getTileEntityFactory() {
         return FermentationBarrelTile::new;
-    }
-
-    @Override
-    public BlockEntityType getTileEntityType() {
-        return SushiContent.TileEntities.FERMENTATION_BARREL.get();
     }
 
     @Override

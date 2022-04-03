@@ -1,6 +1,5 @@
 package com.buuz135.sushigocrafting.block.machinery;
 
-import com.buuz135.sushigocrafting.proxy.SushiContent;
 import com.buuz135.sushigocrafting.tile.machinery.CuttingBoardTile;
 import com.hrznstudio.titanium.block.RotatableBlock;
 import net.minecraft.core.BlockPos;
@@ -28,11 +27,6 @@ public class CuttingBoardBlock extends RotatableBlock<CuttingBoardTile> {
     @Override
     public BlockEntityType.BlockEntitySupplier<?> getTileEntityFactory() {
         return CuttingBoardTile::new;
-    }
-
-    @Override
-    public BlockEntityType getTileEntityType() {
-        return SushiContent.TileEntities.CUTTING_BOARD.get();
     }
 
     @Override

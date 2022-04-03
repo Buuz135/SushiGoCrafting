@@ -237,7 +237,7 @@ public class SushiContent {
 
     public static class LootSerializers {
 
-        public static final DeferredRegister<GlobalLootModifierSerializer<?>> REGISTRY = DeferredRegister.create(ForgeRegistries.LOOT_MODIFIER_SERIALIZERS, SushiGoCrafting.MOD_ID);
+        public static final DeferredRegister<GlobalLootModifierSerializer<?>> REGISTRY = DeferredRegister.create(ForgeRegistries.Keys.LOOT_MODIFIER_SERIALIZERS, SushiGoCrafting.MOD_ID);
 
         public static final RegistryObject<GlobalLootModifierSerializer<?>> SEEDS = lootSerializer("grass_seeds", SeedsLootModifier.Serializer::new);
         public static final RegistryObject<GlobalLootModifierSerializer<?>> ITEM_AMOUNT = lootSerializer("item_amount", ItemAmountLootModifier.Serializer::new);
