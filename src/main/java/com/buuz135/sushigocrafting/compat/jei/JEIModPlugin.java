@@ -12,6 +12,7 @@ import com.buuz135.sushigocrafting.recipe.FermentingBarrelRecipe;
 import com.hrznstudio.titanium.util.RecipeUtil;
 import mezz.jei.api.IModPlugin;
 import mezz.jei.api.JeiPlugin;
+import mezz.jei.api.constants.VanillaTypes;
 import mezz.jei.api.registration.IRecipeCatalystRegistration;
 import mezz.jei.api.registration.IRecipeCategoryRegistration;
 import mezz.jei.api.registration.IRecipeRegistration;
@@ -54,8 +55,8 @@ public class JEIModPlugin implements IModPlugin {
 
     @Override
     public void registerRecipeCatalysts(IRecipeCatalystRegistration registration) {
-        registration.addRecipeCatalyst(new ItemStack(SushiContent.Blocks.CUTTING_BOARD.get()), cuttingBoardRecipe.getUid());
-        registration.addRecipeCatalyst(new ItemStack(SushiContent.Blocks.ROLLER.get()), rollerCategory.getUid());
+        registration.addRecipeCatalyst(VanillaTypes.ITEM, new ItemStack(SushiContent.Blocks.CUTTING_BOARD.get()), cuttingBoardRecipe.getUid());
+        registration.addRecipeCatalyst(VanillaTypes.ITEM, new ItemStack(SushiContent.Blocks.ROLLER.get()), rollerCategory.getUid());
         registration.addRecipeCatalyst(new ItemStack(SushiContent.Blocks.RICE_COOKER.get()), riceCookerCategory.getUid());
         registration.addRecipeCatalyst(new ItemStack(SushiContent.Blocks.FERMENTATION_BARREL.get()), fermentationBarrelCategory.getUid());
     }

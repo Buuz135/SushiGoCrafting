@@ -5,7 +5,7 @@ import com.blamejared.crafttweaker.api.recipe.handler.IRecipeHandler;
 import com.blamejared.crafttweaker.api.recipe.handler.IReplacementRule;
 import com.blamejared.crafttweaker.api.recipe.manager.base.IRecipeManager;
 import com.blamejared.crafttweaker.api.util.IngredientUtil;
-import com.blamejared.crafttweaker.api.util.StringUtils;
+import com.blamejared.crafttweaker.api.util.StringUtil;
 import com.buuz135.sushigocrafting.recipe.CuttingBoardRecipe;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.crafting.Ingredient;
@@ -20,7 +20,7 @@ public class CuttingBoardHandler implements IRecipeHandler<CuttingBoardRecipe> {
 
     @Override
     public String dumpToCommandString(IRecipeManager manager, CuttingBoardRecipe recipe) {
-        return String.format("<recipetype:sushigocrafting:cutting_board>.addRecipe(%s, %s, %s);", StringUtils.quoteAndEscape(recipe.getId()), IIngredient.fromIngredient(recipe.getInput()).getCommandString(), StringUtils.quoteAndEscape(recipe.ingredient));
+        return String.format("<recipetype:sushigocrafting:cutting_board>.addRecipe(%s, %s, %s);", StringUtil.quoteAndEscape(recipe.getId()), IIngredient.fromIngredient(recipe.getInput()).getCommandString(), StringUtil.quoteAndEscape(recipe.ingredient));
     }
 
     @Override

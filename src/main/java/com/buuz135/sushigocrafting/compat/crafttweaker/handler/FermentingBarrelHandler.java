@@ -8,7 +8,7 @@ import com.blamejared.crafttweaker.api.recipe.handler.IRecipeHandler;
 import com.blamejared.crafttweaker.api.recipe.handler.IReplacementRule;
 import com.blamejared.crafttweaker.api.recipe.manager.base.IRecipeManager;
 import com.blamejared.crafttweaker.api.util.IngredientUtil;
-import com.blamejared.crafttweaker.api.util.StringUtils;
+import com.blamejared.crafttweaker.api.util.StringUtil;
 import com.buuz135.sushigocrafting.recipe.FermentingBarrelRecipe;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.crafting.Ingredient;
@@ -23,7 +23,7 @@ public class FermentingBarrelHandler implements IRecipeHandler<FermentingBarrelR
 
     @Override
     public String dumpToCommandString(IRecipeManager manager, FermentingBarrelRecipe recipe) {
-        return String.format("<recipetype:sushigocrafting:fermenting_barrel>.addRecipe(%s, %s, %s, %s);", StringUtils.quoteAndEscape(recipe.getId()), IIngredient.fromIngredient(recipe.getInput()).getCommandString(), new MCFluidStack(recipe.getFluid()).getCommandString(), new MCItemStack(recipe.getOutput()).getCommandString());
+        return String.format("<recipetype:sushigocrafting:fermenting_barrel>.addRecipe(%s, %s, %s, %s);", StringUtil.quoteAndEscape(recipe.getId()), IIngredient.fromIngredient(recipe.getInput()).getCommandString(), new MCFluidStack(recipe.getFluid()).getCommandString(), new MCItemStack(recipe.getOutput()).getCommandString());
     }
 
     @Override
