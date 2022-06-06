@@ -73,7 +73,7 @@ public class RollerCategory implements IRecipeCategory<Recipe> {
                 builder.addSlot(RecipeIngredientRole.INPUT, recipe.stack.getType().getSlotPosition().apply(i).getLeft() - 7, recipe.stack.getType().getSlotPosition().apply(i).getRight() - 17).addIngredient(VanillaTypes.ITEM, new ItemStack(recipe.stack.getIngredientList().get(i).getItem()));
             }
         }
-        builder.addSlot(RecipeIngredientRole.OUTPUT, 4, 2).addIngredient(VanillaTypes.ITEM, new ItemStack(recipe.stack));
+        builder.addSlot(RecipeIngredientRole.OUTPUT, 5, 3).addIngredient(VanillaTypes.ITEM, new ItemStack(recipe.stack));
     }
 
 

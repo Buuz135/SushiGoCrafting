@@ -89,13 +89,14 @@ dependencies {
     compileOnly fg.deobf("mezz.jei:jei-1.18.2:9.5.5.174")
     // at runtime, use the full JEI jar
     runtimeOnly fg.deobf("mezz.jei:jei-1.18.2:9.5.5.174")
-    compileOnly fg.deobf ('com.hrznstudio:titanium:1.18.2-3.5.0-32')
-    runtimeOnly fg.deobf ('com.hrznstudio:titanium:1.18.2-3.5.0-32')
+    compileOnly fg.deobf('com.hrznstudio:titanium:1.18.2-3.5.5-37')
+    runtimeOnly fg.deobf('com.hrznstudio:titanium:1.18.2-3.5.5-37')
     compileOnly fg.deobf("vazkii.patchouli:Patchouli:1.18.2-67:api")
     runtimeOnly fg.deobf("vazkii.patchouli:Patchouli:1.18.2-67")
     //runtimeOnly fg.deobf("curse.maven:diet-443570:3300992")
     //runtimeOnly fg.deobf("curse.maven:appleskin-248787:3395800")
     compileOnly fg.deobf("com.blamejared.crafttweaker:CraftTweaker-forge-1.18.2:9.1.103")
+    runtimeOnly fg.deobf("com.blamejared.crafttweaker:CraftTweaker-forge-1.18.2:9.1.103")
 }
 
 afterEvaluate {
