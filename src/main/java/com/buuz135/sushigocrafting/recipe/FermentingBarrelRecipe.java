@@ -1,6 +1,6 @@
 package com.buuz135.sushigocrafting.recipe;
 
-import com.buuz135.sushigocrafting.SushiGoCrafting;
+import com.buuz135.sushigocrafting.proxy.SushiContent;
 import com.hrznstudio.titanium.recipe.serializer.GenericSerializer;
 import com.hrznstudio.titanium.recipe.serializer.SerializableRecipe;
 import net.minecraft.resources.ResourceLocation;
@@ -16,7 +16,6 @@ import java.util.List;
 
 public class FermentingBarrelRecipe extends SerializableRecipe {
 
-    public static GenericSerializer<FermentingBarrelRecipe> SERIALIZER = new GenericSerializer<>(new ResourceLocation(SushiGoCrafting.MOD_ID, "fermenting_barrel"), FermentingBarrelRecipe.class);
     public static List<FermentingBarrelRecipe> RECIPES = new ArrayList<>();
 
     public Ingredient input = Ingredient.EMPTY;
@@ -57,12 +56,12 @@ public class FermentingBarrelRecipe extends SerializableRecipe {
 
     @Override
     public GenericSerializer<? extends SerializableRecipe> getSerializer() {
-        return SERIALIZER;
+        return (GenericSerializer<? extends SerializableRecipe>) SushiContent.RecipeSerializers.FERMENTING_BARREL.get();
     }
 
     @Override
     public RecipeType<?> getType() {
-        return SERIALIZER.getRecipeType();
+        return SushiContent.RecipeTypes.FERMENTING_BARREL.get();
     }
 
     public Ingredient getInput() {

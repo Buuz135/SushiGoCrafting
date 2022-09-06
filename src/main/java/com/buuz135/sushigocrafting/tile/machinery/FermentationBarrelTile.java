@@ -15,6 +15,7 @@ import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.DyeColor;
+import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.items.ItemHandlerHelper;
@@ -75,7 +76,7 @@ public class FermentationBarrelTile extends ActiveTile<FermentationBarrelTile> {
     }
 
     public boolean canStart() {
-        return RecipeUtil.getRecipes(this.level, FermentingBarrelRecipe.SERIALIZER.getRecipeType()).stream()
+        return RecipeUtil.getRecipes(this.level, (RecipeType<FermentingBarrelRecipe>)SushiContent.RecipeTypes.FERMENTING_BARREL.get()).stream()
                 .anyMatch(fermentingBarrelRecipe -> fermentingBarrelRecipe.input.test(this.input.getStackInSlot(0))
                         && (fermentingBarrelRecipe.fluid.isEmpty() || (fermentingBarrelRecipe.fluid.isFluidEqual(this.fluid.getFluid()) && this.fluid.getFluid().getAmount() >= fermentingBarrelRecipe.fluid.getAmount()))
                         && (this.output.getStackInSlot(0).isEmpty())
@@ -83,7 +84,7 @@ public class FermentationBarrelTile extends ActiveTile<FermentationBarrelTile> {
     }
 
     public void onFinish() {
-        RecipeUtil.getRecipes(this.level, FermentingBarrelRecipe.SERIALIZER.getRecipeType()).stream()
+        RecipeUtil.getRecipes(this.level, (RecipeType<FermentingBarrelRecipe>)SushiContent.RecipeTypes.FERMENTING_BARREL.get()).stream()
                 .filter(fermentingBarrelRecipe -> fermentingBarrelRecipe.input.test(this.input.getStackInSlot(0))
                         && (fermentingBarrelRecipe.fluid.isEmpty() || (fermentingBarrelRecipe.fluid.isFluidEqual(this.fluid.getFluid()) && this.fluid.getFluid().getAmount() >= fermentingBarrelRecipe.fluid.getAmount()))
                         && (this.output.getStackInSlot(0).isEmpty())

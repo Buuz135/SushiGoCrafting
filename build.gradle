@@ -35,7 +35,7 @@ sourceSets.main.resources {
 }
 
 minecraft {
-    mappings channel: 'official', version: '1.18.2'
+    mappings channel: 'official', version: '1.19.2'
     runs {
         client = {
             property 'mixin.env.remapRefMap', 'true'
@@ -85,18 +85,20 @@ repositories {
 }
 
 dependencies {
-    minecraft 'net.minecraftforge:forge:1.18.2-40.0.36'
-    compileOnly fg.deobf("mezz.jei:jei-1.18.2:9.5.5.174")
+    minecraft 'net.minecraftforge:forge:1.19.2-43.1.13'
+    //compileOnly fg.deobf("mezz.jei:jei-1.18.2:9.5.5.174")
     // at runtime, use the full JEI jar
-    runtimeOnly fg.deobf("mezz.jei:jei-1.18.2:9.5.5.174")
-    compileOnly fg.deobf('com.hrznstudio:titanium:1.18.2-3.5.5-37')
-    runtimeOnly fg.deobf('com.hrznstudio:titanium:1.18.2-3.5.5-37')
-    compileOnly fg.deobf("vazkii.patchouli:Patchouli:1.18.2-67:api")
-    runtimeOnly fg.deobf("vazkii.patchouli:Patchouli:1.18.2-67")
+    compileOnly fg.deobf("mezz.jei:jei-1.19.1-common-api:11.2.0.241")
+    compileOnly fg.deobf("mezz.jei:jei-1.19.1-forge-api:11.2.0.241")
+    // at runtime, use the full JEI jar for Forge
+    runtimeOnly fg.deobf("mezz.jei:jei-1.19.1-forge:11.2.0.241")
+    implementation fg.deobf(project.dependencies.create('com.hrznstudio:titanium:1.19.2-3.6.2-14'))
+    //compileOnly fg.deobf("vazkii.patchouli:Patchouli:1.18.2-67:api")
+    //runtimeOnly fg.deobf("vazkii.patchouli:Patchouli:1.18.2-67")
     //runtimeOnly fg.deobf("curse.maven:diet-443570:3300992")
     //runtimeOnly fg.deobf("curse.maven:appleskin-248787:3395800")
     compileOnly fg.deobf("com.blamejared.crafttweaker:CraftTweaker-forge-1.18.2:9.1.103")
-    runtimeOnly fg.deobf("com.blamejared.crafttweaker:CraftTweaker-forge-1.18.2:9.1.103")
+    //runtimeOnly fg.deobf("com.blamejared.crafttweaker:CraftTweaker-forge-1.18.2:9.1.103")
 }
 
 afterEvaluate {

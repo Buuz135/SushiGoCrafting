@@ -18,7 +18,6 @@ import mezz.jei.api.recipe.RecipeType;
 import mezz.jei.api.recipe.category.IRecipeCategory;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.ItemStack;
@@ -42,18 +41,8 @@ public class RollerCategory implements IRecipeCategory<Recipe> {
     }
 
     @Override
-    public ResourceLocation getUid() {
-        return SushiRecipeTypes.ROLLER.getUid();
-    }
-
-    @Override
-    public Class<? extends Recipe> getRecipeClass() {
-        return SushiRecipeTypes.ROLLER.getRecipeClass();
-    }
-
-    @Override
     public Component getTitle() {
-        return new TranslatableComponent(SushiContent.Blocks.ROLLER.get().getDescriptionId());
+        return Component.translatable(SushiContent.Blocks.ROLLER.get().getDescriptionId());
     }
 
     @Override
@@ -70,10 +59,10 @@ public class RollerCategory implements IRecipeCategory<Recipe> {
     public void setRecipe(IRecipeLayoutBuilder builder, Recipe recipe, IFocusGroup focuses) {
         for (int i = 0; i < recipe.stack.getIngredientList().size(); i++) {
             if (!recipe.stack.getIngredientList().get(i).isEmpty()) {
-                builder.addSlot(RecipeIngredientRole.INPUT, recipe.stack.getType().getSlotPosition().apply(i).getLeft() - 7, recipe.stack.getType().getSlotPosition().apply(i).getRight() - 17).addIngredient(VanillaTypes.ITEM, new ItemStack(recipe.stack.getIngredientList().get(i).getItem()));
+                builder.addSlot(RecipeIngredientRole.INPUT, recipe.stack.getType().getSlotPosition().apply(i).getLeft() - 7, recipe.stack.getType().getSlotPosition().apply(i).getRight() - 17).addIngredient(VanillaTypes.ITEM_STACK, new ItemStack(recipe.stack.getIngredientList().get(i).getItem()));
             }
         }
-        builder.addSlot(RecipeIngredientRole.OUTPUT, 5, 3).addIngredient(VanillaTypes.ITEM, new ItemStack(recipe.stack));
+        builder.addSlot(RecipeIngredientRole.OUTPUT, 5, 3).addIngredient(VanillaTypes.ITEM_STACK, new ItemStack(recipe.stack));
     }
 
 

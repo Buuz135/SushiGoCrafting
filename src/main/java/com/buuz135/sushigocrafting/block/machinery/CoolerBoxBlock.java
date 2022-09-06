@@ -9,7 +9,6 @@ import net.minecraft.core.NonNullList;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.world.ContainerHelper;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -96,7 +95,7 @@ public class CoolerBoxBlock extends RotatableBlock<CoolerBoxTile> {
                 }
 
                 if (j - i > 0) {
-                    tooltip.add((new TranslatableComponent("container.shulkerBox.more", j - i)).withStyle(ChatFormatting.ITALIC, ChatFormatting.DARK_AQUA));
+                    tooltip.add(Component.translatable("container.shulkerBox.more", j - i).withStyle(ChatFormatting.ITALIC, ChatFormatting.DARK_AQUA));
                 }
             }
         }

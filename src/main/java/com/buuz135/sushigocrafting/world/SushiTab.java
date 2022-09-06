@@ -4,6 +4,7 @@ import com.buuz135.sushigocrafting.api.impl.FoodHelper;
 import net.minecraft.client.Minecraft;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.ItemStack;
+import net.minecraftforge.registries.RegistryObject;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -21,7 +22,7 @@ public class SushiTab extends CreativeModeTab {
     @Override
     public ItemStack makeIcon() {
         if (values.isEmpty())
-            values = FoodHelper.REGISTERED.values().stream().flatMap(Collection::stream).map(ItemStack::new).collect(Collectors.toList());
+            values = FoodHelper.REGISTERED.values().stream().flatMap(Collection::stream).map(RegistryObject::get).map(ItemStack::new).collect(Collectors.toList());
         return values.get(0);
     }
 

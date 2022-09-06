@@ -1,21 +1,28 @@
 package com.buuz135.sushigocrafting.loot;
 
 import com.buuz135.sushigocrafting.proxy.SushiContent;
-import com.google.gson.JsonObject;
-import net.minecraft.resources.ResourceLocation;
+import com.google.common.base.Suppliers;
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
+import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import net.minecraft.util.random.WeightedRandom;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
-import net.minecraftforge.common.loot.GlobalLootModifierSerializer;
+import net.minecraftforge.common.loot.IGlobalLootModifier;
 import net.minecraftforge.common.loot.LootModifier;
 
 import javax.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Supplier;
 
 public class SeedsLootModifier extends LootModifier {
+
+    public static final Supplier<Codec<SeedsLootModifier>> CODEC = Suppliers.memoize(() ->
+            RecordCodecBuilder.create(inst -> codecStart(inst)
+                    .apply(inst, SeedsLootModifier::new)));
 
     private final List<ItemWeightedItem> seeds = new ArrayList<>();
 
@@ -31,8 +38,8 @@ public class SeedsLootModifier extends LootModifier {
 
     @Nonnull
     @Override
-    protected List<ItemStack> doApply(List<ItemStack> generatedLoot, LootContext context) {
-        List<ItemStack> customLoot = new ArrayList<>();
+    protected ObjectArrayList<ItemStack> doApply(ObjectArrayList<ItemStack> generatedLoot, LootContext context) {
+        ObjectArrayList<ItemStack> customLoot = new ObjectArrayList<>();
         for (ItemStack stack : generatedLoot) {
             if (stack.getItem() == Items.WHEAT_SEEDS) {
                 WeightedRandom.getRandomItem(context.getRandom(), seeds).ifPresent(itemWeightedItem -> {
@@ -47,18 +54,9 @@ public class SeedsLootModifier extends LootModifier {
         return customLoot;
     }
 
-    public static class Serializer extends GlobalLootModifierSerializer<SeedsLootModifier> {
 
-        @Override
-        public SeedsLootModifier read(ResourceLocation location, JsonObject object, LootItemCondition[] ailootcondition) {
-            return new SeedsLootModifier(ailootcondition);
-        }
-
-        @Override
-        public JsonObject write(SeedsLootModifier instance) {
-            return makeConditions(instance.conditions);
-        }
-
+    @Override
+    public Codec<? extends IGlobalLootModifier> codec() {
+        return CODEC.get();
     }
-
 }

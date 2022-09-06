@@ -1,6 +1,6 @@
 package com.buuz135.sushigocrafting.recipe;
 
-import com.buuz135.sushigocrafting.SushiGoCrafting;
+import com.buuz135.sushigocrafting.proxy.SushiContent;
 import com.hrznstudio.titanium.recipe.serializer.GenericSerializer;
 import com.hrznstudio.titanium.recipe.serializer.SerializableRecipe;
 import net.minecraft.resources.ResourceLocation;
@@ -12,7 +12,6 @@ import net.minecraft.world.level.Level;
 
 public class CuttingBoardRecipe extends SerializableRecipe {
 
-    public static GenericSerializer<CuttingBoardRecipe> SERIALIZER = new GenericSerializer<>(new ResourceLocation(SushiGoCrafting.MOD_ID, "cutting_board"), CuttingBoardRecipe.class);
     public Ingredient input;
     public String ingredient;
 
@@ -48,12 +47,12 @@ public class CuttingBoardRecipe extends SerializableRecipe {
 
     @Override
     public GenericSerializer<? extends SerializableRecipe> getSerializer() {
-        return SERIALIZER;
+        return (GenericSerializer<? extends SerializableRecipe>) SushiContent.RecipeSerializers.CUTTING_BOARD.get();
     }
 
     @Override
     public RecipeType<?> getType() {
-        return SERIALIZER.getRecipeType();
+        return SushiContent.RecipeTypes.CUTTING_BOARD.get();
     }
 
     public Ingredient getInput() {

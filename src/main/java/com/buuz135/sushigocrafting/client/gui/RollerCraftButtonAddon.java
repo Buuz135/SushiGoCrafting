@@ -18,7 +18,6 @@ import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.client.resources.sounds.SimpleSoundInstance;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TextComponent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.item.ItemStack;
@@ -54,7 +53,7 @@ public class RollerCraftButtonAddon extends BasicButtonAddon {
         if (screen instanceof AbstractContainerScreen && ((AbstractContainerScreen) screen).getMenu() instanceof ILocatable) {
             if (!isMouseOver(mouseX - ((AbstractContainerScreen<?>) screen).getGuiLeft(), mouseY - ((AbstractContainerScreen<?>) screen).getGuiTop()))
                 return false;
-            Minecraft.getInstance().getSoundManager().play(new SimpleSoundInstance(SoundEvents.UI_BUTTON_CLICK, SoundSource.PLAYERS, 0.2F, 1.0F, Minecraft.getInstance().player.blockPosition()));
+            Minecraft.getInstance().getSoundManager().play(new SimpleSoundInstance(SoundEvents.UI_BUTTON_CLICK, SoundSource.PLAYERS, 0.2F, 1.0F, Minecraft.getInstance().level.getRandom(),Minecraft.getInstance().player.blockPosition()));
             ILocatable locatable = (ILocatable) ((AbstractContainerScreen) screen).getMenu();
             CompoundTag nbt = new CompoundTag();
             nbt.putInt("Button", button);
@@ -66,7 +65,7 @@ public class RollerCraftButtonAddon extends BasicButtonAddon {
 
     @Override
     public List<Component> getTooltipLines() {
-        return Arrays.asList(new TextComponent("Roll"), new TextComponent(ChatFormatting.DARK_GRAY + "*Left Click to make 1*"), new TextComponent(ChatFormatting.DARK_GRAY + "*Right Click to make 64*"));
+        return Arrays.asList(Component.literal("Roll"), Component.literal(ChatFormatting.DARK_GRAY + "*Left Click to make 1*"), Component.literal(ChatFormatting.DARK_GRAY + "*Right Click to make 64*"));
     }
 
     @Override

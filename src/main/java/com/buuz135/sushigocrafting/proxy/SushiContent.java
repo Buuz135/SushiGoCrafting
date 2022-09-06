@@ -18,9 +18,15 @@ import com.buuz135.sushigocrafting.loot.SeedsLootModifier;
 import com.buuz135.sushigocrafting.potioneffect.AcquiredTasteEffect;
 import com.buuz135.sushigocrafting.potioneffect.SmallBitesEffect;
 import com.buuz135.sushigocrafting.potioneffect.SteadyHandsEffect;
+import com.buuz135.sushigocrafting.recipe.CombineAmountItemRecipe;
+import com.buuz135.sushigocrafting.recipe.CuttingBoardRecipe;
+import com.buuz135.sushigocrafting.recipe.FermentingBarrelRecipe;
 import com.buuz135.sushigocrafting.tile.machinery.*;
-import com.buuz135.sushigocrafting.world.SeaWeedFeature;
-import com.buuz135.sushigocrafting.world.tree.AvocadoTree;
+import com.buuz135.sushigocrafting.world.AvocadoTreeGrower;
+import com.buuz135.sushigocrafting.world.SeaweedFeature;
+import com.hrznstudio.titanium.recipe.serializer.GenericSerializer;
+import com.mojang.serialization.Codec;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.entity.Entity;
@@ -29,6 +35,9 @@ import net.minecraft.world.entity.MobCategory;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.MobBucketItem;
+import net.minecraft.world.item.crafting.RecipeSerializer;
+import net.minecraft.world.item.crafting.RecipeType;
+import net.minecraft.world.item.crafting.SimpleRecipeSerializer;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.RotatedPillarBlock;
 import net.minecraft.world.level.block.SaplingBlock;
@@ -43,7 +52,6 @@ import net.minecraft.world.level.levelgen.feature.configurations.NoneFeatureConf
 import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.level.material.Material;
 import net.minecraft.world.level.material.PushReaction;
-import net.minecraftforge.common.loot.GlobalLootModifierSerializer;
 import net.minecraftforge.common.loot.IGlobalLootModifier;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
@@ -93,8 +101,16 @@ public class SushiContent {
         return EntityTypes.REGISTRY.register(id, supplier);
     }
 
-    public static <T extends IGlobalLootModifier> RegistryObject<GlobalLootModifierSerializer<?>> lootSerializer(String id, Supplier<GlobalLootModifierSerializer<T>> supplier) {
+    public static <T extends IGlobalLootModifier> RegistryObject<Codec<? extends IGlobalLootModifier>> lootSerializer(String id, Supplier<Codec<T>> supplier) {
         return LootSerializers.REGISTRY.register(id, supplier);
+    }
+
+    public static RegistryObject<RecipeSerializer> recipeSerializer(String id, Supplier<RecipeSerializer<?>> supplier) {
+        return RecipeSerializers.REGISTRY.register(id, supplier);
+    }
+
+    public static RegistryObject<RecipeType<?>> recipeType(String id, Supplier<RecipeType<?>> supplier) {
+        return RecipeTypes.REGISTRY.register(id, supplier);
     }
 
     public static class Blocks {
@@ -119,7 +135,7 @@ public class SushiContent {
         public static final RegistryObject<RotatedPillarBlock> AVOCADO_LOG = block("avocado_log", () -> new AvocadoLogBlock(BlockBehaviour.Properties.copy(net.minecraft.world.level.block.Blocks.OAK_WOOD)));
         public static final RegistryObject<RotatedPillarBlock> AVOCADO_LEAVES_LOG = block("avocado_leaves_logged", () -> new RotatedPillarBlock(BlockBehaviour.Properties.copy(net.minecraft.world.level.block.Blocks.OAK_WOOD).noOcclusion()));
         public static final RegistryObject<Block> AVOCADO_LEAVES = block("avocado_leaves", AvocadoLeavesBlock::new);
-        public static final RegistryObject<Block> AVOCADO_SAPLING = block("avocado_sapling", () -> new SaplingBlock(new AvocadoTree(), BlockBehaviour.Properties.copy(net.minecraft.world.level.block.Blocks.OAK_SAPLING)));
+        public static final RegistryObject<Block> AVOCADO_SAPLING = block("avocado_sapling", () -> new SaplingBlock(new AvocadoTreeGrower(), BlockBehaviour.Properties.copy(net.minecraft.world.level.block.Blocks.OAK_SAPLING)));
 
         public static final RegistryObject<RollerBlock> ROLLER = block("roller", RollerBlock::new);
         public static final RegistryObject<RiceCookerBlock> RICE_COOKER = block("rice_cooker", RiceCookerBlock::new);
@@ -189,7 +205,7 @@ public class SushiContent {
 
     public static class TileEntities {
 
-        public static final DeferredRegister<BlockEntityType<?>> REGISTRY = DeferredRegister.create(ForgeRegistries.BLOCK_ENTITIES, SushiGoCrafting.MOD_ID);
+        public static final DeferredRegister<BlockEntityType<?>> REGISTRY = DeferredRegister.create(ForgeRegistries.BLOCK_ENTITY_TYPES, SushiGoCrafting.MOD_ID);
 
         public static RegistryObject<BlockEntityType<RollerTile>> ROLLER = tile("roller", RollerTile::new, Blocks.ROLLER);
         public static RegistryObject<BlockEntityType<RiceCookerTile>> RICE_COOKER = tile("rice_cooker", RiceCookerTile::new, Blocks.RICE_COOKER);
@@ -204,7 +220,9 @@ public class SushiContent {
 
         public static final DeferredRegister<Feature<?>> REGISTRY = DeferredRegister.create(ForgeRegistries.FEATURES, SushiGoCrafting.MOD_ID);
 
-        public static final RegistryObject<Feature<NoneFeatureConfiguration>> SEAWEED = feature("seaweed", () -> new SeaWeedFeature(NoneFeatureConfiguration.CODEC));
+        public static final RegistryObject<Feature<NoneFeatureConfiguration>> SEAWEED = feature("seaweed", () -> new SeaweedFeature(NoneFeatureConfiguration.CODEC));
+
+
 
     }
 
@@ -220,7 +238,7 @@ public class SushiContent {
 
     public static class EntityTypes {
 
-        public static final DeferredRegister<EntityType<?>> REGISTRY = DeferredRegister.create(ForgeRegistries.ENTITIES, SushiGoCrafting.MOD_ID);
+        public static final DeferredRegister<EntityType<?>> REGISTRY = DeferredRegister.create(ForgeRegistries.ENTITY_TYPES, SushiGoCrafting.MOD_ID);
 
         public static RegistryObject<EntityType<TunaEntity>> getTuna() {
             return TUNA;
@@ -230,19 +248,34 @@ public class SushiContent {
             return SHRIMP;
         }        public static final RegistryObject<EntityType<ShrimpEntity>> SHRIMP = entity("shrimp", () -> EntityType.Builder.of(ShrimpEntity::new, MobCategory.WATER_AMBIENT).sized(0.7F, 0.4F).clientTrackingRange(4).setCustomClientFactory((spawnEntity, world) -> new ShrimpEntity(getShrimp().get(), world)).build("shrimp"));
 
-
-
-
     }
 
     public static class LootSerializers {
 
-        public static final DeferredRegister<GlobalLootModifierSerializer<?>> REGISTRY = DeferredRegister.create(ForgeRegistries.Keys.LOOT_MODIFIER_SERIALIZERS, SushiGoCrafting.MOD_ID);
+        public static final DeferredRegister<Codec<? extends IGlobalLootModifier>> REGISTRY = DeferredRegister.create(ForgeRegistries.Keys.GLOBAL_LOOT_MODIFIER_SERIALIZERS, SushiGoCrafting.MOD_ID);
 
-        public static final RegistryObject<GlobalLootModifierSerializer<?>> SEEDS = lootSerializer("grass_seeds", SeedsLootModifier.Serializer::new);
-        public static final RegistryObject<GlobalLootModifierSerializer<?>> ITEM_AMOUNT = lootSerializer("item_amount", ItemAmountLootModifier.Serializer::new);
+        public static final RegistryObject<Codec<? extends IGlobalLootModifier>> SEEDS = lootSerializer("grass_seeds", SeedsLootModifier.CODEC);
+        public static final RegistryObject<Codec<? extends IGlobalLootModifier>> ITEM_AMOUNT = lootSerializer("item_amount", ItemAmountLootModifier.CODEC);
 
     }
 
+    public static class RecipeSerializers {
+
+        public static final DeferredRegister<RecipeSerializer<?>> REGISTRY = DeferredRegister.create(ForgeRegistries.Keys.RECIPE_SERIALIZERS, SushiGoCrafting.MOD_ID);
+
+        public static final RegistryObject<RecipeSerializer> COMBINE_AMOUNT = recipeSerializer("amount_combine_recipe", () -> new SimpleRecipeSerializer<>(CombineAmountItemRecipe::new));
+        public static final RegistryObject<RecipeSerializer> CUTTING_BOARD = recipeSerializer("cutting_board", () -> new GenericSerializer<>(CuttingBoardRecipe.class));
+        public static final RegistryObject<RecipeSerializer> FERMENTING_BARREL = recipeSerializer("fermenting_barrel", () -> new GenericSerializer<>(FermentingBarrelRecipe.class));
+
+    }
+
+    public static class RecipeTypes {
+
+        public static final DeferredRegister<RecipeType<?>> REGISTRY = DeferredRegister.create(ForgeRegistries.Keys.RECIPE_TYPES, SushiGoCrafting.MOD_ID);
+
+        public static final RegistryObject<RecipeType<?>> CUTTING_BOARD = recipeType("cutting_board", () -> RecipeType.simple(new ResourceLocation(SushiGoCrafting.MOD_ID, "cutting_board")));
+        public static final RegistryObject<RecipeType<?>> FERMENTING_BARREL = recipeType("fermenting_barrel", () -> RecipeType.simple(new ResourceLocation(SushiGoCrafting.MOD_ID, "fermenting_barrel")));
+
+    }
 
 }

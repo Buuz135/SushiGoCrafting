@@ -10,17 +10,17 @@ import com.hrznstudio.titanium.client.screen.asset.IAssetProvider;
 import com.hrznstudio.titanium.util.AssetUtil;
 import com.mojang.blaze3d.vertex.PoseStack;
 import mezz.jei.api.constants.VanillaTypes;
+import mezz.jei.api.forge.ForgeTypes;
 import mezz.jei.api.gui.builder.IRecipeLayoutBuilder;
 import mezz.jei.api.gui.drawable.IDrawable;
 import mezz.jei.api.gui.ingredient.IRecipeSlotsView;
 import mezz.jei.api.helpers.IGuiHelper;
 import mezz.jei.api.recipe.IFocusGroup;
 import mezz.jei.api.recipe.RecipeIngredientRole;
+import mezz.jei.api.recipe.RecipeType;
 import mezz.jei.api.recipe.category.IRecipeCategory;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TranslatableComponent;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
@@ -41,18 +41,13 @@ public class RiceCookerCategory implements IRecipeCategory<RiceCookerCategory.Ri
     }
 
     @Override
-    public ResourceLocation getUid() {
-        return SushiRecipeTypes.RICE_COOKER.getUid();
-    }
-
-    @Override
-    public Class<? extends RiceCookerRecipe> getRecipeClass() {
-        return SushiRecipeTypes.RICE_COOKER.getRecipeClass();
-    }
-
-    @Override
     public Component getTitle() {
-        return new TranslatableComponent(SushiContent.Blocks.RICE_COOKER.get().getDescriptionId());
+        return Component.translatable(SushiContent.Blocks.RICE_COOKER.get().getDescriptionId());
+    }
+
+    @Override
+    public RecipeType<RiceCookerRecipe> getRecipeType() {
+        return SushiRecipeTypes.RICE_COOKER;
     }
 
     @Override
@@ -69,10 +64,10 @@ public class RiceCookerCategory implements IRecipeCategory<RiceCookerCategory.Ri
     @Override
     public void setRecipe(IRecipeLayoutBuilder builder, RiceCookerRecipe recipe, IFocusGroup focuses) {
         builder.addSlot(RecipeIngredientRole.INPUT, 4, 3).addIngredients(Ingredient.of(RiceCookerTile.RICE));
-        builder.addSlot(RecipeIngredientRole.INPUT, 30, 37).addIngredients(VanillaTypes.ITEM, JEIModPlugin.FUELS);
-        builder.addSlot(RecipeIngredientRole.INPUT, 6, 30).setFluidRenderer(2000, false, 12, 13).setOverlay(smallTank, 0, 0).addIngredient(VanillaTypes.FLUID, new FluidStack(Fluids.WATER, 1000));
+        builder.addSlot(RecipeIngredientRole.INPUT, 30, 37).addIngredients(VanillaTypes.ITEM_STACK, JEIModPlugin.FUELS);
+        builder.addSlot(RecipeIngredientRole.INPUT, 6, 30).setFluidRenderer(2000, false, 12, 13).setOverlay(smallTank, 0, 0).addIngredient(ForgeTypes.FLUID_STACK, new FluidStack(Fluids.WATER, 1000));
 
-        builder.addSlot(RecipeIngredientRole.OUTPUT, 60, 16).addIngredient(VanillaTypes.ITEM, SushiContent.Items.COOKED_RICE.get().withAmount(50));
+        builder.addSlot(RecipeIngredientRole.OUTPUT, 60, 16).addIngredient(VanillaTypes.ITEM_STACK, SushiContent.Items.COOKED_RICE.get().withAmount(50));
     }
 
     @Override

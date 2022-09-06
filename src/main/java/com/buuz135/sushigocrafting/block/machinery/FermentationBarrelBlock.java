@@ -4,6 +4,7 @@ import com.buuz135.sushigocrafting.tile.machinery.FermentationBarrelTile;
 import com.hrznstudio.titanium.block.RotatableBlock;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
@@ -17,7 +18,6 @@ import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
 import javax.annotation.Nonnull;
-import java.util.Random;
 import java.util.stream.Stream;
 
 public class FermentationBarrelBlock extends RotatableBlock<FermentationBarrelTile> {
@@ -67,7 +67,7 @@ public class FermentationBarrelBlock extends RotatableBlock<FermentationBarrelTi
     }
 
     @Override
-    public void animateTick(BlockState stateIn, Level worldIn, BlockPos pos, Random rand) {
+    public void animateTick(BlockState stateIn, Level worldIn, BlockPos pos, RandomSource rand) {
         super.animateTick(stateIn, worldIn, pos, rand);
         this.getTile(worldIn, pos).filter(riceCookerTile -> riceCookerTile.getBar().getProgress() > 0).ifPresent(riceCookerTile -> {
             double d0 = (double) pos.getX() + 0.5D - worldIn.random.nextDouble() / 2D + 0.25D;

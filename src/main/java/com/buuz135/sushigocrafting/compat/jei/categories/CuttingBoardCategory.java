@@ -18,7 +18,6 @@ import mezz.jei.api.recipe.RecipeType;
 import mezz.jei.api.recipe.category.IRecipeCategory;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 
@@ -37,18 +36,8 @@ public class CuttingBoardCategory implements IRecipeCategory<CuttingBoardRecipe>
     }
 
     @Override
-    public ResourceLocation getUid() {
-        return SushiRecipeTypes.CUTTING_BOARD.getUid();
-    }
-
-    @Override
-    public Class<? extends CuttingBoardRecipe> getRecipeClass() {
-        return SushiRecipeTypes.CUTTING_BOARD.getRecipeClass();
-    }
-
-    @Override
     public Component getTitle() {
-        return new TranslatableComponent(SushiContent.Blocks.CUTTING_BOARD.get().getDescriptionId());
+        return Component.translatable(SushiContent.Blocks.CUTTING_BOARD.get().getDescriptionId());
     }
 
     @Override
@@ -64,7 +53,7 @@ public class CuttingBoardCategory implements IRecipeCategory<CuttingBoardRecipe>
     @Override
     public void setRecipe(IRecipeLayoutBuilder builder, CuttingBoardRecipe recipe, IFocusGroup focuses) {
         builder.addSlot(RecipeIngredientRole.INPUT, 30, 52).addIngredients(recipe.input);
-        builder.addSlot(RecipeIngredientRole.OUTPUT, 30, 0).addIngredient(VanillaTypes.ITEM, new ItemStack(FoodAPI.get().getIngredientFromName(recipe.ingredient).getItem()));
+        builder.addSlot(RecipeIngredientRole.OUTPUT, 30, 0).addIngredient(VanillaTypes.ITEM_STACK, new ItemStack(FoodAPI.get().getIngredientFromName(recipe.ingredient).getItem()));
     }
 
 

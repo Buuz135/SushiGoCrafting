@@ -12,6 +12,7 @@ import net.minecraftforge.client.model.generators.BlockStateProvider;
 import net.minecraftforge.client.model.generators.ConfiguredModel;
 import net.minecraftforge.client.model.generators.ModelFile;
 import net.minecraftforge.common.data.ExistingFileHelper;
+import net.minecraftforge.registries.ForgeRegistries;
 
 public class SushiBlockstateProvider extends BlockStateProvider {
 
@@ -36,11 +37,11 @@ public class SushiBlockstateProvider extends BlockStateProvider {
         getVariantBuilder(SushiContent.Blocks.AVOCADO_LEAVES.get())
                 .partialState()
                 .with(AvocadoLeavesBlock.STAGE, 0).addModels(
-                        ConfiguredModel.builder().modelFile(new ModelFile.UncheckedModelFile(modLoc("block/" + SushiContent.Blocks.AVOCADO_LEAVES.get().getRegistryName().getPath() + "_0"))).build())
+                        ConfiguredModel.builder().modelFile(new ModelFile.UncheckedModelFile(modLoc("block/" + ForgeRegistries.BLOCKS.getKey(SushiContent.Blocks.AVOCADO_LEAVES.get()).getPath() + "_0"))).build())
                 .partialState().with(AvocadoLeavesBlock.STAGE, 1).addModels(
-                        ConfiguredModel.builder().modelFile(new ModelFile.UncheckedModelFile(modLoc("block/" + SushiContent.Blocks.AVOCADO_LEAVES.get().getRegistryName().getPath() + "_1"))).build())
+                        ConfiguredModel.builder().modelFile(new ModelFile.UncheckedModelFile(modLoc("block/" + ForgeRegistries.BLOCKS.getKey(SushiContent.Blocks.AVOCADO_LEAVES.get()).getPath() + "_1"))).build())
                 .partialState().with(AvocadoLeavesBlock.STAGE, 2).addModels(
-                        ConfiguredModel.builder().modelFile(new ModelFile.UncheckedModelFile(modLoc("block/" + SushiContent.Blocks.AVOCADO_LEAVES.get().getRegistryName().getPath() + "_2"))).build());
+                        ConfiguredModel.builder().modelFile(new ModelFile.UncheckedModelFile(modLoc("block/" + ForgeRegistries.BLOCKS.getKey(SushiContent.Blocks.AVOCADO_LEAVES.get()).getPath() + "_2"))).build());
         horizontalBlock(SushiContent.Blocks.CUTTING_BOARD.get());
         horizontalBlock(SushiContent.Blocks.ROLLER.get());
         simpleBlockUn(SushiContent.Blocks.FERMENTATION_BARREL.get());
@@ -49,16 +50,16 @@ public class SushiBlockstateProvider extends BlockStateProvider {
     private void crop(CropBlock block) {
         getVariantBuilder(block).forAllStates(blockState -> {
             int age = blockState.getValue(block.getAgeProperty());
-            return ConfiguredModel.builder().modelFile(new ModelFile.UncheckedModelFile(modLoc("block/" + block.getRegistryName().getPath() + "_" + age))).build();
+            return ConfiguredModel.builder().modelFile(new ModelFile.UncheckedModelFile(modLoc("block/" + ForgeRegistries.BLOCKS.getKey(block).getPath() + "_" + age))).build();
         });
     }
 
     private void simpleBlockUn(Block block) {
-        simpleBlock(block, new ModelFile.UncheckedModelFile(modLoc("block/" + block.getRegistryName().getPath())));
+        simpleBlock(block, new ModelFile.UncheckedModelFile(modLoc("block/" + ForgeRegistries.BLOCKS.getKey(block).getPath())));
     }
 
     private void horizontalBlock(Block block) {
-        ModelFile file = new ModelFile.UncheckedModelFile(modLoc("block/" + block.getRegistryName().getPath()));
+        ModelFile file = new ModelFile.UncheckedModelFile(modLoc("block/" + ForgeRegistries.BLOCKS.getKey(block).getPath()));
         getVariantBuilder(block)
                 .forAllStates(state -> ConfiguredModel.builder()
                         .modelFile(file)
@@ -68,7 +69,7 @@ public class SushiBlockstateProvider extends BlockStateProvider {
     }
 
     private void logBlockRot(Block block) {
-        ModelFile file = new ModelFile.UncheckedModelFile(modLoc("block/" + block.getRegistryName().getPath()));
+        ModelFile file = new ModelFile.UncheckedModelFile(modLoc("block/" + ForgeRegistries.BLOCKS.getKey(block).getPath()));
         getVariantBuilder(block)
                 .forAllStates(state -> {
                             Direction.Axis axis = state.getValue(RotatedPillarBlock.AXIS);

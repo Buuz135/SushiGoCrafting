@@ -1,0 +1,6 @@
+{
+  "type": "forge:add_features",
+  "biomes": "minecraft:plains",
+  "features": "sushigocrafting:trees_avocado",
+  "step": "vegetal_decoration"
+}

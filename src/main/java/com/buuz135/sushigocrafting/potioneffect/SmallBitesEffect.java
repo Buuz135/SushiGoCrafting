@@ -18,11 +18,11 @@ public class SmallBitesEffect extends MobEffect {
 
     static {
         EventManager.forge(LivingEntityUseItemEvent.Finish.class)
-                .filter(finish -> finish.getItem().isEdible() && finish.getEntityLiving().hasEffect(SushiContent.Effects.SMALL_BITES.get()))
+                .filter(finish -> finish.getItem().isEdible() && finish.getEntity().hasEffect(SushiContent.Effects.SMALL_BITES.get()))
                 .process(finish -> {
-                    MobEffectInstance instance = finish.getEntityLiving().getEffect(SushiContent.Effects.SMALL_BITES.get());
-                    if (finish.getEntityLiving() instanceof ServerPlayer && finish.getEntityLiving().level.random.nextInt(9) <= instance.getAmplifier() + 1) {
-                        ServerPlayer player = (ServerPlayer) finish.getEntityLiving();
+                    MobEffectInstance instance = finish.getEntity().getEffect(SushiContent.Effects.SMALL_BITES.get());
+                    if (finish.getEntity() instanceof ServerPlayer && finish.getEntity().level.random.nextInt(9) <= instance.getAmplifier() + 1) {
+                        ServerPlayer player = (ServerPlayer) finish.getEntity();
                         ItemStack stack = finish.getResultStack().copy();
                         stack.setCount(1);
                         player.playNotifySound(SoundEvents.PLAYER_LEVELUP, SoundSource.PLAYERS, 0.2f, 1);

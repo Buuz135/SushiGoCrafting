@@ -174,8 +174,7 @@ public class ShrimpEntity extends AbstractSchoolingFish implements ItemSteerable
             return super.getDismountLocationForPassenger(livingEntity);
         }
     }
-
-    @Override
+    
     public boolean canBeControlledByRider() {
         Entity entity = this.getControllingPassenger();
         if (!(entity instanceof Player)) {

@@ -7,6 +7,7 @@ import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.tags.BlockTags;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
@@ -79,7 +80,7 @@ public class AvocadoLeavesBlock extends SushiGoCraftingBlock implements IForgeSh
     }
 
     @Override
-    public void randomTick(BlockState state, ServerLevel worldIn, BlockPos pos, Random random) {
+    public void randomTick(BlockState state, ServerLevel worldIn, BlockPos pos, RandomSource random) {
         worldIn.setBlock(pos, updateDistance(state, worldIn, pos), 3);
         state = worldIn.getBlockState(pos);
         if (!state.getValue(PERSISTENT) && state.getValue(DISTANCE) == 7) {
@@ -92,7 +93,7 @@ public class AvocadoLeavesBlock extends SushiGoCraftingBlock implements IForgeSh
     }
 
     @Override
-    public void tick(BlockState state, ServerLevel worldIn, BlockPos pos, Random rand) {
+    public void tick(BlockState state, ServerLevel worldIn, BlockPos pos, RandomSource rand) {
         worldIn.setBlock(pos, updateDistance(state, worldIn, pos), 3);
     }
 
@@ -152,12 +153,12 @@ public class AvocadoLeavesBlock extends SushiGoCraftingBlock implements IForgeSh
     }
 
     @Override
-    public boolean isBonemealSuccess(Level worldIn, Random rand, BlockPos pos, BlockState state) {
+    public boolean isBonemealSuccess(Level worldIn, RandomSource rand, BlockPos pos, BlockState state) {
         return state.getValue(STAGE) == 1;
     }
 
     @Override
-    public void performBonemeal(ServerLevel worldIn, Random rand, BlockPos pos, BlockState state) {
+    public void performBonemeal(ServerLevel worldIn, RandomSource rand, BlockPos pos, BlockState state) {
         worldIn.setBlockAndUpdate(pos, state.setValue(STAGE, 2));
     }
 

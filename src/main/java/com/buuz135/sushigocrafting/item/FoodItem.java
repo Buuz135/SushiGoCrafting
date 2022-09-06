@@ -10,8 +10,6 @@ import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TextComponent;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.LivingEntity;
@@ -54,15 +52,15 @@ public class FoodItem extends SushiItem {
     public static List<Component> getTagsFrom(int negative, int positive) {
         List<Component> names = new ArrayList<>();
         if (negative == 0 && positive == 0) {
-            names.add(new TextComponent(ChatFormatting.GOLD + "Perfect"));
+            names.add(Component.literal(ChatFormatting.GOLD + "Perfect"));
         } else if (Math.abs(negative) == positive) {
-            names.add(new TextComponent(ChatFormatting.DARK_GREEN + "Weirdly Balanced"));
+            names.add(Component.literal(ChatFormatting.DARK_GREEN + "Weirdly Balanced"));
         }
         if (Math.abs(negative) < positive) {
-            names.add(new TextComponent(ChatFormatting.RED + "Almost Hollow"));
+            names.add(Component.literal(ChatFormatting.RED + "Almost Hollow"));
         }
         if (Math.abs(negative) > positive) {
-            names.add(new TextComponent(ChatFormatting.RED + "Overflowing"));
+            names.add(Component.literal(ChatFormatting.RED + "Overflowing"));
         }
         return names;
     }
@@ -102,14 +100,14 @@ public class FoodItem extends SushiItem {
     @Override
     public void appendHoverText(ItemStack stack, Level worldIn, List<Component> tooltip, TooltipFlag flagIn) {
         super.appendHoverText(stack, worldIn, tooltip, flagIn);
-        tooltip.add(new TextComponent(ChatFormatting.GRAY + "Ingredients: "));
+        tooltip.add(Component.literal(ChatFormatting.GRAY + "Ingredients: "));
         for (int i = 0; i < ingredientList.size(); i++) {
             if (!ingredientList.get(i).isEmpty()) {
-                String line = ChatFormatting.GRAY + " - " + new TranslatableComponent(ingredientList.get(i).getItem().getDescriptionId()).getString();
+                String line = ChatFormatting.GRAY + " - " + Component.translatable(ingredientList.get(i).getItem().getDescriptionId()).getString();
                 if (stack.hasTag()) {
                     line += " " + getWeightText(stack.getTag().getIntArray(WEIGHTS_TAG)[i]);
                 }
-                tooltip.add(new TextComponent(line));
+                tooltip.add(Component.literal(line));
             }
         }
         if (stack.hasTag() && stack.getTagElement(FoodItem.SPICES_TAG) != null) {
@@ -117,7 +115,7 @@ public class FoodItem extends SushiItem {
             for (String name : compoundNBT.getAllKeys()) {
                 IFoodIngredient foodIngredient = FoodAPI.get().getIngredientFromName(name);
                 if (!foodIngredient.isEmpty())
-                    tooltip.add(new TextComponent(ChatFormatting.GRAY + " - " + new TranslatableComponent(foodIngredient.getItem().getDescriptionId()).getString()));
+                    tooltip.add(Component.literal(ChatFormatting.GRAY + " - " + Component.translatable(foodIngredient.getItem().getDescriptionId()).getString()));
             }
         }
         boolean hasShift = Screen.hasShiftDown();
@@ -125,18 +123,18 @@ public class FoodItem extends SushiItem {
         //hasShift = hasAlt = true;
         Info info = new Info(stack, hasShift);
         tooltip.addAll(getTagsFrom(info.getNegative(), info.getPositive()));
-        tooltip.add(new TextComponent(""));
+        tooltip.add(Component.literal(""));
         if (hasShift) {
             if (info.getEffectInstances().size() > 0) {
-                tooltip.add(new TextComponent(ChatFormatting.DARK_AQUA + "Effects:"));
+                tooltip.add(Component.literal(ChatFormatting.DARK_AQUA + "Effects:"));
                 if (hasAlt) {
-                    tooltip.add(new TextComponent(ChatFormatting.YELLOW + " - " + ChatFormatting.GOLD + "Hunger: " + ChatFormatting.WHITE + (int) info.getHunger()));
-                    tooltip.add(new TextComponent(ChatFormatting.YELLOW + " - " + ChatFormatting.GOLD + "Saturation: " + ChatFormatting.WHITE + info.getSaturation()));
+                    tooltip.add(Component.literal(ChatFormatting.YELLOW + " - " + ChatFormatting.GOLD + "Hunger: " + ChatFormatting.WHITE + (int) info.getHunger()));
+                    tooltip.add(Component.literal(ChatFormatting.YELLOW + " - " + ChatFormatting.GOLD + "Saturation: " + ChatFormatting.WHITE + info.getSaturation()));
                 }
-                info.getEffectInstances().forEach(effectInstance -> tooltip.add(new TextComponent(ChatFormatting.YELLOW + " - " + ChatFormatting.GOLD + effectInstance.getEffect().getDisplayName().getString() + ChatFormatting.DARK_AQUA + " (" + ChatFormatting.WHITE + effectInstance.getDuration() / 20 + ChatFormatting.YELLOW + "s" + ChatFormatting.DARK_AQUA + ", " + ChatFormatting.YELLOW + "Level " + ChatFormatting.WHITE + (effectInstance.getAmplifier() + 1) + ChatFormatting.DARK_AQUA + ")")));
+                info.getEffectInstances().forEach(effectInstance -> tooltip.add(Component.literal(ChatFormatting.YELLOW + " - " + ChatFormatting.GOLD + effectInstance.getEffect().getDisplayName().getString() + ChatFormatting.DARK_AQUA + " (" + ChatFormatting.WHITE + effectInstance.getDuration() / 20 + ChatFormatting.YELLOW + "s" + ChatFormatting.DARK_AQUA + ", " + ChatFormatting.YELLOW + "Level " + ChatFormatting.WHITE + (effectInstance.getAmplifier() + 1) + ChatFormatting.DARK_AQUA + ")")));
             }
         } else {
-            tooltip.add(new TextComponent(ChatFormatting.YELLOW + "Hold " + ChatFormatting.GOLD + "" + ChatFormatting.ITALIC + "<Shift>" + ChatFormatting.RESET + ChatFormatting.YELLOW + " for sushi effect"));
+            tooltip.add(Component.literal(ChatFormatting.YELLOW + "Hold " + ChatFormatting.GOLD + "" + ChatFormatting.ITALIC + "<Shift>" + ChatFormatting.RESET + ChatFormatting.YELLOW + " for sushi effect"));
         }
     }
 

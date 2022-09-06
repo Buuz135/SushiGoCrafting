@@ -20,12 +20,10 @@ import net.minecraft.client.renderer.ItemBlockRenderTypes;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.player.PlayerRenderer;
 import net.minecraft.client.resources.model.BakedModel;
-import net.minecraft.network.chat.TextComponent;
+import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.client.event.EntityRenderersEvent;
-import net.minecraftforge.client.event.ModelBakeEvent;
-import net.minecraftforge.client.event.ModelRegistryEvent;
-import net.minecraftforge.client.model.ForgeModelBakery;
+import net.minecraftforge.client.event.ModelEvent;
 import net.minecraftforge.event.entity.player.ItemTooltipEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 
@@ -49,13 +47,13 @@ public class ClientProxy {
         EventManager.mod(EntityRenderersEvent.RegisterLayerDefinitions.class).process(event -> {
             event.registerLayerDefinition(new ModelLayerLocation(new ResourceLocation(SushiGoCrafting.MOD_ID, "shrimp"), "main"), ShrimpModel::createBodyLayer);
         }).subscribe();
-        EventManager.mod(ModelRegistryEvent.class).process(event -> {
-            ForgeModelBakery.addSpecialModel(new ResourceLocation(SushiGoCrafting.MOD_ID, "block/salmon_back"));
-            ForgeModelBakery.addSpecialModel(new ResourceLocation(SushiGoCrafting.MOD_ID, "block/tuna_back"));
+        EventManager.mod(ModelEvent.RegisterAdditional.class).process(event -> {
+            event.register(new ResourceLocation(SushiGoCrafting.MOD_ID, "block/salmon_back"));
+            event.register(new ResourceLocation(SushiGoCrafting.MOD_ID, "block/tuna_back"));
         }).subscribe();
-        EventManager.mod(ModelBakeEvent.class).process(event -> {
-            SALMON_BACK = event.getModelRegistry().get(new ResourceLocation(SushiGoCrafting.MOD_ID, "block/salmon_back"));
-            TUNA_BACK = event.getModelRegistry().get(new ResourceLocation(SushiGoCrafting.MOD_ID, "block/tuna_back"));
+        EventManager.mod(ModelEvent.BakingCompleted.class).process(event -> {
+            SALMON_BACK = event.getModels().get(new ResourceLocation(SushiGoCrafting.MOD_ID, "block/salmon_back"));
+            TUNA_BACK = event.getModels().get(new ResourceLocation(SushiGoCrafting.MOD_ID, "block/tuna_back"));
         }).subscribe();
     }
 
@@ -73,23 +71,23 @@ public class ClientProxy {
         EventManager.forge(ItemTooltipEvent.class).process(event -> {
             IFoodIngredient ingredient = FoodAPI.get().getIngredientFromItem(event.getItemStack().getItem());
             if (!ingredient.isEmpty() && ingredient.getEffect() != null) {
-                event.getToolTip().add(new TextComponent(""));
+                event.getToolTip().add(Component.literal(""));
                 if (Screen.hasShiftDown()) {
                     IIngredientEffect effect = ingredient.getEffect();
                     if (effect instanceof AddIngredientEffect) {
-                        event.getToolTip().add(new TextComponent(ChatFormatting.DARK_AQUA + "Adds Food Effect:"));
-                        event.getToolTip().add(new TextComponent(ChatFormatting.YELLOW + " - " + ChatFormatting.GOLD + ((AddIngredientEffect) effect).getEffect().get().getDisplayName().getString() + ChatFormatting.DARK_AQUA + " (" + ChatFormatting.WHITE + ((AddIngredientEffect) effect).getDuration() / 20 + ChatFormatting.YELLOW + "s" + ChatFormatting.DARK_AQUA + ", " + ChatFormatting.YELLOW + "Level " + ChatFormatting.WHITE + (((AddIngredientEffect) effect).getLevel() + 1) + ChatFormatting.DARK_AQUA + ")"));
+                        event.getToolTip().add(Component.literal(ChatFormatting.DARK_AQUA + "Adds Food Effect:"));
+                        event.getToolTip().add(Component.literal(ChatFormatting.YELLOW + " - " + ChatFormatting.GOLD + ((AddIngredientEffect) effect).getEffect().get().getDisplayName().getString() + ChatFormatting.DARK_AQUA + " (" + ChatFormatting.WHITE + ((AddIngredientEffect) effect).getDuration() / 20 + ChatFormatting.YELLOW + "s" + ChatFormatting.DARK_AQUA + ", " + ChatFormatting.YELLOW + "Level " + ChatFormatting.WHITE + (((AddIngredientEffect) effect).getLevel() + 1) + ChatFormatting.DARK_AQUA + ")"));
                     }
                     if (effect instanceof ModifyIngredientEffect) {
-                        event.getToolTip().add(new TextComponent(ChatFormatting.DARK_AQUA + "Modifies Food Effect:"));
+                        event.getToolTip().add(Component.literal(ChatFormatting.DARK_AQUA + "Modifies Food Effect:"));
                         if (((ModifyIngredientEffect) effect).getTimeModifier() != 1) {
-                            event.getToolTip().add(new TextComponent(ChatFormatting.YELLOW + " - " + ChatFormatting.GOLD + " Multiplies Time By " + ChatFormatting.WHITE + ((ModifyIngredientEffect) effect).getTimeModifier()));
+                            event.getToolTip().add(Component.literal(ChatFormatting.YELLOW + " - " + ChatFormatting.GOLD + " Multiplies Time By " + ChatFormatting.WHITE + ((ModifyIngredientEffect) effect).getTimeModifier()));
                         }
                         if (((ModifyIngredientEffect) effect).getLevelModifier() > 0)
-                            event.getToolTip().add(new TextComponent(ChatFormatting.YELLOW + " - " + ChatFormatting.GOLD + " Increases Level By " + ChatFormatting.WHITE + ((ModifyIngredientEffect) effect).getLevelModifier()));
+                            event.getToolTip().add(Component.literal(ChatFormatting.YELLOW + " - " + ChatFormatting.GOLD + " Increases Level By " + ChatFormatting.WHITE + ((ModifyIngredientEffect) effect).getLevelModifier()));
                     }
                 } else {
-                    event.getToolTip().add(new TextComponent(ChatFormatting.YELLOW + "Hold " + ChatFormatting.GOLD + "" + ChatFormatting.ITALIC + "<Shift>" + ChatFormatting.RESET + ChatFormatting.YELLOW + " for sushi effect"));
+                    event.getToolTip().add(Component.literal(ChatFormatting.YELLOW + "Hold " + ChatFormatting.GOLD + "" + ChatFormatting.ITALIC + "<Shift>" + ChatFormatting.RESET + ChatFormatting.YELLOW + " for sushi effect"));
                 }
             }
         }).subscribe();

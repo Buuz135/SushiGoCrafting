@@ -1,20 +1,19 @@
 package com.buuz135.sushigocrafting.recipe;
 
 import com.buuz135.sushigocrafting.item.AmountItem;
+import com.buuz135.sushigocrafting.proxy.SushiContent;
 import com.google.common.collect.Lists;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.inventory.CraftingContainer;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.CustomRecipe;
 import net.minecraft.world.item.crafting.RecipeSerializer;
-import net.minecraft.world.item.crafting.SimpleRecipeSerializer;
 import net.minecraft.world.level.Level;
 
 import java.util.List;
 
 public class CombineAmountItemRecipe extends CustomRecipe {
 
-    public static RecipeSerializer<CombineAmountItemRecipe> SERIALIZER = new SimpleRecipeSerializer<>(CombineAmountItemRecipe::new);
 
     public CombineAmountItemRecipe(ResourceLocation idIn) {
         super(idIn);
@@ -84,6 +83,6 @@ public class CombineAmountItemRecipe extends CustomRecipe {
 
     @Override
     public RecipeSerializer<?> getSerializer() {
-        return SERIALIZER;
+        return SushiContent.RecipeSerializers.COMBINE_AMOUNT.get();
     }
 }

@@ -5,6 +5,7 @@ import com.blamejared.crafttweaker.api.action.recipe.ActionAddRecipe;
 import com.blamejared.crafttweaker.api.annotation.ZenRegister;
 import com.blamejared.crafttweaker.api.ingredient.IIngredient;
 import com.blamejared.crafttweaker.api.recipe.manager.base.IRecipeManager;
+import com.buuz135.sushigocrafting.proxy.SushiContent;
 import com.buuz135.sushigocrafting.recipe.CuttingBoardRecipe;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.crafting.RecipeType;
@@ -27,6 +28,6 @@ public class CuttingBoardManager implements IRecipeManager<CuttingBoardRecipe> {
 
     @Override
     public RecipeType<CuttingBoardRecipe> getRecipeType() {
-        return CuttingBoardRecipe.SERIALIZER.getRecipeType();
+        return (RecipeType<CuttingBoardRecipe>)SushiContent.RecipeTypes.CUTTING_BOARD.get();
     }
 }

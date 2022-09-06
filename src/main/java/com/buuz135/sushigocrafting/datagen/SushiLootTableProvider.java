@@ -95,7 +95,7 @@ public class SushiLootTableProvider extends LootTableProvider {
         }
 
         private void dropLeaves(Supplier<Block> blockSupplier, Supplier<Block> sapling) {
-            this.add(blockSupplier.get(), (leaves) -> createLeavesDrops(leaves, sapling.get(), 0.15F, 0.2F, 0.3F, 0.4F));
+            this.add(blockSupplier.get(), (leaves) -> createLeavesDrops(leaves, sapling.get(), 0.20F, 0.25F, 0.35F, 0.45F));
             knownBlocks.add(blockSupplier.get());
         }
 

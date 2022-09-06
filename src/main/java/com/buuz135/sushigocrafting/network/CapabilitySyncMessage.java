@@ -6,7 +6,7 @@ import com.hrznstudio.titanium.network.Message;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.network.chat.TextComponent;
+import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -35,7 +35,7 @@ public class CapabilitySyncMessage extends Message {
     public void handle() {
         Minecraft.getInstance().player.getCapability(SushiWeightDiscoveryCapability.CAPABILITY).ifPresent(iSushiWeightDiscovery -> iSushiWeightDiscovery.deserializeNBT(capability));
         if (!itemStack.isEmpty()) {
-            PerfectionToast toast = new PerfectionToast(itemStack, new TextComponent(ChatFormatting.DARK_AQUA + "You have discovered a"), new TextComponent(ChatFormatting.DARK_AQUA + "new perfect weight!"), false);
+            PerfectionToast toast = new PerfectionToast(itemStack, Component.literal(ChatFormatting.DARK_AQUA + "You have discovered a"), Component.literal(ChatFormatting.DARK_AQUA + "new perfect weight!"), false);
             Minecraft.getInstance().getToasts().addToast(toast);
             new Thread(() -> {
                 try {

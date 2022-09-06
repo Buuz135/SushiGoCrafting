@@ -18,6 +18,7 @@ import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.items.ItemHandlerHelper;
 import net.minecraftforge.registries.ForgeRegistries;
@@ -48,7 +49,7 @@ public class CuttingBoardTile extends ActiveTile<CuttingBoardTile> {
             if (!this.input.getStackInSlot(0).isEmpty() && TagUtil.hasTag(ForgeRegistries.ITEMS, stack.getItem(), KNIFE)) {
                 ++click;
                 if (click > 5) {
-                    for (CuttingBoardRecipe recipe : RecipeUtil.getRecipes(this.level, CuttingBoardRecipe.SERIALIZER.getRecipeType())) {
+                    for (CuttingBoardRecipe recipe : RecipeUtil.getRecipes(this.level, ((RecipeType<CuttingBoardRecipe>)SushiContent.RecipeTypes.CUTTING_BOARD.get()))) {
                         if (recipe.getInput().test(this.input.getStackInSlot(0))) {
                             Item item = FoodAPI.get().getIngredientFromName(recipe.getIngredient()).getItem();
                             if (item instanceof AmountItem) {
@@ -92,6 +93,6 @@ public class CuttingBoardTile extends ActiveTile<CuttingBoardTile> {
     }
 
     private boolean accepts(ItemStack input) {
-        return RecipeUtil.getRecipes(this.level, CuttingBoardRecipe.SERIALIZER.getRecipeType()).stream().anyMatch(cuttingBoardRecipe -> cuttingBoardRecipe.getInput().test(input));
+        return RecipeUtil.getRecipes(this.level, ((RecipeType<CuttingBoardRecipe>)SushiContent.RecipeTypes.CUTTING_BOARD.get())).stream().anyMatch(cuttingBoardRecipe -> cuttingBoardRecipe.getInput().test(input));
     }
 }

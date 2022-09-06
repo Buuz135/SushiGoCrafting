@@ -17,7 +17,6 @@ import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.client.resources.sounds.SimpleSoundInstance;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TextComponent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.item.ItemStack;
@@ -53,7 +52,7 @@ public class FoodTypeSelectionButtonAddon extends BasicButtonAddon {
         if (asset != null && getButton().getType().getName().equalsIgnoreCase(selected.get())) {
             AssetUtil.drawAsset(stack, screen, asset, guiX + getPosX() - 1, guiY + getPosY() - 1);
         }
-        Minecraft.getInstance().getItemRenderer().renderAndDecorateItem(new ItemStack(FoodHelper.REGISTERED.get(getButton().getType().getName()).get(0)), guiX + getPosX(), guiY + getPosY());
+        Minecraft.getInstance().getItemRenderer().renderAndDecorateItem(new ItemStack(FoodHelper.REGISTERED.get(getButton().getType().getName()).get(0).get()), guiX + getPosX(), guiY + getPosY());
     }
 
     @Override
@@ -62,7 +61,7 @@ public class FoodTypeSelectionButtonAddon extends BasicButtonAddon {
         if (screen instanceof AbstractContainerScreen && ((AbstractContainerScreen) screen).getMenu() instanceof ILocatable) {
             if (!isMouseOver(mouseX - ((AbstractContainerScreen<?>) screen).getGuiLeft(), mouseY - ((AbstractContainerScreen<?>) screen).getGuiTop()))
                 return false;
-            Minecraft.getInstance().getSoundManager().play(new SimpleSoundInstance(SoundEvents.WOOD_FALL, SoundSource.PLAYERS, 0.5F, 1.0F, Minecraft.getInstance().player.blockPosition()));
+            Minecraft.getInstance().getSoundManager().play(new SimpleSoundInstance(SoundEvents.WOOD_FALL, SoundSource.PLAYERS, 0.5F, 1.0F,Minecraft.getInstance().level.getRandom(), Minecraft.getInstance().player.blockPosition()));
             ILocatable locatable = (ILocatable) ((AbstractContainerScreen) screen).getMenu();
             CompoundTag nbt = new CompoundTag();
             nbt.putString("Type", getButton().getType().getName());
@@ -86,7 +85,7 @@ public class FoodTypeSelectionButtonAddon extends BasicButtonAddon {
 
     @Override
     public List<Component> getTooltipLines() {
-        return Collections.singletonList(new TextComponent(WordUtils.capitalize(getButton().getType().getName())));
+        return Collections.singletonList(Component.literal(WordUtils.capitalize(getButton().getType().getName())));
     }
 
     @Override

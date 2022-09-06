@@ -7,6 +7,7 @@ import com.blamejared.crafttweaker.api.fluid.IFluidStack;
 import com.blamejared.crafttweaker.api.ingredient.IIngredient;
 import com.blamejared.crafttweaker.api.item.IItemStack;
 import com.blamejared.crafttweaker.api.recipe.manager.base.IRecipeManager;
+import com.buuz135.sushigocrafting.proxy.SushiContent;
 import com.buuz135.sushigocrafting.recipe.FermentingBarrelRecipe;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.crafting.RecipeType;
@@ -29,6 +30,6 @@ public class FermentingBarrelManager implements IRecipeManager<FermentingBarrelR
 
     @Override
     public RecipeType<FermentingBarrelRecipe> getRecipeType() {
-        return FermentingBarrelRecipe.SERIALIZER.getRecipeType();
+        return (RecipeType<FermentingBarrelRecipe>)SushiContent.RecipeTypes.FERMENTING_BARREL.get();
     }
 }

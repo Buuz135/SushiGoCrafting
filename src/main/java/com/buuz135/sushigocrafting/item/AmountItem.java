@@ -7,7 +7,6 @@ import com.mojang.datafixers.util.Pair;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.NonNullList;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TextComponent;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
@@ -64,13 +63,13 @@ public class AmountItem extends SushiItem {
     public void appendHoverText(ItemStack stack, Level worldIn, List<Component> tooltip, TooltipFlag flagIn) {
         super.appendHoverText(stack, worldIn, tooltip, flagIn);
         if (stack.hasTag()) {
-            tooltip.add(new TextComponent(ChatFormatting.GRAY + "Amount: " + stack.getTag().getInt(NBT_AMOUNT) + "/" + maxCombineAmount + " gr.")); //TODO Localize
+            tooltip.add(Component.literal(ChatFormatting.GRAY + "Amount: " + stack.getTag().getInt(NBT_AMOUNT) + "/" + maxCombineAmount + " gr.")); //TODO Localize
         }
     }
 
     @Override
     public void fillItemCategory(CreativeModeTab group, NonNullList<ItemStack> items) {
-        if (allowdedIn(group)) {
+        if (allowedIn(group)) {
             ItemStack stack = new ItemStack(this);
             stack.getOrCreateTag().putInt(NBT_AMOUNT, maxAmount / 2);
             items.add(stack);

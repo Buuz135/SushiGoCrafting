@@ -7,6 +7,7 @@ import net.minecraft.world.level.block.CropBlock;
 import net.minecraftforge.client.model.generators.BlockModelProvider;
 import net.minecraftforge.client.model.generators.ModelFile;
 import net.minecraftforge.common.data.ExistingFileHelper;
+import net.minecraftforge.registries.ForgeRegistries;
 
 import java.util.Arrays;
 
@@ -28,7 +29,7 @@ public class SushiModelProvider extends BlockModelProvider {
     public void customCrop(CropBlock block, String name, Integer... filterValues) {
         for (Integer allowedValue : block.getAgeProperty().getPossibleValues()) {
             if (filterValues != null && Arrays.asList(filterValues).contains(allowedValue)) continue;
-            getBuilder(block.getRegistryName().getPath() + "_" + allowedValue).parent(getUnchecked(mcLoc(BLOCK_FOLDER + "/crop"))).texture("crop", modLoc(BLOCK_FOLDER + "/" + name + "_stage_" + allowedValue));
+            getBuilder(ForgeRegistries.BLOCKS.getKey(block).getPath() + "_" + allowedValue).parent(getUnchecked(mcLoc(BLOCK_FOLDER + "/crop"))).texture("crop", modLoc(BLOCK_FOLDER + "/" + name + "_stage_" + allowedValue));
         }
 
     }

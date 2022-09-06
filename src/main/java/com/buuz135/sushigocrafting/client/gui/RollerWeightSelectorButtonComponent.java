@@ -22,7 +22,6 @@ import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.client.resources.sounds.SimpleSoundInstance;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TextComponent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 
@@ -98,7 +97,7 @@ public abstract class RollerWeightSelectorButtonComponent extends BasicScreenAdd
         if (screen instanceof AbstractContainerScreen && ((AbstractContainerScreen) screen).getMenu() instanceof ILocatable) {
             if (!isMouseOver(mouseX - ((AbstractContainerScreen<?>) screen).getGuiLeft(), mouseY - ((AbstractContainerScreen<?>) screen).getGuiTop()))
                 return false;
-            Minecraft.getInstance().getSoundManager().play(new SimpleSoundInstance(SoundEvents.WOOD_FALL, SoundSource.PLAYERS, 0.5F, 1.0F, Minecraft.getInstance().player.blockPosition()));
+            Minecraft.getInstance().getSoundManager().play(new SimpleSoundInstance(SoundEvents.WOOD_FALL, SoundSource.PLAYERS, 0.5F, 1.0F, Minecraft.getInstance().level.getRandom(), Minecraft.getInstance().player.blockPosition()));
             ILocatable locatable = (ILocatable) ((AbstractContainerScreen) screen).getMenu();
             CompoundTag nbt = new CompoundTag();
             nbt.putInt("WeightSlot", slot);
@@ -118,17 +117,17 @@ public abstract class RollerWeightSelectorButtonComponent extends BasicScreenAdd
     public List<Component> getTooltipLines() {
         List<Component> lines = new ArrayList<>();
         if (inventoryComponent.getStackInSlot(slot).isEmpty()) {
-            lines.add(new TextComponent(NumberFormat.getInstance(Locale.getDefault()).format(((getWeight() + 1) / 5D) * 100) + ChatFormatting.DARK_AQUA + "%" + ChatFormatting.GOLD + " Weight"));
+            lines.add(Component.literal(NumberFormat.getInstance(Locale.getDefault()).format(((getWeight() + 1) / 5D) * 100) + ChatFormatting.DARK_AQUA + "%" + ChatFormatting.GOLD + " Weight"));
         } else {
             IFoodIngredient ingredient = FoodAPI.get().getIngredientFromItem(inventoryComponent.getStackInSlot(slot).getItem());
             if (!ingredient.isEmpty()) {
                 String unit = ingredient.getIngredientConsumer() == IIngredientConsumer.STACK ? "u" : "gr";
                 double amount = ingredient.getIngredientConsumer() == IIngredientConsumer.STACK ? ingredient.getDefaultAmount() * (getWeight() + 1) : ingredient.getDefaultAmount() * (getWeight() + 1) / 5D;
-                lines.add(new TextComponent(ChatFormatting.GOLD + "Consumes " + ChatFormatting.WHITE + NumberFormat.getInstance(Locale.getDefault()).format(amount) + ChatFormatting.YELLOW + unit));
+                lines.add(Component.literal(ChatFormatting.GOLD + "Consumes " + ChatFormatting.WHITE + NumberFormat.getInstance(Locale.getDefault()).format(amount) + ChatFormatting.YELLOW + unit));
             }
         }
-        lines.add(new TextComponent(ChatFormatting.DARK_GRAY + "*Left Click to Increase*"));
-        lines.add(new TextComponent(ChatFormatting.DARK_GRAY + "*Right Click to Decrease*"));
+        lines.add(Component.literal(ChatFormatting.DARK_GRAY + "*Left Click to Increase*"));
+        lines.add(Component.literal(ChatFormatting.DARK_GRAY + "*Right Click to Decrease*"));
         return lines;
     }
 
