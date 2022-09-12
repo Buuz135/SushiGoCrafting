@@ -264,8 +264,8 @@ public class SushiContent {
         public static final DeferredRegister<RecipeSerializer<?>> REGISTRY = DeferredRegister.create(ForgeRegistries.Keys.RECIPE_SERIALIZERS, SushiGoCrafting.MOD_ID);
 
         public static final RegistryObject<RecipeSerializer> COMBINE_AMOUNT = recipeSerializer("amount_combine_recipe", () -> new SimpleRecipeSerializer<>(CombineAmountItemRecipe::new));
-        public static final RegistryObject<RecipeSerializer> CUTTING_BOARD = recipeSerializer("cutting_board", () -> new GenericSerializer<>(CuttingBoardRecipe.class));
-        public static final RegistryObject<RecipeSerializer> FERMENTING_BARREL = recipeSerializer("fermenting_barrel", () -> new GenericSerializer<>(FermentingBarrelRecipe.class));
+        public static final RegistryObject<RecipeSerializer> CUTTING_BOARD = recipeSerializer("cutting_board", () -> new GenericSerializer<>(CuttingBoardRecipe.class, RecipeTypes.CUTTING_BOARD));
+        public static final RegistryObject<RecipeSerializer> FERMENTING_BARREL = recipeSerializer("fermenting_barrel", () -> new GenericSerializer<>(FermentingBarrelRecipe.class, RecipeTypes.FERMENTING_BARREL));
 
     }
 

@@ -92,7 +92,7 @@ dependencies {
     compileOnly fg.deobf("mezz.jei:jei-1.19.1-forge-api:11.2.0.241")
     // at runtime, use the full JEI jar for Forge
     runtimeOnly fg.deobf("mezz.jei:jei-1.19.1-forge:11.2.0.241")
-    implementation fg.deobf(project.dependencies.create('com.hrznstudio:titanium:1.19.2-3.6.2-14'))
+    implementation fg.deobf(project.dependencies.create('com.hrznstudio:titanium:1.19.2-3.7.0-22'))
     //compileOnly fg.deobf("vazkii.patchouli:Patchouli:1.18.2-67:api")
     //runtimeOnly fg.deobf("vazkii.patchouli:Patchouli:1.18.2-67")
     //runtimeOnly fg.deobf("curse.maven:diet-443570:3300992")
