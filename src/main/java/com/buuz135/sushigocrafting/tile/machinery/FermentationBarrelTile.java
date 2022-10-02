@@ -15,6 +15,7 @@ import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.DyeColor;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.fluids.capability.IFluidHandler;
@@ -79,22 +80,35 @@ public class FermentationBarrelTile extends ActiveTile<FermentationBarrelTile> {
         return RecipeUtil.getRecipes(this.level, (RecipeType<FermentingBarrelRecipe>)SushiContent.RecipeTypes.FERMENTING_BARREL.get()).stream()
                 .anyMatch(fermentingBarrelRecipe -> fermentingBarrelRecipe.input.test(this.input.getStackInSlot(0))
                         && (fermentingBarrelRecipe.fluid.isEmpty() || (fermentingBarrelRecipe.fluid.isFluidEqual(this.fluid.getFluid()) && this.fluid.getFluid().getAmount() >= fermentingBarrelRecipe.fluid.getAmount()))
-                        && (this.output.getStackInSlot(0).isEmpty())
+                        && (canStack(fermentingBarrelRecipe))
                 );
+    }
+
+    public boolean canStack(FermentingBarrelRecipe recipe) {
+        var outputStack = this.output.getStackInSlot(0);
+        if (outputStack.isEmpty()) return true;
+        if (!outputStack.sameItem(recipe.getOutput()) || !(outputStack.getItem() instanceof AmountItem outputAmount)) return false;
+        return outputAmount.getCurrentAmount(outputStack.copy()) < outputAmount.getMaxCombineAmount();
     }
 
     public void onFinish() {
         RecipeUtil.getRecipes(this.level, (RecipeType<FermentingBarrelRecipe>)SushiContent.RecipeTypes.FERMENTING_BARREL.get()).stream()
                 .filter(fermentingBarrelRecipe -> fermentingBarrelRecipe.input.test(this.input.getStackInSlot(0))
                         && (fermentingBarrelRecipe.fluid.isEmpty() || (fermentingBarrelRecipe.fluid.isFluidEqual(this.fluid.getFluid()) && this.fluid.getFluid().getAmount() >= fermentingBarrelRecipe.fluid.getAmount()))
-                        && (this.output.getStackInSlot(0).isEmpty())
+                        && (canStack(fermentingBarrelRecipe))
                 )
                 .findFirst()
                 .ifPresent(fermentingBarrelRecipe -> {
                     this.input.getStackInSlot(0).shrink(1);
                     this.fluid.drainForced(fermentingBarrelRecipe.getFluid().getAmount(), IFluidHandler.FluidAction.EXECUTE);
                     if (fermentingBarrelRecipe.output.getItem() instanceof AmountItem) {
-                        ItemHandlerHelper.insertItem(this.output, ((AmountItem) fermentingBarrelRecipe.output.getItem()).random(null, level), false);
+                        ItemStack outputStack = this.output.getStackInSlot(0);
+                        ItemStack recipeOutput = ((AmountItem) fermentingBarrelRecipe.output.getItem()).random(null, level);
+                        if (outputStack.isEmpty()) {
+                            ItemHandlerHelper.insertItem(this.output, recipeOutput, false);
+                        } else {
+                            AmountItem.combineStacks(outputStack, recipeOutput);
+                        }
                     } else {
                         ItemHandlerHelper.insertItem(this.output, fermentingBarrelRecipe.output.copy(), false);
                     }

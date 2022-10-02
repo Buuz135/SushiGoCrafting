@@ -20,6 +20,7 @@ public class SushiBlockTagsProvider extends BlockTagsProvider {
         tag(BlockTags.LOGS).add(SushiContent.Blocks.AVOCADO_LOG.get());
         tag(BlockTags.LOGS).add(SushiContent.Blocks.AVOCADO_LEAVES_LOG.get());
         tag(BlockTags.SAPLINGS).add(SushiContent.Blocks.AVOCADO_SAPLING.get());
+        tag(BlockTags.LEAVES).add(SushiContent.Blocks.AVOCADO_LEAVES.get());
         for (CustomCropBlock block : new CustomCropBlock[]{SushiContent.Blocks.RICE_CROP.get(), SushiContent.Blocks.CUCUMBER_CROP.get(), SushiContent.Blocks.SOY_CROP.get(), SushiContent.Blocks.WASABI_CROP.get(), SushiContent.Blocks.SESAME_CROP.get()}) {
             tag(BlockTags.CROPS).add(block);
             tag(BlockTags.BEE_GROWABLES).add(block);

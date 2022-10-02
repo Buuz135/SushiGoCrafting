@@ -136,4 +136,13 @@ public class AmountItem extends SushiItem {
         return stack;
     }
 
+    public static ItemStack combineStacks(ItemStack first, ItemStack second) {
+        if (!first.is(second.getItem())) return null;
+        if (first.getItem() instanceof AmountItem firstAmount && second.getItem() instanceof AmountItem secondAmount) {
+            first.getOrCreateTag().putInt(NBT_AMOUNT, Math.min(firstAmount.getMaxCombineAmount(), firstAmount.getCurrentAmount(first) + secondAmount.getCurrentAmount(second)));
+            return first;
+        }
+        return null;
+    }
+
 }
