@@ -10,6 +10,7 @@ import com.buuz135.sushigocrafting.client.ClientProxy;
 import com.buuz135.sushigocrafting.datagen.*;
 import com.buuz135.sushigocrafting.item.FoodItem;
 import com.buuz135.sushigocrafting.network.CapabilitySyncMessage;
+import com.buuz135.sushigocrafting.proxy.SushiCompostables;
 import com.buuz135.sushigocrafting.proxy.SushiContent;
 import com.buuz135.sushigocrafting.tile.machinery.*;
 import com.buuz135.sushigocrafting.world.SushiTab;
@@ -168,6 +169,7 @@ public class SushiGoCrafting extends ModuleController {
         SpawnPlacements.register(SushiContent.EntityTypes.TUNA.get(), SpawnPlacements.Type.IN_WATER, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, AbstractFish::checkMobSpawnRules);
         Holder<ConfiguredFeature<NoneFeatureConfiguration, ?>> CONFIGURED_SEAWEED = FeatureUtils.register("sushigocrafting:seaweed", SushiContent.Features.SEAWEED.get());
         Holder<PlacedFeature> PLACED_SEAWEED = PlacementUtils.register("sushigocrafting:seaweed", CONFIGURED_SEAWEED, NoiseBasedCountPlacement.of(120, 80.0D, 0.0D), InSquarePlacement.spread(), PlacementUtils.HEIGHTMAP_TOP_SOLID, BiomeFilter.biome());
+        SushiCompostables.init();
     }
 
     public void dataGen(GatherDataEvent event) {
