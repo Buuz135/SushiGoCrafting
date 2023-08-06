@@ -98,7 +98,7 @@ public class AmountItem extends SushiItem {
         return stack;
     }
 
-    public ItemStack random(Player entity, Level world) {
+    public ItemStack random(LivingEntity entity, Level world) {
         int extra = 0;
         if (entity != null && entity.hasEffect(SushiContent.Effects.STEADY_HANDS.get())) {
             extra += (entity.getEffect(SushiContent.Effects.STEADY_HANDS.get()).getAmplifier() + 1) * getMinAmount();

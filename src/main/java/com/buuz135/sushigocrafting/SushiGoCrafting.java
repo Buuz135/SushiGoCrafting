@@ -32,6 +32,7 @@ import net.minecraft.world.Containers;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.SpawnPlacements;
 import net.minecraft.world.entity.animal.AbstractFish;
+import net.minecraft.world.entity.animal.Cat;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.CreativeModeTab;
@@ -128,6 +129,7 @@ public class SushiGoCrafting extends ModuleController {
         EventManager.mod(EntityAttributeCreationEvent.class).process(entityAttributeCreationEvent -> {
             entityAttributeCreationEvent.put(SushiContent.EntityTypes.TUNA.get(), AbstractFish.createAttributes().build());
             entityAttributeCreationEvent.put(SushiContent.EntityTypes.SHRIMP.get(), AbstractFish.createAttributes().build());
+            entityAttributeCreationEvent.put(SushiContent.EntityTypes.ITAMAE_CAT.get(), Cat.createAttributes().build());
         }).subscribe();
         EventManager.forge(LivingDropsEvent.class).filter(livingDropsEvent -> livingDropsEvent.getEntity() instanceof AbstractFish).process(livingDropsEvent -> {
             if (livingDropsEvent.getEntity().level.getRandom().nextInt(10) <= 2) {

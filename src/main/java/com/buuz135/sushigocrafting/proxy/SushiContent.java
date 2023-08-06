@@ -9,10 +9,12 @@ import com.buuz135.sushigocrafting.block.plant.CustomCropBlock;
 import com.buuz135.sushigocrafting.block.plant.WaterCropBlock;
 import com.buuz135.sushigocrafting.block.seaweed.SeaWeedBlock;
 import com.buuz135.sushigocrafting.block.seaweed.SeaWeedTopBlock;
+import com.buuz135.sushigocrafting.entity.ItamaeCatEntity;
 import com.buuz135.sushigocrafting.entity.ShrimpEntity;
 import com.buuz135.sushigocrafting.entity.TunaEntity;
 import com.buuz135.sushigocrafting.item.AmountItem;
 import com.buuz135.sushigocrafting.item.SushiItem;
+import com.buuz135.sushigocrafting.item.WorkStickItem;
 import com.buuz135.sushigocrafting.loot.ItemAmountLootModifier;
 import com.buuz135.sushigocrafting.loot.SeedsLootModifier;
 import com.buuz135.sushigocrafting.potioneffect.AcquiredTasteEffect;
@@ -201,6 +203,7 @@ public class SushiContent {
         public static final RegistryObject<Item> TUNA_BUCKET = item("tuna_bucket", () -> new MobBucketItem(EntityTypes.TUNA, () -> Fluids.WATER, () -> SoundEvents.BUCKET_EMPTY_FISH, (new Item.Properties()).stacksTo(1).tab(SushiGoCrafting.TAB)));
         public static final RegistryObject<Item> SHRIMP_BUCKET = item("shrimp_bucket", () -> new MobBucketItem(EntityTypes.SHRIMP, () -> Fluids.WATER, () -> SoundEvents.BUCKET_EMPTY_AXOLOTL, (new Item.Properties()).stacksTo(1).tab(SushiGoCrafting.TAB)));
 
+        public static final RegistryObject<Item> WORK_STICK = item("work_stick", () -> new WorkStickItem(new Item.Properties().stacksTo(1).tab(SushiGoCrafting.TAB)));
     }
 
     public static class TileEntities {
@@ -222,8 +225,6 @@ public class SushiContent {
 
         public static final RegistryObject<Feature<NoneFeatureConfiguration>> SEAWEED = feature("seaweed", () -> new SeaweedFeature(NoneFeatureConfiguration.CODEC));
 
-
-
     }
 
     public static class Effects {
@@ -242,11 +243,21 @@ public class SushiContent {
 
         public static RegistryObject<EntityType<TunaEntity>> getTuna() {
             return TUNA;
-        }        public static final RegistryObject<EntityType<TunaEntity>> TUNA = entity("tuna", () -> EntityType.Builder.of(TunaEntity::new, MobCategory.WATER_AMBIENT).sized(0.7F, 0.4F).clientTrackingRange(4).setCustomClientFactory((spawnEntity, world) -> new TunaEntity(getTuna().get(), world)).build("tuna"));
+        }
 
         public static RegistryObject<EntityType<ShrimpEntity>> getShrimp() {
             return SHRIMP;
-        }        public static final RegistryObject<EntityType<ShrimpEntity>> SHRIMP = entity("shrimp", () -> EntityType.Builder.of(ShrimpEntity::new, MobCategory.WATER_AMBIENT).sized(0.7F, 0.4F).clientTrackingRange(4).setCustomClientFactory((spawnEntity, world) -> new ShrimpEntity(getShrimp().get(), world)).build("shrimp"));
+        }        public static final RegistryObject<EntityType<TunaEntity>> TUNA = entity("tuna", () -> EntityType.Builder.of(TunaEntity::new, MobCategory.WATER_AMBIENT).sized(0.7F, 0.4F).clientTrackingRange(4).setCustomClientFactory((spawnEntity, world) -> new TunaEntity(getTuna().get(), world)).build("tuna"));
+
+        public static RegistryObject<EntityType<ItamaeCatEntity>> getItamaeCat() {
+            return ITAMAE_CAT;
+        }
+
+        public static final RegistryObject<EntityType<ShrimpEntity>> SHRIMP = entity("shrimp", () -> EntityType.Builder.of(ShrimpEntity::new, MobCategory.WATER_AMBIENT).sized(0.7F, 0.4F).clientTrackingRange(4).setCustomClientFactory((spawnEntity, world) -> new ShrimpEntity(getShrimp().get(), world)).build("shrimp"));
+
+
+
+        public static final RegistryObject<EntityType<ItamaeCatEntity>> ITAMAE_CAT = entity("itamae_cat", () -> EntityType.Builder.of(ItamaeCatEntity::new, MobCategory.CREATURE).sized(0.6F, 0.7F).clientTrackingRange(8).setCustomClientFactory((spawnEntity, world) -> new ItamaeCatEntity(getItamaeCat().get(), world)).build("itamae_cat"));
 
     }
 

@@ -6,8 +6,10 @@ import com.buuz135.sushigocrafting.api.IIngredientEffect;
 import com.buuz135.sushigocrafting.api.impl.FoodAPI;
 import com.buuz135.sushigocrafting.api.impl.effect.AddIngredientEffect;
 import com.buuz135.sushigocrafting.api.impl.effect.ModifyIngredientEffect;
+import com.buuz135.sushigocrafting.client.entity.ItamaeCatRenderer;
 import com.buuz135.sushigocrafting.client.entity.ShrimpRenderer;
 import com.buuz135.sushigocrafting.client.entity.TunaRenderer;
+import com.buuz135.sushigocrafting.client.entity.model.ItamaeCatModel;
 import com.buuz135.sushigocrafting.client.entity.model.ShrimpModel;
 import com.buuz135.sushigocrafting.client.render.ContributorsBackRender;
 import com.buuz135.sushigocrafting.client.tesr.CuttingBoardRenderer;
@@ -37,6 +39,7 @@ public class ClientProxy {
             event.registerEntityRenderer(SushiContent.EntityTypes.TUNA.get(), TunaRenderer::new);
             event.registerEntityRenderer(SushiContent.EntityTypes.SHRIMP.get(), ShrimpRenderer::new);
             event.registerBlockEntityRenderer(SushiContent.TileEntities.CUTTING_BOARD.get(), p_173571_ -> new CuttingBoardRenderer());
+            event.registerEntityRenderer(SushiContent.EntityTypes.ITAMAE_CAT.get(), ItamaeCatRenderer::new);
         }).subscribe();
         EventManager.mod(EntityRenderersEvent.AddLayers.class).process(event -> {
             for (String skin : event.getSkins()) {
@@ -46,6 +49,7 @@ public class ClientProxy {
         }).subscribe();
         EventManager.mod(EntityRenderersEvent.RegisterLayerDefinitions.class).process(event -> {
             event.registerLayerDefinition(new ModelLayerLocation(new ResourceLocation(SushiGoCrafting.MOD_ID, "shrimp"), "main"), ShrimpModel::createBodyLayer);
+            event.registerLayerDefinition(new ModelLayerLocation(new ResourceLocation(SushiGoCrafting.MOD_ID, "itamae_cat"), "main"), ItamaeCatModel::createBodyLayer);
         }).subscribe();
         EventManager.mod(ModelEvent.RegisterAdditional.class).process(event -> {
             event.register(new ResourceLocation(SushiGoCrafting.MOD_ID, "block/salmon_back"));

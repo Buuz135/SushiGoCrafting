@@ -15,6 +15,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -49,17 +50,7 @@ public class CuttingBoardTile extends ActiveTile<CuttingBoardTile> {
             if (!this.input.getStackInSlot(0).isEmpty() && TagUtil.hasTag(ForgeRegistries.ITEMS, stack.getItem(), KNIFE)) {
                 ++click;
                 if (click > 5) {
-                    for (CuttingBoardRecipe recipe : RecipeUtil.getRecipes(this.level, ((RecipeType<CuttingBoardRecipe>)SushiContent.RecipeTypes.CUTTING_BOARD.get()))) {
-                        if (recipe.getInput().test(this.input.getStackInSlot(0))) {
-                            Item item = FoodAPI.get().getIngredientFromName(recipe.getIngredient()).getItem();
-                            if (item instanceof AmountItem) {
-                                ItemHandlerHelper.giveItemToPlayer(player, ((AmountItem) item).random(player, level));
-                            } else {
-                                ItemHandlerHelper.giveItemToPlayer(player, new ItemStack(item));
-                            }
-                            this.input.getStackInSlot(0).shrink(1);
-                        }
-                    }
+                    processRecipe(player);
                     click = 0;
                 }
                 syncObject(click);
@@ -78,6 +69,29 @@ public class CuttingBoardTile extends ActiveTile<CuttingBoardTile> {
         return InteractionResult.FAIL;
     }
 
+
+    public boolean processRecipe(LivingEntity entity) {
+        for (CuttingBoardRecipe recipe : RecipeUtil.getRecipes(this.level, ((RecipeType<CuttingBoardRecipe>) SushiContent.RecipeTypes.CUTTING_BOARD.get()))) {
+            if (recipe.getInput().test(this.input.getStackInSlot(0))) {
+                Item item = FoodAPI.get().getIngredientFromName(recipe.getIngredient()).getItem();
+                ItemStack stack = null;
+                if (item instanceof AmountItem) {
+                    stack = ((AmountItem) item).random(entity, level);
+                } else {
+                    stack = new ItemStack(item);
+                }
+                if (entity instanceof Player player) {
+                    ItemHandlerHelper.giveItemToPlayer(player, stack);
+                } else {
+                    entity.setItemInHand(InteractionHand.MAIN_HAND, stack);
+                }
+                this.input.getStackInSlot(0).shrink(1);
+                return true;
+            }
+        }
+        return false;
+    }
+
     @Nonnull
     @Override
     public CuttingBoardTile getSelf() {
@@ -92,7 +106,7 @@ public class CuttingBoardTile extends ActiveTile<CuttingBoardTile> {
         return click;
     }
 
-    private boolean accepts(ItemStack input) {
+    public boolean accepts(ItemStack input) {
         return RecipeUtil.getRecipes(this.level, ((RecipeType<CuttingBoardRecipe>)SushiContent.RecipeTypes.CUTTING_BOARD.get())).stream().anyMatch(cuttingBoardRecipe -> cuttingBoardRecipe.getInput().test(input));
     }
 }
