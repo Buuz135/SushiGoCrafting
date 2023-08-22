@@ -1,0 +1,13 @@
+{
+  "name": "Морські водорості",
+  "icon": "sushigocrafting:seaweed",
+  "category": "sushigocrafting:world",
+  "sortnum": 1,
+  "read_by_default": false,
+  "pages": [
+    {
+      "type": "text",
+      "text": "Ви можете знайти морські водорості в океанах."
+    }
+  ]
+}

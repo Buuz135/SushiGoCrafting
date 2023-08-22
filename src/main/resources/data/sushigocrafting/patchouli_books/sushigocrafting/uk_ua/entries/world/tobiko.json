@@ -1,0 +1,13 @@
+{
+  "name": "Тобіко",
+  "icon": "sushigocrafting:tobiko",
+  "category": "sushigocrafting:world",
+  "sortnum": 2,
+  "read_by_default": false,
+  "pages": [
+    {
+      "type": "text",
+      "text": "Ви можете отримати тобіко вбиваючи рибу."
+    }
+  ]
+}
