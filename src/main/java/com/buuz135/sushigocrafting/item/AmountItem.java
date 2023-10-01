@@ -3,6 +3,7 @@ package com.buuz135.sushigocrafting.item;
 import com.buuz135.sushigocrafting.api.IFoodIngredient;
 import com.buuz135.sushigocrafting.api.impl.FoodAPI;
 import com.buuz135.sushigocrafting.proxy.SushiContent;
+import com.hrznstudio.titanium.api.ISpecialCreativeTabItem;
 import com.mojang.datafixers.util.Pair;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
@@ -15,11 +16,12 @@ import net.minecraft.world.food.FoodProperties;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
+import net.minecraftforge.event.BuildCreativeModeTabContentsEvent;
 
 import java.awt.*;
 import java.util.List;
 
-public class AmountItem extends SushiItem {
+public class AmountItem extends SushiItem implements ISpecialCreativeTabItem {
 
     public static final String NBT_AMOUNT = "Amount";
 
@@ -134,4 +136,10 @@ public class AmountItem extends SushiItem {
         return null;
     }
 
+    @Override
+    public void addToTab(BuildCreativeModeTabContentsEvent event) {
+        ItemStack stack = new ItemStack(this);
+        stack.getOrCreateTag().putInt(NBT_AMOUNT, maxAmount / 2);
+        event.accept(stack);
+    }
 }
