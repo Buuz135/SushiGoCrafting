@@ -27,15 +27,18 @@ jobs:
         uses: Kir-Antipov/mc-publish@v2.1
         with:
           curseforge-id: 452500
+          modrinth-id: G9WbcGQ2
           curseforge-token: ${{ secrets.CURSEFORGE_TOKEN }}
+          modrinth-token: ${{ secrets.MODRINTH_TOKEN }}
           files-primary: build/libs/!(*-@(dev|sources)).jar
           files-secondary: build/libs/*-@(dev|sources).jar
           version-type: beta
+          version: ${{ github.ref_name }}
           loaders: forge
-          game-versions: 1.19.2
+          game-versions: 1.20.1
           java: 17
           name: ""
-          changelog: "https://github.com/Buuz135/SushiGoCrafting/commits/1.19"
+          changelog: "https://github.com/Buuz135/SushiGoCrafting/commits/1.20"
           dependencies: |
             titanium | depends
             patchouli | depends
