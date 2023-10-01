@@ -1,0 +1,13 @@
+{
+  "name": "Авокадо",
+  "icon": "sushigocrafting:avocado",
+  "category": "sushigocrafting:world",
+  "sortnum": 2,
+  "read_by_default": false,
+  "pages": [
+    {
+      "type": "text",
+      "text": "Авокадові дерева ростуть по всьому світу, переважно на рівнинах. $(br2)Ви можете зібрати авокадо з листя, клацнувши Пкм по ньому, коли воно повністю зросте."
+    }
+  ]
+}

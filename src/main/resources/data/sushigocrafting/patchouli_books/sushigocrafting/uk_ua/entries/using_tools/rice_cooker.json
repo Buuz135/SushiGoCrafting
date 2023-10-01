@@ -1,0 +1,17 @@
+{
+  "name": "Рисоварка",
+  "icon": "sushigocrafting:rice_cooker",
+  "category": "sushigocrafting:using_tools",
+  "sortnum": 2,
+  "read_by_default": false,
+  "pages": [
+    {
+      "type": "text",
+      "text": "Прилад, який ідеально варить рис за стандартами $(6)Дадька Роджера$(). Для його приготування вам знадобиться рис, вода і трохи палива. $(br2)Вам не доведеться турбуватися про вагу у вихідному слоті, зварений рис буде комбінуватися автоматично."
+    },
+    {
+      "type": "crafting",
+      "recipe": "sushigocrafting:rice_cooker"
+    }
+  ]
+}

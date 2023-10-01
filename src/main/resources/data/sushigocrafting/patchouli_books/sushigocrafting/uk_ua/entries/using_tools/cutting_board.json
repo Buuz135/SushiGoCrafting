@@ -1,0 +1,18 @@
+{
+  "name": "Нарізна дошка",
+  "icon": "sushigocrafting:cutting_board",
+  "category": "sushigocrafting:using_tools",
+  "sortnum": 3,
+  "read_by_default": false,
+  "pages": [
+    {
+      "type": "text",
+      "text": "Нарізання інгредієнтів є важливим кроком у приготуванні їжі, ви можете розмістити інгредієнти клацнувши Пкм на нарізній дошці й клацнувши Пкм $(6)ножем-тесаком$() нарізати інгредієнти. Щоб прибрати інгредієнти знову клацніть Пкм по нарізній дошці. $(br2)$(l:getting_started/effects)Золоті руки$() будуть вашими друзями під час використання дошки."
+    },
+    {
+      "type": "crafting",
+      "recipe": "sushigocrafting:cutting_board",
+      "recipe2": "sushigocrafting:cleaver_knife"
+    }
+  ]
+}

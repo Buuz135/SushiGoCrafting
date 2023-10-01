@@ -1,0 +1,13 @@
+{
+  "name": "Культури",
+  "icon": "sushigocrafting:wasabi_root",
+  "category": "sushigocrafting:world",
+  "sortnum": 3,
+  "read_by_default": false,
+  "pages": [
+    {
+      "type": "text",
+      "text": "Ви можете отримати насіння руйнуючи траву. $(br2)Більшість культур вирощують, як звичайні культури, за винятком рису, який потрібно вирощувати під водою на ґрунті."
+    }
+  ]
+}

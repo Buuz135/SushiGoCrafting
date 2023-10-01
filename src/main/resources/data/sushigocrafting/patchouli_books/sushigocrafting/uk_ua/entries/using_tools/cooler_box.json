@@ -1,0 +1,17 @@
+{
+  "name": "Холодильний ящик",
+  "icon": "sushigocrafting:cooler_box",
+  "category": "sushigocrafting:using_tools",
+  "sortnum": 1,
+  "read_by_default": false,
+  "pages": [
+    {
+      "type": "text",
+      "text": "Зручний ящик для автоматичного поєднання інгредієнтів, які мають вагу. Просто покладіть їх усередину й вони будуть об'єднані."
+    },
+    {
+      "type": "crafting",
+      "recipe": "sushigocrafting:cooler_box"
+    }
+  ]
+}

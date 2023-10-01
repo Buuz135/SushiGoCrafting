@@ -1,0 +1,31 @@
+{
+  "name": "Ефекти їди",
+  "icon": "sushigocrafting:avocado_slices",
+  "category": "sushigocrafting:getting_started",
+  "sortnum": 0,
+  "read_by_default": false,
+  "pages": [
+    {
+      "type": "text",
+      "text": "Використання різних інгредієнтів для приготування суші дасть вам різні ефекти, що зробить вашу їжу кращою"
+    },
+    {
+      "type": "spotlight",
+      "item": "sushigocrafting:salmon_fillet",
+      "title": "Малі укуси",
+      "text": "Їдження при цьому ефекті дасть вам малий шанс не спожити предмет."
+    },
+    {
+      "type": "spotlight",
+      "item": "sushigocrafting:tuna_fillet",
+      "title": "Набутий смак",
+      "text": "Їдження при цьому ефекті дасть вам додаткове очко голоду."
+    },
+    {
+      "type": "spotlight",
+      "item": "sushigocrafting:shrimp",
+      "title": "Золоті руки",
+      "text": "Використання нарізної дошки при цьому ефекті дасть додаткову вагу вашим інгредієнтам."
+    }
+  ]
+}

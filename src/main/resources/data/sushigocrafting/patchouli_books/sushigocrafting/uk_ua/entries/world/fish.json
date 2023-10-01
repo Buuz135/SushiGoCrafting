@@ -1,0 +1,13 @@
+{
+  "name": "Тунець і креветка",
+  "icon": "sushigocrafting:raw_tuna",
+  "category": "sushigocrafting:world",
+  "sortnum": 3,
+  "read_by_default": false,
+  "pages": [
+    {
+      "type": "text",
+      "text": "Ви можете знайти ці чарівні створіння в океані. $(br2)Візьміть із собою сідло, хто знає, що ви можете з ним зробити."
+    }
+  ]
+}
