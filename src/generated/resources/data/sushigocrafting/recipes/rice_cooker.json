@@ -4,39 +4,41 @@
     {
       "conditions": [
         {
+          "type": "forge:and",
           "values": [
             {
-              "item": "sushigocrafting:rice_cooker",
-              "type": "forge:item_exists"
+              "type": "forge:item_exists",
+              "item": "sushigocrafting:rice_cooker"
             }
-          ],
-          "type": "forge:and"
+          ]
         }
       ],
       "recipe": {
         "type": "minecraft:crafting_shaped",
-        "pattern": [
-          "IGI",
-          "IFI",
-          "IRI"
-        ],
+        "category": "misc",
         "key": {
-          "I": {
-            "tag": "forge:ingots/iron"
+          "F": {
+            "item": "minecraft:furnace"
           },
           "G": {
             "item": "minecraft:light_weighted_pressure_plate"
           },
-          "F": {
-            "item": "minecraft:furnace"
+          "I": {
+            "tag": "forge:ingots/iron"
           },
           "R": {
             "item": "minecraft:redstone"
           }
         },
+        "pattern": [
+          "IGI",
+          "IFI",
+          "IRI"
+        ],
         "result": {
           "item": "sushigocrafting:rice_cooker"
-        }
+        },
+        "show_notification": true
       }
     }
   ]

@@ -4,36 +4,38 @@
     {
       "conditions": [
         {
+          "type": "forge:and",
           "values": [
             {
-              "item": "sushigocrafting:fermentation_barrel",
-              "type": "forge:item_exists"
+              "type": "forge:item_exists",
+              "item": "sushigocrafting:fermentation_barrel"
             }
-          ],
-          "type": "forge:and"
+          ]
         }
       ],
       "recipe": {
         "type": "minecraft:crafting_shaped",
+        "category": "misc",
+        "key": {
+          "F": {
+            "item": "minecraft:furnace"
+          },
+          "G": {
+            "tag": "minecraft:wooden_pressure_plates"
+          },
+          "I": {
+            "tag": "minecraft:planks"
+          }
+        },
         "pattern": [
           "IGI",
           "IFI",
           "III"
         ],
-        "key": {
-          "I": {
-            "tag": "minecraft:planks"
-          },
-          "G": {
-            "tag": "minecraft:wooden_pressure_plates"
-          },
-          "F": {
-            "item": "minecraft:furnace"
-          }
-        },
         "result": {
           "item": "sushigocrafting:fermentation_barrel"
-        }
+        },
+        "show_notification": true
       }
     }
   ]

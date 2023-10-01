@@ -11,7 +11,7 @@ import org.apache.commons.lang3.text.WordUtils;
 public class SushiLangProvider extends LanguageProvider {
 
     public SushiLangProvider(DataGenerator gen, String modid, String locale) {
-        super(gen, modid, locale);
+        super(gen.getPackOutput(), modid, locale);
     }
 
     @Override

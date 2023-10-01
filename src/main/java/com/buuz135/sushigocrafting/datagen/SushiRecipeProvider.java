@@ -1,17 +1,13 @@
 package com.buuz135.sushigocrafting.datagen;
 
-import com.buuz135.sushigocrafting.SushiGoCrafting;
 import com.buuz135.sushigocrafting.proxy.SushiContent;
 import com.hrznstudio.titanium.recipe.generator.TitaniumRecipeProvider;
 import com.hrznstudio.titanium.recipe.generator.TitaniumShapedRecipeBuilder;
 import com.hrznstudio.titanium.recipe.generator.TitaniumShapelessRecipeBuilder;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.recipes.FinishedRecipe;
-import net.minecraft.data.recipes.SimpleCookingRecipeBuilder;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.world.item.Items;
-import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraftforge.common.Tags;
 
@@ -54,14 +50,14 @@ public class SushiRecipeProvider extends TitaniumRecipeProvider {
                 .define('G', ItemTags.WOODEN_PRESSURE_PLATES)
                 .define('F', Blocks.FURNACE)
                 .save(consumer);
-        SimpleCookingRecipeBuilder.smelting(Ingredient.of(SushiContent.Items.SEAWEED.get()), SushiContent.Items.DRY_SEAWEED.get(), 0.3f, 200).unlockedBy("has_seaweed", has(SushiContent.Items.SEAWEED.get())).save(consumer);
-        TitaniumShapelessRecipeBuilder.shapelessRecipe(SushiContent.Blocks.SEAWEED_BLOCK.get()).requires(Ingredient.of(SushiContent.Items.DRY_SEAWEED.get()), 9).save(consumer);
-        TitaniumShapelessRecipeBuilder.shapelessRecipe(SushiContent.Items.DRY_SEAWEED.get(), 9).requires(Ingredient.of(SushiContent.Blocks.SEAWEED_BLOCK.get()), 1).save(consumer, new ResourceLocation(SushiGoCrafting.MOD_ID, "seaweed_uncrafting"));
+        //SimpleCookingRecipeBuilder.smelting(Ingredient.of(SushiContent.Items.SEAWEED.get()), RecipeCategory.FOOD, SushiContent.Items.DRY_SEAWEED.get(), 0.3f, 200).unlockedBy("has_seaweed", has(SushiContent.Items.SEAWEED.get())).save(consumer);
+        //TitaniumShapelessRecipeBuilder.shapelessRecipe(SushiContent.Blocks.SEAWEED_BLOCK.get()).requires(Ingredient.of(SushiContent.Items.DRY_SEAWEED.get()), 9).save(consumer);
+        //TitaniumShapelessRecipeBuilder.shapelessRecipe(SushiContent.Items.DRY_SEAWEED.get(), 9).requires(Ingredient.of(SushiContent.Blocks.SEAWEED_BLOCK.get()), 1).save(consumer, new ResourceLocation(SushiGoCrafting.MOD_ID, "seaweed_uncrafting"));
         TitaniumShapedRecipeBuilder.shapedRecipe(SushiContent.Items.CUTTING_BOARD.get())
                 .pattern("   ").pattern("SSS").pattern("BBB")
                 .define('S', ItemTags.SLABS)
                 .define('B', ItemTags.LOGS)
                 .save(consumer);
-        TitaniumShapelessRecipeBuilder.shapelessRecipe(SushiContent.Items.SEAWEED_ON_A_STICK.get()).requires(Items.FISHING_ROD).requires(SushiContent.Items.SEAWEED.get()).save(consumer);
+        TitaniumShapelessRecipeBuilder.shapelessRecipe(SushiContent.Items.SEAWEED_ON_A_STICK.get()).requires(Items.FISHING_ROD).requires(Items.KELP).save(consumer);
     }
 }

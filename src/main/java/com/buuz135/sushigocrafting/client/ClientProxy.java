@@ -65,8 +65,8 @@ public class ClientProxy {
         ItemBlockRenderTypes.setRenderLayer(SushiContent.Blocks.AVOCADO_LEAVES_LOG.get(), RenderType.cutout());
         ItemBlockRenderTypes.setRenderLayer(SushiContent.Blocks.AVOCADO_LEAVES.get(), RenderType.cutout());
         ItemBlockRenderTypes.setRenderLayer(SushiContent.Blocks.AVOCADO_SAPLING.get(), RenderType.cutout());
-        ItemBlockRenderTypes.setRenderLayer(SushiContent.Blocks.SEAWEED.get(), RenderType.cutout());
-        ItemBlockRenderTypes.setRenderLayer(SushiContent.Blocks.SEAWEED_PLANT.get(), RenderType.cutout());
+        //ItemBlockRenderTypes.setRenderLayer(SushiContent.Blocks.SEAWEED.get(), RenderType.cutout());
+        //ItemBlockRenderTypes.setRenderLayer(SushiContent.Blocks.SEAWEED_PLANT.get(), RenderType.cutout());
         ItemBlockRenderTypes.setRenderLayer(SushiContent.Blocks.SESAME_CROP.get(), RenderType.cutout());
         EventManager.forge(ItemTooltipEvent.class).process(event -> {
             IFoodIngredient ingredient = FoodAPI.get().getIngredientFromItem(event.getItemStack().getItem());

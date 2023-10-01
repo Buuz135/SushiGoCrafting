@@ -21,7 +21,7 @@ public class SmallBitesEffect extends MobEffect {
                 .filter(finish -> finish.getItem().isEdible() && finish.getEntity().hasEffect(SushiContent.Effects.SMALL_BITES.get()))
                 .process(finish -> {
                     MobEffectInstance instance = finish.getEntity().getEffect(SushiContent.Effects.SMALL_BITES.get());
-                    if (finish.getEntity() instanceof ServerPlayer && finish.getEntity().level.random.nextInt(9) <= instance.getAmplifier() + 1) {
+                    if (finish.getEntity() instanceof ServerPlayer && finish.getEntity().level().random.nextInt(9) <= instance.getAmplifier() + 1) {
                         ServerPlayer player = (ServerPlayer) finish.getEntity();
                         ItemStack stack = finish.getResultStack().copy();
                         stack.setCount(1);

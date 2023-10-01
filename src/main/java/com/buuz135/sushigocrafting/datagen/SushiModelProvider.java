@@ -1,5 +1,6 @@
 package com.buuz135.sushigocrafting.datagen;
 
+import com.buuz135.sushigocrafting.block.plant.CustomCropBlock;
 import com.buuz135.sushigocrafting.proxy.SushiContent;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.resources.ResourceLocation;
@@ -14,7 +15,7 @@ import java.util.Arrays;
 public class SushiModelProvider extends BlockModelProvider {
 
     public SushiModelProvider(DataGenerator generator, String modid, ExistingFileHelper existingFileHelper) {
-        super(generator, modid, existingFileHelper);
+        super(generator.getPackOutput(), modid, existingFileHelper);
     }
 
     @Override
@@ -27,7 +28,7 @@ public class SushiModelProvider extends BlockModelProvider {
     }
 
     public void customCrop(CropBlock block, String name, Integer... filterValues) {
-        for (Integer allowedValue : block.getAgeProperty().getPossibleValues()) {
+        for (Integer allowedValue : CustomCropBlock.AGE.getPossibleValues()) {
             if (filterValues != null && Arrays.asList(filterValues).contains(allowedValue)) continue;
             getBuilder(ForgeRegistries.BLOCKS.getKey(block).getPath() + "_" + allowedValue).parent(getUnchecked(mcLoc(BLOCK_FOLDER + "/crop"))).texture("crop", modLoc(BLOCK_FOLDER + "/" + name + "_stage_" + allowedValue));
         }

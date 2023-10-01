@@ -2,32 +2,33 @@
   "type": "minecraft:block",
   "pools": [
     {
-      "rolls": 1.0,
       "bonus_rolls": 0.0,
+      "conditions": [
+        {
+          "condition": "minecraft:survives_explosion"
+        }
+      ],
       "entries": [
         {
           "type": "minecraft:item",
           "functions": [
             {
               "function": "minecraft:copy_nbt",
-              "source": "block_entity",
               "ops": [
                 {
+                  "op": "replace",
                   "source": "input",
-                  "target": "BlockEntityTag.input",
-                  "op": "replace"
+                  "target": "BlockEntityTag.input"
                 }
-              ]
+              ],
+              "source": "block_entity"
             }
           ],
           "name": "sushigocrafting:cooler_box"
         }
       ],
-      "conditions": [
-        {
-          "condition": "minecraft:survives_explosion"
-        }
-      ]
+      "rolls": 1.0
     }
-  ]
+  ],
+  "random_sequence": "sushigocrafting:blocks/cooler_box"
 }

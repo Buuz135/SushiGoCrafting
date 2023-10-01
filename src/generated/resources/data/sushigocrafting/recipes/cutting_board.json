@@ -4,33 +4,35 @@
     {
       "conditions": [
         {
+          "type": "forge:and",
           "values": [
             {
-              "item": "sushigocrafting:cutting_board",
-              "type": "forge:item_exists"
+              "type": "forge:item_exists",
+              "item": "sushigocrafting:cutting_board"
             }
-          ],
-          "type": "forge:and"
+          ]
         }
       ],
       "recipe": {
         "type": "minecraft:crafting_shaped",
+        "category": "misc",
+        "key": {
+          "B": {
+            "tag": "minecraft:logs"
+          },
+          "S": {
+            "tag": "minecraft:slabs"
+          }
+        },
         "pattern": [
           "   ",
           "SSS",
           "BBB"
         ],
-        "key": {
-          "S": {
-            "tag": "minecraft:slabs"
-          },
-          "B": {
-            "tag": "minecraft:logs"
-          }
-        },
         "result": {
           "item": "sushigocrafting:cutting_board"
-        }
+        },
+        "show_notification": true
       }
     }
   ]

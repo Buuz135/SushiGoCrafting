@@ -15,11 +15,7 @@ public class SushiCompostables {
                 SushiContent.Items.WASABI_SEEDS,
                 SushiContent.Items.SESAME_SEEDS,
                 SushiContent.Items.AVOCADO_LEAVES,
-                SushiContent.Items.AVOCADO_SAPLING,
-                SushiContent.Items.SEAWEED
-        );
-        register(0.5F,
-                SushiContent.Items.SEAWEED_BLOCK
+                SushiContent.Items.AVOCADO_SAPLING
         );
         register(0.65F,
                 SushiContent.Items.AVOCADO,

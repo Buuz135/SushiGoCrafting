@@ -18,7 +18,7 @@ public class AcquiredTasteEffect extends MobEffect {
                 .filter(finish -> finish.getItem().isEdible() && finish.getEntity().hasEffect(SushiContent.Effects.ACQUIRED_TASTE.get()))
                 .process(finish -> {
                     MobEffectInstance instance = finish.getEntity().getEffect(SushiContent.Effects.ACQUIRED_TASTE.get());
-                    if (!finish.getEntity().level.isClientSide() && finish.getEntity() instanceof Player) {
+                    if (!finish.getEntity().level().isClientSide() && finish.getEntity() instanceof Player) {
                         FoodProperties food = finish.getItem().getItem().getFoodProperties();
                         int amplifier = instance.getAmplifier() + 1;
                         ((Player) finish.getEntity()).getFoodData().eat(food.getNutrition() * (amplifier / 10), food.getSaturationModifier() * (amplifier / 10F));

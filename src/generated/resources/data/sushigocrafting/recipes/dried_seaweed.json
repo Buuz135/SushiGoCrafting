@@ -1,9 +1,0 @@
-{
-  "type": "minecraft:smelting",
-  "ingredient": {
-    "item": "sushigocrafting:seaweed"
-  },
-  "result": "sushigocrafting:dried_seaweed",
-  "experience": 0.3,
-  "cookingtime": 200
-}

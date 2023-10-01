@@ -87,7 +87,8 @@ public class FermentationBarrelTile extends ActiveTile<FermentationBarrelTile> {
     public boolean canStack(FermentingBarrelRecipe recipe) {
         var outputStack = this.output.getStackInSlot(0);
         if (outputStack.isEmpty()) return true;
-        if (!outputStack.sameItem(recipe.getOutput()) || !(outputStack.getItem() instanceof AmountItem outputAmount)) return false;
+        if (!ItemStack.isSameItem(outputStack, recipe.getOutput()) || !(outputStack.getItem() instanceof AmountItem outputAmount))
+            return false;
         return outputAmount.getCurrentAmount(outputStack.copy()) < outputAmount.getMaxCombineAmount();
     }
 

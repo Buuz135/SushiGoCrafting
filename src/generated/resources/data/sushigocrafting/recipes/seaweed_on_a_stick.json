@@ -1,11 +1,12 @@
 {
   "type": "minecraft:crafting_shapeless",
+  "category": "misc",
   "ingredients": [
     {
       "item": "minecraft:fishing_rod"
     },
     {
-      "item": "sushigocrafting:seaweed"
+      "item": "minecraft:kelp"
     }
   ],
   "result": {

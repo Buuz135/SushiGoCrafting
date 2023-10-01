@@ -1,8 +1,8 @@
 package com.buuz135.sushigocrafting.client.gui;
 
 import com.mojang.blaze3d.systems.RenderSystem;
-import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.toasts.Toast;
 import net.minecraft.client.gui.components.toasts.ToastComponent;
 import net.minecraft.network.chat.Component;
@@ -26,16 +26,16 @@ public class PerfectionToast implements Toast {
     }
 
     @Override
-    public Visibility render(PoseStack p_230444_1_, ToastComponent p_230444_2_, long p_230444_3_) {
+    public Visibility render(GuiGraphics guiGraphics, ToastComponent p_230444_2_, long p_230444_3_) {
         RenderSystem.setShaderTexture(0, TEXTURE);
         RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1f);
-        p_230444_2_.blit(p_230444_1_, 0, 0, 0, 96, this.width(), this.height());
-        Minecraft.getInstance().getItemRenderer().renderGuiItem(display, 9, 9);
+        p_230444_2_.render(guiGraphics);
+        guiGraphics.renderItem(display, 9, 9);
         if (this.subtitle == null) {
-            p_230444_2_.getMinecraft().font.draw(p_230444_1_, this.title, 30.0F, 12.0F, -11534256);
+            guiGraphics.drawString(Minecraft.getInstance().font, this.title, 30, 12, -11534256, false);
         } else {
-            p_230444_2_.getMinecraft().font.draw(p_230444_1_, this.title, 30.0F, 7.0F, -11534256);
-            p_230444_2_.getMinecraft().font.draw(p_230444_1_, this.subtitle, 30.0F, 18.0F, -16777216);
+            guiGraphics.drawString(Minecraft.getInstance().font, this.title, 30, 7, -11534256);
+            guiGraphics.drawString(Minecraft.getInstance().font, this.subtitle, 30, 18, -16777216);
         }
         return this.visibility;
     }

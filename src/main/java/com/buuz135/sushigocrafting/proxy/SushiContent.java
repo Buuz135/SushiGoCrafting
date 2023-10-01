@@ -1,14 +1,11 @@
 package com.buuz135.sushigocrafting.proxy;
 
 import com.buuz135.sushigocrafting.SushiGoCrafting;
-import com.buuz135.sushigocrafting.block.SushiGoCraftingBlock;
 import com.buuz135.sushigocrafting.block.machinery.*;
 import com.buuz135.sushigocrafting.block.plant.AvocadoLeavesBlock;
 import com.buuz135.sushigocrafting.block.plant.AvocadoLogBlock;
 import com.buuz135.sushigocrafting.block.plant.CustomCropBlock;
 import com.buuz135.sushigocrafting.block.plant.WaterCropBlock;
-import com.buuz135.sushigocrafting.block.seaweed.SeaWeedBlock;
-import com.buuz135.sushigocrafting.block.seaweed.SeaWeedTopBlock;
 import com.buuz135.sushigocrafting.entity.ShrimpEntity;
 import com.buuz135.sushigocrafting.entity.TunaEntity;
 import com.buuz135.sushigocrafting.item.AmountItem;
@@ -23,7 +20,6 @@ import com.buuz135.sushigocrafting.recipe.CuttingBoardRecipe;
 import com.buuz135.sushigocrafting.recipe.FermentingBarrelRecipe;
 import com.buuz135.sushigocrafting.tile.machinery.*;
 import com.buuz135.sushigocrafting.world.AvocadoTreeGrower;
-import com.buuz135.sushigocrafting.world.SeaweedFeature;
 import com.hrznstudio.titanium.recipe.serializer.GenericSerializer;
 import com.mojang.serialization.Codec;
 import net.minecraft.resources.ResourceLocation;
@@ -37,21 +33,14 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.MobBucketItem;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.item.crafting.RecipeType;
-import net.minecraft.world.item.crafting.SimpleRecipeSerializer;
+import net.minecraft.world.item.crafting.SimpleCraftingRecipeSerializer;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.RotatedPillarBlock;
 import net.minecraft.world.level.block.SaplingBlock;
-import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
-import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.levelgen.feature.Feature;
-import net.minecraft.world.level.levelgen.feature.configurations.FeatureConfiguration;
-import net.minecraft.world.level.levelgen.feature.configurations.NoneFeatureConfiguration;
 import net.minecraft.world.level.material.Fluids;
-import net.minecraft.world.level.material.Material;
-import net.minecraft.world.level.material.PushReaction;
 import net.minecraftforge.common.loot.IGlobalLootModifier;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
@@ -66,27 +55,35 @@ public class SushiContent {
     }
 
     public static RegistryObject<Item> item(String id, Supplier<Item> item) {
-        return Items.REGISTRY.register(id, item);
+        return Items.REGISTRY.register(id, () -> {
+            var i = item.get();
+            SushiGoCrafting.TAB.getTabList().add(i);
+            return i;
+        });
     }
 
     public static RegistryObject<Item> basicItem(String id, String category) {
-        return Items.REGISTRY.register(id, () -> new SushiItem(new Item.Properties().tab(SushiGoCrafting.TAB), category));
+        return Items.REGISTRY.register(id, () -> new SushiItem(new Item.Properties(), category));
     }
 
     public static RegistryObject<AmountItem> amountItem(String id, String category, int minAmount, int maxAmount, int maxCombine, boolean hurts) {
-        return Items.REGISTRY.register(id, () -> new AmountItem(new Item.Properties().tab(SushiGoCrafting.TAB).stacksTo(1), category, minAmount, maxAmount, maxCombine, hurts));
+        return Items.REGISTRY.register(id, () -> new AmountItem(new Item.Properties().stacksTo(1), category, minAmount, maxAmount, maxCombine, hurts));
     }
 
     public static RegistryObject<BlockItem> blockItem(String id, Supplier<? extends Block> sup) {
-        return Items.REGISTRY.register(id, () -> new BlockItem(sup.get(), new Item.Properties().tab(SushiGoCrafting.TAB)));
+        return Items.REGISTRY.register(id, () -> {
+            var blockItem = new BlockItem(sup.get(), new Item.Properties());
+            SushiGoCrafting.TAB.getTabList().add(blockItem);
+            return blockItem;
+        });
     }
 
     public static RegistryObject<BlockItem> blockItem(String id, Supplier<? extends Block> sup, Item.Properties properties) {
-        return Items.REGISTRY.register(id, () -> new BlockItem(sup.get(), properties.tab(SushiGoCrafting.TAB)));
-    }
-
-    public static <T extends FeatureConfiguration> RegistryObject<Feature<T>> feature(String id, Supplier<Feature<T>> featureSupplier) {
-        return Features.REGISTRY.register(id, featureSupplier);
+        return Items.REGISTRY.register(id, () -> {
+            var blockItem = new BlockItem(sup.get(), properties);
+            SushiGoCrafting.TAB.getTabList().add(blockItem);
+            return blockItem;
+        });
     }
 
     public static <T extends BlockEntity> RegistryObject<BlockEntityType<T>> tile(String id, BlockEntityType.BlockEntitySupplier<T> supplier, Supplier<? extends Block> sup) {
@@ -123,15 +120,6 @@ public class SushiContent {
         public static final RegistryObject<CustomCropBlock> WASABI_CROP = block("wasabi_crop", () -> new CustomCropBlock(BlockBehaviour.Properties.copy(net.minecraft.world.level.block.Blocks.WHEAT), Items.WASABI_SEEDS, state -> state.is(net.minecraft.world.level.block.Blocks.FARMLAND)));
         public static final RegistryObject<CustomCropBlock> SESAME_CROP = block("sesame_crop", () -> new CustomCropBlock(BlockBehaviour.Properties.copy(net.minecraft.world.level.block.Blocks.WHEAT), Items.SESAME_SEEDS, state -> state.is(net.minecraft.world.level.block.Blocks.FARMLAND)));
 
-        public static final RegistryObject<Block> SEAWEED = block("seaweed", () -> new SeaWeedTopBlock(BlockBehaviour.Properties.of(Material.WATER_PLANT).noCollission().randomTicks().instabreak().sound(SoundType.WET_GRASS)));
-        public static final RegistryObject<Block> SEAWEED_PLANT = block("seaweed_plant", () -> new SeaWeedBlock(BlockBehaviour.Properties.of(Material.WATER_PLANT).noCollission().randomTicks().instabreak().sound(SoundType.WET_GRASS)));
-        public static final RegistryObject<Block> SEAWEED_BLOCK = block("dried_seaweed_block", () -> new SushiGoCraftingBlock("dried_seaweed_block", BlockBehaviour.Properties.copy(net.minecraft.world.level.block.Blocks.DRIED_KELP_BLOCK)) {
-            @Override
-            public PushReaction getPistonPushReaction(BlockState state) {
-                return PushReaction.DESTROY;
-            }
-        });
-
         public static final RegistryObject<RotatedPillarBlock> AVOCADO_LOG = block("avocado_log", () -> new AvocadoLogBlock(BlockBehaviour.Properties.copy(net.minecraft.world.level.block.Blocks.OAK_WOOD)));
         public static final RegistryObject<RotatedPillarBlock> AVOCADO_LEAVES_LOG = block("avocado_leaves_logged", () -> new RotatedPillarBlock(BlockBehaviour.Properties.copy(net.minecraft.world.level.block.Blocks.OAK_WOOD).noOcclusion()));
         public static final RegistryObject<Block> AVOCADO_LEAVES = block("avocado_leaves", AvocadoLeavesBlock::new);
@@ -163,9 +151,6 @@ public class SushiContent {
 
         public static final RegistryObject<BlockItem> SESAME_SEEDS = blockItem("sesame_seeds", Blocks.SESAME_CROP);
 
-        public static final RegistryObject<BlockItem> SEAWEED = blockItem("seaweed", Blocks.SEAWEED);
-        public static final RegistryObject<Item> DRY_SEAWEED = basicItem("dried_seaweed", "");
-        public static final RegistryObject<BlockItem> SEAWEED_BLOCK = blockItem("dried_seaweed_block", Blocks.SEAWEED_BLOCK);
         public static final RegistryObject<Item> SEAWEED_ON_A_STICK = basicItem("seaweed_on_a_stick", "");
 
         public static final RegistryObject<Item> RAW_TUNA = basicItem("raw_tuna", "");
@@ -198,8 +183,8 @@ public class SushiContent {
 
         public static final RegistryObject<Item> KNIFE_CLEAVER = basicItem("cleaver_knife", "");
 
-        public static final RegistryObject<Item> TUNA_BUCKET = item("tuna_bucket", () -> new MobBucketItem(EntityTypes.TUNA, () -> Fluids.WATER, () -> SoundEvents.BUCKET_EMPTY_FISH, (new Item.Properties()).stacksTo(1).tab(SushiGoCrafting.TAB)));
-        public static final RegistryObject<Item> SHRIMP_BUCKET = item("shrimp_bucket", () -> new MobBucketItem(EntityTypes.SHRIMP, () -> Fluids.WATER, () -> SoundEvents.BUCKET_EMPTY_AXOLOTL, (new Item.Properties()).stacksTo(1).tab(SushiGoCrafting.TAB)));
+        public static final RegistryObject<Item> TUNA_BUCKET = item("tuna_bucket", () -> new MobBucketItem(EntityTypes.TUNA, () -> Fluids.WATER, () -> SoundEvents.BUCKET_EMPTY_FISH, (new Item.Properties()).stacksTo(1)));
+        public static final RegistryObject<Item> SHRIMP_BUCKET = item("shrimp_bucket", () -> new MobBucketItem(EntityTypes.SHRIMP, () -> Fluids.WATER, () -> SoundEvents.BUCKET_EMPTY_AXOLOTL, (new Item.Properties()).stacksTo(1)));
 
     }
 
@@ -212,17 +197,6 @@ public class SushiContent {
         public static RegistryObject<BlockEntityType<CuttingBoardTile>> CUTTING_BOARD = tile("cutting_board", CuttingBoardTile::new, Blocks.CUTTING_BOARD);
         public static RegistryObject<BlockEntityType<CoolerBoxTile>> COOLER_BOX = tile("cooler_box", CoolerBoxTile::new, Blocks.COOLER_BOX);
         public static RegistryObject<BlockEntityType<FermentationBarrelTile>> FERMENTATION_BARREL = tile("fermentation_barrel", FermentationBarrelTile::new, Blocks.FERMENTATION_BARREL);
-
-    }
-
-
-    public static class Features {
-
-        public static final DeferredRegister<Feature<?>> REGISTRY = DeferredRegister.create(ForgeRegistries.FEATURES, SushiGoCrafting.MOD_ID);
-
-        public static final RegistryObject<Feature<NoneFeatureConfiguration>> SEAWEED = feature("seaweed", () -> new SeaweedFeature(NoneFeatureConfiguration.CODEC));
-
-
 
     }
 
@@ -263,7 +237,7 @@ public class SushiContent {
 
         public static final DeferredRegister<RecipeSerializer<?>> REGISTRY = DeferredRegister.create(ForgeRegistries.Keys.RECIPE_SERIALIZERS, SushiGoCrafting.MOD_ID);
 
-        public static final RegistryObject<RecipeSerializer> COMBINE_AMOUNT = recipeSerializer("amount_combine_recipe", () -> new SimpleRecipeSerializer<>(CombineAmountItemRecipe::new));
+        public static final RegistryObject<RecipeSerializer> COMBINE_AMOUNT = recipeSerializer("amount_combine_recipe", () -> new SimpleCraftingRecipeSerializer<>((resourceLocation, craftingBookCategory) -> new CombineAmountItemRecipe(resourceLocation)));
         public static final RegistryObject<RecipeSerializer> CUTTING_BOARD = recipeSerializer("cutting_board", () -> new GenericSerializer<>(CuttingBoardRecipe.class, RecipeTypes.CUTTING_BOARD));
         public static final RegistryObject<RecipeSerializer> FERMENTING_BARREL = recipeSerializer("fermenting_barrel", () -> new GenericSerializer<>(FermentingBarrelRecipe.class, RecipeTypes.FERMENTING_BARREL));
 

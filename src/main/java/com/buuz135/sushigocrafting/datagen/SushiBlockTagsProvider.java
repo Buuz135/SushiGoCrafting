@@ -3,20 +3,24 @@ package com.buuz135.sushigocrafting.datagen;
 import com.buuz135.sushigocrafting.SushiGoCrafting;
 import com.buuz135.sushigocrafting.block.plant.CustomCropBlock;
 import com.buuz135.sushigocrafting.proxy.SushiContent;
-import net.minecraft.data.DataGenerator;
-import net.minecraft.data.tags.BlockTagsProvider;
+import net.minecraft.core.HolderLookup;
+import net.minecraft.data.PackOutput;
 import net.minecraft.tags.BlockTags;
+import net.minecraftforge.common.data.BlockTagsProvider;
 import net.minecraftforge.common.data.ExistingFileHelper;
+import org.jetbrains.annotations.Nullable;
+
+import java.util.concurrent.CompletableFuture;
 
 
 public class SushiBlockTagsProvider extends BlockTagsProvider {
 
-    public SushiBlockTagsProvider(DataGenerator gen, ExistingFileHelper existingFileHelper) {
-        super(gen, SushiGoCrafting.MOD_ID, existingFileHelper);
+    public SushiBlockTagsProvider(PackOutput packOutput, CompletableFuture<HolderLookup.Provider> lookupProvider, @Nullable ExistingFileHelper existingFileHelper) {
+        super(packOutput, lookupProvider, SushiGoCrafting.MOD_ID, existingFileHelper);
     }
 
     @Override
-    public void addTags() {
+    public void addTags(HolderLookup.Provider provider) {
         tag(BlockTags.LOGS).add(SushiContent.Blocks.AVOCADO_LOG.get());
         tag(BlockTags.LOGS).add(SushiContent.Blocks.AVOCADO_LEAVES_LOG.get());
         tag(BlockTags.SAPLINGS).add(SushiContent.Blocks.AVOCADO_SAPLING.get());

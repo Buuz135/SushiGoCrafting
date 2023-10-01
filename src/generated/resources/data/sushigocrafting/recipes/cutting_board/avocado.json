@@ -1,7 +1,7 @@
 {
+  "type": "sushigocrafting:cutting_board",
+  "ingredient": "avocado",
   "input": {
     "tag": "forge:fruits/avocado"
-  },
-  "ingredient": "avocado",
-  "type": "sushigocrafting:cutting_board"
+  }
 }

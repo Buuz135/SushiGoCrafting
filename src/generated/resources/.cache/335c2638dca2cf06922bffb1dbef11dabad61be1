@@ -1,0 +1,27 @@
+// 1.20.1	2023-10-01T16:25:07.2920645	Tags for minecraft:item mod id sushigocrafting
+6f1b9961c64fcac0298de81fdef9bc69db03d466 data/diet/tags/items/fruits.json
+2edb19c04f197d462b8d4572a3dba9c4fea2d883 data/diet/tags/items/grains.json
+b7e226156b80da16f44d0af3472c64650df71a1d data/diet/tags/items/proteins.json
+ff5430ea7930620e2ed34c0931c63ae268ddd382 data/diet/tags/items/vegetables.json
+4c5b3a94213d51a2a4a608f95ecbed820b7f5e70 data/forge/tags/items/crops.json
+59797b0de6d37c155d54c4ad2e24e0b7c441d098 data/forge/tags/items/crops/cucumber.json
+45fc65804195794f80150238eaa3c6f9fbfea606 data/forge/tags/items/crops/rice.json
+c30430446abeaf09dca457d20bc1dc0882685bb9 data/forge/tags/items/crops/sesame_seed.json
+13ed228870403dee9732daa3c02c2109bd29bd39 data/forge/tags/items/crops/soy_bean.json
+c06c6b6bb227233c1ee9425652d219976e86f0b3 data/forge/tags/items/crops/wasabi_root.json
+3928f99669604c01e4214ab0f257a144cada698d data/forge/tags/items/fruits.json
+3928f99669604c01e4214ab0f257a144cada698d data/forge/tags/items/fruits/avocado.json
+b7a5dc99a61731d35bda6bcbb438af3946d804ed data/forge/tags/items/raw_fishes.json
+3fe6df0882f02c83c296f5dfaed148dab475c556 data/forge/tags/items/raw_fishes/salmon.json
+ec193d2be5d0dd269f12482a8b861fb11a953bef data/forge/tags/items/raw_fishes/shrimp.json
+1a281932a855dc9fe6db01b007f18f9c7a9a0ded data/forge/tags/items/raw_fishes/tuna.json
+942d8cf685dbcd80cb56b444f59262b6ef87bd64 data/forge/tags/items/seeds.json
+5c3c2256a2c019ea2d05b964de015d53d235556c data/forge/tags/items/seeds/cucumber_seeds.json
+84b971ebf27f2f52ef9038073f7fda1e9e07915b data/forge/tags/items/seeds/rice_seeds.json
+8791a038e89fff147b9d90f74dcfc7f7c7deb2f1 data/forge/tags/items/seeds/sesame_seeds.json
+c28eec1aa23cd82356737e2e4e79221c7c7c1f23 data/forge/tags/items/seeds/soy_seeds.json
+44b9308d93e508da1e54417fae5ba0065f44ec30 data/forge/tags/items/seeds/wasabi_seeds.json
+f9b8fb05d9ffb5c86ac06e71373c87cca426d587 data/forge/tags/items/tools/knife.json
+b89fed35b1e5eb0ef971a076017a49fa65bfefdc data/minecraft/tags/items/fishes.json
+a57b1227a346e6bb880267ad9f8348b763efe539 data/minecraft/tags/items/logs.json
+519d0d6c760ab3e0dbf1490e14f3f22a2f9ebcc5 data/minecraft/tags/items/saplings.json

@@ -5,8 +5,6 @@ import com.buuz135.sushigocrafting.api.impl.FoodAPI;
 import com.buuz135.sushigocrafting.proxy.SushiContent;
 import com.buuz135.sushigocrafting.recipe.CuttingBoardRecipe;
 import com.buuz135.sushigocrafting.util.ItemStackUtil;
-import com.mojang.blaze3d.systems.RenderSystem;
-import com.mojang.blaze3d.vertex.PoseStack;
 import mezz.jei.api.constants.VanillaTypes;
 import mezz.jei.api.gui.builder.IRecipeLayoutBuilder;
 import mezz.jei.api.gui.drawable.IDrawable;
@@ -16,7 +14,7 @@ import mezz.jei.api.recipe.IFocusGroup;
 import mezz.jei.api.recipe.RecipeIngredientRole;
 import mezz.jei.api.recipe.RecipeType;
 import mezz.jei.api.recipe.category.IRecipeCategory;
-import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
@@ -58,15 +56,14 @@ public class CuttingBoardCategory implements IRecipeCategory<CuttingBoardRecipe>
 
 
     @Override
-    public void draw(CuttingBoardRecipe recipe, IRecipeSlotsView recipeSlotsView, PoseStack stack, double mouseX, double mouseY) {
-        RenderSystem.setShaderTexture(0, new ResourceLocation(SushiGoCrafting.MOD_ID, "textures/gui/jei.png"));
-        Minecraft.getInstance().screen.blit(stack, 31, 22, 0, 0, 15, 22);
+    public void draw(CuttingBoardRecipe recipe, IRecipeSlotsView recipeSlotsView, GuiGraphics guiGraphics, double mouseX, double mouseY) {
+        guiGraphics.blit(new ResourceLocation(SushiGoCrafting.MOD_ID, "textures/gui/jei.png"), 31, 22, 0, 0, 15, 22);
         float scale = 4;
         //matrixStack.translate(0,0, 100);
         //matrixStack.translate(0,0, -200);
-        stack.scale(scale, scale, scale);
-        ItemStackUtil.renderItemIntoGUI(stack, new ItemStack(SushiContent.Blocks.CUTTING_BOARD.get()), 2, 4);
-        stack.scale(1 / scale, 1 / scale, 1 / scale);
+        guiGraphics.pose().scale(scale, scale, scale);
+        ItemStackUtil.renderItemIntoGUI(guiGraphics.pose(), new ItemStack(SushiContent.Blocks.CUTTING_BOARD.get()), 2, 4);
+        guiGraphics.pose().scale(1 / scale, 1 / scale, 1 / scale);
         //matrixStack.translate(0,0, 200);
     }
 

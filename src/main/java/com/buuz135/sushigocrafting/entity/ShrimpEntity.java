@@ -13,7 +13,6 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.*;
-import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.animal.AbstractSchoolingFish;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.vehicle.DismountHelper;
@@ -62,17 +61,17 @@ public class ShrimpEntity extends AbstractSchoolingFish implements ItemSteerable
     public void equipSaddle(@Nullable SoundSource p_230266_1_) {
         this.steering.setSaddle(true);
         if (p_230266_1_ != null) {
-            this.level.playSound(null, this, SoundEvents.PIG_SADDLE, p_230266_1_, 0.5F, 1.0F);
+            this.level().playSound(null, this, SoundEvents.PIG_SADDLE, p_230266_1_, 0.5F, 1.0F);
         }
     }
 
     @Override
     public InteractionResult mobInteract(Player playerIn, InteractionHand hand) {
         if (this.isSaddled() && !this.isVehicle() && !playerIn.isSecondaryUseActive()) {
-            if (!this.level.isClientSide) {
+            if (!this.level().isClientSide) {
                 playerIn.startRiding(this);
             }
-            return InteractionResult.sidedSuccess(this.level.isClientSide);
+            return InteractionResult.sidedSuccess(this.level().isClientSide);
         } else {
             InteractionResult actionresulttype = super.mobInteract(playerIn, hand);
             if (!actionresulttype.consumesAction()) {
@@ -85,12 +84,12 @@ public class ShrimpEntity extends AbstractSchoolingFish implements ItemSteerable
     }
 
     @Nullable
-    public Entity getControllingPassenger() {
-        return this.getPassengers().isEmpty() ? null : this.getPassengers().get(0);
+    public LivingEntity getControllingPassenger() {
+        return this.getPassengers().isEmpty() ? null : (this.getPassengers().get(0) instanceof LivingEntity ? (LivingEntity) this.getPassengers().get(0) : null);
     }
 
     public void onSyncedDataUpdated(EntityDataAccessor<?> key) {
-        if (BOOST_TIME.equals(key) && this.level.isClientSide) {
+        if (BOOST_TIME.equals(key) && this.level().isClientSide) {
             this.steering.onSynced();
         }
 
@@ -127,17 +126,7 @@ public class ShrimpEntity extends AbstractSchoolingFish implements ItemSteerable
                 this.setDeltaMovement(this.getDeltaMovement().add(0, -entity.getRotationVector().x / 500, 0));
             //this.ride(this, this.steering, new Vector3d(0,-entity.getPitchYaw().x,0));
         }
-        this.travel(this, this.steering, travelVector);
-    }
-
-    @Override
-    public float getSteeringSpeed() {
-        return (float) this.getAttributeValue(Attributes.MOVEMENT_SPEED);
-    }
-
-    @Override
-    public void travelWithInput(Vec3 travelVec) {
-        super.travel(travelVec);
+        super.travel(travelVector);
     }
 
     @Override
@@ -160,10 +149,10 @@ public class ShrimpEntity extends AbstractSchoolingFish implements ItemSteerable
 
                 for (int[] aint1 : aint) {
                     blockpos$mutable.set(blockpos.getX() + aint1[0], blockpos.getY(), blockpos.getZ() + aint1[1]);
-                    double d0 = this.level.getBlockFloorHeight(blockpos$mutable);
+                    double d0 = this.level().getBlockFloorHeight(blockpos$mutable);
                     if (DismountHelper.isBlockFloorValid(d0)) {
                         Vec3 vector3d = Vec3.upFromBottomCenterOf(blockpos$mutable, d0);
-                        if (DismountHelper.canDismountTo(this.level, livingEntity, axisalignedbb.move(vector3d))) {
+                        if (DismountHelper.canDismountTo(this.level(), livingEntity, axisalignedbb.move(vector3d))) {
                             livingEntity.setPose(pose);
                             return vector3d;
                         }
@@ -188,11 +177,6 @@ public class ShrimpEntity extends AbstractSchoolingFish implements ItemSteerable
     @Override
     public boolean isControlledByLocalInstance() {
         return super.isControlledByLocalInstance();
-    }
-
-    @Override
-    public boolean rideableUnderWater() {
-        return true;
     }
 
     @Override

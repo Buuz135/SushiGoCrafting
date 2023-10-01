@@ -6,32 +6,35 @@ import com.buuz135.sushigocrafting.api.impl.FoodHelper;
 import com.buuz135.sushigocrafting.block.plant.CustomCropBlock;
 import com.buuz135.sushigocrafting.item.FoodItem;
 import com.buuz135.sushigocrafting.proxy.SushiContent;
-import net.minecraft.data.DataGenerator;
-import net.minecraft.data.tags.BlockTagsProvider;
+import net.minecraft.core.HolderLookup;
+import net.minecraft.data.PackOutput;
 import net.minecraft.data.tags.ItemTagsProvider;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.level.block.Block;
 import net.minecraftforge.common.Tags;
 import net.minecraftforge.common.data.ExistingFileHelper;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.concurrent.CompletableFuture;
 
 
 public class SushiItemTagsProvider extends ItemTagsProvider {
 
-    public SushiItemTagsProvider(DataGenerator gen, BlockTagsProvider blockTagsProvider, ExistingFileHelper existingFileHelper) {
-        super(gen, blockTagsProvider, SushiGoCrafting.MOD_ID, existingFileHelper);
+    public SushiItemTagsProvider(PackOutput packOutput, CompletableFuture<HolderLookup.Provider> completableFuture, CompletableFuture<TagLookup<Block>> lookupCompletableFuture, @Nullable ExistingFileHelper existingFileHelper) {
+        super(packOutput, completableFuture, lookupCompletableFuture, SushiGoCrafting.MOD_ID, existingFileHelper);
     }
 
     @Override
-    public void addTags() {
+    public void addTags(HolderLookup.Provider provider) {
         //super.registerTags();
         this.copy(BlockTags.LOGS, ItemTags.LOGS);
         this.copy(BlockTags.SAPLINGS, ItemTags.SAPLINGS);

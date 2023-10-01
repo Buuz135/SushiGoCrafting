@@ -1,7 +1,7 @@
 {
+  "type": "sushigocrafting:cutting_board",
+  "ingredient": "crab",
   "input": {
     "item": "minecraft:cod"
-  },
-  "ingredient": "crab",
-  "type": "sushigocrafting:cutting_board"
+  }
 }

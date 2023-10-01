@@ -4,22 +4,18 @@
     {
       "conditions": [
         {
+          "type": "forge:and",
           "values": [
             {
-              "item": "sushigocrafting:roller",
-              "type": "forge:item_exists"
+              "type": "forge:item_exists",
+              "item": "sushigocrafting:roller"
             }
-          ],
-          "type": "forge:and"
+          ]
         }
       ],
       "recipe": {
         "type": "minecraft:crafting_shaped",
-        "pattern": [
-          "BBB",
-          "SSS",
-          "BBB"
-        ],
+        "category": "misc",
         "key": {
           "B": {
             "item": "minecraft:bamboo"
@@ -28,9 +24,15 @@
             "item": "minecraft:string"
           }
         },
+        "pattern": [
+          "BBB",
+          "SSS",
+          "BBB"
+        ],
         "result": {
           "item": "sushigocrafting:roller"
-        }
+        },
+        "show_notification": true
       }
     }
   ]

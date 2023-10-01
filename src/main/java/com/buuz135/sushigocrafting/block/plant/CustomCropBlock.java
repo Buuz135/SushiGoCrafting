@@ -69,8 +69,8 @@ public class CustomCropBlock extends CropBlock {
     }
 
     @Override
-    public boolean isMaxAge(BlockState state) {
-        return state.getValue(getAgeProperty()) == getMaxAge();
+    public int getAge(BlockState state) {
+        return state.getValue(getAgeProperty());
     }
 
     @Override

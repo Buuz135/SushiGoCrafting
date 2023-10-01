@@ -7,5 +7,6 @@
   "header_color": "48435C",
   "nameplate_color": "61E786",
   "progress_bar_color": "EDFFEC",
-  "model": "sushigocrafting:guide_book"
+  "model": "sushigocrafting:guide_book",
+  "use_resource_pack": true
 }

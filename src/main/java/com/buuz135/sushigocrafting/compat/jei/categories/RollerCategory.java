@@ -6,7 +6,6 @@ import com.buuz135.sushigocrafting.client.gui.provider.RollerAssetProvider;
 import com.buuz135.sushigocrafting.item.FoodItem;
 import com.buuz135.sushigocrafting.proxy.SushiContent;
 import com.hrznstudio.titanium.client.screen.addon.SlotsScreenAddon;
-import com.mojang.blaze3d.vertex.PoseStack;
 import mezz.jei.api.constants.VanillaTypes;
 import mezz.jei.api.gui.builder.IRecipeLayoutBuilder;
 import mezz.jei.api.gui.drawable.IDrawable;
@@ -17,6 +16,7 @@ import mezz.jei.api.recipe.RecipeIngredientRole;
 import mezz.jei.api.recipe.RecipeType;
 import mezz.jei.api.recipe.category.IRecipeCategory;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.DyeColor;
@@ -67,12 +67,12 @@ public class RollerCategory implements IRecipeCategory<Recipe> {
 
 
     @Override
-    public void draw(Recipe recipe, IRecipeSlotsView recipeSlotsView, PoseStack stack, double mouseX, double mouseY) {
-        SlotsScreenAddon.drawAsset(stack, Minecraft.getInstance().screen, RollerAssetProvider.INSTANCE, 5, 3, 0, 0, 1, integer -> Pair.of(0, 0), integer -> ItemStack.EMPTY, true, integer -> new Color(DyeColor.ORANGE.getFireworkColor()), integer -> true);
-        SlotsScreenAddon.drawAsset(stack, Minecraft.getInstance().screen, RollerAssetProvider.INSTANCE, -7, -17, 0, 0, recipe.stack.getIngredientList().size(), recipe.stack.getType().getSlotPosition(), integer -> ItemStack.EMPTY, true, integer -> new Color(DyeColor.LIGHT_BLUE.getFireworkColor()), integer -> true);
+    public void draw(Recipe recipe, IRecipeSlotsView recipeSlotsView, GuiGraphics guiGraphics, double mouseX, double mouseY) {
+        SlotsScreenAddon.drawAsset(guiGraphics, Minecraft.getInstance().screen, RollerAssetProvider.INSTANCE, 5, 3, 0, 0, 1, integer -> Pair.of(0, 0), integer -> ItemStack.EMPTY, true, integer -> new Color(DyeColor.ORANGE.getFireworkColor()), integer -> true, 1);
+        SlotsScreenAddon.drawAsset(guiGraphics, Minecraft.getInstance().screen, RollerAssetProvider.INSTANCE, -7, -17, 0, 0, recipe.stack.getIngredientList().size(), recipe.stack.getType().getSlotPosition(), integer -> ItemStack.EMPTY, true, integer -> new Color(DyeColor.LIGHT_BLUE.getFireworkColor()), integer -> true, 1);
         for (int i = 0; i < recipe.stack.getIngredientList().size(); i++) {
-            RollerWeightSelectorButtonComponent.drawBackground(stack, Minecraft.getInstance().screen, RollerAssetProvider.INSTANCE, 0, 0, recipe.stack.getType().getSlotPosition().apply(i).getLeft() - 8 + 18, recipe.stack.getType().getSlotPosition().apply(i).getRight() - 18);
-            RollerWeightSelectorButtonComponent.drawForeground(stack, Minecraft.getInstance().screen, RollerAssetProvider.INSTANCE, 0, 0, recipe.stack.getType().getSlotPosition().apply(i).getLeft() - 8 + 18, recipe.stack.getType().getSlotPosition().apply(i).getRight() - 18, Integer.MIN_VALUE, 18, recipe.stack.getType().getName(), i);
+            RollerWeightSelectorButtonComponent.drawBackground(guiGraphics, Minecraft.getInstance().screen, RollerAssetProvider.INSTANCE, 0, 0, recipe.stack.getType().getSlotPosition().apply(i).getLeft() - 8 + 18, recipe.stack.getType().getSlotPosition().apply(i).getRight() - 18);
+            RollerWeightSelectorButtonComponent.drawForeground(guiGraphics, Minecraft.getInstance().screen, RollerAssetProvider.INSTANCE, 0, 0, recipe.stack.getType().getSlotPosition().apply(i).getLeft() - 8 + 18, recipe.stack.getType().getSlotPosition().apply(i).getRight() - 18, Integer.MIN_VALUE, 18, recipe.stack.getType().getName(), i);
         }
     }
 

@@ -1,7 +1,7 @@
 {
+  "type": "sushigocrafting:cutting_board",
+  "ingredient": "tuna",
   "input": {
     "tag": "forge:raw_fishes/tuna"
-  },
-  "ingredient": "tuna",
-  "type": "sushigocrafting:cutting_board"
+  }
 }

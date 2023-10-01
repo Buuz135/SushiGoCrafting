@@ -3,9 +3,11 @@ package com.buuz135.sushigocrafting.recipe;
 import com.buuz135.sushigocrafting.item.AmountItem;
 import com.buuz135.sushigocrafting.proxy.SushiContent;
 import com.google.common.collect.Lists;
+import net.minecraft.core.RegistryAccess;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.inventory.CraftingContainer;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.CraftingBookCategory;
 import net.minecraft.world.item.crafting.CustomRecipe;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.level.Level;
@@ -16,7 +18,7 @@ public class CombineAmountItemRecipe extends CustomRecipe {
 
 
     public CombineAmountItemRecipe(ResourceLocation idIn) {
-        super(idIn);
+        super(idIn, CraftingBookCategory.MISC);
     }
 
     public static boolean stackMatches(ItemStack first, ItemStack second) {
@@ -59,7 +61,7 @@ public class CombineAmountItemRecipe extends CustomRecipe {
     }
 
     @Override
-    public ItemStack assemble(CraftingContainer inv) {
+    public ItemStack assemble(CraftingContainer inv, RegistryAccess registryAccess) {
         List<ItemStack> list = Lists.newArrayList();
         for (int i = 0; i < inv.getContainerSize(); ++i) {
             ItemStack itemstack = inv.getItem(i);

@@ -26,7 +26,7 @@ import com.buuz135.sushigocrafting.client.ClientProxy;
 import com.hrznstudio.titanium.reward.storage.ClientRewardStorage;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.math.Vector3f;
+import com.mojang.math.Axis;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.PlayerModel;
 import net.minecraft.client.player.AbstractClientPlayer;
@@ -56,9 +56,9 @@ public class ContributorsBackRender extends RenderLayer<AbstractClientPlayer, Pl
         stack.pushPose();
         if (entitylivingbaseIn.isCrouching()) {
             stack.translate(0D, 0.2D, 0D);
-            stack.mulPose(Vector3f.XP.rotationDegrees((float) (90F / Math.PI)));
+            stack.mulPose(Axis.XP.rotationDegrees((float) (90F / Math.PI)));
         }
-        stack.mulPose(Vector3f.XP.rotationDegrees(180));
+        stack.mulPose(Axis.XP.rotationDegrees(180));
         stack.translate(-0.53, -0.55, -0.37);
         RenderSystem.setShaderTexture(0, TextureAtlas.LOCATION_BLOCKS);
         BakedModel selected = null;

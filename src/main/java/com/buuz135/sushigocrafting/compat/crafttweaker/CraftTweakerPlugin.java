@@ -3,6 +3,7 @@ package com.buuz135.sushigocrafting.compat.crafttweaker;
 import com.blamejared.crafttweaker.api.CraftTweakerAPI;
 import com.blamejared.crafttweaker.api.command.CommandUtilities;
 import com.blamejared.crafttweaker.impl.command.CtCommands;
+import com.buuz135.sushigocrafting.SushiGoCrafting;
 import com.buuz135.sushigocrafting.api.impl.FoodAPI;
 import com.hrznstudio.titanium.annotation.plugin.FeaturePlugin;
 import com.hrznstudio.titanium.plugin.FeaturePluginInstance;
@@ -21,9 +22,9 @@ public class CraftTweakerPlugin implements FeaturePluginInstance {
             CtCommands.get().registerCommand("sushigocrafting_food_ingredients", Component.literal("Lists all Sushi Go Crafting Food Ingredients"), builder -> {
                 builder.executes(context -> {
                     ServerPlayer player = context.getSource().getPlayerOrException();
-                    CraftTweakerAPI.LOGGER.info("List of all known Food Ingredients: ");
+                    CraftTweakerAPI.getLogger(SushiGoCrafting.MOD_ID).info("List of all known Food Ingredients: ");
                     FoodAPI.get().getFoodIngredient().forEach(iFoodIngredient -> {
-                        CraftTweakerAPI.LOGGER.info("- {}", iFoodIngredient.getName());
+                        CraftTweakerAPI.getLogger(SushiGoCrafting.MOD_ID).info("- {}", iFoodIngredient.getName());
                     });
 
                     CommandUtilities.send(CommandUtilities.openingLogFile(Component.translatable("crafttweaker.command.list.check.log", CommandUtilities.makeNoticeable(Component.literal("Food Ingredients")), CommandUtilities.getFormattedLogFile()).withStyle(ChatFormatting.GREEN)), player);

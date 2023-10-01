@@ -1,6 +1,7 @@
 package com.buuz135.sushigocrafting.datagen;
 
 import com.buuz135.sushigocrafting.block.plant.AvocadoLeavesBlock;
+import com.buuz135.sushigocrafting.block.plant.CustomCropBlock;
 import com.buuz135.sushigocrafting.proxy.SushiContent;
 import com.hrznstudio.titanium.block.RotatableBlock;
 import net.minecraft.core.Direction;
@@ -17,7 +18,7 @@ import net.minecraftforge.registries.ForgeRegistries;
 public class SushiBlockstateProvider extends BlockStateProvider {
 
     public SushiBlockstateProvider(DataGenerator gen, String modid, ExistingFileHelper exFileHelper) {
-        super(gen, modid, exFileHelper);
+        super(gen.getPackOutput(), modid, exFileHelper);
     }
 
     @Override
@@ -27,13 +28,12 @@ public class SushiBlockstateProvider extends BlockStateProvider {
         crop(SushiContent.Blocks.WASABI_CROP.get());
         crop(SushiContent.Blocks.SOY_CROP.get());
         crop(SushiContent.Blocks.SESAME_CROP.get());
-        simpleBlockUn(SushiContent.Blocks.SEAWEED.get());
-        simpleBlockUn(SushiContent.Blocks.SEAWEED_PLANT.get());
+        //simpleBlockUn(SushiContent.Blocks.SEAWEED.get());
+        //simpleBlockUn(SushiContent.Blocks.SEAWEED_PLANT.get());
         simpleBlockUn(SushiContent.Blocks.AVOCADO_SAPLING.get());
         horizontalBlock(SushiContent.Blocks.RICE_COOKER.get());
         logBlockRot(SushiContent.Blocks.AVOCADO_LOG.get());
         logBlockRot(SushiContent.Blocks.AVOCADO_LEAVES_LOG.get());
-        simpleBlockUn(SushiContent.Blocks.SEAWEED_BLOCK.get());
         getVariantBuilder(SushiContent.Blocks.AVOCADO_LEAVES.get())
                 .partialState()
                 .with(AvocadoLeavesBlock.STAGE, 0).addModels(
@@ -49,7 +49,7 @@ public class SushiBlockstateProvider extends BlockStateProvider {
 
     private void crop(CropBlock block) {
         getVariantBuilder(block).forAllStates(blockState -> {
-            int age = blockState.getValue(block.getAgeProperty());
+            int age = blockState.getValue(CustomCropBlock.AGE);
             return ConfiguredModel.builder().modelFile(new ModelFile.UncheckedModelFile(modLoc("block/" + ForgeRegistries.BLOCKS.getKey(block).getPath() + "_" + age))).build();
         });
     }
