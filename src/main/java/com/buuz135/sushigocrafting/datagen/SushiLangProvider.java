@@ -2,6 +2,7 @@ package com.buuz135.sushigocrafting.datagen;
 
 import com.buuz135.sushigocrafting.proxy.SushiContent;
 import net.minecraft.data.DataGenerator;
+import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.item.BlockItem;
 import net.minecraftforge.common.data.LanguageProvider;
 import net.minecraftforge.registries.ForgeRegistries;
@@ -29,5 +30,13 @@ public class SushiLangProvider extends LanguageProvider {
         SushiContent.Effects.REGISTRY.getEntries().stream().map(RegistryObject::get).forEach(effect -> {
             add(effect, WordUtils.capitalize(ForgeRegistries.MOB_EFFECTS.getKey(effect).getPath().replaceAll("_", " ")));
         });
+
+        addDesc(SushiContent.Effects.STEADY_HANDS, "Increases the amount you get from chopping on the cutting board");
+        addDesc(SushiContent.Effects.ACQUIRED_TASTE, "Gives extra nutrition and saturation when eating food");
+        addDesc(SushiContent.Effects.SMALL_BITES, "A chance to give you back the food you are eating");
+    }
+
+    private void addDesc(RegistryObject<MobEffect> effect, String description) {
+        add(effect.get().getDescriptionId() + ".description", description);
     }
 }
