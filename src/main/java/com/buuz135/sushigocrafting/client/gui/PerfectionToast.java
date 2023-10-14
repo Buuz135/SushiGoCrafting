@@ -29,7 +29,8 @@ public class PerfectionToast implements Toast {
     public Visibility render(GuiGraphics guiGraphics, ToastComponent p_230444_2_, long p_230444_3_) {
         RenderSystem.setShaderTexture(0, TEXTURE);
         RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1f);
-        p_230444_2_.render(guiGraphics);
+        //p_230444_2_.render(guiGraphics);
+        guiGraphics.blit(TEXTURE, 0, 0, 0, 0, this.width(), this.height());
         guiGraphics.renderItem(display, 9, 9);
         if (this.subtitle == null) {
             guiGraphics.drawString(Minecraft.getInstance().font, this.title, 30, 12, -11534256, false);
