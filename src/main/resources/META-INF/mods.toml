@@ -38,12 +38,6 @@ mandatory = false #mandatory
 ordering = "NONE"
 side = "BOTH"
 [[dependencies.sushigocrafting]] #optional
-modId = "jei" #mandatory
-mandatory = true #mandatory
-versionRange = "[7.6.1.72,)" #mandatory
-ordering = "NONE"
-side = "BOTH"
-[[dependencies.sushigocrafting]] #optional
 modId = "forge" #mandatory
 mandatory = true #mandatory
 versionRange = "[43.1.13,)" #mandatory
