@@ -1,0 +1,31 @@
+{
+  "name": "Эффекты Еды",
+  "icon": "sushigocrafting:avocado_slices",
+  "category": "sushigocrafting:getting_started",
+  "sortnum": 0,
+  "read_by_default": false,
+  "pages": [
+    {
+      "type": "text",
+      "text": "Использование разных типов ингредиентов для приготовления суши даст вам разные эффекты и сделает вашу еду лучше."
+    },
+    {
+      "type": "spotlight",
+      "item": "sushigocrafting:salmon_fillet",
+      "title": "Маленький перекус",
+      "text": "Если вы поедите во время действия этого эффекта, у вас будет небольшой шанс не съесть предмет."
+    },
+    {
+      "type": "spotlight",
+      "item": "sushigocrafting:tuna_fillet",
+      "title": "Приобрел вкус",
+      "text": "Прием пищи во время действия этого эффекта даст дополнительную еду."
+    },
+    {
+      "type": "spotlight",
+      "item": "sushigocrafting:shrimp",
+      "title": "Твёрдые руки",
+      "text": "Использование разделочной доски во время действия этого эффекта придаст вашим ингредиентам дополнительный вес."
+    }
+  ]
+}

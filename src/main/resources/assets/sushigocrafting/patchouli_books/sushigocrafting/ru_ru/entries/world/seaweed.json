@@ -1,0 +1,13 @@
+{
+  "name": "Водоросли",
+  "icon": "sushigocrafting:seaweed",
+  "category": "sushigocrafting:world",
+  "sortnum": 1,
+  "read_by_default": false,
+  "pages": [
+    {
+      "type": "text",
+      "text": "Вы можете найти водоросли в океанах."
+    }
+  ]
+}

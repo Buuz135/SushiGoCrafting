@@ -1,0 +1,21 @@
+{
+  "name": "Нори",
+  "icon": "sushigocrafting:nori_sheets",
+  "category": "sushigocrafting:getting_started",
+  "sortnum": 2,
+  "read_by_default": false,
+  "pages": [
+    {
+      "type": "text",
+      "text": "Чтобы получить листы нори, вам нужно будет найти в океане немного водорослей и сделать из них блок сушеных водорослей. $(br2)Зажав блок сушеных ламинарий (выбросить из инвенторя) между железным блоком с помощью поршня, вы получите несколько листов нори."
+    },
+    {
+      "type": "image",
+      "images": [
+        "sushigocrafting:textures/gui/book/nori.png"
+      ],
+      "title": "Изготовление Нори",
+      "text": ""
+    }
+  ]
+}

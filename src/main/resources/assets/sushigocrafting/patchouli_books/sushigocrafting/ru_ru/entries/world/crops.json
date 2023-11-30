@@ -1,0 +1,13 @@
+{
+  "name": "Семена",
+  "icon": "sushigocrafting:wasabi_root",
+  "category": "sushigocrafting:world",
+  "sortnum": 3,
+  "read_by_default": false,
+  "pages": [
+    {
+      "type": "text",
+      "text": "Семена можно получить, ломая траву. $(br2)Большинство семян выращиваются как обычные культуры, за исключением риса, который нужно выращивать под водой на земле."
+    }
+  ]
+}

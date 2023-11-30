@@ -1,0 +1,17 @@
+{
+  "name": "Рисоварка",
+  "icon": "sushigocrafting:rice_cooker",
+  "category": "sushigocrafting:using_tools",
+  "sortnum": 2,
+  "read_by_default": false,
+  "pages": [
+    {
+      "type": "text",
+      "text": "Машина, которая идеально готовила рис по стандартам $(6)Дяди Роджера$().Чтобы приготовить его, вам понадобится рис, вода и немного топлива. $(br2)Вам не придется беспокоиться о весе в выходном слоте: приготовленный рис будет объединен автоматически."
+    },
+    {
+      "type": "crafting",
+      "recipe": "sushigocrafting:rice_cooker"
+    }
+  ]
+}

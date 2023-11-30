@@ -1,0 +1,13 @@
+{
+  "name": "Тунец и Креветки",
+  "icon": "sushigocrafting:raw_tuna",
+  "category": "sushigocrafting:world",
+  "sortnum": 3,
+  "read_by_default": false,
+  "pages": [
+    {
+      "type": "text",
+      "text": "Вы можете найти этих очаровательных существ в океане. $(br2)Принесите седло, кто знает, что с ним можно сделать."
+    }
+  ]
+}
