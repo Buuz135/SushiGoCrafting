@@ -1,8 +1,8 @@
 {
   "credit": "Made with Blockbench",
   "textures": {
-    "0": "sushigocrafting:rewards/tuna_back",
-    "particle": "sushigocrafting:rewards/tuna_back"
+    "0": "sushigocrafting:block/rewards/tuna_back",
+    "particle": "sushigocrafting:block/rewards/tuna_back"
   },
   "elements": [
     {
