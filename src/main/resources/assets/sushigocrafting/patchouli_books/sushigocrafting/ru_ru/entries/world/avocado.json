@@ -1,0 +1,13 @@
+{
+  "name": "Авокадо",
+  "icon": "sushigocrafting:avocado",
+  "category": "sushigocrafting:world",
+  "sortnum": 2,
+  "read_by_default": false,
+  "pages": [
+    {
+      "type": "text",
+      "text": "Деревья авокадо можно найти по всему миру, в основном на равнинах. $(br2)Вы можете собрать авокадо из листьев, щелкнув по ним правой кнопкой мыши, когда он полностью вырастет."
+    }
+  ]
+}

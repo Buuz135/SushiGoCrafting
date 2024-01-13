@@ -1,0 +1,17 @@
+{
+  "name": "Холодильник",
+  "icon": "sushigocrafting:cooler_box",
+  "category": "sushigocrafting:using_tools",
+  "sortnum": 1,
+  "read_by_default": false,
+  "pages": [
+    {
+      "type": "text",
+      "text": "Удобная коробка для автоматического объединения ингредиентов, имеющих вес: просто поместите их внутрь, и они смешаются."
+    },
+    {
+      "type": "crafting",
+      "recipe": "sushigocrafting:cooler_box"
+    }
+  ]
+}

@@ -1,0 +1,18 @@
+{
+  "name": "Разделочная доска",
+  "icon": "sushigocrafting:cutting_board",
+  "category": "sushigocrafting:using_tools",
+  "sortnum": 3,
+  "read_by_default": false,
+  "pages": [
+    {
+      "type": "text",
+      "text": "Нарезка ингредиентов — важный шаг в приготовлении пищи. Вы можете разместить ингредиенты, щелкнув правой кнопкой мыши по разделочной доске и щелкнув правой кнопкой мыши $(6)Нож-тесак$() , и эти ингредиенты будут измельчены. $(br)Чтобы удалить ингредиенты, Присесть + правый клик по разделочной доске. $(br2)$(l:getting_started/effects)Твёрдые руки$() будут вашими друзьями при использовании разделочных досок."
+    },
+    {
+      "type": "crafting",
+      "recipe": "sushigocrafting:cutting_board",
+      "recipe2": "sushigocrafting:cleaver_knife"
+    }
+  ]
+}
