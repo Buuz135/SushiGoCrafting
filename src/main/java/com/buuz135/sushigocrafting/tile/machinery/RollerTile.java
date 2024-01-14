@@ -86,6 +86,7 @@ public class RollerTile extends ActiveTile<RollerTile> {
                     return false;
                 })
         );
+        addInventory(spices);
         FoodAPI.get().getTypeFromName(this.selected).ifPresent(iFoodType -> {
             for (int slot = 0; slot < slots.getSlots(); slot++) {
                 slots.setSlotToItemStackRender(slot, iFoodType.getSlotStackRender().apply(slot));
