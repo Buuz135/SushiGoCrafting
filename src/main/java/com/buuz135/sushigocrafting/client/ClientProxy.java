@@ -11,6 +11,7 @@ import com.buuz135.sushigocrafting.client.entity.TunaRenderer;
 import com.buuz135.sushigocrafting.client.entity.model.ShrimpModel;
 import com.buuz135.sushigocrafting.client.render.ContributorsBackRender;
 import com.buuz135.sushigocrafting.client.tesr.CuttingBoardRenderer;
+import com.buuz135.sushigocrafting.client.tesr.RollerRenderer;
 import com.buuz135.sushigocrafting.proxy.SushiContent;
 import com.hrznstudio.titanium.event.handler.EventManager;
 import net.minecraft.ChatFormatting;
@@ -37,6 +38,8 @@ public class ClientProxy {
             event.registerEntityRenderer(SushiContent.EntityTypes.TUNA.get(), TunaRenderer::new);
             event.registerEntityRenderer(SushiContent.EntityTypes.SHRIMP.get(), ShrimpRenderer::new);
             event.registerBlockEntityRenderer(SushiContent.TileEntities.CUTTING_BOARD.get(), p_173571_ -> new CuttingBoardRenderer());
+            event.registerBlockEntityRenderer(SushiContent.TileEntities.ROLLER.get(), p_173571_ -> new RollerRenderer());
+
         }).subscribe();
         EventManager.mod(EntityRenderersEvent.AddLayers.class).process(event -> {
             for (String skin : event.getSkins()) {

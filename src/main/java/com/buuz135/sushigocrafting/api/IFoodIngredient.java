@@ -25,4 +25,7 @@ public interface IFoodIngredient {
     int getSaturationValue();
 
     DietType getDietType();
+
+    IFoodIngredientRenderer getRenderer();
+
 }

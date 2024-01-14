@@ -279,10 +279,17 @@ public class RollerTile extends ActiveTile<RollerTile> {
         return RollerAssetProvider.INSTANCE;
     }
 
-    private class WeightTracker implements INBTSerializable<CompoundTag> {
+    public WeightTracker getWeightTracker() {
+        return weightTracker;
+    }
+
+    public InventoryComponent<RollerTile> getSpices() {
+        return spices;
+    }
+
+    public class WeightTracker implements INBTSerializable<CompoundTag> {
 
         private List<Integer> weights;
-
 
         public WeightTracker(int amount) {
             weights = new ArrayList<>();
@@ -304,6 +311,10 @@ public class RollerTile extends ActiveTile<RollerTile> {
             for (int i : nbt.getIntArray("Weights")) {
                 weights.add(i);
             }
+        }
+
+        public List<Integer> getWeights() {
+            return weights;
         }
     }
 }
