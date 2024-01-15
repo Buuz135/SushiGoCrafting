@@ -43,7 +43,7 @@ public class RollerRenderer implements BlockEntityRenderer<RollerTile> {
                 if (!ingredient.isEmpty()) {
                     var renderer = ingredient.getRenderer();
                     if (renderer != null) {
-                        var offset = renderer.render(matrix, bufferIn, 0, combinedLightIn, combinedOverlayIn);
+                        var offset = renderer.get().render(matrix, bufferIn, 0, combinedLightIn, combinedOverlayIn);
                         matrix.translate(0, offset.getSecond(), offset.getFirst());
                     }
                 }
@@ -56,7 +56,7 @@ public class RollerRenderer implements BlockEntityRenderer<RollerTile> {
                 if (!ingredient.isEmpty()) {
                     var renderer = ingredient.getRenderer();
                     if (renderer != null) {
-                        var offset = renderer.render(matrix, bufferIn, tileEntityIn.getWeightTracker().getWeights().get(i), combinedLightIn, combinedOverlayIn);
+                        var offset = renderer.get().render(matrix, bufferIn, tileEntityIn.getWeightTracker().getWeights().get(i), combinedLightIn, combinedOverlayIn);
                         matrix.translate(0, offset.getSecond(), offset.getFirst());
                     }
                 }
