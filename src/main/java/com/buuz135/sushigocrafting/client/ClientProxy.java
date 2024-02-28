@@ -43,8 +43,10 @@ public class ClientProxy {
         }).subscribe();
         EventManager.mod(EntityRenderersEvent.AddLayers.class).process(event -> {
             for (String skin : event.getSkins()) {
-                PlayerRenderer renderer = event.getSkin(skin);
-                renderer.addLayer(new ContributorsBackRender(renderer));
+                var renderer = event.getSkin(skin);
+                if (renderer instanceof PlayerRenderer playerRenderer) {
+                    playerRenderer.addLayer(new ContributorsBackRender(playerRenderer));
+                }
             }
         }).subscribe();
         EventManager.mod(EntityRenderersEvent.RegisterLayerDefinitions.class).process(event -> {
