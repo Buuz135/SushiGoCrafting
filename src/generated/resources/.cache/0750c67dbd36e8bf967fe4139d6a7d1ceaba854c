@@ -1,6 +1,8 @@
-// 1.20.1	2023-10-01T16:25:07.2861588	Tags for minecraft:block mod id sushigocrafting
+// 1.20.1	2024-02-28T20:06:47.340833	Tags for minecraft:block mod id sushigocrafting
 1eb3932dc2e19470298938affe8bd08c6039397b data/minecraft/tags/blocks/bee_growables.json
 1eb3932dc2e19470298938affe8bd08c6039397b data/minecraft/tags/blocks/crops.json
 b310b9b8b01a9a63ac922bbdef060e8080520dfb data/minecraft/tags/blocks/leaves.json
 a57b1227a346e6bb880267ad9f8348b763efe539 data/minecraft/tags/blocks/logs.json
+369af28dc854397a05bc052039c2012306188cb3 data/minecraft/tags/blocks/mineable/axe.json
+41d84ea55bfbda37b7d10d7e0c718f3af9eec838 data/minecraft/tags/blocks/mineable/pickaxe.json
 519d0d6c760ab3e0dbf1490e14f3f22a2f9ebcc5 data/minecraft/tags/blocks/saplings.json

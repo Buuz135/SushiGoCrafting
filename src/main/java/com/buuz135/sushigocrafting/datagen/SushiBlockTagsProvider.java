@@ -29,5 +29,11 @@ public class SushiBlockTagsProvider extends BlockTagsProvider {
             tag(BlockTags.CROPS).add(block);
             tag(BlockTags.BEE_GROWABLES).add(block);
         }
+        tag(BlockTags.MINEABLE_WITH_AXE).add(SushiContent.Blocks.AVOCADO_LOG.get(),
+                SushiContent.Blocks.AVOCADO_LEAVES_LOG.get(),
+                SushiContent.Blocks.ROLLER.get(),
+                SushiContent.Blocks.CUTTING_BOARD.get(),
+                SushiContent.Blocks.FERMENTATION_BARREL.get());
+        tag(BlockTags.MINEABLE_WITH_PICKAXE).add(SushiContent.Blocks.RICE_COOKER.get(), SushiContent.Blocks.COOLER_BOX.get());
     }
 }
