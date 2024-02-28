@@ -24,7 +24,7 @@ jobs:
       - name: build
         run: ./gradlew build
       - name: Publish Minecraft Mods Forge
-        uses: Kir-Antipov/mc-publish@v3.2
+        uses: Kir-Antipov/mc-publish@v3.2.0
         with:
           curseforge-id: 452500
           modrinth-id: G9WbcGQ2
