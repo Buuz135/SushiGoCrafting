@@ -1,6 +1,6 @@
 {
   "name": "Seaweed",
-  "icon": "sushigocrafting:seaweed",
+  "icon": "minecraft:kelp",
   "category": "sushigocrafting:world",
   "sortnum": 1,
   "read_by_default": false,
