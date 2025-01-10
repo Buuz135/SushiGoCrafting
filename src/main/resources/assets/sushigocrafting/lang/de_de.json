@@ -1,4 +1,6 @@
 {
+    "itemGroup.sushigocrafting": "Sushi Go Crafting",
+
     "block.sushigocrafting.avocado_leaves": "Avocadoblätter",
     "block.sushigocrafting.avocado_leaves_logged": "Avocadoblätter mit Stamm",
     "block.sushigocrafting.avocado_log": "Avocadostamm",
@@ -13,14 +15,17 @@
     "block.sushigocrafting.sesame_crop": "Sesamsamen",
     "block.sushigocrafting.soy_crop": "Sojasamen",
     "block.sushigocrafting.wasabi_crop": "Wasabiesamen",
+
     "effect.sushigocrafting.acquired_taste": "Erworbener Geschmack",
     "effect.sushigocrafting.acquired_taste.description": "Gibt zusätzliche Nährstoffe und Sättigung beim Essen",
     "effect.sushigocrafting.small_bites": "Kleine Happen",
     "effect.sushigocrafting.small_bites.description": "Eine Chance, dir das Essen, das du isst, zurückzugeben",
     "effect.sushigocrafting.steady_hands": "Ruhige Hände",
     "effect.sushigocrafting.steady_hands.description": "Erhöht die Menge, die du beim Schneiden auf dem Schneidebrett erhältst",
+
     "entity.sushigocrafting.shrimp": "Garnele",
     "entity.sushigocrafting.tuna": "Thunfisch",
+
     "item.sushigocrafting.avocado": "Avocado",
     "item.sushigocrafting.avocado_maki": "Avocado Maki",
     "item.sushigocrafting.avocado_slices": "Avocado Scheiben",
@@ -78,6 +83,33 @@
     "item.sushigocrafting.wakame_gunkan": "Wakame Gunkan",
     "item.sushigocrafting.wasabi_paste": "Wasabipaste",
     "item.sushigocrafting.wasabi_root": "Wasabiwurzel",
-    "itemGroup.sushigocrafting": "Sushi Go Crafting",
-    "text.sushigocrafting.book.title": "Werde zum Sushichef"
+
+    "text.sushigocrafting.book.title": "Werde zum Sushichef",
+    "text.sushigocrafting.effects": "Effekte",
+    "text.sushigocrafting.hunger": "Hunger",
+    "text.sushigocrafting.saturation": "Sättigung",
+    "text.sushigocrafting.hold": "Halten",
+    "text.sushigocrafting.sushi_effect": " für Sushi Effekte",
+    "text.sushigocrafting.perfect": "Perfekt",
+    "text.sushigocrafting.weirdly_balanced": "Seltsam ausbalanciert",
+    "text.sushigocrafting.almost_hollow": "Fast hohl",
+    "text.sushigocrafting.overflowing": "Überlaufend",
+    "text.sushigocrafting.add_food_effect": "Fügt Nahrungseffekt hinzu",
+    "text.sushigocrafting.modify_food_effect": "Ändert Nahrungseffekt",
+    "text.sushigocrafting.increase_level_by": "Erhöht Level um",
+    "text.sushigocrafting.multiply_time_by": "Multipliziert Zeit um",
+    "text.sushigocrafting.weight": "Gewichtung",
+    "text.sushigocrafting.consumes": "Verbraucht",
+    "text.sushigocrafting.left_click_increase": "Linksklick zum Erhöhen",
+    "text.sushigocrafting.right_click_decrease": "Rechtsklick zum Verringern",
+    "text.sushigocrafting.list_ingredients": "Listet alle Sushi Go Crafting Zutaten auf",
+    "text.sushigocrafting.list_oof_ingredients": "Liste aller bekannten Zutaten",
+    "text.sushigocrafting.food_ingredients": "Zutaten",
+    "text.sushigocrafting.amount": "Menge",
+    "text.sushigocrafting.discovered_a": "Du hast ein",
+    "text.sushigocrafting.perfect_weight": "neues perfektes Gewicht entdeckt!",
+    "text.sushigocrafting.make_one": "Linksklick, um 1 zu machen",
+    "text.sushigocrafting.make_64": "Rechtsklick, um 64 zu machen",
+    "text.sushigocrafting.roll": "Rollen",
+    "text.sushigocrafting.button": "Knopf"
   }
