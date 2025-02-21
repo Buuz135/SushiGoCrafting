@@ -27,6 +27,8 @@ import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvents;
+import net.minecraft.tags.BlockTags;
+import net.minecraft.tags.TagKey;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
@@ -56,6 +58,8 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.Optional;
 import java.util.function.Supplier;
+
+import static com.buuz135.sushigocrafting.SushiGoCrafting.MOD_ID;
 
 public class SushiContent {
 
@@ -285,5 +289,10 @@ public class SushiContent {
                     }
                 })
                 .build());
+    }
+
+    public static class Tags {
+        public static final TagKey<Block> PRESSING_BASE = BlockTags.create(ResourceLocation.tryBuild(MOD_ID, "pressing_base"));
+
     }
 }
