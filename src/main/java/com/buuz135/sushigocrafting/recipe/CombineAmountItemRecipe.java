@@ -1,13 +1,13 @@
 package com.buuz135.sushigocrafting.recipe;
 
 import com.buuz135.sushigocrafting.item.AmountItem;
+import com.buuz135.sushigocrafting.item.SushiDataComponent;
 import com.buuz135.sushigocrafting.proxy.SushiContent;
 import com.google.common.collect.Lists;
-import net.minecraft.core.RegistryAccess;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.inventory.CraftingContainer;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.CraftingBookCategory;
+import net.minecraft.world.item.crafting.CraftingInput;
 import net.minecraft.world.item.crafting.CustomRecipe;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.level.Level;
@@ -17,8 +17,8 @@ import java.util.List;
 public class CombineAmountItemRecipe extends CustomRecipe {
 
 
-    public CombineAmountItemRecipe(ResourceLocation idIn) {
-        super(idIn, CraftingBookCategory.MISC);
+    public CombineAmountItemRecipe() {
+        super(CraftingBookCategory.MISC);
     }
 
     public static boolean stackMatches(ItemStack first, ItemStack second) {
@@ -35,7 +35,7 @@ public class CombineAmountItemRecipe extends CustomRecipe {
             ItemStack second = list.get(1);
             if (first.getItem() == second.getItem() && first.getCount() == 1 && second.getCount() == 1 && first.getItem() instanceof AmountItem) {
                 ItemStack output = new ItemStack(first.getItem());
-                output.getOrCreateTag().putInt(AmountItem.NBT_AMOUNT, Math.min(((AmountItem) first.getItem()).getMaxCombineAmount(), ((AmountItem) first.getItem()).getCurrentAmount(first) + ((AmountItem) second.getItem()).getCurrentAmount(second)));
+                output.set(SushiDataComponent.AMOUNT, Math.min(((AmountItem) first.getItem()).getMaxCombineAmount(), ((AmountItem) first.getItem()).getCurrentAmount(first) + ((AmountItem) second.getItem()).getCurrentAmount(second)));
                 return output;
             }
         }
@@ -43,9 +43,9 @@ public class CombineAmountItemRecipe extends CustomRecipe {
     }
 
     @Override
-    public boolean matches(CraftingContainer inv, Level worldIn) {
+    public boolean matches(CraftingInput inv, Level worldIn) {
         List<ItemStack> list = Lists.newArrayList();
-        for (int i = 0; i < inv.getContainerSize(); ++i) {
+        for (int i = 0; i < inv.size(); ++i) {
             ItemStack itemstack = inv.getItem(i);
             if (!itemstack.isEmpty()) {
                 list.add(itemstack);
@@ -61,9 +61,9 @@ public class CombineAmountItemRecipe extends CustomRecipe {
     }
 
     @Override
-    public ItemStack assemble(CraftingContainer inv, RegistryAccess registryAccess) {
+    public ItemStack assemble(CraftingInput inv, HolderLookup.Provider provider) {
         List<ItemStack> list = Lists.newArrayList();
-        for (int i = 0; i < inv.getContainerSize(); ++i) {
+        for (int i = 0; i < inv.size(); ++i) {
             ItemStack itemstack = inv.getItem(i);
             if (!itemstack.isEmpty()) {
                 list.add(itemstack);

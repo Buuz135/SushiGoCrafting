@@ -10,6 +10,7 @@ import com.buuz135.sushigocrafting.client.gui.provider.RollerAssetProvider;
 import com.buuz135.sushigocrafting.component.FoodTypeButtonComponent;
 import com.buuz135.sushigocrafting.component.RollerCraftButtonComponent;
 import com.buuz135.sushigocrafting.item.FoodItem;
+import com.buuz135.sushigocrafting.item.SushiDataComponent;
 import com.buuz135.sushigocrafting.proxy.SushiContent;
 import com.hrznstudio.titanium.annotation.Save;
 import com.hrznstudio.titanium.block.tile.ActiveTile;
@@ -17,20 +18,22 @@ import com.hrznstudio.titanium.client.screen.asset.IAssetProvider;
 import com.hrznstudio.titanium.component.inventory.InventoryComponent;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.Containers;
 import net.minecraft.world.InteractionHand;
-import net.minecraft.world.InteractionResult;
+import net.minecraft.world.ItemInteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.common.util.INBTSerializable;
-import net.minecraftforge.items.ItemHandlerHelper;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
+import net.neoforged.neoforge.common.util.INBTSerializable;
+import net.neoforged.neoforge.items.ItemHandlerHelper;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -43,13 +46,13 @@ public class RollerTile extends ActiveTile<RollerTile> {
     @Save
     private final InventoryComponent<RollerTile> slots;
     @Save
-    private String selected;
-    @Save
     private final WeightTracker weightTracker;
     @Save
-    private int craftProgress;
-    @Save
     private final InventoryComponent<RollerTile> spices;
+    @Save
+    private String selected;
+    @Save
+    private int craftProgress;
 
     public RollerTile(BlockPos pos, BlockState state) {
         super(SushiContent.Blocks.ROLLER.get(), SushiContent.TileEntities.ROLLER.get(), pos, state);
@@ -129,14 +132,18 @@ public class RollerTile extends ActiveTile<RollerTile> {
     }
 
     @Override
-    public InteractionResult onActivated(Player player, InteractionHand hand, Direction facing, double hitX, double hitY, double hitZ) {
-        InteractionResult type = super.onActivated(player, hand, facing, hitX, hitY, hitZ);
-        if (!type.shouldSwing()) {
+    public ItemInteractionResult onActivated(Player player, InteractionHand hand, Direction facing, double hitX, double hitY, double hitZ) {
+        ItemInteractionResult type = super.onActivated(player, hand, facing, hitX, hitY, hitZ);
+        if (!type.result().shouldSwing()) {
+            if (!player.hasData(SushiContent.AttachmentTypes.SUSHI_WEIGHT_DISCOVERY)) {
+                player.setData(SushiContent.AttachmentTypes.SUSHI_WEIGHT_DISCOVERY, new SushiWeightDiscoveryCapability());
+            }
+            var data = player.getData(SushiContent.AttachmentTypes.SUSHI_WEIGHT_DISCOVERY);
             if (player instanceof ServerPlayer) {
-                player.getCapability(SushiWeightDiscoveryCapability.CAPABILITY).ifPresent(iSushiWeightDiscovery -> iSushiWeightDiscovery.requestUpdate((ServerPlayer) player, ItemStack.EMPTY));
+                data.requestUpdate((ServerPlayer) player, new ItemStack(Items.STONE), null);
             }
             openGui(player);
-            return InteractionResult.SUCCESS;
+            return ItemInteractionResult.SUCCESS;
         }
         return type;
     }
@@ -179,16 +186,15 @@ public class RollerTile extends ActiveTile<RollerTile> {
                                     weightValues.add(value);
                                     if (value == 0 && !ingredient.isEmpty()) {
                                         int finalSlot = slot;
-                                        player.getCapability(SushiWeightDiscoveryCapability.CAPABILITY).ifPresent(iSushiWeightDiscovery -> {
-                                            if (!iSushiWeightDiscovery.hasDiscovery(selected + "-" + finalSlot)) {
-                                                iSushiWeightDiscovery.setDiscovery(selected + "-" + finalSlot, weightTracker.weights.get(finalSlot));
-                                                discovery.set(stack.copy());
-                                            }
-                                        });
+                                        var iSushiWeightDiscovery = player.getData(SushiContent.AttachmentTypes.SUSHI_WEIGHT_DISCOVERY);
+                                        if (!iSushiWeightDiscovery.hasDiscovery(selected + "-" + finalSlot)) {
+                                            iSushiWeightDiscovery.setDiscovery(selected + "-" + finalSlot, weightTracker.weights.get(finalSlot));
+                                            discovery.set(stack.copy());
+                                        }
                                     }
                                 }
                             }
-                            stack.getOrCreateTag().putIntArray(FoodItem.WEIGHTS_TAG, weightValues);
+                            stack.set(SushiDataComponent.FOOD_WEIGHTS, weightValues);
                             CompoundTag spicesNBT = new CompoundTag();
                             for (int i = 0; i < spices.getSlots(); i++) {
                                 if (!spices.getStackInSlot(i).isEmpty()) {
@@ -199,11 +205,11 @@ public class RollerTile extends ActiveTile<RollerTile> {
                                     }
                                 }
                             }
-                            stack.getOrCreateTag().put(FoodItem.SPICES_TAG, spicesNBT);
+                            stack.set(SushiDataComponent.FOOD_SPICES, spicesNBT);
                             Containers.dropItemStack(this.level, this.worldPosition.getX(), this.getBlockPos().getY(), this.getBlockPos().getZ(), stack);
                         }
-                        if (player instanceof ServerPlayer) {
-                            player.getCapability(SushiWeightDiscoveryCapability.CAPABILITY).ifPresent(iSushiWeightDiscovery -> iSushiWeightDiscovery.requestUpdate((ServerPlayer) player, discovery.get()));
+                        if (player instanceof ServerPlayer && !discovery.get().isEmpty()) {
+                            player.getData(SushiContent.AttachmentTypes.SUSHI_WEIGHT_DISCOVERY).requestUpdate((ServerPlayer) player, discovery.get(), null);
                         }
                         markForUpdate();
                     }
@@ -300,14 +306,14 @@ public class RollerTile extends ActiveTile<RollerTile> {
         }
 
         @Override
-        public CompoundTag serializeNBT() {
+        public CompoundTag serializeNBT(HolderLookup.Provider provider) {
             CompoundTag compoundNBT = new CompoundTag();
             compoundNBT.putIntArray("Weights", weights);
             return compoundNBT;
         }
 
         @Override
-        public void deserializeNBT(CompoundTag nbt) {
+        public void deserializeNBT(HolderLookup.Provider provider, CompoundTag nbt) {
             weights = new ArrayList<>();
             for (int i : nbt.getIntArray("Weights")) {
                 weights.add(i);

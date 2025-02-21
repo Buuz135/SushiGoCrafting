@@ -7,7 +7,7 @@ import net.minecraft.world.effect.MobEffectCategory;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.food.FoodProperties;
-import net.minecraftforge.event.entity.living.LivingEntityUseItemEvent;
+import net.neoforged.neoforge.event.entity.living.LivingEntityUseItemEvent;
 
 import java.awt.*;
 
@@ -15,13 +15,13 @@ public class AcquiredTasteEffect extends MobEffect {
 
     static {
         EventManager.forge(LivingEntityUseItemEvent.Finish.class)
-                .filter(finish -> finish.getItem().isEdible() && finish.getEntity().hasEffect(SushiContent.Effects.ACQUIRED_TASTE.get()))
+                .filter(finish -> finish.getItem().getFoodProperties(finish.getEntity()) != null && finish.getEntity().hasEffect(SushiContent.Effects.ACQUIRED_TASTE))
                 .process(finish -> {
-                    MobEffectInstance instance = finish.getEntity().getEffect(SushiContent.Effects.ACQUIRED_TASTE.get());
-                    if (!finish.getEntity().level().isClientSide() && finish.getEntity() instanceof Player) {
-                        FoodProperties food = finish.getItem().getItem().getFoodProperties();
+                    MobEffectInstance instance = finish.getEntity().getEffect(SushiContent.Effects.ACQUIRED_TASTE.getDelegate());
+                    if (!finish.getEntity().level().isClientSide() && finish.getEntity() instanceof Player player) {
+                        FoodProperties food = finish.getItem().getFoodProperties(player);
                         int amplifier = instance.getAmplifier() + 1;
-                        ((Player) finish.getEntity()).getFoodData().eat(food.getNutrition() * (amplifier / 10), food.getSaturationModifier() * (amplifier / 10F));
+                        player.getFoodData().eat(food.nutrition() * (amplifier / 10), food.saturation() * (amplifier / 10F));
                     }
                 }).subscribe();
     }

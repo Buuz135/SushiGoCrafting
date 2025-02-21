@@ -9,11 +9,11 @@ import com.hrznstudio.titanium.client.screen.asset.DefaultAssetProvider;
 import com.hrznstudio.titanium.client.screen.asset.IAssetProvider;
 import com.hrznstudio.titanium.util.AssetUtil;
 import mezz.jei.api.constants.VanillaTypes;
-import mezz.jei.api.forge.ForgeTypes;
 import mezz.jei.api.gui.builder.IRecipeLayoutBuilder;
 import mezz.jei.api.gui.drawable.IDrawable;
 import mezz.jei.api.gui.ingredient.IRecipeSlotsView;
 import mezz.jei.api.helpers.IGuiHelper;
+import mezz.jei.api.neoforge.NeoForgeTypes;
 import mezz.jei.api.recipe.IFocusGroup;
 import mezz.jei.api.recipe.RecipeIngredientRole;
 import mezz.jei.api.recipe.RecipeType;
@@ -25,7 +25,7 @@ import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.material.Fluids;
-import net.minecraftforge.fluids.FluidStack;
+import net.neoforged.neoforge.fluids.FluidStack;
 import org.apache.commons.lang3.tuple.Pair;
 
 import java.awt.*;
@@ -65,7 +65,7 @@ public class RiceCookerCategory implements IRecipeCategory<RiceCookerCategory.Ri
     public void setRecipe(IRecipeLayoutBuilder builder, RiceCookerRecipe recipe, IFocusGroup focuses) {
         builder.addSlot(RecipeIngredientRole.INPUT, 4, 3).addIngredients(Ingredient.of(RiceCookerTile.RICE));
         builder.addSlot(RecipeIngredientRole.INPUT, 30, 37).addIngredients(VanillaTypes.ITEM_STACK, JEIModPlugin.FUELS);
-        builder.addSlot(RecipeIngredientRole.INPUT, 6, 30).setFluidRenderer(2000, false, 12, 13).setOverlay(smallTank, 0, 0).addIngredient(ForgeTypes.FLUID_STACK, new FluidStack(Fluids.WATER, 1000));
+        builder.addSlot(RecipeIngredientRole.INPUT, 6, 30).setFluidRenderer(2000, false, 12, 13).setOverlay(smallTank, 0, 0).addIngredient(NeoForgeTypes.FLUID_STACK, new FluidStack(Fluids.WATER, 1000));
 
         builder.addSlot(RecipeIngredientRole.OUTPUT, 60, 16).addIngredient(VanillaTypes.ITEM_STACK, SushiContent.Items.COOKED_RICE.get().withAmount(50));
     }

@@ -112,7 +112,7 @@ public class RiceCookerBlock extends RotatableBlock<RiceCookerTile> {
     }).get();
 
     public RiceCookerBlock() {
-        super("rice_cooker", Properties.copy(Blocks.IRON_BLOCK), RiceCookerTile.class);
+        super("rice_cooker", Properties.ofFullCopy(Blocks.IRON_BLOCK), RiceCookerTile.class);
     }
 
     @Override

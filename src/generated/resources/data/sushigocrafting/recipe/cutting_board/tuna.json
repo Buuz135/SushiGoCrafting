@@ -1,0 +1,7 @@
+{
+  "type": "sushigocrafting:cutting_board",
+  "ingredient": "tuna",
+  "input": {
+    "tag": "c:raw_fishes/tuna"
+  }
+}

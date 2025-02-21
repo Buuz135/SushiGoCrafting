@@ -7,8 +7,9 @@ import com.blamejared.crafttweaker.api.recipe.manager.base.IRecipeManager;
 import com.blamejared.crafttweaker.api.util.IngredientUtil;
 import com.blamejared.crafttweaker.api.util.StringUtil;
 import com.buuz135.sushigocrafting.recipe.CuttingBoardRecipe;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.core.RegistryAccess;
 import net.minecraft.world.item.crafting.Recipe;
+import net.minecraft.world.item.crafting.RecipeHolder;
 
 import java.util.Optional;
 
@@ -16,8 +17,8 @@ import java.util.Optional;
 public class CuttingBoardHandler implements IRecipeHandler<CuttingBoardRecipe> {
 
     @Override
-    public String dumpToCommandString(IRecipeManager manager, CuttingBoardRecipe recipe) {
-        return String.format("<recipetype:sushigocrafting:cutting_board>.addRecipe(%s, %s, %s);", StringUtil.quoteAndEscape(recipe.getId()), IIngredient.fromIngredient(recipe.getInput()).getCommandString(), StringUtil.quoteAndEscape(recipe.ingredient));
+    public String dumpToCommandString(IRecipeManager<? super CuttingBoardRecipe> iRecipeManager, RegistryAccess registryAccess, RecipeHolder<CuttingBoardRecipe> recipeHolder) {
+        return String.format("<recipetype:sushigocrafting:cutting_board>.addRecipe(%s, %s, %s);", StringUtil.quoteAndEscape(recipeHolder.id()), IIngredient.fromIngredient(recipeHolder.value().getInput()).getCommandString(), StringUtil.quoteAndEscape(recipeHolder.value().ingredient));
     }
 
     /*@Override
@@ -36,12 +37,13 @@ public class CuttingBoardHandler implements IRecipeHandler<CuttingBoardRecipe> {
     }
 
     @Override
-    public Optional<IDecomposedRecipe> decompose(IRecipeManager<? super CuttingBoardRecipe> manager, CuttingBoardRecipe recipe) {
+    public Optional<IDecomposedRecipe> decompose(IRecipeManager<? super CuttingBoardRecipe> iRecipeManager, RegistryAccess registryAccess, CuttingBoardRecipe cuttingBoardRecipe) {
         return Optional.empty();
     }
 
     @Override
-    public Optional<CuttingBoardRecipe> recompose(IRecipeManager<? super CuttingBoardRecipe> manager, ResourceLocation name, IDecomposedRecipe recipe) {
+    public Optional<CuttingBoardRecipe> recompose(IRecipeManager<? super CuttingBoardRecipe> iRecipeManager, RegistryAccess registryAccess, IDecomposedRecipe iDecomposedRecipe) {
         return Optional.empty();
     }
+
 }

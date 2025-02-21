@@ -34,11 +34,13 @@ jobs:
           files-secondary: build/libs/*-@(dev|sources).jar
           version-type: beta
           version: ${{ github.ref_name }}
-          loaders: forge
-          game-versions: 1.20.1
-          java: 17
+          loaders: neoforge
+          game-versions: |
+            1.21
+            1.21.1
+          java: 21
           name: ""
-          changelog: "https://github.com/Buuz135/SushiGoCrafting/commits/1.20"
+          changelog: "https://github.com/Buuz135/SushiGoCrafting/commits/1.21"
           dependencies: |
             titanium | depends
-            patchouli | depends
+            patchouli | optional

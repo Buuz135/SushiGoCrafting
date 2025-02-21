@@ -1,12 +1,12 @@
 package com.buuz135.sushigocrafting.datagen;
 
 import com.buuz135.sushigocrafting.proxy.SushiContent;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.item.BlockItem;
-import net.minecraftforge.common.data.LanguageProvider;
-import net.minecraftforge.registries.ForgeRegistries;
-import net.minecraftforge.registries.RegistryObject;
+import net.neoforged.neoforge.common.data.LanguageProvider;
+import net.neoforged.neoforge.registries.DeferredHolder;
 import org.apache.commons.lang3.text.WordUtils;
 
 public class SushiLangProvider extends LanguageProvider {
@@ -48,14 +48,14 @@ public class SushiLangProvider extends LanguageProvider {
         add("text.sushigocrafting.make_64", "Right Click to make 64");
         add("text.sushigocrafting.roll", "Roll");
         add("text.sushigocrafting.button", "Button");
-        SushiContent.Items.REGISTRY.getEntries().stream().map(RegistryObject::get).filter(item -> item instanceof BlockItem).map(item -> (BlockItem) item).forEach(blockItem -> {
-            add(blockItem, WordUtils.capitalize(ForgeRegistries.ITEMS.getKey(blockItem).getPath().replaceAll("_", " ")));
+        SushiContent.Items.REGISTRY.getEntries().stream().map(DeferredHolder::get).filter(item -> item instanceof BlockItem).map(item -> (BlockItem) item).forEach(blockItem -> {
+            add(blockItem, WordUtils.capitalize(BuiltInRegistries.ITEM.getKey(blockItem).getPath().replaceAll("_", " ")));
         });
-        SushiContent.Items.REGISTRY.getEntries().stream().map(RegistryObject::get).filter(item -> !(item instanceof BlockItem)).forEach(item -> {
-            add(item, WordUtils.capitalize(ForgeRegistries.ITEMS.getKey(item).getPath().replaceAll("_", " ")));
+        SushiContent.Items.REGISTRY.getEntries().stream().map(DeferredHolder::get).filter(item -> !(item instanceof BlockItem)).forEach(item -> {
+            add(item, WordUtils.capitalize(BuiltInRegistries.ITEM.getKey(item).getPath().replaceAll("_", " ")));
         });
-        SushiContent.Effects.REGISTRY.getEntries().stream().map(RegistryObject::get).forEach(effect -> {
-            add(effect, WordUtils.capitalize(ForgeRegistries.MOB_EFFECTS.getKey(effect).getPath().replaceAll("_", " ")));
+        SushiContent.Effects.REGISTRY.getEntries().stream().map(DeferredHolder::get).forEach(effect -> {
+            add(effect, WordUtils.capitalize(BuiltInRegistries.MOB_EFFECT.getKey(effect).getPath().replaceAll("_", " ")));
         });
 
         addDesc(SushiContent.Effects.STEADY_HANDS, "Increases the amount you get from chopping on the cutting board");
@@ -63,7 +63,7 @@ public class SushiLangProvider extends LanguageProvider {
         addDesc(SushiContent.Effects.SMALL_BITES, "A chance to give you back the food you are eating");
     }
 
-    private void addDesc(RegistryObject<MobEffect> effect, String description) {
+    private void addDesc(DeferredHolder<MobEffect, MobEffect> effect, String description) {
         add(effect.get().getDescriptionId() + ".description", description);
     }
 }

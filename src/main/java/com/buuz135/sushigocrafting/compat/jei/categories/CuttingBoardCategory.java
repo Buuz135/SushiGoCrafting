@@ -57,7 +57,7 @@ public class CuttingBoardCategory implements IRecipeCategory<CuttingBoardRecipe>
 
     @Override
     public void draw(CuttingBoardRecipe recipe, IRecipeSlotsView recipeSlotsView, GuiGraphics guiGraphics, double mouseX, double mouseY) {
-        guiGraphics.blit(new ResourceLocation(SushiGoCrafting.MOD_ID, "textures/gui/jei.png"), 31, 22, 0, 0, 15, 22);
+        guiGraphics.blit(ResourceLocation.fromNamespaceAndPath(SushiGoCrafting.MOD_ID, "textures/gui/jei.png"), 31, 22, 0, 0, 15, 22);
         float scale = 4;
         //matrixStack.translate(0,0, 100);
         //matrixStack.translate(0,0, -200);

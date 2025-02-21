@@ -1,0 +1,30 @@
+{
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:item_exists",
+      "item": "sushigocrafting:fermentation_barrel"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "F": {
+      "item": "minecraft:furnace"
+    },
+    "G": {
+      "tag": "minecraft:wooden_pressure_plates"
+    },
+    "I": {
+      "tag": "minecraft:planks"
+    }
+  },
+  "pattern": [
+    "IGI",
+    "IFI",
+    "III"
+  ],
+  "result": {
+    "count": 1,
+    "id": "sushigocrafting:fermentation_barrel"
+  }
+}

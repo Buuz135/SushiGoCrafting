@@ -2,21 +2,15 @@ package com.buuz135.sushigocrafting.cap;
 
 import com.buuz135.sushigocrafting.SushiGoCrafting;
 import com.buuz135.sushigocrafting.network.CapabilitySyncMessage;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.item.ItemStack;
-import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.common.capabilities.CapabilityManager;
-import net.minecraftforge.common.capabilities.CapabilityToken;
-import net.minecraftforge.network.NetworkDirection;
 
 import java.util.HashMap;
 import java.util.Map;
 
 public class SushiWeightDiscoveryCapability implements ISushiWeightDiscovery {
-
-    public static Capability<ISushiWeightDiscovery> CAPABILITY = CapabilityManager.get(new CapabilityToken<>() {
-    });
 
     private final Map<String, Integer> discoveryLevels;
 
@@ -25,8 +19,8 @@ public class SushiWeightDiscoveryCapability implements ISushiWeightDiscovery {
     }
 
     @Override
-    public void requestUpdate(ServerPlayer entity, ItemStack discovery) {
-        SushiGoCrafting.NETWORK.get().sendTo(new CapabilitySyncMessage(serializeNBT(), discovery), entity.connection.connection, NetworkDirection.PLAY_TO_CLIENT);
+    public void requestUpdate(ServerPlayer entity, ItemStack discovery, HolderLookup.Provider provider) {
+        SushiGoCrafting.NETWORK.sendTo(new CapabilitySyncMessage(serializeNBT(provider), discovery), entity);
     }
 
     @Override
@@ -45,7 +39,7 @@ public class SushiWeightDiscoveryCapability implements ISushiWeightDiscovery {
     }
 
     @Override
-    public CompoundTag serializeNBT() {
+    public CompoundTag serializeNBT(HolderLookup.Provider provider) {
         CompoundTag compoundNBT = new CompoundTag();
         for (String name : this.discoveryLevels.keySet()) {
             compoundNBT.putInt(name, this.discoveryLevels.get(name));
@@ -54,7 +48,7 @@ public class SushiWeightDiscoveryCapability implements ISushiWeightDiscovery {
     }
 
     @Override
-    public void deserializeNBT(CompoundTag nbt) {
+    public void deserializeNBT(HolderLookup.Provider provider, CompoundTag nbt) {
         this.discoveryLevels.clear();
         for (String name : nbt.getAllKeys()) {
             this.discoveryLevels.put(name, nbt.getInt(name));

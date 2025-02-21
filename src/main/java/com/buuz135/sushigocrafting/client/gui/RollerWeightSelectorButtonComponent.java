@@ -3,8 +3,8 @@ package com.buuz135.sushigocrafting.client.gui;
 import com.buuz135.sushigocrafting.api.IFoodIngredient;
 import com.buuz135.sushigocrafting.api.IIngredientConsumer;
 import com.buuz135.sushigocrafting.api.impl.FoodAPI;
-import com.buuz135.sushigocrafting.cap.SushiWeightDiscoveryCapability;
 import com.buuz135.sushigocrafting.client.gui.provider.SushiAssetTypes;
+import com.buuz135.sushigocrafting.proxy.SushiContent;
 import com.buuz135.sushigocrafting.tile.machinery.RollerTile;
 import com.hrznstudio.titanium.Titanium;
 import com.hrznstudio.titanium.api.client.IAsset;
@@ -53,12 +53,12 @@ public abstract class RollerWeightSelectorButtonComponent extends BasicScreenAdd
         if (asset != null && weight != Integer.MIN_VALUE) {
             AssetUtil.drawAsset(matrixStack, screen, asset, posX, posY + (4 - weight) * (ySize / 4) - 1);
         }
-        Minecraft.getInstance().player.getCapability(SushiWeightDiscoveryCapability.CAPABILITY).ifPresent(iSushiWeightDiscovery -> {
-            if (iSushiWeightDiscovery.hasDiscovery(type + "-" + slot)) {
-                int pos = posY + (4 - iSushiWeightDiscovery.getDiscovery(type + "-" + slot)) * (ySize / 4) - 1;
-                AssetUtil.drawAsset(matrixStack, screen, iAssetProvider.getAsset(SushiAssetTypes.ROLLER_WEIGHT_PERFECT_POINTER), posX + 1, pos + 1);
-            }
-        });
+        var iSushiWeightDiscovery = Minecraft.getInstance().player.getData(SushiContent.AttachmentTypes.SUSHI_WEIGHT_DISCOVERY);
+        if (iSushiWeightDiscovery.hasDiscovery(type + "-" + slot)) {
+            int pos = posY + (4 - iSushiWeightDiscovery.getDiscovery(type + "-" + slot)) * (ySize / 4) - 1;
+            AssetUtil.drawAsset(matrixStack, screen, iAssetProvider.getAsset(SushiAssetTypes.ROLLER_WEIGHT_PERFECT_POINTER), posX + 1, pos + 1);
+        }
+
     }
 
     @Override
@@ -94,15 +94,14 @@ public abstract class RollerWeightSelectorButtonComponent extends BasicScreenAdd
     @Override
     public boolean mouseClicked(double mouseX, double mouseY, int button) {
         Screen screen = Minecraft.getInstance().screen;
-        if (screen instanceof AbstractContainerScreen && ((AbstractContainerScreen) screen).getMenu() instanceof ILocatable) {
+        if (screen instanceof AbstractContainerScreen && ((AbstractContainerScreen) screen).getMenu() instanceof ILocatable locatable) {
             if (!isMouseOver(mouseX - ((AbstractContainerScreen<?>) screen).getGuiLeft(), mouseY - ((AbstractContainerScreen<?>) screen).getGuiTop()))
                 return false;
             Minecraft.getInstance().getSoundManager().play(new SimpleSoundInstance(SoundEvents.WOOD_FALL, SoundSource.PLAYERS, 0.5F, 1.0F, Minecraft.getInstance().level.getRandom(), Minecraft.getInstance().player.blockPosition()));
-            ILocatable locatable = (ILocatable) ((AbstractContainerScreen) screen).getMenu();
             CompoundTag nbt = new CompoundTag();
             nbt.putInt("WeightSlot", slot);
             nbt.putInt("Button", button);
-            Titanium.NETWORK.get().sendToServer(new ButtonClickNetworkMessage(locatable.getLocatorInstance(), 100, nbt));
+            Titanium.NETWORK.sendToServer(new ButtonClickNetworkMessage(locatable.getLocatorInstance(), 100, nbt));
             return true;
         }
         return super.mouseClicked(mouseX, mouseY, button);

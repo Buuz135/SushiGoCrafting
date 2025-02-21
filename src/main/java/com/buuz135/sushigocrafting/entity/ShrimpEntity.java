@@ -36,10 +36,10 @@ public class ShrimpEntity extends AbstractSchoolingFish implements ItemSteerable
     }
 
     @Override
-    protected void defineSynchedData() {
-        super.defineSynchedData();
-        this.entityData.define(SADDLED, false);
-        this.entityData.define(BOOST_TIME, 0);
+    protected void defineSynchedData(SynchedEntityData.Builder builder) {
+        super.defineSynchedData(builder);
+        builder.define(SADDLED, false);
+        builder.define(BOOST_TIME, 0);
     }
 
     @Override
@@ -58,10 +58,10 @@ public class ShrimpEntity extends AbstractSchoolingFish implements ItemSteerable
     }
 
     @Override
-    public void equipSaddle(@Nullable SoundSource p_230266_1_) {
+    public void equipSaddle(ItemStack itemStack, @org.jetbrains.annotations.Nullable SoundSource soundSource) {
         this.steering.setSaddle(true);
-        if (p_230266_1_ != null) {
-            this.level().playSound(null, this, SoundEvents.PIG_SADDLE, p_230266_1_, 0.5F, 1.0F);
+        if (soundSource != null) {
+            this.level().playSound(null, this, SoundEvents.PIG_SADDLE, soundSource, 0.5F, 1.0F);
         }
     }
 
@@ -163,13 +163,12 @@ public class ShrimpEntity extends AbstractSchoolingFish implements ItemSteerable
             return super.getDismountLocationForPassenger(livingEntity);
         }
     }
-    
+
     public boolean canBeControlledByRider() {
         Entity entity = this.getControllingPassenger();
-        if (!(entity instanceof Player)) {
+        if (!(entity instanceof Player playerentity)) {
             return false;
         } else {
-            Player playerentity = (Player) entity;
             return playerentity.getMainHandItem().getItem() == SushiContent.Items.SEAWEED_ON_A_STICK.get() || playerentity.getOffhandItem().getItem() == SushiContent.Items.SEAWEED_ON_A_STICK.get();
         }
     }
@@ -185,7 +184,7 @@ public class ShrimpEntity extends AbstractSchoolingFish implements ItemSteerable
     }
 
     @Override
-    public double getPassengersRidingOffset() {
-        return (double) this.getBbHeight() * 0.1D;
+    public Vec3 getPassengerRidingPosition(Entity entity) {
+        return super.getPassengerRidingPosition(entity);
     }
 }

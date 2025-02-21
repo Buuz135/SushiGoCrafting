@@ -47,7 +47,7 @@ public class RollerCategory implements IRecipeCategory<Recipe> {
 
     @Override
     public IDrawable getBackground() {
-        return guiHelper.createDrawable(new ResourceLocation(SushiGoCrafting.MOD_ID, "textures/gui/roller.png"), 8, 17, 160, 79);
+        return guiHelper.createDrawable(ResourceLocation.fromNamespaceAndPath(SushiGoCrafting.MOD_ID, "textures/gui/roller.png"), 8, 17, 160, 79);
     }
 
     @Override

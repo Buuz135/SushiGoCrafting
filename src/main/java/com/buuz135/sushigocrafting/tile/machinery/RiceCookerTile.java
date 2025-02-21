@@ -13,7 +13,7 @@ import net.minecraft.core.Direction;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.InteractionHand;
-import net.minecraft.world.InteractionResult;
+import net.minecraft.world.ItemInteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.Item;
@@ -21,25 +21,24 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.Fluids;
-import net.minecraftforge.common.ForgeHooks;
-import net.minecraftforge.fluids.capability.IFluidHandler;
+import net.neoforged.neoforge.fluids.capability.IFluidHandler;
 
 import javax.annotation.Nonnull;
 
 public class RiceCookerTile extends ActiveTile<RiceCookerTile> {
 
-    public static TagKey<Item> RICE = TagUtil.getItemTag(new ResourceLocation("forge", "crops/rice"));
+    public static TagKey<Item> RICE = TagUtil.getItemTag(ResourceLocation.fromNamespaceAndPath("c", "crops/rice"));
 
     @Save
     private final InventoryComponent<RiceCookerTile> input;
+    @Save
+    private final InventoryComponent<RiceCookerTile> fuel;
     @Save
     private ProgressBarComponent<RiceCookerTile> bar;
     @Save
     private InventoryComponent<RiceCookerTile> output;
     @Save
     private FluidTankComponent<RiceCookerTile> water;
-    @Save
-    private final InventoryComponent<RiceCookerTile> fuel;
     @Save
     private double burnTime;
 
@@ -89,7 +88,7 @@ public class RiceCookerTile extends ActiveTile<RiceCookerTile> {
         addInventory(this.fuel = new InventoryComponent<RiceCookerTile>("fuel", 69, 67, 1)
                 .setSlotToColorRender(0, DyeColor.RED)
                 .setSlotLimit(64)
-                .setInputFilter((stack, integer) -> ForgeHooks.getBurnTime(stack, RecipeType.SMELTING) > 0));
+                .setInputFilter((stack, integer) -> stack.getBurnTime(RecipeType.SMELTING) > 0));
     }
 
     @Nonnull
@@ -99,18 +98,18 @@ public class RiceCookerTile extends ActiveTile<RiceCookerTile> {
     }
 
     @Override
-    public InteractionResult onActivated(Player player, InteractionHand hand, Direction facing, double hitX, double hitY, double hitZ) {
-        InteractionResult type = super.onActivated(player, hand, facing, hitX, hitY, hitZ);
-        if (!type.shouldSwing()) {
+    public ItemInteractionResult onActivated(Player player, InteractionHand hand, Direction facing, double hitX, double hitY, double hitZ) {
+        ItemInteractionResult type = super.onActivated(player, hand, facing, hitX, hitY, hitZ);
+        if (!type.result().shouldSwing()) {
             openGui(player);
-            return InteractionResult.SUCCESS;
+            return ItemInteractionResult.SUCCESS;
         }
         return type;
     }
 
     public boolean canStart() {
         if (burnTime < 1 && !this.fuel.getStackInSlot(0).isEmpty()) {
-            this.burnTime += ForgeHooks.getBurnTime(this.fuel.getStackInSlot(0), RecipeType.SMELTING) / 200D;
+            this.burnTime += this.fuel.getStackInSlot(0).getBurnTime(RecipeType.SMELTING) / 200D;
             this.fuel.getStackInSlot(0).shrink(1);
             setChanged();
         }

@@ -20,13 +20,15 @@ import net.minecraft.client.model.geom.ModelLayerLocation;
 import net.minecraft.client.renderer.ItemBlockRenderTypes;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.player.PlayerRenderer;
+import net.minecraft.client.resources.PlayerSkin;
 import net.minecraft.client.resources.model.BakedModel;
+import net.minecraft.client.resources.model.ModelResourceLocation;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraftforge.client.event.EntityRenderersEvent;
-import net.minecraftforge.client.event.ModelEvent;
-import net.minecraftforge.event.entity.player.ItemTooltipEvent;
-import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
+import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
+import net.neoforged.neoforge.client.event.EntityRenderersEvent;
+import net.neoforged.neoforge.client.event.ModelEvent;
+import net.neoforged.neoforge.event.entity.player.ItemTooltipEvent;
 
 public class ClientProxy {
 
@@ -42,7 +44,7 @@ public class ClientProxy {
 
         }).subscribe();
         EventManager.mod(EntityRenderersEvent.AddLayers.class).process(event -> {
-            for (String skin : event.getSkins()) {
+            for (PlayerSkin.Model skin : event.getSkins()) {
                 var renderer = event.getSkin(skin);
                 if (renderer instanceof PlayerRenderer playerRenderer) {
                     playerRenderer.addLayer(new ContributorsBackRender(playerRenderer));
@@ -50,15 +52,15 @@ public class ClientProxy {
             }
         }).subscribe();
         EventManager.mod(EntityRenderersEvent.RegisterLayerDefinitions.class).process(event -> {
-            event.registerLayerDefinition(new ModelLayerLocation(new ResourceLocation(SushiGoCrafting.MOD_ID, "shrimp"), "main"), ShrimpModel::createBodyLayer);
+            event.registerLayerDefinition(new ModelLayerLocation(ResourceLocation.fromNamespaceAndPath(SushiGoCrafting.MOD_ID, "shrimp"), "main"), ShrimpModel::createBodyLayer);
         }).subscribe();
         EventManager.mod(ModelEvent.RegisterAdditional.class).process(event -> {
-            event.register(new ResourceLocation(SushiGoCrafting.MOD_ID, "block/salmon_back"));
-            event.register(new ResourceLocation(SushiGoCrafting.MOD_ID, "block/tuna_back"));
+            event.register(ModelResourceLocation.standalone(ResourceLocation.fromNamespaceAndPath(SushiGoCrafting.MOD_ID, "block/salmon_back")));
+            event.register(ModelResourceLocation.standalone(ResourceLocation.fromNamespaceAndPath(SushiGoCrafting.MOD_ID, "block/tuna_back")));
         }).subscribe();
         EventManager.mod(ModelEvent.BakingCompleted.class).process(event -> {
-            SALMON_BACK = event.getModels().get(new ResourceLocation(SushiGoCrafting.MOD_ID, "block/salmon_back"));
-            TUNA_BACK = event.getModels().get(new ResourceLocation(SushiGoCrafting.MOD_ID, "block/tuna_back"));
+            SALMON_BACK = event.getModels().get(ModelResourceLocation.standalone(ResourceLocation.fromNamespaceAndPath(SushiGoCrafting.MOD_ID, "block/salmon_back")));
+            TUNA_BACK = event.getModels().get(ModelResourceLocation.standalone(ResourceLocation.fromNamespaceAndPath(SushiGoCrafting.MOD_ID, "block/tuna_back")));
         }).subscribe();
     }
 
@@ -81,7 +83,7 @@ public class ClientProxy {
                     IIngredientEffect effect = ingredient.getEffect();
                     if (effect instanceof AddIngredientEffect) {
                         event.getToolTip().add(Component.literal("" + ChatFormatting.DARK_AQUA + Component.translatable("text.sushigocrafting.add_food_effect") + ":"));
-                        event.getToolTip().add(Component.literal(ChatFormatting.YELLOW + " - " + ChatFormatting.GOLD + ((AddIngredientEffect) effect).getEffect().get().getDisplayName().getString() + ChatFormatting.DARK_AQUA + " (" + ChatFormatting.WHITE + ((AddIngredientEffect) effect).getDuration() / 20 + ChatFormatting.YELLOW + "s" + ChatFormatting.DARK_AQUA + ", " + ChatFormatting.YELLOW + "Level " + ChatFormatting.WHITE + (((AddIngredientEffect) effect).getLevel() + 1) + ChatFormatting.DARK_AQUA + ")"));
+                        event.getToolTip().add(Component.literal(ChatFormatting.YELLOW + " - " + ChatFormatting.GOLD + ((AddIngredientEffect) effect).getEffect().value().getDisplayName().getString() + ChatFormatting.DARK_AQUA + " (" + ChatFormatting.WHITE + ((AddIngredientEffect) effect).getDuration() / 20 + ChatFormatting.YELLOW + "s" + ChatFormatting.DARK_AQUA + ", " + ChatFormatting.YELLOW + "Level " + ChatFormatting.WHITE + (((AddIngredientEffect) effect).getLevel() + 1) + ChatFormatting.DARK_AQUA + ")"));
                     }
                     if (effect instanceof ModifyIngredientEffect) {
                         event.getToolTip().add(Component.literal("" + ChatFormatting.DARK_AQUA + Component.translatable("text.sushigocrafting.modify_food_effect")+ ":"));

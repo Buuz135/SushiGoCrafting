@@ -2,13 +2,13 @@ package com.buuz135.sushigocrafting.datagen;
 
 import com.buuz135.sushigocrafting.block.plant.CustomCropBlock;
 import com.buuz135.sushigocrafting.proxy.SushiContent;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.CropBlock;
-import net.minecraftforge.client.model.generators.BlockModelProvider;
-import net.minecraftforge.client.model.generators.ModelFile;
-import net.minecraftforge.common.data.ExistingFileHelper;
-import net.minecraftforge.registries.ForgeRegistries;
+import net.neoforged.neoforge.client.model.generators.BlockModelProvider;
+import net.neoforged.neoforge.client.model.generators.ModelFile;
+import net.neoforged.neoforge.common.data.ExistingFileHelper;
 
 import java.util.Arrays;
 
@@ -30,7 +30,7 @@ public class SushiModelProvider extends BlockModelProvider {
     public void customCrop(CropBlock block, String name, Integer... filterValues) {
         for (Integer allowedValue : CustomCropBlock.AGE.getPossibleValues()) {
             if (filterValues != null && Arrays.asList(filterValues).contains(allowedValue)) continue;
-            getBuilder(ForgeRegistries.BLOCKS.getKey(block).getPath() + "_" + allowedValue).parent(getUnchecked(mcLoc(BLOCK_FOLDER + "/crop"))).texture("crop", modLoc(BLOCK_FOLDER + "/" + name + "_stage_" + allowedValue));
+            getBuilder(BuiltInRegistries.BLOCK.getKey(block).getPath() + "_" + allowedValue).parent(getUnchecked(mcLoc(BLOCK_FOLDER + "/crop"))).texture("crop", modLoc(BLOCK_FOLDER + "/" + name + "_stage_" + allowedValue));
         }
 
     }
@@ -45,7 +45,7 @@ public class SushiModelProvider extends BlockModelProvider {
         if (rl.getPath().contains("/")) {
             return rl;
         }
-        return new ResourceLocation(rl.getNamespace(), folder + "/" + rl.getPath());
+        return ResourceLocation.fromNamespaceAndPath(rl.getNamespace(), folder + "/" + rl.getPath());
     }
 
 }

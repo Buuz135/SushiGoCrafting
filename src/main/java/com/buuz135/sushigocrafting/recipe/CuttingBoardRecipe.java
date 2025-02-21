@@ -1,38 +1,43 @@
 package com.buuz135.sushigocrafting.recipe;
 
 import com.buuz135.sushigocrafting.proxy.SushiContent;
-import com.hrznstudio.titanium.recipe.serializer.GenericSerializer;
-import com.hrznstudio.titanium.recipe.serializer.SerializableRecipe;
-import net.minecraft.core.RegistryAccess;
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
+import net.minecraft.core.HolderLookup;
+import net.minecraft.data.recipes.RecipeOutput;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.Container;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.crafting.Ingredient;
-import net.minecraft.world.item.crafting.RecipeType;
+import net.minecraft.world.item.crafting.*;
 import net.minecraft.world.level.Level;
 
-public class CuttingBoardRecipe extends SerializableRecipe {
+public class CuttingBoardRecipe implements Recipe<CraftingInput> {
+
+    public static final MapCodec<CuttingBoardRecipe> CODEC = RecordCodecBuilder.mapCodec(in -> in.group(
+            Ingredient.CODEC_NONEMPTY.fieldOf("input").forGetter(CuttingBoardRecipe::getInput),
+            Codec.STRING.fieldOf("ingredient").forGetter(CuttingBoardRecipe::getIngredient)
+    ).apply(in, CuttingBoardRecipe::new));
 
     public Ingredient input;
     public String ingredient;
 
-    public CuttingBoardRecipe(ResourceLocation resourceLocation) {
-        super(resourceLocation);
+    public CuttingBoardRecipe() {
+
     }
 
-    public CuttingBoardRecipe(ResourceLocation resourceLocation, Ingredient input, String ingredient) {
-        super(resourceLocation);
+    public CuttingBoardRecipe(Ingredient input, String ingredient) {
         this.input = input;
         this.ingredient = ingredient;
     }
 
+
     @Override
-    public boolean matches(Container inv, Level worldIn) {
+    public boolean matches(CraftingInput craftingInput, Level level) {
         return false;
     }
 
     @Override
-    public ItemStack assemble(Container inv, RegistryAccess registryAccess) {
+    public ItemStack assemble(CraftingInput craftingInput, HolderLookup.Provider provider) {
         return ItemStack.EMPTY;
     }
 
@@ -42,13 +47,13 @@ public class CuttingBoardRecipe extends SerializableRecipe {
     }
 
     @Override
-    public ItemStack getResultItem(RegistryAccess registryAccess) {
+    public ItemStack getResultItem(HolderLookup.Provider provider) {
         return ItemStack.EMPTY;
     }
 
     @Override
-    public GenericSerializer<? extends SerializableRecipe> getSerializer() {
-        return (GenericSerializer<? extends SerializableRecipe>) SushiContent.RecipeSerializers.CUTTING_BOARD.get();
+    public RecipeSerializer<?> getSerializer() {
+        return SushiContent.RecipeSerializers.CUTTING_BOARD.get();
     }
 
     @Override
@@ -62,5 +67,9 @@ public class CuttingBoardRecipe extends SerializableRecipe {
 
     public String getIngredient() {
         return ingredient;
+    }
+
+    public void save(RecipeOutput output, ResourceLocation id) {
+        output.accept(id, this, null);
     }
 }

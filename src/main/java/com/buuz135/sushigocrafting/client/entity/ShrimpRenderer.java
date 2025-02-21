@@ -12,10 +12,10 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 
 public class ShrimpRenderer extends MobRenderer<ShrimpEntity, ShrimpModel> {
-    private static final ResourceLocation SHRIMP_LOCATION = new ResourceLocation(SushiGoCrafting.MOD_ID, "textures/entity/shrimp.png");
+    private static final ResourceLocation SHRIMP_LOCATION = ResourceLocation.fromNamespaceAndPath(SushiGoCrafting.MOD_ID, "textures/entity/shrimp.png");
 
     public ShrimpRenderer(EntityRendererProvider.Context renderManagerIn) {
-        super(renderManagerIn, new ShrimpModel(renderManagerIn.bakeLayer(new ModelLayerLocation(new ResourceLocation(SushiGoCrafting.MOD_ID, "shrimp"), "main"))), 0.3F);
+        super(renderManagerIn, new ShrimpModel(renderManagerIn.bakeLayer(new ModelLayerLocation(ResourceLocation.fromNamespaceAndPath(SushiGoCrafting.MOD_ID, "shrimp"), "main"))), 0.3F);
     }
 
     @Override
@@ -25,11 +25,11 @@ public class ShrimpRenderer extends MobRenderer<ShrimpEntity, ShrimpModel> {
 
 
     @Override
-    protected void setupRotations(ShrimpEntity entityLiving, PoseStack matrixStackIn, float ageInTicks, float rotationYaw, float partialTicks) {
-        super.setupRotations(entityLiving, matrixStackIn, ageInTicks, rotationYaw, partialTicks);
-        float f = Mth.sin(0.3F * ageInTicks);
+    protected void setupRotations(ShrimpEntity entity, PoseStack matrixStackIn, float bob, float yBodyRot, float partialTick, float scale) {
+        super.setupRotations(entity, matrixStackIn, bob, yBodyRot, partialTick, scale);
+        float f = Mth.sin(0.3F * bob);
         matrixStackIn.mulPose(Axis.XP.rotationDegrees(f));
-        if (!entityLiving.isInWater()) {
+        if (!entity.isInWater()) {
             matrixStackIn.translate(0.1F, 0.1F, -0.1F);
             matrixStackIn.mulPose(Axis.ZP.rotationDegrees(90.0F));
         }

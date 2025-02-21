@@ -8,11 +8,11 @@ import com.hrznstudio.titanium.client.screen.asset.DefaultAssetProvider;
 import com.hrznstudio.titanium.client.screen.asset.IAssetProvider;
 import com.hrznstudio.titanium.util.AssetUtil;
 import mezz.jei.api.constants.VanillaTypes;
-import mezz.jei.api.forge.ForgeTypes;
 import mezz.jei.api.gui.builder.IRecipeLayoutBuilder;
 import mezz.jei.api.gui.drawable.IDrawable;
 import mezz.jei.api.gui.ingredient.IRecipeSlotsView;
 import mezz.jei.api.helpers.IGuiHelper;
+import mezz.jei.api.neoforge.NeoForgeTypes;
 import mezz.jei.api.recipe.IFocusGroup;
 import mezz.jei.api.recipe.RecipeIngredientRole;
 import mezz.jei.api.recipe.RecipeType;
@@ -57,8 +57,8 @@ public class FermentationBarrelCategory implements IRecipeCategory<FermentingBar
 
     @Override
     public void setRecipe(IRecipeLayoutBuilder builder, FermentingBarrelRecipe recipe, IFocusGroup focuses) {
-        builder.addSlot(RecipeIngredientRole.INPUT, 4, 16).addIngredients(recipe.input);
-        builder.addSlot(RecipeIngredientRole.INPUT, 26 + 3, 15 + 3).setFluidRenderer(1000, false, 12, 13).setOverlay(smallTank, 0, 0).addIngredient(ForgeTypes.FLUID_STACK, recipe.getFluid());
+        builder.addSlot(RecipeIngredientRole.INPUT, 4, 16).addIngredients(recipe.getInput());
+        builder.addSlot(RecipeIngredientRole.INPUT, 26 + 3, 15 + 3).setFluidRenderer(1000, false, 12, 13).setOverlay(smallTank, 0, 0).addIngredient(NeoForgeTypes.FLUID_STACK, recipe.getFluid());
 
         builder.addSlot(RecipeIngredientRole.OUTPUT, 81, 16).addIngredient(VanillaTypes.ITEM_STACK, recipe.getOutput());
     }

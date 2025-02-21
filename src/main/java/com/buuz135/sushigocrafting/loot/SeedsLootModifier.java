@@ -1,8 +1,7 @@
 package com.buuz135.sushigocrafting.loot;
 
 import com.buuz135.sushigocrafting.proxy.SushiContent;
-import com.google.common.base.Suppliers;
-import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import net.minecraft.util.random.WeightedRandom;
@@ -10,25 +9,24 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
-import net.minecraftforge.common.loot.IGlobalLootModifier;
-import net.minecraftforge.common.loot.LootModifier;
+import net.neoforged.neoforge.common.loot.IGlobalLootModifier;
+import net.neoforged.neoforge.common.loot.LootModifier;
 
 import javax.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.function.Supplier;
 
 public class SeedsLootModifier extends LootModifier {
 
-    public static final Supplier<Codec<SeedsLootModifier>> CODEC = Suppliers.memoize(() ->
-            RecordCodecBuilder.create(inst -> codecStart(inst)
-                    .apply(inst, SeedsLootModifier::new)));
+    public static final MapCodec<SeedsLootModifier> CODEC = RecordCodecBuilder.mapCodec(
+            inst -> codecStart(inst)
+                    .apply(inst, SeedsLootModifier::new));
 
     private final List<ItemWeightedItem> seeds = new ArrayList<>();
 
     public SeedsLootModifier(LootItemCondition[] conditionsIn) {
         super(conditionsIn);
-        seeds.add(new ItemWeightedItem(Items.WHEAT_SEEDS, 150));
+        seeds.add(new ItemWeightedItem(Items.WHEAT_SEEDS, 100));
         seeds.add(new ItemWeightedItem(SushiContent.Items.RICE_SEEDS.get(), 25));
         seeds.add(new ItemWeightedItem(SushiContent.Items.SESAME_SEEDS.get(), 10));
         seeds.add(new ItemWeightedItem(SushiContent.Items.WASABI_SEEDS.get(), 25));
@@ -54,9 +52,8 @@ public class SeedsLootModifier extends LootModifier {
         return customLoot;
     }
 
-
     @Override
-    public Codec<? extends IGlobalLootModifier> codec() {
-        return CODEC.get();
+    public MapCodec<? extends IGlobalLootModifier> codec() {
+        return CODEC;
     }
 }

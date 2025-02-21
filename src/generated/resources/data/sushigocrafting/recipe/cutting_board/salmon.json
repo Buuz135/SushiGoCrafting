@@ -1,0 +1,7 @@
+{
+  "type": "sushigocrafting:cutting_board",
+  "ingredient": "salmon",
+  "input": {
+    "tag": "c:raw_fishes/salmon"
+  }
+}

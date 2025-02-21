@@ -1,7 +1,7 @@
 {
   "name": "text.sushigocrafting.book.title",
   "landing_text": "Welcome to SushiGoCrafting, a deep food mod using sushi! $(br2)You can become my patreon $(l:https://www.patreon.com/buuz135)here$().",
-  "book_texture": "patchouli:textures/gui/book_cyan.png",
+  "book_texture": "patchouli:textures/gui/book_green.png",
   "version": "GRADLE:VERSION",
   "text_color": "5A5766",
   "header_color": "48435C",

@@ -1,0 +1,37 @@
+{
+  "values": {
+    "sushigocrafting:avocado": {
+      "chance": 0.65
+    },
+    "sushigocrafting:avocado_leaves": {
+      "chance": 0.3
+    },
+    "sushigocrafting:avocado_sapling": {
+      "chance": 0.3
+    },
+    "sushigocrafting:cucumber": {
+      "chance": 0.65
+    },
+    "sushigocrafting:cucumber_seeds": {
+      "chance": 0.3
+    },
+    "sushigocrafting:rice_seeds": {
+      "chance": 0.3
+    },
+    "sushigocrafting:sesame_seeds": {
+      "chance": 0.3
+    },
+    "sushigocrafting:soy_bean": {
+      "chance": 0.65
+    },
+    "sushigocrafting:soy_seeds": {
+      "chance": 0.3
+    },
+    "sushigocrafting:wasabi_root": {
+      "chance": 0.65
+    },
+    "sushigocrafting:wasabi_seeds": {
+      "chance": 0.3
+    }
+  }
+}

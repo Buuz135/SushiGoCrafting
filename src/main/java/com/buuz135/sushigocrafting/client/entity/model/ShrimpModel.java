@@ -85,8 +85,9 @@ public class ShrimpModel extends HierarchicalModel<ShrimpEntity> {
         body4.xRot = f * 0.2f;
     }
 
+
     @Override
-    public void renderToBuffer(PoseStack matrixStack, VertexConsumer buffer, int packedLight, int packedOverlay, float red, float green, float blue, float alpha) {
+    public void renderToBuffer(PoseStack matrixStack, VertexConsumer buffer, int packedLight, int packedOverlay, int color) {
         body1.render(matrixStack, buffer, packedLight, packedOverlay);
         body2.render(matrixStack, buffer, packedLight, packedOverlay);
         body3.render(matrixStack, buffer, packedLight, packedOverlay);

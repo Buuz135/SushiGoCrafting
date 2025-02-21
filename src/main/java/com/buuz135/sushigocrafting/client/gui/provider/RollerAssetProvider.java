@@ -13,9 +13,8 @@ import java.awt.*;
 
 public class RollerAssetProvider implements IAssetProvider {
 
+    private static final ResourceLocation TEXTURE = ResourceLocation.fromNamespaceAndPath(SushiGoCrafting.MOD_ID, "textures/gui/roller.png");
     public static RollerAssetProvider INSTANCE = new RollerAssetProvider();
-    private static final ResourceLocation TEXTURE = new ResourceLocation(SushiGoCrafting.MOD_ID, "textures/gui/roller.png");
-
     private final IAsset SLOT = new IAsset() {
         @Override
         public Rectangle getArea() {

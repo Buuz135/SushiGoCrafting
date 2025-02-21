@@ -5,15 +5,16 @@ import com.buuz135.sushigocrafting.block.plant.CustomCropBlock;
 import com.buuz135.sushigocrafting.proxy.SushiContent;
 import com.hrznstudio.titanium.block.RotatableBlock;
 import net.minecraft.core.Direction;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.CropBlock;
 import net.minecraft.world.level.block.RotatedPillarBlock;
-import net.minecraftforge.client.model.generators.BlockStateProvider;
-import net.minecraftforge.client.model.generators.ConfiguredModel;
-import net.minecraftforge.client.model.generators.ModelFile;
-import net.minecraftforge.common.data.ExistingFileHelper;
-import net.minecraftforge.registries.ForgeRegistries;
+import net.neoforged.neoforge.client.model.generators.BlockStateProvider;
+import net.neoforged.neoforge.client.model.generators.ConfiguredModel;
+import net.neoforged.neoforge.client.model.generators.ModelFile;
+import net.neoforged.neoforge.common.data.ExistingFileHelper;
+
 
 public class SushiBlockstateProvider extends BlockStateProvider {
 
@@ -37,11 +38,11 @@ public class SushiBlockstateProvider extends BlockStateProvider {
         getVariantBuilder(SushiContent.Blocks.AVOCADO_LEAVES.get())
                 .partialState()
                 .with(AvocadoLeavesBlock.STAGE, 0).addModels(
-                        ConfiguredModel.builder().modelFile(new ModelFile.UncheckedModelFile(modLoc("block/" + ForgeRegistries.BLOCKS.getKey(SushiContent.Blocks.AVOCADO_LEAVES.get()).getPath() + "_0"))).build())
+                        ConfiguredModel.builder().modelFile(new ModelFile.UncheckedModelFile(modLoc("block/" + BuiltInRegistries.BLOCK.getKey(SushiContent.Blocks.AVOCADO_LEAVES.get()).getPath() + "_0"))).build())
                 .partialState().with(AvocadoLeavesBlock.STAGE, 1).addModels(
-                        ConfiguredModel.builder().modelFile(new ModelFile.UncheckedModelFile(modLoc("block/" + ForgeRegistries.BLOCKS.getKey(SushiContent.Blocks.AVOCADO_LEAVES.get()).getPath() + "_1"))).build())
+                        ConfiguredModel.builder().modelFile(new ModelFile.UncheckedModelFile(modLoc("block/" + BuiltInRegistries.BLOCK.getKey(SushiContent.Blocks.AVOCADO_LEAVES.get()).getPath() + "_1"))).build())
                 .partialState().with(AvocadoLeavesBlock.STAGE, 2).addModels(
-                        ConfiguredModel.builder().modelFile(new ModelFile.UncheckedModelFile(modLoc("block/" + ForgeRegistries.BLOCKS.getKey(SushiContent.Blocks.AVOCADO_LEAVES.get()).getPath() + "_2"))).build());
+                        ConfiguredModel.builder().modelFile(new ModelFile.UncheckedModelFile(modLoc("block/" + BuiltInRegistries.BLOCK.getKey(SushiContent.Blocks.AVOCADO_LEAVES.get()).getPath() + "_2"))).build());
         horizontalBlock(SushiContent.Blocks.CUTTING_BOARD.get());
         horizontalBlock(SushiContent.Blocks.ROLLER.get());
         simpleBlockUn(SushiContent.Blocks.FERMENTATION_BARREL.get());
@@ -50,16 +51,16 @@ public class SushiBlockstateProvider extends BlockStateProvider {
     private void crop(CropBlock block) {
         getVariantBuilder(block).forAllStates(blockState -> {
             int age = blockState.getValue(CustomCropBlock.AGE);
-            return ConfiguredModel.builder().modelFile(new ModelFile.UncheckedModelFile(modLoc("block/" + ForgeRegistries.BLOCKS.getKey(block).getPath() + "_" + age))).build();
+            return ConfiguredModel.builder().modelFile(new ModelFile.UncheckedModelFile(modLoc("block/" + BuiltInRegistries.BLOCK.getKey(block).getPath() + "_" + age))).build();
         });
     }
 
     private void simpleBlockUn(Block block) {
-        simpleBlock(block, new ModelFile.UncheckedModelFile(modLoc("block/" + ForgeRegistries.BLOCKS.getKey(block).getPath())));
+        simpleBlock(block, new ModelFile.UncheckedModelFile(modLoc("block/" + BuiltInRegistries.BLOCK.getKey(block).getPath())));
     }
 
     private void horizontalBlock(Block block) {
-        ModelFile file = new ModelFile.UncheckedModelFile(modLoc("block/" + ForgeRegistries.BLOCKS.getKey(block).getPath()));
+        ModelFile file = new ModelFile.UncheckedModelFile(modLoc("block/" + BuiltInRegistries.BLOCK.getKey(block).getPath()));
         getVariantBuilder(block)
                 .forAllStates(state -> ConfiguredModel.builder()
                         .modelFile(file)
@@ -69,7 +70,7 @@ public class SushiBlockstateProvider extends BlockStateProvider {
     }
 
     private void logBlockRot(Block block) {
-        ModelFile file = new ModelFile.UncheckedModelFile(modLoc("block/" + ForgeRegistries.BLOCKS.getKey(block).getPath()));
+        ModelFile file = new ModelFile.UncheckedModelFile(modLoc("block/" + BuiltInRegistries.BLOCK.getKey(block).getPath()));
         getVariantBuilder(block)
                 .forAllStates(state -> {
                             Direction.Axis axis = state.getValue(RotatedPillarBlock.AXIS);

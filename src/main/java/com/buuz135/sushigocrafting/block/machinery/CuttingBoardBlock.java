@@ -21,7 +21,7 @@ public class CuttingBoardBlock extends RotatableBlock<CuttingBoardTile> {
     public static VoxelShape SHAPE_EAST = Block.box(3, 0, 1, 13, 1, 15);
 
     public CuttingBoardBlock() {
-        super("cutting_board", Properties.copy(Blocks.OAK_TRAPDOOR), CuttingBoardTile.class);
+        super("cutting_board", Properties.ofFullCopy(Blocks.OAK_TRAPDOOR), CuttingBoardTile.class);
     }
 
     @Override

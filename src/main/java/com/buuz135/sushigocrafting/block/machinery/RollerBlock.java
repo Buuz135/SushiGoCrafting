@@ -23,7 +23,7 @@ public class RollerBlock extends RotatableBlock<RollerTile> {
     public static VoxelShape SHAPE_EAST = Block.box(1, 0, 2, 15, 0.5, 14);
 
     public RollerBlock() {
-        super("roller", Properties.copy(Blocks.OAK_TRAPDOOR), RollerTile.class);
+        super("roller", Properties.ofFullCopy(Blocks.OAK_TRAPDOOR), RollerTile.class);
     }
 
     @Override

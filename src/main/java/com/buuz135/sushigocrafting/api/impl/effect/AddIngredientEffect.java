@@ -1,19 +1,19 @@
 package com.buuz135.sushigocrafting.api.impl.effect;
 
 import com.buuz135.sushigocrafting.api.IIngredientEffect;
+import net.minecraft.core.Holder;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectInstance;
 
 import java.util.List;
-import java.util.function.Supplier;
 
 public class AddIngredientEffect implements IIngredientEffect {
 
-    private final Supplier<MobEffect> effect;
+    private final Holder<MobEffect> effect;
     private final int duration;
     private final int level;
 
-    public AddIngredientEffect(Supplier<MobEffect> effect, int durationSeconds, int level) {
+    public AddIngredientEffect(Holder<MobEffect> effect, int durationSeconds, int level) {
         this.effect = effect;
         this.duration = durationSeconds * 20;
         this.level = level;
@@ -21,7 +21,7 @@ public class AddIngredientEffect implements IIngredientEffect {
 
     @Override
     public void accept(List<MobEffectInstance> effects) {
-        effects.add(new MobEffectInstance(effect.get(), duration, level, false, false));
+        effects.add(new MobEffectInstance(effect, duration, level, false, false));
     }
 
     @Override
@@ -29,7 +29,7 @@ public class AddIngredientEffect implements IIngredientEffect {
         return 0;
     }
 
-    public Supplier<MobEffect> getEffect() {
+    public Holder<MobEffect> getEffect() {
         return effect;
     }
 

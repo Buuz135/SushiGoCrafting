@@ -5,8 +5,8 @@ import net.minecraft.world.item.Item;
 
 public class SushiGoCraftingBlock extends BasicBlock {
 
-    public SushiGoCraftingBlock(String name, Properties properties) {
-        super(name, properties);
+    public SushiGoCraftingBlock(Properties properties) {
+        super(properties);
     }
 
     @Override

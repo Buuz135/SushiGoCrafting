@@ -9,8 +9,8 @@ import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectCategory;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.item.ItemStack;
-import net.minecraftforge.event.entity.living.LivingEntityUseItemEvent;
-import net.minecraftforge.items.ItemHandlerHelper;
+import net.neoforged.neoforge.event.entity.living.LivingEntityUseItemEvent;
+import net.neoforged.neoforge.items.ItemHandlerHelper;
 
 import java.awt.*;
 
@@ -18,11 +18,10 @@ public class SmallBitesEffect extends MobEffect {
 
     static {
         EventManager.forge(LivingEntityUseItemEvent.Finish.class)
-                .filter(finish -> finish.getItem().isEdible() && finish.getEntity().hasEffect(SushiContent.Effects.SMALL_BITES.get()))
+                .filter(finish -> finish.getItem().getFoodProperties(finish.getEntity()) != null && finish.getEntity().hasEffect(SushiContent.Effects.SMALL_BITES.getDelegate()))
                 .process(finish -> {
-                    MobEffectInstance instance = finish.getEntity().getEffect(SushiContent.Effects.SMALL_BITES.get());
-                    if (finish.getEntity() instanceof ServerPlayer && finish.getEntity().level().random.nextInt(9) <= instance.getAmplifier() + 1) {
-                        ServerPlayer player = (ServerPlayer) finish.getEntity();
+                    MobEffectInstance instance = finish.getEntity().getEffect(SushiContent.Effects.SMALL_BITES.getDelegate());
+                    if (finish.getEntity() instanceof ServerPlayer player && finish.getEntity().level().random.nextInt(9) <= instance.getAmplifier() + 1) {
                         ItemStack stack = finish.getResultStack().copy();
                         stack.setCount(1);
                         player.playNotifySound(SoundEvents.PLAYER_LEVELUP, SoundSource.PLAYERS, 0.2f, 1);

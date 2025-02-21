@@ -8,6 +8,7 @@ import com.blamejared.crafttweaker.api.recipe.manager.base.IRecipeManager;
 import com.buuz135.sushigocrafting.proxy.SushiContent;
 import com.buuz135.sushigocrafting.recipe.CuttingBoardRecipe;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.crafting.RecipeHolder;
 import net.minecraft.world.item.crafting.RecipeType;
 import org.openzen.zencode.java.ZenCodeType;
 
@@ -18,7 +19,7 @@ public class CuttingBoardManager implements IRecipeManager<CuttingBoardRecipe> {
     @ZenCodeType.Method
     public void addRecipe(String name, IIngredient input, String foodOutput) {
         name = fixRecipeName(name);
-        CraftTweakerAPI.apply(new ActionAddRecipe<>(this, new CuttingBoardRecipe(new ResourceLocation("crafttweaker", name), input.asVanillaIngredient(), foodOutput)));
+        CraftTweakerAPI.apply(new ActionAddRecipe<>(this, new RecipeHolder<>(ResourceLocation.fromNamespaceAndPath("crafttweaker", name), new CuttingBoardRecipe(input.asVanillaIngredient(), foodOutput))));
     }
 
     @Override
@@ -28,6 +29,6 @@ public class CuttingBoardManager implements IRecipeManager<CuttingBoardRecipe> {
 
     @Override
     public RecipeType<CuttingBoardRecipe> getRecipeType() {
-        return (RecipeType<CuttingBoardRecipe>)SushiContent.RecipeTypes.CUTTING_BOARD.get();
+        return (RecipeType<CuttingBoardRecipe>) SushiContent.RecipeTypes.CUTTING_BOARD.get();
     }
 }

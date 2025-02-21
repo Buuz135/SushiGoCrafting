@@ -12,27 +12,27 @@ import com.hrznstudio.titanium.util.RecipeUtil;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.InteractionHand;
-import net.minecraft.world.InteractionResult;
+import net.minecraft.world.ItemInteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraftforge.fluids.capability.IFluidHandler;
-import net.minecraftforge.items.ItemHandlerHelper;
+import net.neoforged.neoforge.fluids.capability.IFluidHandler;
+import net.neoforged.neoforge.items.ItemHandlerHelper;
 
 import javax.annotation.Nonnull;
 
 public class FermentationBarrelTile extends ActiveTile<FermentationBarrelTile> {
 
     @Save
-    private ProgressBarComponent<FermentationBarrelTile> bar;
-    @Save
     private final FluidTankComponent<FermentationBarrelTile> fluid;
     @Save
     private final InventoryComponent<FermentationBarrelTile> input;
     @Save
     private final InventoryComponent<FermentationBarrelTile> output;
+    @Save
+    private ProgressBarComponent<FermentationBarrelTile> bar;
 
     public FermentationBarrelTile(BlockPos pos, BlockState state) {
         super(SushiContent.Blocks.FERMENTATION_BARREL.get(), SushiContent.TileEntities.FERMENTATION_BARREL.get(), pos, state);
@@ -67,19 +67,19 @@ public class FermentationBarrelTile extends ActiveTile<FermentationBarrelTile> {
     }
 
     @Override
-    public InteractionResult onActivated(Player player, InteractionHand hand, Direction facing, double hitX, double hitY, double hitZ) {
-        InteractionResult type = super.onActivated(player, hand, facing, hitX, hitY, hitZ);
-        if (!type.shouldSwing()) {
+    public ItemInteractionResult onActivated(Player player, InteractionHand hand, Direction facing, double hitX, double hitY, double hitZ) {
+        ItemInteractionResult type = super.onActivated(player, hand, facing, hitX, hitY, hitZ);
+        if (!type.result().shouldSwing()) {
             openGui(player);
-            return InteractionResult.SUCCESS;
+            return ItemInteractionResult.SUCCESS;
         }
         return type;
     }
 
     public boolean canStart() {
-        return RecipeUtil.getRecipes(this.level, (RecipeType<FermentingBarrelRecipe>)SushiContent.RecipeTypes.FERMENTING_BARREL.get()).stream()
+        return RecipeUtil.getRecipes(this.level, (RecipeType<FermentingBarrelRecipe>) SushiContent.RecipeTypes.FERMENTING_BARREL.get()).stream()
                 .anyMatch(fermentingBarrelRecipe -> fermentingBarrelRecipe.input.test(this.input.getStackInSlot(0))
-                        && (fermentingBarrelRecipe.fluid.isEmpty() || (fermentingBarrelRecipe.fluid.isFluidEqual(this.fluid.getFluid()) && this.fluid.getFluid().getAmount() >= fermentingBarrelRecipe.fluid.getAmount()))
+                        && (fermentingBarrelRecipe.fluid.isEmpty() || (fermentingBarrelRecipe.fluid.is(this.fluid.getFluid().getFluid()) && this.fluid.getFluid().getAmount() >= fermentingBarrelRecipe.fluid.getAmount()))
                         && (canStack(fermentingBarrelRecipe))
                 );
     }
@@ -93,9 +93,9 @@ public class FermentationBarrelTile extends ActiveTile<FermentationBarrelTile> {
     }
 
     public void onFinish() {
-        RecipeUtil.getRecipes(this.level, (RecipeType<FermentingBarrelRecipe>)SushiContent.RecipeTypes.FERMENTING_BARREL.get()).stream()
+        RecipeUtil.getRecipes(this.level, (RecipeType<FermentingBarrelRecipe>) SushiContent.RecipeTypes.FERMENTING_BARREL.get()).stream()
                 .filter(fermentingBarrelRecipe -> fermentingBarrelRecipe.input.test(this.input.getStackInSlot(0))
-                        && (fermentingBarrelRecipe.fluid.isEmpty() || (fermentingBarrelRecipe.fluid.isFluidEqual(this.fluid.getFluid()) && this.fluid.getFluid().getAmount() >= fermentingBarrelRecipe.fluid.getAmount()))
+                        && (fermentingBarrelRecipe.fluid.isEmpty() || (fermentingBarrelRecipe.fluid.is(this.fluid.getFluid().getFluid()) && this.fluid.getFluid().getAmount() >= fermentingBarrelRecipe.fluid.getAmount()))
                         && (canStack(fermentingBarrelRecipe))
                 )
                 .findFirst()

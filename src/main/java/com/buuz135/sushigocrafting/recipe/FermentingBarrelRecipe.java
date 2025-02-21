@@ -1,34 +1,37 @@
 package com.buuz135.sushigocrafting.recipe;
 
 import com.buuz135.sushigocrafting.proxy.SushiContent;
-import com.hrznstudio.titanium.recipe.serializer.GenericSerializer;
-import com.hrznstudio.titanium.recipe.serializer.SerializableRecipe;
-import net.minecraft.core.RegistryAccess;
+import com.mojang.serialization.MapCodec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
+import net.minecraft.core.HolderLookup;
+import net.minecraft.data.recipes.RecipeOutput;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.Container;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.crafting.Ingredient;
-import net.minecraft.world.item.crafting.RecipeType;
+import net.minecraft.world.item.crafting.*;
 import net.minecraft.world.level.Level;
-import net.minecraftforge.fluids.FluidStack;
+import net.neoforged.neoforge.fluids.FluidStack;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
-public class FermentingBarrelRecipe extends SerializableRecipe {
+public class FermentingBarrelRecipe implements Recipe<CraftingInput> {
 
+    public static final MapCodec<FermentingBarrelRecipe> CODEC = RecordCodecBuilder.mapCodec(in -> in.group(
+            Ingredient.CODEC.optionalFieldOf("input").forGetter(fermentingBarrelRecipe -> Optional.of(fermentingBarrelRecipe.input)),
+            FluidStack.CODEC.fieldOf("fluid").forGetter(FermentingBarrelRecipe::getFluid),
+            ItemStack.CODEC.fieldOf("output").forGetter(FermentingBarrelRecipe::getOutput)
+    ).apply(in, (ingredient, fluidStack, itemStack) -> new FermentingBarrelRecipe(ingredient.orElse(Ingredient.EMPTY), fluidStack, itemStack)));
     public static List<FermentingBarrelRecipe> RECIPES = new ArrayList<>();
-
     public Ingredient input = Ingredient.EMPTY;
     public FluidStack fluid = FluidStack.EMPTY;
     public ItemStack output;
 
-    public FermentingBarrelRecipe(ResourceLocation resourceLocation) {
-        super(resourceLocation);
+    public FermentingBarrelRecipe() {
+
     }
 
-    public FermentingBarrelRecipe(ResourceLocation resourceLocation, Ingredient input, FluidStack stack, ItemStack output) {
-        super(resourceLocation);
+    public FermentingBarrelRecipe(Ingredient input, FluidStack stack, ItemStack output) {
         this.input = input;
         this.fluid = stack;
         this.output = output;
@@ -36,12 +39,12 @@ public class FermentingBarrelRecipe extends SerializableRecipe {
     }
 
     @Override
-    public boolean matches(Container inv, Level worldIn) {
+    public boolean matches(CraftingInput craftingInput, Level level) {
         return false;
     }
 
     @Override
-    public ItemStack assemble(Container inv, RegistryAccess access) {
+    public ItemStack assemble(CraftingInput craftingInput, HolderLookup.Provider provider) {
         return ItemStack.EMPTY;
     }
 
@@ -51,13 +54,13 @@ public class FermentingBarrelRecipe extends SerializableRecipe {
     }
 
     @Override
-    public ItemStack getResultItem(RegistryAccess access) {
+    public ItemStack getResultItem(HolderLookup.Provider provider) {
         return ItemStack.EMPTY;
     }
 
     @Override
-    public GenericSerializer<? extends SerializableRecipe> getSerializer() {
-        return (GenericSerializer<? extends SerializableRecipe>) SushiContent.RecipeSerializers.FERMENTING_BARREL.get();
+    public RecipeSerializer<?> getSerializer() {
+        return SushiContent.RecipeSerializers.FERMENTING_BARREL.get();
     }
 
     @Override
@@ -75,5 +78,9 @@ public class FermentingBarrelRecipe extends SerializableRecipe {
 
     public ItemStack getOutput() {
         return output;
+    }
+
+    public void save(RecipeOutput output, ResourceLocation id) {
+        output.accept(id, this, null);
     }
 }

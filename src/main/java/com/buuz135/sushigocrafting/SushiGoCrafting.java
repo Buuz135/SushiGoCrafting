@@ -3,16 +3,14 @@ package com.buuz135.sushigocrafting;
 import com.buuz135.sushigocrafting.api.IFoodType;
 import com.buuz135.sushigocrafting.api.impl.FoodAPI;
 import com.buuz135.sushigocrafting.api.impl.FoodHelper;
-import com.buuz135.sushigocrafting.cap.ISushiWeightDiscovery;
-import com.buuz135.sushigocrafting.cap.SushiDiscoveryProvider;
-import com.buuz135.sushigocrafting.cap.SushiWeightDiscoveryCapability;
 import com.buuz135.sushigocrafting.client.ClientProxy;
 import com.buuz135.sushigocrafting.datagen.*;
 import com.buuz135.sushigocrafting.item.FoodItem;
+import com.buuz135.sushigocrafting.item.SushiDataComponent;
 import com.buuz135.sushigocrafting.network.CapabilitySyncMessage;
-import com.buuz135.sushigocrafting.proxy.SushiCompostables;
 import com.buuz135.sushigocrafting.proxy.SushiContent;
 import com.buuz135.sushigocrafting.tile.machinery.*;
+import com.hrznstudio.titanium.block.tile.ActiveTile;
 import com.hrznstudio.titanium.event.handler.EventManager;
 import com.hrznstudio.titanium.module.ModuleController;
 import com.hrznstudio.titanium.nbthandler.NBTManager;
@@ -24,16 +22,14 @@ import com.hrznstudio.titanium.tab.TitaniumTab;
 import net.minecraft.core.NonNullList;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.Containers;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntitySelector;
-import net.minecraft.world.entity.SpawnPlacements;
+import net.minecraft.world.entity.SpawnPlacementTypes;
 import net.minecraft.world.entity.animal.AbstractFish;
 import net.minecraft.world.entity.item.ItemEntity;
-import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
@@ -41,20 +37,20 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraft.world.phys.AABB;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.common.ForgeMod;
-import net.minecraftforge.common.capabilities.RegisterCapabilitiesEvent;
-import net.minecraftforge.data.event.GatherDataEvent;
-import net.minecraftforge.event.AttachCapabilitiesEvent;
-import net.minecraftforge.event.entity.EntityAttributeCreationEvent;
-import net.minecraftforge.event.entity.living.LivingDropsEvent;
-import net.minecraftforge.event.entity.player.PlayerEvent;
-import net.minecraftforge.event.level.PistonEvent;
-import net.minecraftforge.fml.DistExecutor;
-import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
-import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
-import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.bus.api.IEventBus;
+import net.neoforged.fml.ModContainer;
+import net.neoforged.fml.common.Mod;
+import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
+import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
+import net.neoforged.neoforge.capabilities.Capabilities;
+import net.neoforged.neoforge.capabilities.RegisterCapabilitiesEvent;
+import net.neoforged.neoforge.common.NeoForgeMod;
+import net.neoforged.neoforge.data.event.GatherDataEvent;
+import net.neoforged.neoforge.event.entity.EntityAttributeCreationEvent;
+import net.neoforged.neoforge.event.entity.RegisterSpawnPlacementsEvent;
+import net.neoforged.neoforge.event.entity.living.LivingDropsEvent;
+import net.neoforged.neoforge.event.level.PistonEvent;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -69,26 +65,31 @@ public class SushiGoCrafting extends ModuleController {
 
     public static final String MOD_ID = "sushigocrafting";
 
-    public static final TitaniumTab TAB = new TitaniumTab(new ResourceLocation(MOD_ID, "main"));
+    public static final TitaniumTab TAB = new TitaniumTab(ResourceLocation.fromNamespaceAndPath(MOD_ID, "main"));
     public static NetworkHandler NETWORK = new NetworkHandler(MOD_ID);
     public static Logger LOGGER = LogManager.getLogger(MOD_ID);
 
     static {
-        ForgeMod.enableMilkFluid();
-        NETWORK.registerMessage(CapabilitySyncMessage.class);
+        NeoForgeMod.enableMilkFluid();
+        NETWORK.registerMessage("capability_sync", CapabilitySyncMessage.class);
     }
 
-    public SushiGoCrafting() {
-        SushiContent.Blocks.REGISTRY.register(FMLJavaModLoadingContext.get().getModEventBus());
-        SushiContent.Items.REGISTRY.register(FMLJavaModLoadingContext.get().getModEventBus());
-        SushiContent.TileEntities.REGISTRY.register(FMLJavaModLoadingContext.get().getModEventBus());
-        SushiContent.Effects.REGISTRY.register(FMLJavaModLoadingContext.get().getModEventBus());
-        SushiContent.EntityTypes.REGISTRY.register(FMLJavaModLoadingContext.get().getModEventBus());
-        SushiContent.LootSerializers.REGISTRY.register(FMLJavaModLoadingContext.get().getModEventBus());
-        SushiContent.RecipeSerializers.REGISTRY.register(FMLJavaModLoadingContext.get().getModEventBus());
-        SushiContent.RecipeTypes.REGISTRY.register(FMLJavaModLoadingContext.get().getModEventBus());
-        DistExecutor.runWhenOn(Dist.CLIENT, () -> ClientProxy::register);
-        DistExecutor.runWhenOn(Dist.CLIENT, () -> () -> EventManager.mod(FMLClientSetupEvent.class).process(fmlClientSetupEvent -> new ClientProxy().fmlClient(fmlClientSetupEvent)).subscribe());
+    public SushiGoCrafting(Dist dist, IEventBus modBus, ModContainer container) {
+        super(container);
+        SushiContent.Blocks.REGISTRY.register(modBus);
+        SushiContent.Items.REGISTRY.register(modBus);
+        SushiContent.TileEntities.REGISTRY.register(modBus);
+        SushiContent.Effects.REGISTRY.register(modBus);
+        SushiContent.EntityTypes.REGISTRY.register(modBus);
+        SushiContent.LootSerializers.REGISTRY.register(modBus);
+        SushiContent.RecipeSerializers.REGISTRY.register(modBus);
+        SushiContent.RecipeTypes.REGISTRY.register(modBus);
+        SushiDataComponent.REGISTRY.register(modBus);
+        SushiContent.AttachmentTypes.REGISTRY.register(modBus);
+        if (dist == Dist.CLIENT) {
+            ClientProxy.register();
+            EventManager.mod(FMLClientSetupEvent.class).process(fmlClientSetupEvent -> new ClientProxy().fmlClient(fmlClientSetupEvent)).subscribe();
+        }
         EventManager.mod(FMLCommonSetupEvent.class).process(this::fmlCommon).subscribe();
         EventManager.mod(GatherDataEvent.class).process(this::dataGen).subscribe();
         NBTManager.getInstance().scanTileClassForAnnotations(RollerTile.class);
@@ -127,7 +128,7 @@ public class SushiGoCrafting extends ModuleController {
         }).subscribe();
         RewardGiver giver = RewardManager.get().getGiver(UUID.fromString("d28b7061-fb92-4064-90fb-7e02b95a72a6"), "Buuz135");
         try {
-            giver.addReward(new Reward(new ResourceLocation(SushiGoCrafting.MOD_ID, "back"), new URL("https://raw.githubusercontent.com/Buuz135/Industrial-Foregoing/master/contributors.json"), () -> dist -> {
+            giver.addReward(new Reward(ResourceLocation.fromNamespaceAndPath(SushiGoCrafting.MOD_ID, "back"), new URL("https://raw.githubusercontent.com/Buuz135/Industrial-Foregoing/master/contributors.json"), () -> dist2 -> {
 
             }, new String[]{"salmon", "tuna"}));
         } catch (Exception e) {
@@ -136,6 +137,20 @@ public class SushiGoCrafting extends ModuleController {
         //EventManager.forge(ItemTooltipEvent.class).process(itemTooltipEvent -> {
         //    itemTooltipEvent.getToolTip().addAll(itemTooltipEvent.getItemStack().getItem().getTags().stream().map(resourceLocation -> new StringTextComponent(resourceLocation.toString())).collect(Collectors.toList()));
         //}).subscribe();
+        EventManager.mod(RegisterSpawnPlacementsEvent.class).process(event -> {
+            event.register(SushiContent.EntityTypes.SHRIMP.get(), SpawnPlacementTypes.IN_WATER, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, AbstractFish::checkMobSpawnRules, RegisterSpawnPlacementsEvent.Operation.OR);
+            event.register(SushiContent.EntityTypes.TUNA.get(), SpawnPlacementTypes.IN_WATER, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, AbstractFish::checkMobSpawnRules, RegisterSpawnPlacementsEvent.Operation.OR);
+        }).subscribe();
+        EventManager.mod(RegisterCapabilitiesEvent.class).process(event -> {
+            event.registerBlockEntity(Capabilities.ItemHandler.BLOCK, SushiContent.TileEntities.COOLER_BOX.value(), ActiveTile::getItemHandler);
+            event.registerBlockEntity(Capabilities.ItemHandler.BLOCK, SushiContent.TileEntities.CUTTING_BOARD.value(), ActiveTile::getItemHandler);
+            event.registerBlockEntity(Capabilities.ItemHandler.BLOCK, SushiContent.TileEntities.FERMENTATION_BARREL.value(), ActiveTile::getItemHandler);
+            event.registerBlockEntity(Capabilities.ItemHandler.BLOCK, SushiContent.TileEntities.RICE_COOKER.value(), ActiveTile::getItemHandler);
+            event.registerBlockEntity(Capabilities.ItemHandler.BLOCK, SushiContent.TileEntities.ROLLER.value(), ActiveTile::getItemHandler);
+
+            event.registerBlockEntity(Capabilities.FluidHandler.BLOCK, SushiContent.TileEntities.FERMENTATION_BARREL.value(), ActiveTile::getFluidHandler);
+            event.registerBlockEntity(Capabilities.FluidHandler.BLOCK, SushiContent.TileEntities.RICE_COOKER.value(), ActiveTile::getFluidHandler);
+        }).subscribe();
     }
 
     @Override
@@ -157,45 +172,21 @@ public class SushiGoCrafting extends ModuleController {
     }
 
     public void fmlCommon(FMLCommonSetupEvent event) {
-        registerCapability();
-        SpawnPlacements.register(SushiContent.EntityTypes.SHRIMP.get(), SpawnPlacements.Type.IN_WATER, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, AbstractFish::checkMobSpawnRules);
-        SpawnPlacements.register(SushiContent.EntityTypes.TUNA.get(), SpawnPlacements.Type.IN_WATER, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, AbstractFish::checkMobSpawnRules);
-        SushiCompostables.init();
+
     }
 
     public void dataGen(GatherDataEvent event) {
         event.getGenerator().addProvider(true, new SushiModelProvider(event.getGenerator(), MOD_ID, event.getExistingFileHelper()));
-        event.getGenerator().addProvider(true,new SushiBlockstateProvider(event.getGenerator(), MOD_ID, event.getExistingFileHelper()));
-        event.getGenerator().addProvider(true,new SushiItemModelProvider(event.getGenerator(), MOD_ID, event.getExistingFileHelper()));
-        event.getGenerator().addProvider(true,new SushiLangProvider(event.getGenerator(), MOD_ID, "en_us"));
+        event.getGenerator().addProvider(true, new SushiBlockstateProvider(event.getGenerator(), MOD_ID, event.getExistingFileHelper()));
+        event.getGenerator().addProvider(true, new SushiItemModelProvider(event.getGenerator(), MOD_ID, event.getExistingFileHelper()));
+        event.getGenerator().addProvider(true, new SushiLangProvider(event.getGenerator(), MOD_ID, "en_us"));
         var provider = new SushiBlockTagsProvider(event.getGenerator().getPackOutput(), event.getLookupProvider(), event.getExistingFileHelper());
-        event.getGenerator().addProvider(true,provider);
+        event.getGenerator().addProvider(true, provider);
         event.getGenerator().addProvider(true, new SushiItemTagsProvider(event.getGenerator().getPackOutput(), event.getLookupProvider(), provider.contentsGetter(), event.getExistingFileHelper()));
-        event.getGenerator().addProvider(true,new SushiSerializableProvider(event.getGenerator(), MOD_ID));
-        event.getGenerator().addProvider(true,new SushiLootTableProvider(event.getGenerator()));
-        event.getGenerator().addProvider(true,new SushiRecipeProvider(event.getGenerator()));
+        event.getGenerator().addProvider(true, new SushiLootTableProvider(event.getGenerator(), event.getLookupProvider()));
+        event.getGenerator().addProvider(true, new SushiRecipeProvider(event.getGenerator(), event.getLookupProvider()));
+        event.getGenerator().addProvider(true, new SushiDataMapProvider(event.getGenerator().getPackOutput(), event.getLookupProvider()));
     }
 
-    private void registerCapability() {
-        EventManager.mod(RegisterCapabilitiesEvent.class).process(registerCapabilitiesEvent -> {
-            registerCapabilitiesEvent.register(ISushiWeightDiscovery.class);
-        }).subscribe();
-        EventManager.forgeGeneric(AttachCapabilitiesEvent.class, Entity.class)
-                .filter(attachCapabilitiesEvent -> ((AttachCapabilitiesEvent) attachCapabilitiesEvent).getObject() instanceof Player)
-                .process(attachCapabilitiesEvent -> ((AttachCapabilitiesEvent) attachCapabilitiesEvent).addCapability(new ResourceLocation(MOD_ID, "weight_discovery"), new SushiDiscoveryProvider()))
-                .subscribe();
-        EventManager.forge(PlayerEvent.Clone.class).process(clone -> {
-            clone.getOriginal().getCapability(SushiWeightDiscoveryCapability.CAPABILITY).ifPresent(original -> {
-                clone.getEntity().getCapability(SushiWeightDiscoveryCapability.CAPABILITY).ifPresent(future -> {
-                    future.deserializeNBT(original.serializeNBT());
-                    future.requestUpdate((ServerPlayer) clone.getEntity(), ItemStack.EMPTY);
-                });
-            });
-        }).subscribe();
-        EventManager.forge(PlayerEvent.PlayerLoggedInEvent.class)
-                .filter(playerLoggedInEvent -> playerLoggedInEvent.getEntity() instanceof ServerPlayer)
-                .process(playerLoggedInEvent -> playerLoggedInEvent.getEntity().getCapability(SushiWeightDiscoveryCapability.CAPABILITY)
-                        .ifPresent(iSushiWeightDiscovery -> iSushiWeightDiscovery.requestUpdate((ServerPlayer) playerLoggedInEvent.getEntity(), ItemStack.EMPTY))).subscribe();
-    }
 
 }

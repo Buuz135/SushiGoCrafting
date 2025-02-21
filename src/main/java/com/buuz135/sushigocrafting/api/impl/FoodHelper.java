@@ -4,7 +4,7 @@ import com.buuz135.sushigocrafting.api.IFoodIngredient;
 import com.buuz135.sushigocrafting.api.IFoodType;
 import com.buuz135.sushigocrafting.item.FoodItem;
 import net.minecraft.world.item.Item;
-import net.minecraftforge.registries.RegistryObject;
+import net.neoforged.neoforge.registries.DeferredHolder;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -13,7 +13,7 @@ import java.util.List;
 
 public class FoodHelper {
 
-    public static HashMap<String, List<RegistryObject<Item>>> REGISTERED = new LinkedHashMap<>();
+    public static HashMap<String, List<DeferredHolder<Item, Item>>> REGISTERED = new LinkedHashMap<>();
 
     public static List<FoodData> generateFood(IFoodType type) {
         List<FoodData> items = new ArrayList<>();
@@ -52,11 +52,11 @@ public class FoodHelper {
     }
 
     public static FoodItem getFoodFromIngredients(String type, List<IFoodIngredient> foodIngredients) {
-        for (RegistryObject<Item> foodItem : REGISTERED.get(type)) {
-            if (foodIngredients.size() == ((FoodItem)foodItem.get()).getIngredientList().size()) {
+        for (DeferredHolder<Item, Item> foodItem : REGISTERED.get(type)) {
+            if (foodIngredients.size() == ((FoodItem) foodItem.get()).getIngredientList().size()) {
                 boolean allMatch = true;
                 for (int i = 0; i < foodIngredients.size(); i++) {
-                    if (!foodIngredients.get(i).equals(((FoodItem)foodItem.get()).getIngredientList().get(i))) {
+                    if (!foodIngredients.get(i).equals(((FoodItem) foodItem.get()).getIngredientList().get(i))) {
                         allMatch = false;
                     }
                 }
@@ -68,10 +68,10 @@ public class FoodHelper {
         return null;
     }
 
-    public static class FoodData{
+    public static class FoodData {
 
-        private List<IFoodIngredient> foodIngredients;
         private final IFoodType foodType;
+        private final List<IFoodIngredient> foodIngredients;
 
         public FoodData(IFoodType foodType) {
             this.foodType = foodType;

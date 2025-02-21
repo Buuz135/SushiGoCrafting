@@ -2,6 +2,7 @@ package com.buuz135.sushigocrafting.block.plant;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.tags.FluidTags;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
@@ -27,7 +28,8 @@ public class WaterCropBlock extends CustomCropBlock implements LiquidBlockContai
         return Fluids.WATER.getSource(false);
     }
 
-    public boolean canPlaceLiquid(BlockGetter worldIn, BlockPos pos, BlockState state, Fluid fluidIn) {
+    @Override
+    public boolean canPlaceLiquid(@org.jetbrains.annotations.Nullable Player player, BlockGetter blockGetter, BlockPos blockPos, BlockState blockState, Fluid fluid) {
         return false;
     }
 
@@ -36,8 +38,8 @@ public class WaterCropBlock extends CustomCropBlock implements LiquidBlockContai
     }
 
     @Override
-    public boolean isValidBonemealTarget(LevelReader worldIn, BlockPos pos, BlockState state, boolean isClient) {
-        return worldIn.getFluidState(pos).is(FluidTags.WATER) && super.isValidBonemealTarget(worldIn, pos, state, isClient);
+    public boolean isValidBonemealTarget(LevelReader level, BlockPos pos, BlockState state) {
+        return level.getFluidState(pos).is(FluidTags.WATER) && super.isValidBonemealTarget(level, pos, state);
     }
 
     @Nullable

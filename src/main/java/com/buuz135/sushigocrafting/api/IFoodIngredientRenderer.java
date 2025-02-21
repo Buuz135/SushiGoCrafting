@@ -16,17 +16,17 @@ import org.joml.Matrix4f;
 
 public interface IFoodIngredientRenderer {
 
-    static RenderType ROLLER_RENDERER = createRenderType();
+    RenderType ROLLER_RENDERER = createRenderType();
 
-    public static RenderType createRenderType() {
+    static RenderType createRenderType() {
         RenderType.CompositeState state = RenderType.CompositeState.builder()
-                .setTextureState(new RenderStateShard.TextureStateShard(new ResourceLocation(SushiGoCrafting.MOD_ID, "textures/block/roller_texture.png"), false, false))
-                .setShaderState(new RenderStateShard.ShaderStateShard(GameRenderer::getPositionColorTexShader))
+                .setTextureState(new RenderStateShard.TextureStateShard(ResourceLocation.fromNamespaceAndPath(SushiGoCrafting.MOD_ID, "textures/block/roller_texture.png"), false, false))
+                .setShaderState(new RenderStateShard.ShaderStateShard(GameRenderer::getPositionTexColorShader))
                 .createCompositeState(true);
-        return RenderType.create("roller_renderer", DefaultVertexFormat.POSITION_COLOR_TEX, VertexFormat.Mode.QUADS, 256, false, true, state);
+        return RenderType.create("roller_renderer", DefaultVertexFormat.POSITION_TEX_COLOR, VertexFormat.Mode.QUADS, 256, false, true, state);
     }
 
-    public static void renderCube(PoseStack stack, MultiBufferSource renderTypeBuffer, AABB pos, double x, double y, double z, float red, float green, float blue, float alpha) {
+    static void renderCube(PoseStack stack, MultiBufferSource renderTypeBuffer, AABB pos, double x, double y, double z, float red, float green, float blue, float alpha) {
 
         float x1 = (float) (pos.minX + x);
         float x2 = (float) (pos.maxX + x);
@@ -40,37 +40,37 @@ public interface IFoodIngredientRenderer {
 
         buffer = renderTypeBuffer.getBuffer(ROLLER_RENDERER);
 
-        buffer.vertex(matrix, x1, y1, z1).color(red, green, blue, alpha).uv(0, (float) pos.maxY).endVertex();
-        buffer.vertex(matrix, x1, y2, z1).color(red, green, blue, alpha).uv(0, 0).endVertex();
-        buffer.vertex(matrix, x2, y2, z1).color(red, green, blue, alpha).uv(1, 0).endVertex();
-        buffer.vertex(matrix, x2, y1, z1).color(red, green, blue, alpha).uv(1, (float) pos.maxY).endVertex();
+        buffer.addVertex(matrix, x1, y1, z1).setColor(red, green, blue, alpha).setUv(0, (float) pos.maxY);
+        buffer.addVertex(matrix, x1, y2, z1).setColor(red, green, blue, alpha).setUv(0, 0);
+        buffer.addVertex(matrix, x2, y2, z1).setColor(red, green, blue, alpha).setUv(1, 0);
+        buffer.addVertex(matrix, x2, y1, z1).setColor(red, green, blue, alpha).setUv(1, (float) pos.maxY);
 
-        buffer.vertex(matrix, x1, y1, z2).color(red, green, blue, alpha).uv(0, 1).endVertex();
-        buffer.vertex(matrix, x2, y1, z2).color(red, green, blue, alpha).uv(0, 0).endVertex();
-        buffer.vertex(matrix, x2, y2, z2).color(red, green, blue, alpha).uv((float) pos.maxY, 0).endVertex();
-        buffer.vertex(matrix, x1, y2, z2).color(red, green, blue, alpha).uv((float) pos.maxY, 1).endVertex();
-
-
-        buffer.vertex(matrix, x1, y1, z1).color(red, green, blue, alpha).uv(0, 1).endVertex();
-        buffer.vertex(matrix, x2, y1, z1).color(red, green, blue, alpha).uv(0, 0).endVertex();
-        buffer.vertex(matrix, x2, y1, z2).color(red, green, blue, alpha).uv(1, 0).endVertex();
-        buffer.vertex(matrix, x1, y1, z2).color(red, green, blue, alpha).uv(0, 0).endVertex();
-
-        buffer.vertex(matrix, x1, y2, z1).color(red, green, blue, alpha).uv(0, (float) pos.maxZ).endVertex();
-        buffer.vertex(matrix, x1, y2, z2).color(red, green, blue, alpha).uv(0, (float) pos.minZ).endVertex();
-        buffer.vertex(matrix, x2, y2, z2).color(red, green, blue, alpha).uv(1, (float) pos.minZ).endVertex();
-        buffer.vertex(matrix, x2, y2, z1).color(red, green, blue, alpha).uv(1, (float) pos.maxZ).endVertex();
+        buffer.addVertex(matrix, x1, y1, z2).setColor(red, green, blue, alpha).setUv(0, 1);
+        buffer.addVertex(matrix, x2, y1, z2).setColor(red, green, blue, alpha).setUv(0, 0);
+        buffer.addVertex(matrix, x2, y2, z2).setColor(red, green, blue, alpha).setUv((float) pos.maxY, 0);
+        buffer.addVertex(matrix, x1, y2, z2).setColor(red, green, blue, alpha).setUv((float) pos.maxY, 1);
 
 
-        buffer.vertex(matrix, x1, y1, z1).color(red, green, blue, alpha).uv(0, (float) pos.maxZ).endVertex();
-        buffer.vertex(matrix, x1, y1, z2).color(red, green, blue, alpha).uv(0, (float) pos.minZ).endVertex();
-        buffer.vertex(matrix, x1, y2, z2).color(red, green, blue, alpha).uv((float) pos.maxY, (float) pos.minZ).endVertex();
-        buffer.vertex(matrix, x1, y2, z1).color(red, green, blue, alpha).uv((float) pos.maxY, (float) pos.maxZ).endVertex();
+        buffer.addVertex(matrix, x1, y1, z1).setColor(red, green, blue, alpha).setUv(0, 1);
+        buffer.addVertex(matrix, x2, y1, z1).setColor(red, green, blue, alpha).setUv(0, 0);
+        buffer.addVertex(matrix, x2, y1, z2).setColor(red, green, blue, alpha).setUv(1, 0);
+        buffer.addVertex(matrix, x1, y1, z2).setColor(red, green, blue, alpha).setUv(0, 0);
 
-        buffer.vertex(matrix, x2, y1, z1).color(red, green, blue, alpha).uv((float) pos.maxY, (float) pos.maxZ).endVertex();
-        buffer.vertex(matrix, x2, y2, z1).color(red, green, blue, alpha).uv(0, (float) pos.maxZ).endVertex();
-        buffer.vertex(matrix, x2, y2, z2).color(red, green, blue, alpha).uv(0, (float) pos.minZ).endVertex();
-        buffer.vertex(matrix, x2, y1, z2).color(red, green, blue, alpha).uv((float) pos.maxY, (float) pos.minZ).endVertex();
+        buffer.addVertex(matrix, x1, y2, z1).setColor(red, green, blue, alpha).setUv(0, (float) pos.maxZ);
+        buffer.addVertex(matrix, x1, y2, z2).setColor(red, green, blue, alpha).setUv(0, (float) pos.minZ);
+        buffer.addVertex(matrix, x2, y2, z2).setColor(red, green, blue, alpha).setUv(1, (float) pos.minZ);
+        buffer.addVertex(matrix, x2, y2, z1).setColor(red, green, blue, alpha).setUv(1, (float) pos.maxZ);
+
+
+        buffer.addVertex(matrix, x1, y1, z1).setColor(red, green, blue, alpha).setUv(0, (float) pos.maxZ);
+        buffer.addVertex(matrix, x1, y1, z2).setColor(red, green, blue, alpha).setUv(0, (float) pos.minZ);
+        buffer.addVertex(matrix, x1, y2, z2).setColor(red, green, blue, alpha).setUv((float) pos.maxY, (float) pos.minZ);
+        buffer.addVertex(matrix, x1, y2, z1).setColor(red, green, blue, alpha).setUv((float) pos.maxY, (float) pos.maxZ);
+
+        buffer.addVertex(matrix, x2, y1, z1).setColor(red, green, blue, alpha).setUv((float) pos.maxY, (float) pos.maxZ);
+        buffer.addVertex(matrix, x2, y2, z1).setColor(red, green, blue, alpha).setUv(0, (float) pos.maxZ);
+        buffer.addVertex(matrix, x2, y2, z2).setColor(red, green, blue, alpha).setUv(0, (float) pos.minZ);
+        buffer.addVertex(matrix, x2, y1, z2).setColor(red, green, blue, alpha).setUv((float) pos.maxY, (float) pos.minZ);
 
     }
 

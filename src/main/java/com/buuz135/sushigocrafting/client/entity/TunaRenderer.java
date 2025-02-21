@@ -12,7 +12,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 
 public class TunaRenderer extends MobRenderer<TunaEntity, CodModel<TunaEntity>> {
-    private static final ResourceLocation TUNA_LOCATION = new ResourceLocation(SushiGoCrafting.MOD_ID, "textures/entity/tuna.png");
+    private static final ResourceLocation TUNA_LOCATION = ResourceLocation.fromNamespaceAndPath(SushiGoCrafting.MOD_ID, "textures/entity/tuna.png");
 
     public TunaRenderer(EntityRendererProvider.Context renderManagerIn) {
         super(renderManagerIn, new CodModel<>(renderManagerIn.bakeLayer(ModelLayers.COD)), 0.3F);
@@ -24,14 +24,13 @@ public class TunaRenderer extends MobRenderer<TunaEntity, CodModel<TunaEntity>> 
     }
 
     @Override
-    protected void setupRotations(TunaEntity entityLiving, PoseStack matrixStackIn, float ageInTicks, float rotationYaw, float partialTicks) {
-        super.setupRotations(entityLiving, matrixStackIn, ageInTicks, rotationYaw, partialTicks);
-        float f = 4.3F * Mth.sin(0.6F * ageInTicks);
-        matrixStackIn.mulPose(Axis.YP.rotationDegrees(f));
-        if (!entityLiving.isInWater()) {
+    protected void setupRotations(TunaEntity entity, PoseStack matrixStackIn, float bob, float yBodyRot, float partialTick, float scale) {
+        super.setupRotations(entity, matrixStackIn, bob, yBodyRot, partialTick, scale);
+        float f = Mth.sin(0.3F * bob);
+        matrixStackIn.mulPose(Axis.XP.rotationDegrees(f));
+        if (!entity.isInWater()) {
             matrixStackIn.translate(0.1F, 0.1F, -0.1F);
             matrixStackIn.mulPose(Axis.ZP.rotationDegrees(90.0F));
         }
-
     }
 }

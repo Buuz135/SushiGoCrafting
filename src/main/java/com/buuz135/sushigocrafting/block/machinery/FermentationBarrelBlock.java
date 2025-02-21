@@ -37,7 +37,7 @@ public class FermentationBarrelBlock extends RotatableBlock<FermentationBarrelTi
 
 
     public FermentationBarrelBlock() {
-        super("fermentation_barrel", Properties.copy(Blocks.OAK_WOOD), FermentationBarrelTile.class);
+        super("fermentation_barrel", Properties.ofFullCopy(Blocks.OAK_WOOD), FermentationBarrelTile.class);
     }
 
     @Override

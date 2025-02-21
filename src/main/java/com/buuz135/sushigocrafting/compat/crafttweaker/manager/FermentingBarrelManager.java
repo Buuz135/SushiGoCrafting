@@ -10,6 +10,7 @@ import com.blamejared.crafttweaker.api.recipe.manager.base.IRecipeManager;
 import com.buuz135.sushigocrafting.proxy.SushiContent;
 import com.buuz135.sushigocrafting.recipe.FermentingBarrelRecipe;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.crafting.RecipeHolder;
 import net.minecraft.world.item.crafting.RecipeType;
 import org.openzen.zencode.java.ZenCodeType;
 
@@ -20,7 +21,7 @@ public class FermentingBarrelManager implements IRecipeManager<FermentingBarrelR
     @ZenCodeType.Method
     public void addRecipe(String name, IIngredient input, IFluidStack stack, IItemStack output) {
         name = fixRecipeName(name);
-        CraftTweakerAPI.apply(new ActionAddRecipe<>(this, new FermentingBarrelRecipe(new ResourceLocation("crafttweaker", name), input.asVanillaIngredient(), stack.getInternal(), output.getInternal())));
+        CraftTweakerAPI.apply(new ActionAddRecipe<>(this, new RecipeHolder<>(ResourceLocation.fromNamespaceAndPath("crafttweaker", name), new FermentingBarrelRecipe(input.asVanillaIngredient(), stack.getInternal(), output.getInternal()))));
     }
 
     @Override
@@ -30,6 +31,6 @@ public class FermentingBarrelManager implements IRecipeManager<FermentingBarrelR
 
     @Override
     public RecipeType<FermentingBarrelRecipe> getRecipeType() {
-        return (RecipeType<FermentingBarrelRecipe>)SushiContent.RecipeTypes.FERMENTING_BARREL.get();
+        return (RecipeType<FermentingBarrelRecipe>) SushiContent.RecipeTypes.FERMENTING_BARREL.get();
     }
 }

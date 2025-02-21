@@ -5,11 +5,12 @@ import com.buuz135.sushigocrafting.proxy.SushiContent;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
-import net.minecraft.world.InteractionResult;
+import net.minecraft.world.ItemInteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.BlockPlaceContext;
@@ -29,21 +30,20 @@ import net.minecraft.world.level.block.state.properties.IntegerProperty;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.common.IForgeShearable;
-import net.minecraftforge.items.ItemHandlerHelper;
-import net.minecraftforge.registries.ForgeRegistries;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
+import net.neoforged.neoforge.common.IShearable;
+import net.neoforged.neoforge.items.ItemHandlerHelper;
 
 import java.util.Random;
 
-public class AvocadoLeavesBlock extends SushiGoCraftingBlock implements IForgeShearable, BonemealableBlock {
+public class AvocadoLeavesBlock extends SushiGoCraftingBlock implements IShearable, BonemealableBlock {
     public static final IntegerProperty DISTANCE = BlockStateProperties.DISTANCE;
     public static final BooleanProperty PERSISTENT = BlockStateProperties.PERSISTENT;
     public static final IntegerProperty STAGE = IntegerProperty.create("stage", 0, 2);
 
     public AvocadoLeavesBlock() {
-        super("avocado_leaves", Properties.copy(Blocks.OAK_LEAVES));
+        super(Properties.ofFullCopy(Blocks.OAK_LEAVES));
         this.registerDefaultState(this.stateDefinition.any().setValue(DISTANCE, Integer.valueOf(7)).setValue(PERSISTENT, Boolean.valueOf(false)).setValue(STAGE, 0));
     }
 
@@ -63,7 +63,7 @@ public class AvocadoLeavesBlock extends SushiGoCraftingBlock implements IForgeSh
     }
 
     private static int getDistance(BlockState neighbor) {
-        if (ForgeRegistries.BLOCKS.tags().getTag(BlockTags.LOGS).contains(neighbor.getBlock())) {
+        if (BuiltInRegistries.BLOCK.getTag(BlockTags.LOGS).get().contains(neighbor.getBlockHolder())) {
             return 0;
         } else {
             return neighbor.getBlock() instanceof AvocadoLeavesBlock || neighbor.getBlock() instanceof LeavesBlock ? neighbor.getValue(DISTANCE) : 7;
@@ -139,18 +139,18 @@ public class AvocadoLeavesBlock extends SushiGoCraftingBlock implements IForgeSh
     }
 
     @Override
-    public InteractionResult use(BlockState state, Level worldIn, BlockPos pos, Player player, InteractionHand handIn, BlockHitResult hit) {
+    protected ItemInteractionResult useItemOn(ItemStack stack, BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hitResult) {
         if (state.getValue(STAGE) == 2) {
             ItemHandlerHelper.giveItemToPlayer(player, new ItemStack(SushiContent.Items.AVOCADO.get()));
-            worldIn.setBlockAndUpdate(pos, state.setValue(STAGE, 1));
-            return InteractionResult.SUCCESS;
+            level.setBlockAndUpdate(pos, state.setValue(STAGE, 1));
+            return ItemInteractionResult.SUCCESS;
         }
-        return super.use(state, worldIn, pos, player, handIn, hit);
+        return super.useItemOn(stack, state, level, pos, player, hand, hitResult);
     }
 
     @Override
-    public boolean isValidBonemealTarget(LevelReader p_256559_, BlockPos p_50898_, BlockState state, boolean p_50900_) {
-        return state.getValue(STAGE) > 0;
+    public boolean isValidBonemealTarget(LevelReader levelReader, BlockPos blockPos, BlockState blockState) {
+        return blockState.getValue(STAGE) > 0;
     }
 
     @Override

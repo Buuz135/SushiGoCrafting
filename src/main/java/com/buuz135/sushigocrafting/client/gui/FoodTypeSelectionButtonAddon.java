@@ -64,18 +64,17 @@ public class FoodTypeSelectionButtonAddon extends BasicButtonAddon {
     @Override
     public boolean mouseClicked(double mouseX, double mouseY, int button) {
         Screen screen = Minecraft.getInstance().screen;
-        if (screen instanceof AbstractContainerScreen && ((AbstractContainerScreen) screen).getMenu() instanceof ILocatable) {
+        if (screen instanceof AbstractContainerScreen && ((AbstractContainerScreen) screen).getMenu() instanceof ILocatable locatable) {
             if (!isMouseOver(mouseX - ((AbstractContainerScreen<?>) screen).getGuiLeft(), mouseY - ((AbstractContainerScreen<?>) screen).getGuiTop()))
                 return false;
-            Minecraft.getInstance().getSoundManager().play(new SimpleSoundInstance(SoundEvents.WOOD_FALL, SoundSource.PLAYERS, 0.5F, 1.0F,Minecraft.getInstance().level.getRandom(), Minecraft.getInstance().player.blockPosition()));
-            ILocatable locatable = (ILocatable) ((AbstractContainerScreen) screen).getMenu();
+            Minecraft.getInstance().getSoundManager().play(new SimpleSoundInstance(SoundEvents.WOOD_FALL, SoundSource.PLAYERS, 0.5F, 1.0F, Minecraft.getInstance().level.getRandom(), Minecraft.getInstance().player.blockPosition()));
             CompoundTag nbt = new CompoundTag();
             nbt.putString("Type", getButton().getType().getName());
             getButton().getComponent().get().setSlotPosition(getButton().getType().getSlotPosition());
             for (int i = 0; i < getButton().getComponent().get().getSlots(); i++) {
                 getButton().getComponent().get().setSlotToItemStackRender(i, getButton().getType().getSlotStackRender().apply(i));
             }
-            Titanium.NETWORK.get().sendToServer(new ButtonClickNetworkMessage(locatable.getLocatorInstance(), this.getButton().getId(), nbt));
+            Titanium.NETWORK.sendToServer(new ButtonClickNetworkMessage(locatable.getLocatorInstance(), this.getButton().getId(), nbt));
             for (int i1 = 0; i1 < getButton().getComponent().get().getSlots(); i1++) {
                 getButton().getComponent().get().setSlotLimit(i1, i1 < getButton().getType().getFoodIngredients().size() ? 64 : 0);
             }
