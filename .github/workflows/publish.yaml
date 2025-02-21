@@ -40,7 +40,7 @@ jobs:
             1.21.1
           java: 21
           name: ""
-          changelog: "https://github.com/Buuz135/SushiGoCrafting/commits/1.21"
+          changelog: "https://github.com/Buuz135/SushiGoCrafting/blob/1.21/CHANGELOG.md"
           dependencies: |
             titanium | depends
             patchouli | optional
