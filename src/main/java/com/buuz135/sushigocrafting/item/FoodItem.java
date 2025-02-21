@@ -51,15 +51,15 @@ public class FoodItem extends SushiItem {
     public static List<Component> getTagsFrom(int negative, int positive) {
         List<Component> names = new ArrayList<>();
         if (negative == 0 && positive == 0) {
-            names.add(Component.literal("" + ChatFormatting.GOLD + Component.translatable("text.sushigocrafting.perfect")));
+            names.add(Component.literal("" + ChatFormatting.GOLD + Component.translatable("text.sushigocrafting.perfect").getString()));
         } else if (Math.abs(negative) == positive) {
-            names.add(Component.literal("" + ChatFormatting.DARK_GREEN + Component.translatable("text.sushigocrafting.weirdly_balanced")));
+            names.add(Component.literal("" + ChatFormatting.DARK_GREEN + Component.translatable("text.sushigocrafting.weirdly_balanced").getString()));
         }
         if (Math.abs(negative) < positive) {
-            names.add(Component.literal("" + ChatFormatting.RED + Component.translatable("text.sushigocrafting.almost_hollow")));
+            names.add(Component.literal("" + ChatFormatting.RED + Component.translatable("text.sushigocrafting.almost_hollow").getString()));
         }
         if (Math.abs(negative) > positive) {
-            names.add(Component.literal("" + ChatFormatting.RED + Component.translatable("text.sushigocrafting.overflowing")));
+            names.add(Component.literal("" + ChatFormatting.RED + Component.translatable("text.sushigocrafting.overflowing").getString()));
         }
         return names;
     }
@@ -99,7 +99,7 @@ public class FoodItem extends SushiItem {
     @Override
     public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltip, TooltipFlag tooltipFlag) {
         super.appendHoverText(stack, context, tooltip, tooltipFlag);
-        tooltip.add(Component.literal("" + ChatFormatting.GRAY + Component.translatable("itemGroup.ingredients") + ": "));
+        tooltip.add(Component.literal("" + ChatFormatting.GRAY + Component.translatable("itemGroup.ingredients").getString() + ": "));
         for (int i = 0; i < ingredientList.size(); i++) {
             if (!ingredientList.get(i).isEmpty()) {
                 String line = ChatFormatting.GRAY + " - " + Component.translatable(ingredientList.get(i).getItem().getDescriptionId()).getString();
@@ -125,15 +125,15 @@ public class FoodItem extends SushiItem {
         tooltip.add(Component.literal(""));
         if (hasShift) {
             if (info.getEffectInstances().size() > 0) {
-                tooltip.add(Component.literal("" + ChatFormatting.DARK_AQUA + Component.translatable("text.sushigocrafting.effects") + ":"));
+                tooltip.add(Component.literal("" + ChatFormatting.DARK_AQUA + Component.translatable("text.sushigocrafting.effects").getString() + ":"));
                 if (hasAlt) {
-                    tooltip.add(Component.literal(ChatFormatting.YELLOW + " - " + ChatFormatting.GOLD + Component.translatable("text.sushigocrafting.hunger") + ": " + ChatFormatting.WHITE + (int) info.getHunger()));
-                    tooltip.add(Component.literal(ChatFormatting.YELLOW + " - " + ChatFormatting.GOLD + Component.translatable("text.sushigocrafting.saturation") + ": " + ChatFormatting.WHITE + info.getSaturation()));
+                    tooltip.add(Component.literal(ChatFormatting.YELLOW + " - " + ChatFormatting.GOLD + Component.translatable("text.sushigocrafting.hunger").getString() + ": " + ChatFormatting.WHITE + (int) info.getHunger()));
+                    tooltip.add(Component.literal(ChatFormatting.YELLOW + " - " + ChatFormatting.GOLD + Component.translatable("text.sushigocrafting.saturation").getString() + ": " + ChatFormatting.WHITE + info.getSaturation()));
                 }
                 info.getEffectInstances().forEach(effectInstance -> tooltip.add(Component.literal(ChatFormatting.YELLOW + " - " + ChatFormatting.GOLD + Component.translatable(effectInstance.getDescriptionId()).getString() + ChatFormatting.DARK_AQUA + " (" + ChatFormatting.WHITE + effectInstance.getDuration() / 20 + ChatFormatting.YELLOW + "s" + ChatFormatting.DARK_AQUA + ", " + ChatFormatting.YELLOW + "Level " + ChatFormatting.WHITE + (effectInstance.getAmplifier() + 1) + ChatFormatting.DARK_AQUA + ")")));
             }
         } else {
-            tooltip.add(Component.literal(ChatFormatting.YELLOW + "" + Component.translatable("text.sushigocrafting.hold") + ChatFormatting.GOLD + " " + ChatFormatting.ITALIC + "<" + Component.translatable("key.keyboard.left.shift") + ">" + ChatFormatting.RESET + ChatFormatting.YELLOW + Component.translatable("text.sushigocrafting.sushi_effect")));
+            tooltip.add(Component.literal(ChatFormatting.YELLOW + "" + Component.translatable("text.sushigocrafting.hold").getString() + ChatFormatting.GOLD + " " + ChatFormatting.ITALIC + "<" + Component.translatable("key.keyboard.left.shift").getString() + ">" + ChatFormatting.RESET + ChatFormatting.YELLOW + Component.translatable("text.sushigocrafting.sushi_effect").getString()));
         }
     }
 

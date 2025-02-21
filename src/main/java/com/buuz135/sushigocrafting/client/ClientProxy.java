@@ -82,19 +82,19 @@ public class ClientProxy {
                 if (Screen.hasShiftDown()) {
                     IIngredientEffect effect = ingredient.getEffect();
                     if (effect instanceof AddIngredientEffect) {
-                        event.getToolTip().add(Component.literal("" + ChatFormatting.DARK_AQUA + Component.translatable("text.sushigocrafting.add_food_effect") + ":"));
+                        event.getToolTip().add(Component.literal("" + ChatFormatting.DARK_AQUA + Component.translatable("text.sushigocrafting.add_food_effect").getString() + ":"));
                         event.getToolTip().add(Component.literal(ChatFormatting.YELLOW + " - " + ChatFormatting.GOLD + ((AddIngredientEffect) effect).getEffect().value().getDisplayName().getString() + ChatFormatting.DARK_AQUA + " (" + ChatFormatting.WHITE + ((AddIngredientEffect) effect).getDuration() / 20 + ChatFormatting.YELLOW + "s" + ChatFormatting.DARK_AQUA + ", " + ChatFormatting.YELLOW + "Level " + ChatFormatting.WHITE + (((AddIngredientEffect) effect).getLevel() + 1) + ChatFormatting.DARK_AQUA + ")"));
                     }
                     if (effect instanceof ModifyIngredientEffect) {
-                        event.getToolTip().add(Component.literal("" + ChatFormatting.DARK_AQUA + Component.translatable("text.sushigocrafting.modify_food_effect")+ ":"));
+                        event.getToolTip().add(Component.literal("" + ChatFormatting.DARK_AQUA + Component.translatable("text.sushigocrafting.modify_food_effect").getString()+ ":"));
                         if (((ModifyIngredientEffect) effect).getTimeModifier() != 1) {
-                            event.getToolTip().add(Component.literal(ChatFormatting.YELLOW + " - " + ChatFormatting.GOLD + " " + Component.translatable("text.sushigocrafting.multiply_time_by") + " " + ChatFormatting.WHITE + ((ModifyIngredientEffect) effect).getTimeModifier()));
+                            event.getToolTip().add(Component.literal(ChatFormatting.YELLOW + " - " + ChatFormatting.GOLD + " " + Component.translatable("text.sushigocrafting.multiply_time_by").getString() + " " + ChatFormatting.WHITE + ((ModifyIngredientEffect) effect).getTimeModifier()));
                         }
                         if (((ModifyIngredientEffect) effect).getLevelModifier() > 0)
-                            event.getToolTip().add(Component.literal(ChatFormatting.YELLOW + " - " + ChatFormatting.GOLD + " " + Component.translatable("text.sushigocrafting.increase_level_by") + " " + ChatFormatting.WHITE + ((ModifyIngredientEffect) effect).getLevelModifier()));
+                            event.getToolTip().add(Component.literal(ChatFormatting.YELLOW + " - " + ChatFormatting.GOLD + " " + Component.translatable("text.sushigocrafting.increase_level_by").getString() + " " + ChatFormatting.WHITE + ((ModifyIngredientEffect) effect).getLevelModifier()));
                     }
                 } else {
-                    event.getToolTip().add(Component.literal(ChatFormatting.YELLOW + "" + Component.translatable("text.sushigocrafting.hold") + ChatFormatting.GOLD + " " + ChatFormatting.ITALIC + "<" + Component.translatable("key.keyboard.left.shift") + ">" + ChatFormatting.RESET + ChatFormatting.YELLOW + Component.translatable("text.sushigocrafting.sushi_effect")));
+                    event.getToolTip().add(Component.literal(ChatFormatting.YELLOW + "" + Component.translatable("text.sushigocrafting.hold").getString() + ChatFormatting.GOLD + " " + ChatFormatting.ITALIC + "<" + Component.translatable("key.keyboard.left.shift").getString() + ">" + ChatFormatting.RESET + ChatFormatting.YELLOW + Component.translatable("text.sushigocrafting.sushi_effect").getString()));
                 }
             }
         }).subscribe();

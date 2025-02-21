@@ -70,7 +70,7 @@ public class AmountItem extends SushiItem implements ISpecialCreativeTabItem {
     public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltipComponents, TooltipFlag tooltipFlag) {
         super.appendHoverText(stack, context, tooltipComponents, tooltipFlag);
         if (stack.has(SushiDataComponent.AMOUNT)) {
-            tooltipComponents.add(Component.literal("" + ChatFormatting.GRAY +Component.translatable("text.sushigocrafting.amount")  + stack.get(SushiDataComponent.AMOUNT) + "/" + maxCombineAmount + " gr.")); //TODO Localize
+            tooltipComponents.add(Component.literal("" + ChatFormatting.GRAY +Component.translatable("text.sushigocrafting.amount").getString() + " "  + stack.get(SushiDataComponent.AMOUNT) + "/" + maxCombineAmount + " gr.")); //TODO Localize
         }
     }
 
