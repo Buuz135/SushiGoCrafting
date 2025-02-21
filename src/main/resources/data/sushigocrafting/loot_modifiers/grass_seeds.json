@@ -6,7 +6,7 @@
       "terms": [
         {
           "condition": "block_state_property",
-          "block": "minecraft:grass"
+          "block": "minecraft:short_grass"
         },
         {
           "condition": "block_state_property",
