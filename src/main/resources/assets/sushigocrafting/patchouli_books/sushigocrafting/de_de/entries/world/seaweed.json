@@ -1,5 +1,5 @@
 {
-  "name": "Seaweed",
+  "name": "Seegras",
   "icon": "minecraft:kelp",
   "category": "sushigocrafting:world",
   "sortnum": 1,
@@ -7,7 +7,7 @@
   "pages": [
     {
       "type": "text",
-      "text": "You can find Seaweed in Oceans."
+      "text": "Du kannst Seegras in den Ozeanen finden."
     }
   ]
 }

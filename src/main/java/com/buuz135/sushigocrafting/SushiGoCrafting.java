@@ -10,6 +10,7 @@ import com.buuz135.sushigocrafting.item.SushiDataComponent;
 import com.buuz135.sushigocrafting.network.CapabilitySyncMessage;
 import com.buuz135.sushigocrafting.proxy.SushiContent;
 import com.buuz135.sushigocrafting.tile.machinery.*;
+import com.buuz135.sushigocrafting.world.PistonCrafting;
 import com.hrznstudio.titanium.block.tile.ActiveTile;
 import com.hrznstudio.titanium.event.handler.EventManager;
 import com.hrznstudio.titanium.module.ModuleController;
@@ -97,26 +98,7 @@ public class SushiGoCrafting extends ModuleController {
         NBTManager.getInstance().scanTileClassForAnnotations(CuttingBoardTile.class);
         NBTManager.getInstance().scanTileClassForAnnotations(CoolerBoxTile.class);
         NBTManager.getInstance().scanTileClassForAnnotations(FermentationBarrelTile.class);
-        EventManager.forge(PistonEvent.Pre.class).process(pre -> {
-            if (pre.getLevel().getBlockState(pre.getPos().relative(pre.getDirection(), 2)).getBlock().equals(Blocks.IRON_BLOCK)) {
-                NonNullList<ItemStack> list = NonNullList.create();
-                var level = pre.getLevel();
-                var aabb = new AABB(pre.getPos().relative(pre.getDirection(), 1));
-                var entities = level.getEntitiesOfClass(ItemEntity.class, aabb, EntitySelector.ENTITY_STILL_ALIVE);
-                for (ItemEntity entity : entities) {
-                    if (entity.getItem().is(Items.DRIED_KELP_BLOCK)) {
-                        list.add(new ItemStack(SushiContent.Items.NORI_SHEET.get(), (5 + pre.getLevel().getRandom().nextInt(4)) * entity.getItem().getCount()));
-                        entity.remove(Entity.RemovalReason.KILLED);
-                    }
-                }
-                if (!list.isEmpty()) {
-                    if (level instanceof ServerLevel serverLevel) {
-                        serverLevel.playSeededSound(null, pre.getPos().getX(), pre.getPos().getY(), pre.getPos().getZ(), SoundEvents.ANVIL_LAND, SoundSource.BLOCKS, 0.75f, 1f, serverLevel.random.nextLong());
-                    }
-                    Containers.dropContents((Level) pre.getLevel(), pre.getFaceOffsetPos().offset(0, 0, 0), list);
-                }
-            }
-        }).subscribe();
+        new PistonCrafting();
         EventManager.mod(EntityAttributeCreationEvent.class).process(entityAttributeCreationEvent -> {
             entityAttributeCreationEvent.put(SushiContent.EntityTypes.TUNA.get(), AbstractFish.createAttributes().build());
             entityAttributeCreationEvent.put(SushiContent.EntityTypes.SHRIMP.get(), AbstractFish.createAttributes().build());
