@@ -5,7 +5,7 @@
     "id": "minecraft:water"
   },
   "input": {
-    "tag": "c:crops/soy_bean"
+    "tag": "c:crops/soybean"
   },
   "output": {
     "count": 1,
