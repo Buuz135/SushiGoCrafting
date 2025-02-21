@@ -38,7 +38,7 @@ public class CapabilitySyncMessage extends Message {
         var data = Minecraft.getInstance().player.getData(SushiContent.AttachmentTypes.SUSHI_WEIGHT_DISCOVERY);
         data.deserializeNBT(null, capability);
         if (!itemStack.isEmpty() && !itemStack.getItem().equals(Items.STONE)) {
-            PerfectionToast toast = new PerfectionToast(itemStack, Component.literal(ChatFormatting.DARK_AQUA + "You have discovered a"), Component.literal(ChatFormatting.DARK_AQUA + "new perfect weight!"), false);
+            PerfectionToast toast = new PerfectionToast(itemStack, Component.literal(ChatFormatting.DARK_AQUA + "" + Component.translatable("text.sushigoocrafting.discovered_a")), Component.literal(ChatFormatting.DARK_AQUA + "" + Component.translatable("text.sushigocrafting.perfect_weight")), false);
             Minecraft.getInstance().getToasts().addToast(toast);
             new Thread(() -> {
                 try {
