@@ -1,0 +1,13 @@
+{
+  "name": "Avocado",
+  "icon": "sushigocrafting:avocado",
+  "category": "sushigocrafting:world",
+  "sortnum": 2,
+  "read_by_default": false,
+  "pages": [
+    {
+      "type": "text",
+      "text": "Du kannst Avocadobäume in der Welt finden, hauptsächlich in Ebenen. $(br2)Du kannst die Avocado von den Blättern ernten, indem du mit Rechtsklick darauf klickst, wenn sie vollständig gewachsen ist."
+    }
+  ]
+}

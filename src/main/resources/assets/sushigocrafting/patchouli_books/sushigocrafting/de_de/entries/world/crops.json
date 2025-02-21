@@ -1,0 +1,13 @@
+{
+  "name": "Pflanzen",
+  "icon": "sushigocrafting:wasabi_root",
+  "category": "sushigocrafting:world",
+  "sortnum": 3,
+  "read_by_default": false,
+  "pages": [
+    {
+      "type": "text",
+      "text": "Du kannst Samen erhalten, indem du Gras brichst. $(br2)Die meisten Pflanzen werden wie normale Pflanzen angebaut, außer Reis, der unter Wasser auf Erde angebaut werden muss."
+    }
+  ]
+}

@@ -1,0 +1,31 @@
+{
+  "name": "Essens Effekte",
+  "icon": "sushigocrafting:avocado_slices",
+  "category": "sushigocrafting:getting_started",
+  "sortnum": 0,
+  "read_by_default": false,
+  "pages": [
+    {
+      "type": "text",
+      "text": "Die Verwendung verschiedener Zutaten zur Herstellung einer Sushi-Sorte verleiht dir verschiedene Effekte, um das Essen zu verbessern."
+    },
+    {
+      "type": "spotlight",
+      "item": "sushigocrafting:salmon_fillet",
+      "title": "Kleine Happen",
+      "text": "Solange dieser Effekt aktiv ist, hast du eine kleine Chance das Item nicht beim Essen zu verbrauchen."
+    },
+    {
+      "type": "spotlight",
+      "item": "sushigocrafting:tuna_fillet",
+      "title": "Erworbener Geschmack",
+      "text": "Solange der Effekt aktiv ist wird mehr Hunger wieder hergestellt."
+    },
+    {
+      "type": "spotlight",
+      "item": "sushigocrafting:shrimp",
+      "title": "Ruhige Hände",
+      "text": "Wenn du ein Schneidebrett verwendest, während du diesen Trankeffekt hast, werden die Zutaten verstärkt."
+    }
+  ]
+}

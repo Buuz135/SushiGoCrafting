@@ -1,0 +1,17 @@
+{
+  "name": "Kühlbox",
+  "icon": "sushigocrafting:cooler_box",
+  "category": "sushigocrafting:using_tools",
+  "sortnum": 1,
+  "read_by_default": false,
+  "pages": [
+    {
+      "type": "text",
+      "text": "Eine praktische Box, die automatisch Zutaten mit Gewichtung kombiniert. Einfach platzieren und sie werden kombiniert."
+    },
+    {
+      "type": "crafting",
+      "recipe": "sushigocrafting:cooler_box"
+    }
+  ]
+}
