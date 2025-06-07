@@ -53,7 +53,7 @@ public class SushiItemTagsProvider extends ItemTagsProvider {
         }
         tag(ItemTags.create(ResourceLocation.fromNamespaceAndPath("c", "fruits"))).add(SushiContent.Items.AVOCADO.get());
         tag(ItemTags.create(ResourceLocation.fromNamespaceAndPath("c", "fruits/avocado"))).add(SushiContent.Items.AVOCADO.get());
-        tag(ItemTags.create(ResourceLocation.fromNamespaceAndPath("c", "tools/knife"))).add(SushiContent.Items.KNIFE_CLEAVER.get());
+        tag(ItemTags.create(ResourceLocation.fromNamespaceAndPath("c", "tools/knives"))).add(SushiContent.Items.KNIFE_CLEAVER.get());
         for (Map.Entry<String, List<DeferredHolder<Item, Item>>> stringListEntry : FoodHelper.REGISTERED.entrySet()) {
             for (DeferredHolder<Item, Item> foodItem : stringListEntry.getValue()) {
                 for (IFoodIngredient foodIngredient : ((FoodItem) foodItem.get()).getIngredientList()) {

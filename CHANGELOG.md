@@ -1,6 +1,7 @@
 # 0.6.5
 
 * Fixed Rice Cooker consuming burnable items that can't be consumed, closes #56
+* Changed knife tag to use plural, closes #57
 
 # 0.6.4
 * Replace all literals with translatables by joshieman06
