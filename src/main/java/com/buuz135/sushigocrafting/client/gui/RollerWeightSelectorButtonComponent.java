@@ -116,17 +116,17 @@ public abstract class RollerWeightSelectorButtonComponent extends BasicScreenAdd
     public List<Component> getTooltipLines() {
         List<Component> lines = new ArrayList<>();
         if (inventoryComponent.getStackInSlot(slot).isEmpty()) {
-            lines.add(Component.literal(NumberFormat.getInstance(Locale.getDefault()).format(((getWeight() + 1) / 5D) * 100) + ChatFormatting.DARK_AQUA + "%" + ChatFormatting.GOLD + " " + Component.translatable("text.sushigocrafting.weight")));
+            lines.add(Component.literal(NumberFormat.getInstance(Locale.getDefault()).format(((getWeight() + 1) / 5D) * 100) + ChatFormatting.DARK_AQUA + "%" + ChatFormatting.GOLD + " " + Component.translatable("text.sushigocrafting.weight").getString()));
         } else {
             IFoodIngredient ingredient = FoodAPI.get().getIngredientFromItem(inventoryComponent.getStackInSlot(slot).getItem());
             if (!ingredient.isEmpty()) {
                 String unit = ingredient.getIngredientConsumer() == IIngredientConsumer.STACK ? "u" : "gr";
                 double amount = ingredient.getIngredientConsumer() == IIngredientConsumer.STACK ? ingredient.getDefaultAmount() * (getWeight() + 1) : ingredient.getDefaultAmount() * (getWeight() + 1) / 5D;
-                lines.add(Component.literal(ChatFormatting.GOLD + "" + Component.translatable("text.sushigocrafting.consumes") + ChatFormatting.WHITE + NumberFormat.getInstance(Locale.getDefault()).format(amount) + ChatFormatting.YELLOW + unit));
+                lines.add(Component.literal(ChatFormatting.GOLD + "" + Component.translatable("text.sushigocrafting.consumes").getString() + ChatFormatting.WHITE + NumberFormat.getInstance(Locale.getDefault()).format(amount) + ChatFormatting.YELLOW + unit));
             }
         }
-        lines.add(Component.literal(ChatFormatting.DARK_GRAY + "*" + Component.translatable("text.sushigocrafting.left_click_increase") + "*"));
-        lines.add(Component.literal(ChatFormatting.DARK_GRAY + "*" + Component.translatable("text.sushigocrafting.right_click_decrease") + "*"));
+        lines.add(Component.literal(ChatFormatting.DARK_GRAY + "*" + Component.translatable("text.sushigocrafting.left_click_increase").getString() + "*"));
+        lines.add(Component.literal(ChatFormatting.DARK_GRAY + "*" + Component.translatable("text.sushigocrafting.right_click_decrease").getString() + "*"));
         return lines;
     }
 
