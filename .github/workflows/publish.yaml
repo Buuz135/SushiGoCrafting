@@ -24,7 +24,7 @@ jobs:
       - name: build
         run: ./gradlew build
       - name: Publish Minecraft Mods Forge
-        uses: Kir-Antipov/mc-publish@v3.2.0
+        uses: Kir-Antipov/mc-publish@v3.3.1
         with:
           curseforge-id: 452500
           modrinth-id: G9WbcGQ2
@@ -35,8 +35,8 @@ jobs:
           version-type: beta
           version: ${{ github.ref_name }}
           loaders: neoforge
+          environment: client | server
           game-versions: |
-            1.21
             1.21.1
           java: 21
           name: ""
