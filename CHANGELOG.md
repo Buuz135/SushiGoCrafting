@@ -1,3 +1,7 @@
+# 0.6.6
+
+* Fix translation and typo correction - #62 loulou2444 closes #60
+
 # 0.6.5
 
 * Fixed Rice Cooker consuming burnable items that can't be consumed, closes #56
