@@ -64,7 +64,7 @@ public class RollerCraftButtonAddon extends BasicButtonAddon {
 
     @Override
     public List<Component> getTooltipLines() {
-        return Arrays.asList(Component.translatable("text.sushigocrafting.roll"), Component.literal(ChatFormatting.DARK_GRAY + "*" + Component.translatable("text.sushigocrafting.make_one") + "*"), Component.literal(ChatFormatting.DARK_GRAY + "*" + Component.translatable("text.sushigocrafting.make_64") + "*"));
+        return Arrays.asList(Component.translatable("text.sushigocrafting.roll"), Component.literal(ChatFormatting.DARK_GRAY + "*" + Component.translatable("text.sushigocrafting.make_one").getString() + "*"), Component.literal(ChatFormatting.DARK_GRAY + "*" + Component.translatable("text.sushigocrafting.make_64").getString() + "*"));
     }
 
     @Override
