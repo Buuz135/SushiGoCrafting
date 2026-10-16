@@ -268,7 +268,7 @@ public class SushiContent {
 
         public static final DeferredRegister<RecipeSerializer<?>> REGISTRY = DeferredRegister.create(Registries.RECIPE_SERIALIZER, SushiGoCrafting.MOD_ID);
 
-        public static final DeferredHolder<RecipeSerializer<?>, RecipeSerializer<CombineAmountItemRecipe>> COMBINE_AMOUNT = recipeSerializer("amount_combine_recipe", () -> new RecipeSerializer<>(MapCodec.unit(CombineAmountItemRecipe::new), StreamCodec.unit(new CombineAmountItemRecipe())));
+        public static final DeferredHolder<RecipeSerializer<?>, RecipeSerializer<CombineAmountItemRecipe>> COMBINE_AMOUNT = recipeSerializer("amount_combine_recipe", () -> new RecipeSerializer<>(MapCodec.unit(CombineAmountItemRecipe::new), StreamCodec.<net.minecraft.network.RegistryFriendlyByteBuf, net.minecraft.util.Unit>unit(net.minecraft.util.Unit.INSTANCE).map(unit -> new CombineAmountItemRecipe(), recipe -> net.minecraft.util.Unit.INSTANCE)));
         public static final DeferredHolder<RecipeSerializer<?>, RecipeSerializer<CuttingBoardRecipe>> CUTTING_BOARD = recipeSerializer("cutting_board", () -> new RecipeSerializer<>(CuttingBoardRecipe.CODEC, CuttingBoardRecipe.STREAM_CODEC));
         public static final DeferredHolder<RecipeSerializer<?>, RecipeSerializer<FermentingBarrelRecipe>> FERMENTING_BARREL = recipeSerializer("fermenting_barrel", () -> new RecipeSerializer<>(FermentingBarrelRecipe.CODEC, FermentingBarrelRecipe.STREAM_CODEC));
 
