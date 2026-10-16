@@ -4,7 +4,6 @@ import com.buuz135.sushigocrafting.proxy.SushiContent;
 import com.hrznstudio.titanium.event.handler.EventManager;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.NonNullList;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
