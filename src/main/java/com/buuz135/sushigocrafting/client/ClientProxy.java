@@ -77,7 +77,7 @@ public class ClientProxy {
             IFoodIngredient ingredient = FoodAPI.get().getIngredientFromItem(event.getItemStack().getItem());
             if (!ingredient.isEmpty() && ingredient.getEffect() != null) {
                 event.getToolTip().add(Component.literal(""));
-                if (Minecraft.getInstance().options.keyShift.isDown()) {
+                if (Minecraft.getInstance().hasShiftDown()) {
                     IIngredientEffect effect = ingredient.getEffect();
                     if (effect instanceof AddIngredientEffect) {
                         event.getToolTip().add(Component.literal(ChatFormatting.DARK_AQUA + "Adds Food Effect:"));

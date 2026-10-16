@@ -118,7 +118,7 @@ public class AvocadoLeavesBlock extends LeavesBlock implements IShearable, Bonem
         if (i != 1 || stateIn.getValue(DISTANCE) != i) {
             tickAccess.scheduleTick(currentPos, this, 1);
         }
-        return stateIn;
+        return super.updateShape(stateIn, worldIn, tickAccess, currentPos, facing, facingPos, facingState, random);
     }
 
     @OnlyIn(Dist.CLIENT)
@@ -139,12 +139,13 @@ public class AvocadoLeavesBlock extends LeavesBlock implements IShearable, Bonem
 
     @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
-        builder.add(DISTANCE, PERSISTENT, STAGE);
+        super.createBlockStateDefinition(builder);
+        builder.add(STAGE);
     }
 
     @Override
     public BlockState getStateForPlacement(BlockPlaceContext context) {
-        return updateDistance(this.defaultBlockState().setValue(PERSISTENT, Boolean.valueOf(true)), context.getLevel(), context.getClickedPos());
+        return updateDistance(super.getStateForPlacement(context), context.getLevel(), context.getClickedPos());
     }
 
     @Override
