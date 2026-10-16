@@ -64,7 +64,7 @@ public class CuttingBoardCategory implements IRecipeCategory<CuttingBoardRecipe>
         //matrixStack.translate(0,0, 100);
         //matrixStack.translate(0,0, -200);
         guiGraphics.pose().scale(scale, scale, scale);
-        ItemStackUtil.renderItemIntoGUI(guiGraphics.pose(), new ItemStack(SushiContent.Blocks.CUTTING_BOARD.get()), 2, 4);
+        ItemStackUtil.renderItemIntoGUI(guiGraphics, new ItemStack(SushiContent.Blocks.CUTTING_BOARD.get()), 2, 4);
         guiGraphics.pose().scale(1 / scale, 1 / scale, 1 / scale);
         //matrixStack.translate(0,0, 200);
     }
