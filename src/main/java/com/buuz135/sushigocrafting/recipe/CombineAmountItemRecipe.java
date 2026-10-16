@@ -18,7 +18,7 @@ public class CombineAmountItemRecipe extends CustomRecipe {
 
 
     public CombineAmountItemRecipe() {
-        super(CraftingBookCategory.MISC);
+        super();
     }
 
     public static boolean stackMatches(ItemStack first, ItemStack second) {
@@ -35,7 +35,7 @@ public class CombineAmountItemRecipe extends CustomRecipe {
             ItemStack second = list.get(1);
             if (first.getItem() == second.getItem() && first.getCount() == 1 && second.getCount() == 1 && first.getItem() instanceof AmountItem) {
                 ItemStack output = new ItemStack(first.getItem());
-                output.set(SushiDataComponent.AMOUNT, Math.min(((AmountItem) first.getItem()).getMaxCombineAmount(), ((AmountItem) first.getItem()).getCurrentAmount(first) + ((AmountItem) second.getItem()).getCurrentAmount(second)));
+                output.set(SushiDataComponent.AMOUNT.get(), Math.min(((AmountItem) first.getItem()).getMaxCombineAmount(), ((AmountItem) first.getItem()).getCurrentAmount(first) + ((AmountItem) second.getItem()).getCurrentAmount(second)));
                 return output;
             }
         }
@@ -61,7 +61,7 @@ public class CombineAmountItemRecipe extends CustomRecipe {
     }
 
     @Override
-    public ItemStack assemble(CraftingInput inv, HolderLookup.Provider provider) {
+    public ItemStack assemble(CraftingInput inv) {
         List<ItemStack> list = Lists.newArrayList();
         for (int i = 0; i < inv.size(); ++i) {
             ItemStack itemstack = inv.getItem(i);
@@ -79,12 +79,7 @@ public class CombineAmountItemRecipe extends CustomRecipe {
     }
 
     @Override
-    public boolean canCraftInDimensions(int width, int height) {
-        return width * height >= 2;
-    }
-
-    @Override
-    public RecipeSerializer<?> getSerializer() {
+    public RecipeSerializer<CombineAmountItemRecipe> getSerializer() {
         return SushiContent.RecipeSerializers.COMBINE_AMOUNT.get();
     }
 }

@@ -5,7 +5,7 @@ import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.data.recipes.RecipeOutput;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.*;
 import net.minecraft.world.level.Level;
@@ -18,12 +18,12 @@ import java.util.Optional;
 public class FermentingBarrelRecipe implements Recipe<CraftingInput> {
 
     public static final MapCodec<FermentingBarrelRecipe> CODEC = RecordCodecBuilder.mapCodec(in -> in.group(
-            Ingredient.CODEC.optionalFieldOf("input").forGetter(fermentingBarrelRecipe -> Optional.of(fermentingBarrelRecipe.input)),
+            Ingredient.CODEC.optionalFieldOf("input").forGetter(fermentingBarrelRecipe -> fermentingBarrelRecipe.input),
             FluidStack.CODEC.fieldOf("fluid").forGetter(FermentingBarrelRecipe::getFluid),
             ItemStack.CODEC.fieldOf("output").forGetter(FermentingBarrelRecipe::getOutput)
-    ).apply(in, (ingredient, fluidStack, itemStack) -> new FermentingBarrelRecipe(ingredient.orElse(Ingredient.EMPTY), fluidStack, itemStack)));
+    ).apply(in, (ingredient, fluidStack, itemStack) -> new FermentingBarrelRecipe(ingredient, fluidStack, itemStack)));
     public static List<FermentingBarrelRecipe> RECIPES = new ArrayList<>();
-    public Ingredient input = Ingredient.EMPTY;
+    public Optional<Ingredient> input = Optional.empty();
     public FluidStack fluid = FluidStack.EMPTY;
     public ItemStack output;
 
@@ -31,7 +31,7 @@ public class FermentingBarrelRecipe implements Recipe<CraftingInput> {
 
     }
 
-    public FermentingBarrelRecipe(Ingredient input, FluidStack stack, ItemStack output) {
+    public FermentingBarrelRecipe(Optional<Ingredient> input, FluidStack stack, ItemStack output) {
         this.input = input;
         this.fluid = stack;
         this.output = output;
@@ -44,31 +44,41 @@ public class FermentingBarrelRecipe implements Recipe<CraftingInput> {
     }
 
     @Override
-    public ItemStack assemble(CraftingInput craftingInput, HolderLookup.Provider provider) {
+    public ItemStack assemble(CraftingInput craftingInput) {
         return ItemStack.EMPTY;
     }
 
     @Override
-    public boolean canCraftInDimensions(int width, int height) {
+    public boolean showNotification() {
         return false;
     }
 
     @Override
-    public ItemStack getResultItem(HolderLookup.Provider provider) {
-        return ItemStack.EMPTY;
+    public String group() {
+        return "";
     }
 
     @Override
-    public RecipeSerializer<?> getSerializer() {
+    public PlacementInfo placementInfo() {
+        return PlacementInfo.NOT_PLACEABLE;
+    }
+
+    @Override
+    public RecipeBookCategory recipeBookCategory() {
+        return RecipeBookCategories.CRAFTING_MISC;
+    }
+
+    @Override
+    public RecipeSerializer<FermentingBarrelRecipe> getSerializer() {
         return SushiContent.RecipeSerializers.FERMENTING_BARREL.get();
     }
 
     @Override
-    public RecipeType<?> getType() {
+    public RecipeType<FermentingBarrelRecipe> getType() {
         return SushiContent.RecipeTypes.FERMENTING_BARREL.get();
     }
 
-    public Ingredient getInput() {
+    public Optional<Ingredient> getInput() {
         return input;
     }
 
@@ -80,7 +90,7 @@ public class FermentingBarrelRecipe implements Recipe<CraftingInput> {
         return output;
     }
 
-    public void save(RecipeOutput output, ResourceLocation id) {
-        output.accept(id, this, null);
+    public void save(RecipeOutput output, Identifier id) {
+        output.accept(net.minecraft.resources.ResourceKey.create(net.minecraft.core.registries.Registries.RECIPE, id), this, null);
     }
 }
