@@ -133,13 +133,13 @@ public class RollerTile extends ActiveTile<RollerTile> {
     @Override
     public InteractionResult onActivated(Player player, InteractionHand hand, Direction facing, double hitX, double hitY, double hitZ) {
         InteractionResult type = super.onActivated(player, hand, facing, hitX, hitY, hitZ);
-        if (!type.result().shouldSwing()) {
+        if (!type.consumesAction()) {
             if (!player.hasData(SushiContent.AttachmentTypes.SUSHI_WEIGHT_DISCOVERY)) {
                 player.setData(SushiContent.AttachmentTypes.SUSHI_WEIGHT_DISCOVERY, new SushiWeightDiscoveryCapability());
             }
             var data = player.getData(SushiContent.AttachmentTypes.SUSHI_WEIGHT_DISCOVERY);
             if (player instanceof ServerPlayer) {
-                data.requestUpdate((ServerPlayer) player, new ItemStack(Items.STONE), null);
+                data.requestUpdate((ServerPlayer) player, new ItemStack(Items.STONE));
             }
             openGui(player);
             return InteractionResult.SUCCESS;
@@ -294,7 +294,7 @@ public class RollerTile extends ActiveTile<RollerTile> {
         return spices;
     }
 
-    public class WeightTracker {
+    public class WeightTracker implements com.hrznstudio.titanium.nbthandler.INBTSerializable<CompoundTag> {
 
         private List<Integer> weights;
 

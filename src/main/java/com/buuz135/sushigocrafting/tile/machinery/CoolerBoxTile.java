@@ -34,7 +34,7 @@ public class CoolerBoxTile extends ActiveTile<CoolerBoxTile> {
     @Override
     public InteractionResult onActivated(Player player, InteractionHand hand, Direction facing, double hitX, double hitY, double hitZ) {
         InteractionResult type = super.onActivated(player, hand, facing, hitX, hitY, hitZ);
-        if (!type.result().shouldSwing()) {
+        if (!type.consumesAction()) {
             openGui(player);
             return InteractionResult.SUCCESS;
         }

@@ -7,7 +7,7 @@ import com.buuz135.sushigocrafting.api.impl.FoodAPI;
 import com.buuz135.sushigocrafting.api.impl.effect.ModifyIngredientEffect;
 import com.buuz135.sushigocrafting.util.TextUtil;
 import net.minecraft.ChatFormatting;
-import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.client.Minecraft;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.sounds.SoundSource;
@@ -114,14 +114,14 @@ public class FoodItem extends SushiItem {
         }
         if (stack.has(SushiDataComponent.FOOD_SPICES.get())) {
             CompoundTag compoundNBT = stack.get(SushiDataComponent.FOOD_SPICES.get());
-            for (String name : compoundNBT.getAllKeys()) {
+            for (String name : compoundNBT.keySet()) {
                 IFoodIngredient foodIngredient = FoodAPI.get().getIngredientFromName(name);
                 if (!foodIngredient.isEmpty())
                     tooltip.accept(Component.literal(ChatFormatting.GRAY + " - " + Component.translatable(foodIngredient.getItem().getDescriptionId()).getString()));
             }
         }
-        boolean hasShift = Screen.hasShiftDown();
-        boolean hasAlt = Screen.hasAltDown();
+        boolean hasShift = Minecraft.getInstance().hasShiftDown();
+        boolean hasAlt = Minecraft.getInstance().hasAltDown();
         //hasShift = hasAlt = true;
         Info info = new Info(stack, hasShift);
         getTagsFrom(info.getNegative(), info.getPositive()).forEach(tooltip);

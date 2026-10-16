@@ -29,7 +29,12 @@ public class CapabilitySyncMessage extends Message {
     }
 
     @Override
-    protected void handleMessage(IPayloadContext context) {
+    protected void handleServerMessage(IPayloadContext context) {
+        throw new UnsupportedOperationException("Capability sync is client-bound");
+    }
+
+    @Override
+    public void handleClientMessage(IPayloadContext context) {
         context.enqueueWork(this::handle);
     }
 
@@ -39,7 +44,7 @@ public class CapabilitySyncMessage extends Message {
         data.deserialize(net.minecraft.world.level.storage.TagValueInput.create(net.minecraft.util.ProblemReporter.DISCARDING, Minecraft.getInstance().level.registryAccess(), capability));
         if (!itemStack.isEmpty() && !itemStack.getItem().equals(Items.STONE)) {
             PerfectionToast toast = new PerfectionToast(itemStack, Component.literal(ChatFormatting.DARK_AQUA + "You have discovered a"), Component.literal(ChatFormatting.DARK_AQUA + "new perfect weight!"), false);
-            Minecraft.getInstance().getToasts().addToast(toast);
+            Minecraft.getInstance().getToastManager().addToast(toast);
             new Thread(() -> {
                 try {
                     Thread.sleep(5 * 1000);

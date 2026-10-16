@@ -21,7 +21,7 @@ public class SushiDataComponent {
 
 
     public static final ComponentSupplier<Integer> AMOUNT = register("amount", () -> 0, op -> op.persistent(Codec.INT).networkSynchronized(ByteBufCodecs.INT));
-    public static final ComponentSupplier<List<Integer>> FOOD_WEIGHTS = register("food_weights", ArrayList::new, op -> op.persistent(Codec.INT.listOf()).networkSynchronized(ByteBufCodecs.list().apply(ByteBufCodecs.INT)));
+    public static final ComponentSupplier<List<Integer>> FOOD_WEIGHTS = register("food_weights", ArrayList::new, op -> op.persistent(Codec.INT.listOf()).networkSynchronized(ByteBufCodecs.list().apply(ByteBufCodecs.INT).cast()));
     public static final ComponentSupplier<CompoundTag> FOOD_SPICES = register("food_spices", CompoundTag::new, op -> op.persistent(CompoundTag.CODEC).networkSynchronized(ByteBufCodecs.COMPOUND_TAG));
     public static final ComponentSupplier<CompoundTag> TILE = register("tile", CompoundTag::new, op -> op.persistent(CompoundTag.CODEC).networkSynchronized(ByteBufCodecs.COMPOUND_TAG));
 
