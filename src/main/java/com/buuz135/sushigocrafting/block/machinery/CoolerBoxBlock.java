@@ -15,6 +15,7 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.item.component.TooltipDisplay;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
@@ -30,6 +31,7 @@ import org.jetbrains.annotations.Nullable;
 
 import javax.annotation.Nonnull;
 import java.util.List;
+import java.util.function.Consumer;
 
 public class CoolerBoxBlock extends RotatableBlock<CoolerBoxTile> {
 
@@ -88,13 +90,13 @@ public class CoolerBoxBlock extends RotatableBlock<CoolerBoxTile> {
 
     protected void copyTo(CoolerBoxTile tile, ItemStack stack) {
         if (!tile.isEmpty()) {
-            stack.set(SushiDataComponent.TILE, tile.saveWithoutMetadata(tile.getLevel().registryAccess()));
+            stack.set(SushiDataComponent.TILE.get(), tile.saveWithoutMetadata(tile.getLevel().registryAccess()));
         }
     }
 
     protected void copyFrom(ItemStack stack, CoolerBoxTile tile) {
-        if (stack.has(SushiDataComponent.TILE)) {
-            tile.loadAdditional(stack.get(SushiDataComponent.TILE), tile.getLevel().registryAccess());
+        if (stack.has(SushiDataComponent.TILE.get())) {
+            tile.loadAdditional(stack.get(SushiDataComponent.TILE.get()), tile.getLevel().registryAccess());
             tile.markForUpdate();
         }
     }
@@ -109,14 +111,14 @@ public class CoolerBoxBlock extends RotatableBlock<CoolerBoxTile> {
     }
 
     @Override
-    public void appendHoverText(ItemStack stack, Item.TooltipContext context, List<Component> tooltip, TooltipFlag tooltipFlag) {
-        super.appendHoverText(stack, context, tooltip, tooltipFlag);
-        if (stack.has(SushiDataComponent.TILE)) {
-            var tileData = stack.get(SushiDataComponent.TILE);
+    public void appendHoverText(ItemStack stack, Item.TooltipContext context, TooltipDisplay display, Consumer<Component> tooltip, TooltipFlag tooltipFlag) {
+        super.appendHoverText(stack, context, display, tooltip, tooltipFlag);
+        if (stack.has(SushiDataComponent.TILE.get())) {
+            var tileData = stack.get(SushiDataComponent.TILE.get());
 
             if (tileData.contains("input")) {
                 NonNullList<ItemStack> nonnulllist = NonNullList.withSize(27, ItemStack.EMPTY);
-                ContainerHelper.loadAllItems(tileData.getCompound("input"), nonnulllist, Minecraft.getInstance().level.registryAccess());
+                ContainerHelper.loadAllItems(tileData.getCompoundOrEmpty("input"), nonnulllist, Minecraft.getInstance().level.registryAccess());
                 int i = 0;
                 int j = 0;
 
@@ -127,13 +129,13 @@ public class CoolerBoxBlock extends RotatableBlock<CoolerBoxTile> {
                             ++i;
                             MutableComponent iformattabletextcomponent = itemstack.getHoverName().copy();
                             iformattabletextcomponent.append(" x").append(String.valueOf(itemstack.getCount())).withStyle(ChatFormatting.DARK_AQUA);
-                            tooltip.add(iformattabletextcomponent);
+                            tooltip.accept(iformattabletextcomponent);
                         }
                     }
                 }
 
                 if (j - i > 0) {
-                    tooltip.add(Component.translatable("container.shulkerBox.more", j - i).withStyle(ChatFormatting.ITALIC, ChatFormatting.DARK_AQUA));
+                    tooltip.accept(Component.translatable("container.shulkerBox.more", j - i).withStyle(ChatFormatting.ITALIC, ChatFormatting.DARK_AQUA));
                 }
             }
         }

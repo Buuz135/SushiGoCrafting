@@ -51,7 +51,7 @@ public class SushiWeightDiscoveryCapability implements ISushiWeightDiscovery {
     public void deserializeNBT(HolderLookup.Provider provider, CompoundTag nbt) {
         this.discoveryLevels.clear();
         for (String name : nbt.getAllKeys()) {
-            this.discoveryLevels.put(name, nbt.getInt(name));
+            this.discoveryLevels.put(name, nbt.getIntOr(name, 0));
         }
     }
 

@@ -11,18 +11,21 @@ import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.food.FoodProperties;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.item.component.TooltipDisplay;
 import net.minecraft.world.level.Level;
 
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
+import java.util.function.Consumer;
 
 public class FoodItem extends SushiItem {
 
@@ -97,43 +100,43 @@ public class FoodItem extends SushiItem {
     }
 
     @Override
-    public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltip, TooltipFlag tooltipFlag) {
-        super.appendHoverText(stack, context, tooltip, tooltipFlag);
-        tooltip.add(Component.literal(ChatFormatting.GRAY + "Ingredients: "));
+    public void appendHoverText(ItemStack stack, TooltipContext context, TooltipDisplay display, Consumer<Component> tooltip, TooltipFlag tooltipFlag) {
+        super.appendHoverText(stack, context, display, tooltip, tooltipFlag);
+        tooltip.accept(Component.literal(ChatFormatting.GRAY + "Ingredients: "));
         for (int i = 0; i < ingredientList.size(); i++) {
             if (!ingredientList.get(i).isEmpty()) {
                 String line = ChatFormatting.GRAY + " - " + Component.translatable(ingredientList.get(i).getItem().getDescriptionId()).getString();
-                if (stack.has(SushiDataComponent.FOOD_WEIGHTS)) {
-                    line += " " + getWeightText(stack.get(SushiDataComponent.FOOD_WEIGHTS).get(i));
+                if (stack.has(SushiDataComponent.FOOD_WEIGHTS.get())) {
+                    line += " " + getWeightText(stack.get(SushiDataComponent.FOOD_WEIGHTS.get()).get(i));
                 }
-                tooltip.add(Component.literal(line));
+                tooltip.accept(Component.literal(line));
             }
         }
-        if (stack.has(SushiDataComponent.FOOD_SPICES)) {
-            CompoundTag compoundNBT = stack.get(SushiDataComponent.FOOD_SPICES);
+        if (stack.has(SushiDataComponent.FOOD_SPICES.get())) {
+            CompoundTag compoundNBT = stack.get(SushiDataComponent.FOOD_SPICES.get());
             for (String name : compoundNBT.getAllKeys()) {
                 IFoodIngredient foodIngredient = FoodAPI.get().getIngredientFromName(name);
                 if (!foodIngredient.isEmpty())
-                    tooltip.add(Component.literal(ChatFormatting.GRAY + " - " + Component.translatable(foodIngredient.getItem().getDescriptionId()).getString()));
+                    tooltip.accept(Component.literal(ChatFormatting.GRAY + " - " + Component.translatable(foodIngredient.getItem().getDescriptionId()).getString()));
             }
         }
         boolean hasShift = Screen.hasShiftDown();
         boolean hasAlt = Screen.hasAltDown();
         //hasShift = hasAlt = true;
         Info info = new Info(stack, hasShift);
-        tooltip.addAll(getTagsFrom(info.getNegative(), info.getPositive()));
-        tooltip.add(Component.literal(""));
+        getTagsFrom(info.getNegative(), info.getPositive()).forEach(tooltip);
+        tooltip.accept(Component.literal(""));
         if (hasShift) {
             if (info.getEffectInstances().size() > 0) {
-                tooltip.add(Component.literal(ChatFormatting.DARK_AQUA + "Effects:"));
+                tooltip.accept(Component.literal(ChatFormatting.DARK_AQUA + "Effects:"));
                 if (hasAlt) {
-                    tooltip.add(Component.literal(ChatFormatting.YELLOW + " - " + ChatFormatting.GOLD + "Hunger: " + ChatFormatting.WHITE + (int) info.getHunger()));
-                    tooltip.add(Component.literal(ChatFormatting.YELLOW + " - " + ChatFormatting.GOLD + "Saturation: " + ChatFormatting.WHITE + info.getSaturation()));
+                    tooltip.accept(Component.literal(ChatFormatting.YELLOW + " - " + ChatFormatting.GOLD + "Hunger: " + ChatFormatting.WHITE + (int) info.getHunger()));
+                    tooltip.accept(Component.literal(ChatFormatting.YELLOW + " - " + ChatFormatting.GOLD + "Saturation: " + ChatFormatting.WHITE + info.getSaturation()));
                 }
-                info.getEffectInstances().forEach(effectInstance -> tooltip.add(Component.literal(ChatFormatting.YELLOW + " - " + ChatFormatting.GOLD + Component.translatable(effectInstance.getDescriptionId()).getString() + ChatFormatting.DARK_AQUA + " (" + ChatFormatting.WHITE + effectInstance.getDuration() / 20 + ChatFormatting.YELLOW + "s" + ChatFormatting.DARK_AQUA + ", " + ChatFormatting.YELLOW + "Level " + ChatFormatting.WHITE + (effectInstance.getAmplifier() + 1) + ChatFormatting.DARK_AQUA + ")")));
+                info.getEffectInstances().forEach(effectInstance -> tooltip.accept(Component.literal(ChatFormatting.YELLOW + " - " + ChatFormatting.GOLD + Component.translatable(effectInstance.getDescriptionId()).getString() + ChatFormatting.DARK_AQUA + " (" + ChatFormatting.WHITE + effectInstance.getDuration() / 20 + ChatFormatting.YELLOW + "s" + ChatFormatting.DARK_AQUA + ", " + ChatFormatting.YELLOW + "Level " + ChatFormatting.WHITE + (effectInstance.getAmplifier() + 1) + ChatFormatting.DARK_AQUA + ")")));
             }
         } else {
-            tooltip.add(Component.literal(ChatFormatting.YELLOW + "Hold " + ChatFormatting.GOLD + ChatFormatting.ITALIC + "<Shift>" + ChatFormatting.RESET + ChatFormatting.YELLOW + " for sushi effect"));
+            tooltip.accept(Component.literal(ChatFormatting.YELLOW + "Hold " + ChatFormatting.GOLD + ChatFormatting.ITALIC + "<Shift>" + ChatFormatting.RESET + ChatFormatting.YELLOW + " for sushi effect"));
         }
     }
 
@@ -143,19 +146,13 @@ public class FoodItem extends SushiItem {
             Info info = new Info(stack, true);
             player.getFoodData().eat((int) info.getHunger(), info.getSaturation());
             info.getEffectInstances().forEach(player::addEffect);
-            worldIn.playSound(null, entity.getX(), entity.getY(), entity.getZ(), entity.getEatingSound(stack), SoundSource.NEUTRAL, 1.0F, 1.0F + (worldIn.random.nextFloat() - worldIn.random.nextFloat()) * 0.4F);
+            worldIn.playSound(null, entity.getX(), entity.getY(), entity.getZ(), SoundEvents.GENERIC_EAT, SoundSource.NEUTRAL, 1.0F, 1.0F + (worldIn.random.nextFloat() - worldIn.random.nextFloat()) * 0.4F);
             if (!(entity instanceof Player) || !((Player) entity).getAbilities().instabuild) {
                 stack.shrink(1);
             }
             return stack;
         }
-        return entity.eat(worldIn, stack);
-    }
-
-    @Override
-    public @org.jetbrains.annotations.Nullable FoodProperties getFoodProperties(ItemStack stack, @org.jetbrains.annotations.Nullable LivingEntity entity) {
-        var info = new Info(stack, true);
-        return new FoodProperties.Builder().nutrition((int) Math.floor(info.getHunger())).saturationModifier(info.getSaturation()).build();
+        return super.finishUsingItem(stack, worldIn, entity);
     }
 
     public static class Info {
@@ -171,8 +168,8 @@ public class FoodItem extends SushiItem {
             this.stack = stack;
             this.effectInstances = new ArrayList<>();
             this.modifyIngredientEffect = null;
-            if (stack.has(SushiDataComponent.FOOD_WEIGHTS)) {
-                for (int i : stack.get(SushiDataComponent.FOOD_WEIGHTS)) {
+            if (stack.has(SushiDataComponent.FOOD_WEIGHTS.get())) {
+                for (int i : stack.get(SushiDataComponent.FOOD_WEIGHTS.get())) {
                     if (i < 0) {
                         negative += i;
                     }
@@ -187,8 +184,8 @@ public class FoodItem extends SushiItem {
             this.saturation = (foodItem.getIngredientList().stream().map(IFoodIngredient::getSaturationValue).mapToInt(Integer::intValue).sum() * getFoodModifierValue(negative, positive)) / (foodItem.ingredientList.size() + 2);
             if (calculateEffects) {
                 List<IFoodIngredient> foodIngredients = new ArrayList<>(foodItem.getIngredientList());
-                if (stack.has(SushiDataComponent.FOOD_SPICES)) {
-                    CompoundTag compoundNBT = stack.get(SushiDataComponent.FOOD_SPICES);
+                if (stack.has(SushiDataComponent.FOOD_SPICES.get())) {
+                    CompoundTag compoundNBT = stack.get(SushiDataComponent.FOOD_SPICES.get());
                     for (String name : compoundNBT.getAllKeys()) {
                         IFoodIngredient foodIngredient = FoodAPI.get().getIngredientFromName(name);
                         if (!foodIngredient.isEmpty()) foodIngredients.add(foodIngredient);

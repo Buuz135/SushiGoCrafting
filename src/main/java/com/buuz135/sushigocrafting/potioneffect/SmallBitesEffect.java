@@ -8,6 +8,7 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectCategory;
 import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.world.item.ItemStack;
 import net.neoforged.neoforge.event.entity.living.LivingEntityUseItemEvent;
 import net.neoforged.neoforge.items.ItemHandlerHelper;
@@ -18,7 +19,7 @@ public class SmallBitesEffect extends MobEffect {
 
     static {
         EventManager.forge(LivingEntityUseItemEvent.Finish.class)
-                .filter(finish -> finish.getItem().getFoodProperties(finish.getEntity()) != null && finish.getEntity().hasEffect(SushiContent.Effects.SMALL_BITES.getDelegate()))
+                .filter(finish -> finish.getItem().has(DataComponents.FOOD) && finish.getEntity().hasEffect(SushiContent.Effects.SMALL_BITES.getDelegate()))
                 .process(finish -> {
                     MobEffectInstance instance = finish.getEntity().getEffect(SushiContent.Effects.SMALL_BITES.getDelegate());
                     if (finish.getEntity() instanceof ServerPlayer player && finish.getEntity().level().random.nextInt(9) <= instance.getAmplifier() + 1) {

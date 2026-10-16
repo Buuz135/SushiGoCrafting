@@ -8,7 +8,7 @@ import com.buuz135.sushigocrafting.api.impl.effect.AddIngredientEffect;
 import com.buuz135.sushigocrafting.api.impl.effect.ModifyIngredientEffect;
 import com.buuz135.sushigocrafting.client.FoodRenderers;
 import com.buuz135.sushigocrafting.proxy.SushiContent;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.item.Item;
@@ -24,13 +24,13 @@ public class FoodIngredient implements IFoodIngredient {
             new ModifyIngredientEffect(1.75f, 0), 0, 2, DietType.GRAINS, () -> FoodRenderers.RICE);
     public static FoodIngredient NORI = new FoodIngredient("nori", SushiContent.Items.NORI_SHEET, 1, IIngredientConsumer.STACK, null,
             null, 1, 1, DietType.VEGETABLES, () -> FoodRenderers.NORI);
-    public static FoodIngredient TUNA_FILLET = new FoodIngredient("tuna", SushiContent.Items.RAW_TUNA_FILLET, 30, IIngredientConsumer.WEIGHT, () -> Ingredient.of(ItemTags.create(ResourceLocation.fromNamespaceAndPath("c", "raw_fishes/tuna"))),
+    public static FoodIngredient TUNA_FILLET = new FoodIngredient("tuna", SushiContent.Items.RAW_TUNA_FILLET, 30, IIngredientConsumer.WEIGHT, () -> Ingredient.of(ItemTags.create(Identifier.fromNamespaceAndPath("c", "raw_fishes/tuna"))),
             new AddIngredientEffect(SushiContent.Effects.ACQUIRED_TASTE, 30, 0), 3, 1, DietType.PROTEINS, () -> FoodRenderers.TUNA_FILLET);
-    public static FoodIngredient SALMON_FILLET = new FoodIngredient("salmon", SushiContent.Items.RAW_SALMON_FILLET, 30, IIngredientConsumer.WEIGHT, () -> Ingredient.of(ItemTags.create(ResourceLocation.fromNamespaceAndPath("c", "raw_fishes/salmon"))),
+    public static FoodIngredient SALMON_FILLET = new FoodIngredient("salmon", SushiContent.Items.RAW_SALMON_FILLET, 30, IIngredientConsumer.WEIGHT, () -> Ingredient.of(ItemTags.create(Identifier.fromNamespaceAndPath("c", "raw_fishes/salmon"))),
             new AddIngredientEffect(SushiContent.Effects.SMALL_BITES, 30, 0), 3, 1, DietType.PROTEINS, () -> FoodRenderers.SALMON_FILLET);
-    public static FoodIngredient AVOCADO = new FoodIngredient("avocado", SushiContent.Items.AVOCADO_SLICES, 45, IIngredientConsumer.WEIGHT, () -> Ingredient.of(ItemTags.create(ResourceLocation.fromNamespaceAndPath("c", "fruits/avocado"))),
+    public static FoodIngredient AVOCADO = new FoodIngredient("avocado", SushiContent.Items.AVOCADO_SLICES, 45, IIngredientConsumer.WEIGHT, () -> Ingredient.of(ItemTags.create(Identifier.fromNamespaceAndPath("c", "fruits/avocado"))),
             new ModifyIngredientEffect(1.20f, 1), 2, 2, DietType.FRUITS, () -> FoodRenderers.AVOCADO);
-    public static FoodIngredient CUCUMBER = new FoodIngredient("cucumber", SushiContent.Items.CUCUMBER_SLICES, 15, IIngredientConsumer.WEIGHT, () -> Ingredient.of(ItemTags.create(ResourceLocation.fromNamespaceAndPath("c", "crops/cucumber"))),
+    public static FoodIngredient CUCUMBER = new FoodIngredient("cucumber", SushiContent.Items.CUCUMBER_SLICES, 15, IIngredientConsumer.WEIGHT, () -> Ingredient.of(ItemTags.create(Identifier.fromNamespaceAndPath("c", "crops/cucumber"))),
             new ModifyIngredientEffect(1.25f, 0), 2, 2, DietType.VEGETABLES, () -> FoodRenderers.CUCUMBER);
     public static FoodIngredient SESAME = new FoodIngredient("sesame", SushiContent.Items.SESAME_SEED, 6, IIngredientConsumer.WEIGHT, null,
             new ModifyIngredientEffect(2, 0), 1, 1, DietType.GRAINS, null);
@@ -48,7 +48,7 @@ public class FoodIngredient implements IFoodIngredient {
             new AddIngredientEffect(MobEffects.SLOW_FALLING, 10, 0), 2, 1, DietType.PROTEINS, () -> FoodRenderers.CHICKEN);
     public static FoodIngredient SOY_SAUCE = new FoodIngredient("soy_sauce", SushiContent.Items.SOY_SAUCE, 4, IIngredientConsumer.WEIGHT, null,
             new ModifyIngredientEffect(1, 1), 0, 0, DietType.GRAINS, () -> FoodRenderers.SOY_SAUCE);
-    public static FoodIngredient WASABI = new FoodIngredient("wasabi", SushiContent.Items.WASABI_PASTE, 4, IIngredientConsumer.WEIGHT, () -> Ingredient.of(ItemTags.create(ResourceLocation.fromNamespaceAndPath("c", "crops/wasabi_root"))),
+    public static FoodIngredient WASABI = new FoodIngredient("wasabi", SushiContent.Items.WASABI_PASTE, 4, IIngredientConsumer.WEIGHT, () -> Ingredient.of(ItemTags.create(Identifier.fromNamespaceAndPath("c", "crops/wasabi_root"))),
             new AddIngredientEffect(MobEffects.FIRE_RESISTANCE, 10, 0), 0, 0, DietType.VEGETABLES, () -> FoodRenderers.WASABI);
 
     private final Supplier<? extends Item> item;

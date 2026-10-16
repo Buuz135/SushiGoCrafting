@@ -10,7 +10,7 @@ import com.hrznstudio.titanium.component.progress.ProgressBarComponent;
 import com.hrznstudio.titanium.util.TagUtil;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.ItemInteractionResult;
@@ -27,7 +27,7 @@ import javax.annotation.Nonnull;
 
 public class RiceCookerTile extends ActiveTile<RiceCookerTile> {
 
-    public static TagKey<Item> RICE = TagUtil.getItemTag(ResourceLocation.fromNamespaceAndPath("c", "crops/rice"));
+    public static TagKey<Item> RICE = TagUtil.getItemTag(Identifier.fromNamespaceAndPath("c", "crops/rice"));
 
     @Save
     private final InventoryComponent<RiceCookerTile> input;

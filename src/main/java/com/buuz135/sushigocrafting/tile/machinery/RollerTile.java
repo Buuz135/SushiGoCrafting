@@ -194,7 +194,7 @@ public class RollerTile extends ActiveTile<RollerTile> {
                                     }
                                 }
                             }
-                            stack.set(SushiDataComponent.FOOD_WEIGHTS, weightValues);
+                            stack.set(SushiDataComponent.FOOD_WEIGHTS.get(), weightValues);
                             CompoundTag spicesNBT = new CompoundTag();
                             for (int i = 0; i < spices.getSlots(); i++) {
                                 if (!spices.getStackInSlot(i).isEmpty()) {
@@ -205,7 +205,7 @@ public class RollerTile extends ActiveTile<RollerTile> {
                                     }
                                 }
                             }
-                            stack.set(SushiDataComponent.FOOD_SPICES, spicesNBT);
+                            stack.set(SushiDataComponent.FOOD_SPICES.get(), spicesNBT);
                             Containers.dropItemStack(this.level, this.worldPosition.getX(), this.getBlockPos().getY(), this.getBlockPos().getZ(), stack);
                         }
                         if (player instanceof ServerPlayer && !discovery.get().isEmpty()) {
@@ -250,8 +250,8 @@ public class RollerTile extends ActiveTile<RollerTile> {
             });
         }
         if (id == 100) {
-            int weight = compound.getInt("WeightSlot");
-            int button = compound.getInt("Button");
+            int weight = compound.getIntOr("WeightSlot", 0);
+            int button = compound.getIntOr("Button", 0);
             if (button == 0) {
                 weightTracker.weights.set(weight, Math.min(4, weightTracker.weights.get(weight) + 1));
             }
@@ -263,7 +263,7 @@ public class RollerTile extends ActiveTile<RollerTile> {
         if (id == 101) {
             int amount = 1;
             if (compound.contains("Button")) {
-                amount = compound.getInt("Button") == 1 ? 64 : 1;
+                amount = compound.getIntOr("Button", 0) == 1 ? 64 : 1;
             }
             for (int i = 0; i < amount; i++) {
                 this.craftProgress = 4;
@@ -315,7 +315,7 @@ public class RollerTile extends ActiveTile<RollerTile> {
         @Override
         public void deserializeNBT(HolderLookup.Provider provider, CompoundTag nbt) {
             weights = new ArrayList<>();
-            for (int i : nbt.getIntArray("Weights")) {
+            for (int i : nbt.getIntArray("Weights").orElseThrow()) {
                 weights.add(i);
             }
         }

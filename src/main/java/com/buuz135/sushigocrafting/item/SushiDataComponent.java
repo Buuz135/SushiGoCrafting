@@ -6,8 +6,10 @@ import com.mojang.serialization.Codec;
 import net.minecraft.core.component.DataComponentType;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.world.item.ItemStack;
 import net.neoforged.neoforge.registries.DeferredRegister;
+import net.neoforged.neoforge.registries.DeferredHolder;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,17 +17,17 @@ import java.util.function.Supplier;
 import java.util.function.UnaryOperator;
 
 public class SushiDataComponent {
-    public static final DeferredRegister<DataComponentType<?>> REGISTRY = DeferredRegister.create(Registries.DATA_COMPONENT_TYPE, SushiGoCrafting.MOD_ID);
+    public static final DeferredRegister.DataComponents REGISTRY = DeferredRegister.createDataComponents(Registries.DATA_COMPONENT_TYPE, SushiGoCrafting.MOD_ID);
 
 
-    public static final Supplier<DataComponentType<Integer>> AMOUNT = register("amount", () -> 0, op -> op.persistent(Codec.INT));
-    public static final Supplier<DataComponentType<List<Integer>>> FOOD_WEIGHTS = register("food_weights", ArrayList::new, op -> op.persistent(Codec.INT.listOf()));
-    public static final Supplier<DataComponentType<CompoundTag>> FOOD_SPICES = register("food_spices", CompoundTag::new, op -> op.persistent(CompoundTag.CODEC));
-    public static final Supplier<DataComponentType<CompoundTag>> TILE = register("tile", CompoundTag::new, op -> op.persistent(CompoundTag.CODEC));
+    public static final ComponentSupplier<Integer> AMOUNT = register("amount", () -> 0, op -> op.persistent(Codec.INT).networkSynchronized(ByteBufCodecs.INT));
+    public static final ComponentSupplier<List<Integer>> FOOD_WEIGHTS = register("food_weights", ArrayList::new, op -> op.persistent(Codec.INT.listOf()).networkSynchronized(ByteBufCodecs.list().apply(ByteBufCodecs.INT)));
+    public static final ComponentSupplier<CompoundTag> FOOD_SPICES = register("food_spices", CompoundTag::new, op -> op.persistent(CompoundTag.CODEC).networkSynchronized(ByteBufCodecs.COMPOUND_TAG));
+    public static final ComponentSupplier<CompoundTag> TILE = register("tile", CompoundTag::new, op -> op.persistent(CompoundTag.CODEC).networkSynchronized(ByteBufCodecs.COMPOUND_TAG));
 
 
     private static <T> ComponentSupplier<T> register(String name, Supplier<T> defaultVal, UnaryOperator<DataComponentType.Builder<T>> op) {
-        var registered = REGISTRY.register(name, () -> op.apply(DataComponentType.builder()).build());
+        DeferredHolder<DataComponentType<?>, DataComponentType<T>> registered = REGISTRY.registerComponentType(name, builder -> op.apply(builder));
         return new ComponentSupplier<>(registered, defaultVal);
     }
 
@@ -39,7 +41,7 @@ public class SushiDataComponent {
         }
 
         public T get(ItemStack stack) {
-            return stack.getOrDefault(type, defaultSupplier.get());
+            return stack.getOrDefault(type.get(), defaultSupplier.get());
         }
 
         @Override
