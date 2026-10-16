@@ -25,7 +25,7 @@ import com.mojang.serialization.MapCodec;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.TagKey;
@@ -38,7 +38,8 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.MobBucketItem;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.item.crafting.RecipeType;
-import net.minecraft.world.item.crafting.SimpleCraftingRecipeSerializer;
+import net.minecraft.world.item.crafting.Recipe;
+import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.RotatedPillarBlock;
 import net.minecraft.world.level.block.SaplingBlock;
@@ -58,6 +59,8 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.Optional;
 import java.util.function.Supplier;
+import java.util.function.Function;
+import java.util.Set;
 
 import static com.buuz135.sushigocrafting.SushiGoCrafting.MOD_ID;
 
@@ -67,21 +70,25 @@ public class SushiContent {
         return Blocks.REGISTRY.register(id, block);
     }
 
-    public static DeferredHolder<Item, Item> item(String id, Supplier<Item> item) {
-        return Items.REGISTRY.register(id, () -> {
-            var i = item.get();
-            //SushiGoCrafting.TAB.getTabList().add(i);
-            return i;
-        });
+    public static DeferredHolder<Item, Item> item(String id, Function<Item.Properties, Item> item) {
+        return Items.REGISTRY.register(id, () -> item.apply(itemProperties(id)));
+    }
+
+    private static Item.Properties itemProperties(String id) {
+        return new Item.Properties().setId(ResourceKey.create(Registries.ITEM, Identifier.fromNamespaceAndPath(MOD_ID, id)));
+    }
+
+    private static BlockBehaviour.Properties blockProperties(String id, Block source) {
+        return BlockBehaviour.Properties.ofFullCopy(source).setId(ResourceKey.create(Registries.BLOCK, Identifier.fromNamespaceAndPath(MOD_ID, id)));
     }
 
     public static DeferredHolder<Item, Item> basicItem(String id, String category) {
-        return Items.REGISTRY.register(id, () -> new SushiItem(new Item.Properties(), category));
+        return Items.REGISTRY.register(id, () -> new SushiItem(itemProperties(id), category));
     }
 
     public static DeferredHolder<Item, AmountItem> amountItem(String id, String category, int minAmount, int maxAmount, int maxCombine, boolean hurts) {
         return Items.REGISTRY.register(id, () -> {
-            var item = new AmountItem(new Item.Properties().stacksTo(1), category, minAmount, maxAmount, maxCombine, hurts);
+            var item = new AmountItem(itemProperties(id).stacksTo(1), category, minAmount, maxAmount, maxCombine, hurts);
             //SushiGoCrafting.TAB.getTabList().add(item);
             return item;
         });
@@ -89,7 +96,7 @@ public class SushiContent {
 
     public static DeferredHolder<Item, BlockItem> blockItem(String id, Supplier<? extends Block> sup) {
         return Items.REGISTRY.register(id, () -> {
-            var blockItem = new BlockItem(sup.get(), new Item.Properties());
+            var blockItem = new BlockItem(sup.get(), itemProperties(id));
             SushiGoCrafting.TAB.getTabList().add(blockItem);
             return blockItem;
         });
@@ -97,14 +104,14 @@ public class SushiContent {
 
     public static DeferredHolder<Item, BlockItem> blockItem(String id, Supplier<? extends Block> sup, Item.Properties properties) {
         return Items.REGISTRY.register(id, () -> {
-            var blockItem = new BlockItem(sup.get(), properties);
+            var blockItem = new BlockItem(sup.get(), properties.setId(ResourceKey.create(Registries.ITEM, Identifier.fromNamespaceAndPath(MOD_ID, id))));
             SushiGoCrafting.TAB.getTabList().add(blockItem);
             return blockItem;
         });
     }
 
     public static <T extends BlockEntity> DeferredHolder<BlockEntityType<?>, BlockEntityType<T>> tile(String id, BlockEntityType.BlockEntitySupplier<T> supplier, Supplier<? extends Block> sup) {
-        return TileEntities.REGISTRY.register(id, () -> BlockEntityType.Builder.of(supplier, sup.get()).build(null));
+        return TileEntities.REGISTRY.register(id, () -> new BlockEntityType<>(supplier, Set.of(sup.get())));
     }
 
     public static DeferredHolder<MobEffect, MobEffect> effect(String id, Supplier<MobEffect> supplier) {
@@ -119,11 +126,11 @@ public class SushiContent {
         return LootSerializers.REGISTRY.register(id, supplier);
     }
 
-    public static DeferredHolder<RecipeSerializer<?>, RecipeSerializer<?>> recipeSerializer(String id, Supplier<RecipeSerializer<?>> supplier) {
+    public static <T extends Recipe<?>> DeferredHolder<RecipeSerializer<?>, RecipeSerializer<T>> recipeSerializer(String id, Supplier<RecipeSerializer<T>> supplier) {
         return RecipeSerializers.REGISTRY.register(id, supplier);
     }
 
-    public static DeferredHolder<RecipeType<?>, RecipeType<?>> recipeType(String id, Supplier<RecipeType<?>> supplier) {
+    public static <T extends Recipe<?>> DeferredHolder<RecipeType<?>, RecipeType<T>> recipeType(String id, Supplier<RecipeType<T>> supplier) {
         return RecipeTypes.REGISTRY.register(id, supplier);
     }
 
@@ -131,21 +138,21 @@ public class SushiContent {
 
         public static final DeferredRegister<Block> REGISTRY = DeferredRegister.create(Registries.BLOCK, SushiGoCrafting.MOD_ID);
 
-        public static final DeferredHolder<Block, CustomCropBlock> RICE_CROP = block("rice_crop", () -> new WaterCropBlock(BlockBehaviour.Properties.ofFullCopy(net.minecraft.world.level.block.Blocks.KELP_PLANT), Items.RICE_SEEDS, state -> state.is(net.minecraft.world.level.block.Blocks.DIRT)));
-        public static final DeferredHolder<Block, CustomCropBlock> CUCUMBER_CROP = block("cucumber_crop", () -> new CustomCropBlock(BlockBehaviour.Properties.ofFullCopy(net.minecraft.world.level.block.Blocks.WHEAT), Items.CUCUMBER_SEEDS, state -> state.is(net.minecraft.world.level.block.Blocks.FARMLAND)));
-        public static final DeferredHolder<Block, CustomCropBlock> SOY_CROP = block("soy_crop", () -> new CustomCropBlock(BlockBehaviour.Properties.ofFullCopy(net.minecraft.world.level.block.Blocks.WHEAT), Items.SOY_SEEDS, state -> state.is(net.minecraft.world.level.block.Blocks.FARMLAND)));
-        public static final DeferredHolder<Block, CustomCropBlock> WASABI_CROP = block("wasabi_crop", () -> new CustomCropBlock(BlockBehaviour.Properties.ofFullCopy(net.minecraft.world.level.block.Blocks.WHEAT), Items.WASABI_SEEDS, state -> state.is(net.minecraft.world.level.block.Blocks.FARMLAND)));
-        public static final DeferredHolder<Block, CustomCropBlock> SESAME_CROP = block("sesame_crop", () -> new CustomCropBlock(BlockBehaviour.Properties.ofFullCopy(net.minecraft.world.level.block.Blocks.WHEAT), Items.SESAME_SEEDS, state -> state.is(net.minecraft.world.level.block.Blocks.FARMLAND)));
+        public static final DeferredHolder<Block, CustomCropBlock> RICE_CROP = block("rice_crop", () -> new WaterCropBlock(blockProperties("rice_crop", net.minecraft.world.level.block.Blocks.KELP_PLANT), Items.RICE_SEEDS, state -> state.is(net.minecraft.world.level.block.Blocks.DIRT)));
+        public static final DeferredHolder<Block, CustomCropBlock> CUCUMBER_CROP = block("cucumber_crop", () -> new CustomCropBlock(blockProperties("cucumber_crop", net.minecraft.world.level.block.Blocks.WHEAT), Items.CUCUMBER_SEEDS, state -> state.is(net.minecraft.world.level.block.Blocks.FARMLAND)));
+        public static final DeferredHolder<Block, CustomCropBlock> SOY_CROP = block("soy_crop", () -> new CustomCropBlock(blockProperties("soy_crop", net.minecraft.world.level.block.Blocks.WHEAT), Items.SOY_SEEDS, state -> state.is(net.minecraft.world.level.block.Blocks.FARMLAND)));
+        public static final DeferredHolder<Block, CustomCropBlock> WASABI_CROP = block("wasabi_crop", () -> new CustomCropBlock(blockProperties("wasabi_crop", net.minecraft.world.level.block.Blocks.WHEAT), Items.WASABI_SEEDS, state -> state.is(net.minecraft.world.level.block.Blocks.FARMLAND)));
+        public static final DeferredHolder<Block, CustomCropBlock> SESAME_CROP = block("sesame_crop", () -> new CustomCropBlock(blockProperties("sesame_crop", net.minecraft.world.level.block.Blocks.WHEAT), Items.SESAME_SEEDS, state -> state.is(net.minecraft.world.level.block.Blocks.FARMLAND)));
 
-        public static final DeferredHolder<Block, RotatedPillarBlock> AVOCADO_LOG = block("avocado_log", () -> new AvocadoLogBlock(BlockBehaviour.Properties.ofFullCopy(net.minecraft.world.level.block.Blocks.OAK_WOOD)));
-        public static final DeferredHolder<Block, RotatedPillarBlock> AVOCADO_LEAVES_LOG = block("avocado_leaves_logged", () -> new RotatedPillarBlock(BlockBehaviour.Properties.ofFullCopy(net.minecraft.world.level.block.Blocks.OAK_WOOD).noOcclusion()));
+        public static final DeferredHolder<Block, RotatedPillarBlock> AVOCADO_LOG = block("avocado_log", () -> new AvocadoLogBlock(blockProperties("avocado_log", net.minecraft.world.level.block.Blocks.OAK_WOOD)));
+        public static final DeferredHolder<Block, RotatedPillarBlock> AVOCADO_LEAVES_LOG = block("avocado_leaves_logged", () -> new RotatedPillarBlock(blockProperties("avocado_leaves_logged", net.minecraft.world.level.block.Blocks.OAK_WOOD).noOcclusion()));
         public static final DeferredHolder<Block, Block> AVOCADO_LEAVES = block("avocado_leaves", AvocadoLeavesBlock::new);
         public static final DeferredHolder<Block, Block> AVOCADO_SAPLING = block("avocado_sapling", () -> new SaplingBlock(new TreeGrower(
                 "avocado",
                 Optional.empty(),
-                Optional.of(ResourceKey.create(Registries.CONFIGURED_FEATURE, ResourceLocation.fromNamespaceAndPath("sushigocrafting", "avocado_tree"))),
+                Optional.of(ResourceKey.create(Registries.CONFIGURED_FEATURE, Identifier.fromNamespaceAndPath("sushigocrafting", "avocado_tree"))),
                 Optional.empty()
-        ), BlockBehaviour.Properties.ofFullCopy(net.minecraft.world.level.block.Blocks.OAK_SAPLING)));
+        ), blockProperties("avocado_sapling", net.minecraft.world.level.block.Blocks.OAK_SAPLING)));
 
         public static final DeferredHolder<Block, RollerBlock> ROLLER = block("roller", RollerBlock::new);
         public static final DeferredHolder<Block, RiceCookerBlock> RICE_COOKER = block("rice_cooker", RiceCookerBlock::new);
@@ -205,8 +212,8 @@ public class SushiContent {
 
         public static final DeferredHolder<Item, Item> KNIFE_CLEAVER = basicItem("cleaver_knife", "");
 
-        public static final DeferredHolder<Item, Item> TUNA_BUCKET = item("tuna_bucket", () -> new MobBucketItem(EntityTypes.TUNA.get(), Fluids.WATER, SoundEvents.BUCKET_EMPTY_FISH, (new Item.Properties()).stacksTo(1)));
-        public static final DeferredHolder<Item, Item> SHRIMP_BUCKET = item("shrimp_bucket", () -> new MobBucketItem(EntityTypes.SHRIMP.get(), Fluids.WATER, SoundEvents.BUCKET_EMPTY_AXOLOTL, (new Item.Properties()).stacksTo(1)));
+        public static final DeferredHolder<Item, Item> TUNA_BUCKET = item("tuna_bucket", properties -> new MobBucketItem(EntityTypes.TUNA.get(), Fluids.WATER, SoundEvents.BUCKET_EMPTY_FISH, properties.stacksTo(1)));
+        public static final DeferredHolder<Item, Item> SHRIMP_BUCKET = item("shrimp_bucket", properties -> new MobBucketItem(EntityTypes.SHRIMP.get(), Fluids.WATER, SoundEvents.BUCKET_EMPTY_AXOLOTL, properties.stacksTo(1)));
 
     }
 
@@ -235,8 +242,8 @@ public class SushiContent {
     public static class EntityTypes {
 
         public static final DeferredRegister<EntityType<?>> REGISTRY = DeferredRegister.create(Registries.ENTITY_TYPE, SushiGoCrafting.MOD_ID);
-        public static final DeferredHolder<EntityType<?>, EntityType<TunaEntity>> TUNA = entity("tuna", () -> EntityType.Builder.of(TunaEntity::new, MobCategory.WATER_AMBIENT).sized(0.7F, 0.4F).clientTrackingRange(4)./*setCustomClientFactory((spawnEntity, world) -> new TunaEntity(getTuna().get(), world)).*/build("tuna"));
-        public static final DeferredHolder<EntityType<?>, EntityType<ShrimpEntity>> SHRIMP = entity("shrimp", () -> EntityType.Builder.of(ShrimpEntity::new, MobCategory.WATER_AMBIENT).sized(0.7F, 0.4F).clientTrackingRange(4)./*setCustomClientFactory((spawnEntity, world) -> new ShrimpEntity(getShrimp().get(), world)).*/build("shrimp"));
+        public static final DeferredHolder<EntityType<?>, EntityType<TunaEntity>> TUNA = entity("tuna", () -> EntityType.Builder.of(TunaEntity::new, MobCategory.WATER_AMBIENT).sized(0.7F, 0.4F).clientTrackingRange(4).build(ResourceKey.create(Registries.ENTITY_TYPE, Identifier.fromNamespaceAndPath(MOD_ID, "tuna"))));
+        public static final DeferredHolder<EntityType<?>, EntityType<ShrimpEntity>> SHRIMP = entity("shrimp", () -> EntityType.Builder.of(ShrimpEntity::new, MobCategory.WATER_AMBIENT).sized(0.7F, 0.4F).clientTrackingRange(4).build(ResourceKey.create(Registries.ENTITY_TYPE, Identifier.fromNamespaceAndPath(MOD_ID, "shrimp"))));
 
         public static DeferredHolder<EntityType<?>, EntityType<TunaEntity>> getTuna() {
             return TUNA;
@@ -261,9 +268,9 @@ public class SushiContent {
 
         public static final DeferredRegister<RecipeSerializer<?>> REGISTRY = DeferredRegister.create(Registries.RECIPE_SERIALIZER, SushiGoCrafting.MOD_ID);
 
-        public static final DeferredHolder<RecipeSerializer<?>, RecipeSerializer<?>> COMBINE_AMOUNT = recipeSerializer("amount_combine_recipe", () -> new SimpleCraftingRecipeSerializer<>((craftingBookCategory) -> new CombineAmountItemRecipe()));
-        public static final DeferredHolder<RecipeSerializer<?>, RecipeSerializer<?>> CUTTING_BOARD = recipeSerializer("cutting_board", () -> new GenericSerializer<>(CuttingBoardRecipe.class, RecipeTypes.CUTTING_BOARD, CuttingBoardRecipe.CODEC));
-        public static final DeferredHolder<RecipeSerializer<?>, RecipeSerializer<?>> FERMENTING_BARREL = recipeSerializer("fermenting_barrel", () -> new GenericSerializer<>(FermentingBarrelRecipe.class, RecipeTypes.FERMENTING_BARREL, FermentingBarrelRecipe.CODEC));
+        public static final DeferredHolder<RecipeSerializer<?>, RecipeSerializer<CombineAmountItemRecipe>> COMBINE_AMOUNT = recipeSerializer("amount_combine_recipe", () -> new RecipeSerializer<>(MapCodec.unit(CombineAmountItemRecipe::new), StreamCodec.unit(new CombineAmountItemRecipe())));
+        public static final DeferredHolder<RecipeSerializer<?>, RecipeSerializer<CuttingBoardRecipe>> CUTTING_BOARD = recipeSerializer("cutting_board", () -> GenericSerializer.create(CuttingBoardRecipe.class, () -> RecipeTypes.CUTTING_BOARD.get(), CuttingBoardRecipe.CODEC));
+        public static final DeferredHolder<RecipeSerializer<?>, RecipeSerializer<FermentingBarrelRecipe>> FERMENTING_BARREL = recipeSerializer("fermenting_barrel", () -> GenericSerializer.create(FermentingBarrelRecipe.class, () -> RecipeTypes.FERMENTING_BARREL.get(), FermentingBarrelRecipe.CODEC));
 
     }
 
@@ -271,8 +278,8 @@ public class SushiContent {
 
         public static final DeferredRegister<RecipeType<?>> REGISTRY = DeferredRegister.create(Registries.RECIPE_TYPE, SushiGoCrafting.MOD_ID);
 
-        public static final DeferredHolder<RecipeType<?>, RecipeType<?>> CUTTING_BOARD = recipeType("cutting_board", () -> RecipeType.simple(ResourceLocation.fromNamespaceAndPath(SushiGoCrafting.MOD_ID, "cutting_board")));
-        public static final DeferredHolder<RecipeType<?>, RecipeType<?>> FERMENTING_BARREL = recipeType("fermenting_barrel", () -> RecipeType.simple(ResourceLocation.fromNamespaceAndPath(SushiGoCrafting.MOD_ID, "fermenting_barrel")));
+        public static final DeferredHolder<RecipeType<?>, RecipeType<CuttingBoardRecipe>> CUTTING_BOARD = recipeType("cutting_board", () -> RecipeType.simple(Identifier.fromNamespaceAndPath(SushiGoCrafting.MOD_ID, "cutting_board")));
+        public static final DeferredHolder<RecipeType<?>, RecipeType<FermentingBarrelRecipe>> FERMENTING_BARREL = recipeType("fermenting_barrel", () -> RecipeType.simple(Identifier.fromNamespaceAndPath(SushiGoCrafting.MOD_ID, "fermenting_barrel")));
 
     }
 
@@ -292,7 +299,7 @@ public class SushiContent {
     }
 
     public static class Tags {
-        public static final TagKey<Block> PRESSING_BASE = BlockTags.create(ResourceLocation.tryBuild(MOD_ID, "pressing_base"));
+        public static final TagKey<Block> PRESSING_BASE = BlockTags.create(Identifier.tryBuild(MOD_ID, "pressing_base"));
 
     }
 }

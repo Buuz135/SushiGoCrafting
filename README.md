@@ -26,16 +26,16 @@ for a better in-game experience.
 
 ## Compatibility
 
-- Minecraft 1.21
-- NeoForge 21.x
+- Minecraft 26.1.2
+- NeoForge 26.1.2
 - Current project version: `0.6.3`
 
 ## Development
 
-Minecraft 1.21 requires Java 21. Build the project with the included Gradle wrapper:
+Minecraft 26.1.2 requires Java 25. Build the project with the included Gradle wrapper:
 
 ```powershell
-.\gradlew.bat build
+.\gradlew.bat build -x test
 ```
 
 ## License

@@ -21,7 +21,7 @@ import com.hrznstudio.titanium.reward.RewardGiver;
 import com.hrznstudio.titanium.reward.RewardManager;
 import com.hrznstudio.titanium.tab.TitaniumTab;
 import net.minecraft.core.NonNullList;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
@@ -29,7 +29,7 @@ import net.minecraft.world.Containers;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntitySelector;
 import net.minecraft.world.entity.SpawnPlacementTypes;
-import net.minecraft.world.entity.animal.AbstractFish;
+import net.minecraft.world.entity.animal.fish.AbstractFish;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -66,7 +66,7 @@ public class SushiGoCrafting extends ModuleController {
 
     public static final String MOD_ID = "sushigocrafting";
 
-    public static final TitaniumTab TAB = new TitaniumTab(ResourceLocation.fromNamespaceAndPath(MOD_ID, "main"));
+    public static final TitaniumTab TAB = new TitaniumTab(Identifier.fromNamespaceAndPath(MOD_ID, "main"));
     public static NetworkHandler NETWORK = new NetworkHandler(MOD_ID);
     public static Logger LOGGER = LogManager.getLogger(MOD_ID);
 
@@ -92,7 +92,7 @@ public class SushiGoCrafting extends ModuleController {
             EventManager.mod(FMLClientSetupEvent.class).process(fmlClientSetupEvent -> new ClientProxy().fmlClient(fmlClientSetupEvent)).subscribe();
         }
         EventManager.mod(FMLCommonSetupEvent.class).process(this::fmlCommon).subscribe();
-        EventManager.mod(GatherDataEvent.class).process(this::dataGen).subscribe();
+        EventManager.mod(GatherDataEvent.Client.class).process(this::dataGen).subscribe();
         NBTManager.getInstance().scanTileClassForAnnotations(RollerTile.class);
         NBTManager.getInstance().scanTileClassForAnnotations(RiceCookerTile.class);
         NBTManager.getInstance().scanTileClassForAnnotations(CuttingBoardTile.class);
@@ -110,7 +110,7 @@ public class SushiGoCrafting extends ModuleController {
         }).subscribe();
         RewardGiver giver = RewardManager.get().getGiver(UUID.fromString("d28b7061-fb92-4064-90fb-7e02b95a72a6"), "Buuz135");
         try {
-            giver.addReward(new Reward(ResourceLocation.fromNamespaceAndPath(SushiGoCrafting.MOD_ID, "back"), new URL("https://raw.githubusercontent.com/Buuz135/Industrial-Foregoing/master/contributors.json"), () -> dist2 -> {
+            giver.addReward(new Reward(Identifier.fromNamespaceAndPath(SushiGoCrafting.MOD_ID, "back"), new URL("https://raw.githubusercontent.com/Buuz135/Industrial-Foregoing/master/contributors.json"), () -> dist2 -> {
 
             }, new String[]{"salmon", "tuna"}));
         } catch (Exception e) {
@@ -124,14 +124,14 @@ public class SushiGoCrafting extends ModuleController {
             event.register(SushiContent.EntityTypes.TUNA.get(), SpawnPlacementTypes.IN_WATER, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, AbstractFish::checkMobSpawnRules, RegisterSpawnPlacementsEvent.Operation.OR);
         }).subscribe();
         EventManager.mod(RegisterCapabilitiesEvent.class).process(event -> {
-            event.registerBlockEntity(Capabilities.ItemHandler.BLOCK, SushiContent.TileEntities.COOLER_BOX.value(), ActiveTile::getItemHandler);
-            event.registerBlockEntity(Capabilities.ItemHandler.BLOCK, SushiContent.TileEntities.CUTTING_BOARD.value(), ActiveTile::getItemHandler);
-            event.registerBlockEntity(Capabilities.ItemHandler.BLOCK, SushiContent.TileEntities.FERMENTATION_BARREL.value(), ActiveTile::getItemHandler);
-            event.registerBlockEntity(Capabilities.ItemHandler.BLOCK, SushiContent.TileEntities.RICE_COOKER.value(), ActiveTile::getItemHandler);
-            event.registerBlockEntity(Capabilities.ItemHandler.BLOCK, SushiContent.TileEntities.ROLLER.value(), ActiveTile::getItemHandler);
+            event.registerBlockEntity(Capabilities.Item.BLOCK, SushiContent.TileEntities.COOLER_BOX.value(), ActiveTile::getItemHandler);
+            event.registerBlockEntity(Capabilities.Item.BLOCK, SushiContent.TileEntities.CUTTING_BOARD.value(), ActiveTile::getItemHandler);
+            event.registerBlockEntity(Capabilities.Item.BLOCK, SushiContent.TileEntities.FERMENTATION_BARREL.value(), ActiveTile::getItemHandler);
+            event.registerBlockEntity(Capabilities.Item.BLOCK, SushiContent.TileEntities.RICE_COOKER.value(), ActiveTile::getItemHandler);
+            event.registerBlockEntity(Capabilities.Item.BLOCK, SushiContent.TileEntities.ROLLER.value(), ActiveTile::getItemHandler);
 
-            event.registerBlockEntity(Capabilities.FluidHandler.BLOCK, SushiContent.TileEntities.FERMENTATION_BARREL.value(), ActiveTile::getFluidHandler);
-            event.registerBlockEntity(Capabilities.FluidHandler.BLOCK, SushiContent.TileEntities.RICE_COOKER.value(), ActiveTile::getFluidHandler);
+            event.registerBlockEntity(Capabilities.Fluid.BLOCK, SushiContent.TileEntities.FERMENTATION_BARREL.value(), ActiveTile::getFluidHandler);
+            event.registerBlockEntity(Capabilities.Fluid.BLOCK, SushiContent.TileEntities.RICE_COOKER.value(), ActiveTile::getFluidHandler);
         }).subscribe();
     }
 
@@ -141,8 +141,8 @@ public class SushiGoCrafting extends ModuleController {
         FoodAPI.get().init();
         for (IFoodType value : FoodAPI.get().getFoodTypes()) {
             FoodHelper.generateFood(value).forEach(item -> {
-                Supplier<Item> supplier = () -> {
-                    FoodItem foodItem = new FoodItem(new Item.Properties(), item.getFoodType());
+                java.util.function.Function<Item.Properties, Item> supplier = properties -> {
+                    FoodItem foodItem = new FoodItem(properties, item.getFoodType());
                     foodItem.getIngredientList().addAll(item.getFoodIngredients());
                     return foodItem;
                 };
@@ -158,15 +158,15 @@ public class SushiGoCrafting extends ModuleController {
     }
 
     public void dataGen(GatherDataEvent event) {
-        event.getGenerator().addProvider(true, new SushiModelProvider(event.getGenerator(), MOD_ID, event.getExistingFileHelper()));
-        event.getGenerator().addProvider(true, new SushiBlockstateProvider(event.getGenerator(), MOD_ID, event.getExistingFileHelper()));
-        event.getGenerator().addProvider(true, new SushiItemModelProvider(event.getGenerator(), MOD_ID, event.getExistingFileHelper()));
-        event.getGenerator().addProvider(true, new SushiLangProvider(event.getGenerator(), MOD_ID, "en_us"));
-        var provider = new SushiBlockTagsProvider(event.getGenerator().getPackOutput(), event.getLookupProvider(), event.getExistingFileHelper());
+        event.getGenerator().addProvider(true, new SushiModelProvider(event.getGenerator().getPackOutput()));
+        event.getGenerator().addProvider(true, new SushiBlockstateProvider(event.getGenerator().getPackOutput()));
+        event.getGenerator().addProvider(true, new SushiItemModelProvider(event.getGenerator().getPackOutput()));
+        event.getGenerator().addProvider(true, new SushiLangProvider(event.getGenerator().getPackOutput(), MOD_ID, "en_us"));
+        var provider = new SushiBlockTagsProvider(event.getGenerator().getPackOutput(), event.getLookupProvider());
         event.getGenerator().addProvider(true, provider);
-        event.getGenerator().addProvider(true, new SushiItemTagsProvider(event.getGenerator().getPackOutput(), event.getLookupProvider(), provider.contentsGetter(), event.getExistingFileHelper()));
-        event.getGenerator().addProvider(true, new SushiLootTableProvider(event.getGenerator(), event.getLookupProvider()));
-        event.getGenerator().addProvider(true, new SushiRecipeProvider(event.getGenerator(), event.getLookupProvider()));
+        event.getGenerator().addProvider(true, new SushiItemTagsProvider(event.getGenerator().getPackOutput(), event.getLookupProvider()));
+        event.getGenerator().addProvider(true, new SushiLootTableProvider(event.getGenerator().getPackOutput(), event.getLookupProvider()));
+        event.getGenerator().addProvider(true, new SushiRecipeProvider.Runner(event.getGenerator().getPackOutput(), event.getLookupProvider()));
         event.getGenerator().addProvider(true, new SushiDataMapProvider(event.getGenerator().getPackOutput(), event.getLookupProvider()));
     }
 
