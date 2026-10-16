@@ -13,7 +13,7 @@ import net.minecraft.core.HolderLookup;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.recipes.RecipeOutput;
 import net.minecraft.data.recipes.RecipeProvider;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
@@ -65,7 +65,7 @@ public class SushiRecipeProvider extends RecipeProvider {
                 .save(consumer);
         //SimpleCookingRecipeBuilder.smelting(Ingredient.of(SushiContent.Items.SEAWEED.get()), RecipeCategory.FOOD, SushiContent.Items.DRY_SEAWEED.get(), 0.3f, 200).unlockedBy("has_seaweed", has(SushiContent.Items.SEAWEED.get())).save(consumer);
         //TitaniumShapelessRecipeBuilder.shapelessRecipe(SushiContent.Blocks.SEAWEED_BLOCK.get()).requires(Ingredient.of(SushiContent.Items.DRY_SEAWEED.get()), 9).save(consumer);
-        //TitaniumShapelessRecipeBuilder.shapelessRecipe(SushiContent.Items.DRY_SEAWEED.get(), 9).requires(Ingredient.of(SushiContent.Blocks.SEAWEED_BLOCK.get()), 1).save(consumer, ResourceLocation.fromNamespaceAndPath(SushiGoCrafting.MOD_ID, "seaweed_uncrafting"));
+        //TitaniumShapelessRecipeBuilder.shapelessRecipe(SushiContent.Items.DRY_SEAWEED.get(), 9).requires(Ingredient.of(SushiContent.Blocks.SEAWEED_BLOCK.get()), 1).save(consumer, Identifier.fromNamespaceAndPath(SushiGoCrafting.MOD_ID, "seaweed_uncrafting"));
         TitaniumShapedRecipeBuilder.shapedRecipe(SushiContent.Items.CUTTING_BOARD.get())
                 .pattern("   ").pattern("SSS").pattern("BBB")
                 .define('S', ItemTags.SLABS)
@@ -76,12 +76,12 @@ public class SushiRecipeProvider extends RecipeProvider {
         for (IFoodIngredient value : FoodAPI.get().getFoodIngredient()) {
             if (value instanceof FoodIngredient && ((FoodIngredient) value).needsChoppingRecipe()) {
                 CuttingBoardRecipe recipe = new CuttingBoardRecipe(((FoodIngredient) value).getInput().get(), value.getName());
-                recipe.save(consumer, ResourceLocation.fromNamespaceAndPath(SushiGoCrafting.MOD_ID, "cutting_board/" + value.getName()));
+                recipe.save(consumer, Identifier.fromNamespaceAndPath(SushiGoCrafting.MOD_ID, "cutting_board/" + value.getName()));
             }
         }
         new FermentingBarrelRecipe(Ingredient.EMPTY, new FluidStack(NeoForgeMod.MILK.get(), 250), new ItemStack(SushiContent.Items.CHEESE.get()))
-                .save(consumer, ResourceLocation.fromNamespaceAndPath(SushiGoCrafting.MOD_ID, "fermenting_barrel/cheese"));
-        new FermentingBarrelRecipe(Ingredient.of(ItemTags.create(ResourceLocation.fromNamespaceAndPath("c", "crops/soy_bean"))), new FluidStack(Fluids.WATER, 250), new ItemStack(SushiContent.Items.SOY_SAUCE.get()))
-                .save(consumer, ResourceLocation.fromNamespaceAndPath(SushiGoCrafting.MOD_ID, "fermenting_barrel/soy"));
+                .save(consumer, Identifier.fromNamespaceAndPath(SushiGoCrafting.MOD_ID, "fermenting_barrel/cheese"));
+        new FermentingBarrelRecipe(Ingredient.of(ItemTags.create(Identifier.fromNamespaceAndPath("c", "crops/soy_bean"))), new FluidStack(Fluids.WATER, 250), new ItemStack(SushiContent.Items.SOY_SAUCE.get()))
+                .save(consumer, Identifier.fromNamespaceAndPath(SushiGoCrafting.MOD_ID, "fermenting_barrel/soy"));
     }
 }
