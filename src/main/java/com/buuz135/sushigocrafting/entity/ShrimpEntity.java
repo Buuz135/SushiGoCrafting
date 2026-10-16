@@ -55,7 +55,7 @@ public class ShrimpEntity extends AbstractSchoolingFish implements ItemSteerable
             if (!this.level().isClientSide()) {
                 playerIn.startRiding(this);
             }
-            return InteractionResult.sidedSuccess(this.level().isClientSide());
+            return InteractionResult.SUCCESS;
         } else {
             InteractionResult actionresulttype = super.mobInteract(playerIn, hand);
             if (!actionresulttype.consumesAction()) {
@@ -151,11 +151,6 @@ public class ShrimpEntity extends AbstractSchoolingFish implements ItemSteerable
         } else {
             return playerentity.getMainHandItem().getItem() == SushiContent.Items.SEAWEED_ON_A_STICK.get() || playerentity.getOffhandItem().getItem() == SushiContent.Items.SEAWEED_ON_A_STICK.get();
         }
-    }
-
-    @Override
-    public boolean isControlledByLocalInstance() {
-        return super.isControlledByLocalInstance();
     }
 
     @Override

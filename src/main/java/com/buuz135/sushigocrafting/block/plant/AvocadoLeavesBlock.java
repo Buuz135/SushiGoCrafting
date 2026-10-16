@@ -48,7 +48,7 @@ public class AvocadoLeavesBlock extends LeavesBlock implements IShearable, Bonem
     }
 
     @Override
-    protected com.mojang.serialization.MapCodec<? extends LeavesBlock> codec() {
+    public com.mojang.serialization.MapCodec<? extends LeavesBlock> codec() {
         return simpleCodec(properties -> new AvocadoLeavesBlock());
     }
 

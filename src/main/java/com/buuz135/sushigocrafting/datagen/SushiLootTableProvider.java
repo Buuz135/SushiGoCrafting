@@ -4,12 +4,10 @@ import com.buuz135.sushigocrafting.block.plant.CustomCropBlock;
 import com.buuz135.sushigocrafting.proxy.SushiContent;
 import net.minecraft.advancements.criterion.StatePropertiesPredicate;
 import net.minecraft.core.HolderLookup;
-import net.minecraft.core.WritableRegistry;
 import net.minecraft.data.PackOutput;
 import net.minecraft.data.loot.BlockLootSubProvider;
 import net.minecraft.data.loot.EntityLootSubProvider;
 import net.minecraft.data.loot.LootTableProvider;
-import net.minecraft.util.ProblemReporter;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.flag.FeatureFlags;
 import net.minecraft.world.item.Item;
@@ -18,7 +16,6 @@ import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.storage.loot.LootPool;
 import net.minecraft.world.level.storage.loot.LootTable;
-import net.minecraft.world.level.storage.loot.ValidationContext;
 import net.minecraft.world.level.storage.loot.entries.LootItem;
 import net.minecraft.world.level.storage.loot.functions.CopyComponentsFunction;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
@@ -41,11 +38,6 @@ public class SushiLootTableProvider extends LootTableProvider {
         super(output, new HashSet<>(), Arrays.asList(
                 new SubProviderEntry(SushiBlockLootTables::new, LootContextParamSets.BLOCK),
                 new SubProviderEntry(SushiEntityLootTables::new, LootContextParamSets.ENTITY)), registries);
-    }
-
-    @Override
-    protected void validate(WritableRegistry<LootTable> writableregistry, ValidationContext validationcontext, ProblemReporter.Collector problemreporter$collector) {
-        //super.validate(writableregistry, validationcontext, problemreporter$collector);
     }
 
     private static class SushiBlockLootTables extends BlockLootSubProvider {
@@ -117,7 +109,7 @@ public class SushiLootTableProvider extends LootTableProvider {
         }
     }
 
-    private class SushiEntityLootTables extends EntityLootSubProvider {
+    private static class SushiEntityLootTables extends EntityLootSubProvider {
 
         protected SushiEntityLootTables(HolderLookup.Provider registries) {
             super(FeatureFlags.REGISTRY.allFlags(), registries);
