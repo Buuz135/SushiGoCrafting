@@ -9,8 +9,6 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
-import net.neoforged.api.distmarker.Dist;
-import net.neoforged.api.distmarker.OnlyIn;
 import net.neoforged.neoforge.network.handling.IPayloadContext;
 
 
@@ -38,7 +36,6 @@ public class CapabilitySyncMessage extends Message {
         context.enqueueWork(this::handle);
     }
 
-    @OnlyIn(Dist.CLIENT)
     public void handle() {
         var data = Minecraft.getInstance().player.getData(SushiContent.AttachmentTypes.SUSHI_WEIGHT_DISCOVERY);
         data.deserialize(net.minecraft.world.level.storage.TagValueInput.create(net.minecraft.util.ProblemReporter.DISCARDING, Minecraft.getInstance().level.registryAccess(), capability));

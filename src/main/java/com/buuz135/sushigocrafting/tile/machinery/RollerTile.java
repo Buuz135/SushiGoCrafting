@@ -30,8 +30,6 @@ import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.state.BlockState;
-import net.neoforged.api.distmarker.Dist;
-import net.neoforged.api.distmarker.OnlyIn;
 import net.neoforged.neoforge.items.ItemHandlerHelper;
 
 import java.util.ArrayList;
@@ -97,7 +95,6 @@ public class RollerTile extends ActiveTile<RollerTile> {
         });
     }
 
-    @OnlyIn(Dist.CLIENT)
     @Override
     public void initClient() {
         super.initClient();

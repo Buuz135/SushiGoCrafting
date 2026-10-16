@@ -21,7 +21,6 @@ import com.buuz135.sushigocrafting.recipe.CombineAmountItemRecipe;
 import com.buuz135.sushigocrafting.recipe.CuttingBoardRecipe;
 import com.buuz135.sushigocrafting.recipe.FermentingBarrelRecipe;
 import com.buuz135.sushigocrafting.tile.machinery.*;
-import com.hrznstudio.titanium.recipe.serializer.GenericSerializer;
 import com.mojang.serialization.MapCodec;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.registries.Registries;
@@ -270,8 +269,8 @@ public class SushiContent {
         public static final DeferredRegister<RecipeSerializer<?>> REGISTRY = DeferredRegister.create(Registries.RECIPE_SERIALIZER, SushiGoCrafting.MOD_ID);
 
         public static final DeferredHolder<RecipeSerializer<?>, RecipeSerializer<CombineAmountItemRecipe>> COMBINE_AMOUNT = recipeSerializer("amount_combine_recipe", () -> new RecipeSerializer<>(MapCodec.unit(CombineAmountItemRecipe::new), StreamCodec.unit(new CombineAmountItemRecipe())));
-        public static final DeferredHolder<RecipeSerializer<?>, RecipeSerializer<CuttingBoardRecipe>> CUTTING_BOARD = recipeSerializer("cutting_board", () -> GenericSerializer.create(CuttingBoardRecipe.class, () -> RecipeTypes.CUTTING_BOARD.get(), CuttingBoardRecipe.CODEC));
-        public static final DeferredHolder<RecipeSerializer<?>, RecipeSerializer<FermentingBarrelRecipe>> FERMENTING_BARREL = recipeSerializer("fermenting_barrel", () -> GenericSerializer.create(FermentingBarrelRecipe.class, () -> RecipeTypes.FERMENTING_BARREL.get(), FermentingBarrelRecipe.CODEC));
+        public static final DeferredHolder<RecipeSerializer<?>, RecipeSerializer<CuttingBoardRecipe>> CUTTING_BOARD = recipeSerializer("cutting_board", () -> new RecipeSerializer<>(CuttingBoardRecipe.CODEC, CuttingBoardRecipe.STREAM_CODEC));
+        public static final DeferredHolder<RecipeSerializer<?>, RecipeSerializer<FermentingBarrelRecipe>> FERMENTING_BARREL = recipeSerializer("fermenting_barrel", () -> new RecipeSerializer<>(FermentingBarrelRecipe.CODEC, FermentingBarrelRecipe.STREAM_CODEC));
 
     }
 

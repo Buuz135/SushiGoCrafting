@@ -9,7 +9,7 @@ import com.buuz135.sushigocrafting.api.impl.effect.ModifyIngredientEffect;
 import com.buuz135.sushigocrafting.client.FoodRenderers;
 import com.buuz135.sushigocrafting.proxy.SushiContent;
 import net.minecraft.resources.Identifier;
-import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.HolderGetter;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.item.Item;
@@ -17,6 +17,7 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.Ingredient;
 
 import java.util.function.Supplier;
+import java.util.function.Function;
 
 public class FoodIngredient implements IFoodIngredient {
 
@@ -25,17 +26,17 @@ public class FoodIngredient implements IFoodIngredient {
             new ModifyIngredientEffect(1.75f, 0), 0, 2, DietType.GRAINS, () -> FoodRenderers.RICE);
     public static FoodIngredient NORI = new FoodIngredient("nori", SushiContent.Items.NORI_SHEET, 1, IIngredientConsumer.STACK, null,
             null, 1, 1, DietType.VEGETABLES, () -> FoodRenderers.NORI);
-    public static FoodIngredient TUNA_FILLET = new FoodIngredient("tuna", SushiContent.Items.RAW_TUNA_FILLET, 30, IIngredientConsumer.WEIGHT, () -> Ingredient.of(BuiltInRegistries.ITEM.get(ItemTags.create(Identifier.fromNamespaceAndPath("c", "raw_fishes/tuna"))).orElseThrow()),
+    public static FoodIngredient TUNA_FILLET = new FoodIngredient("tuna", SushiContent.Items.RAW_TUNA_FILLET, 30, IIngredientConsumer.WEIGHT, items -> Ingredient.of(items.getOrThrow(ItemTags.create(Identifier.fromNamespaceAndPath("c", "raw_fishes/tuna")))),
             new AddIngredientEffect(SushiContent.Effects.ACQUIRED_TASTE, 30, 0), 3, 1, DietType.PROTEINS, () -> FoodRenderers.TUNA_FILLET);
-    public static FoodIngredient SALMON_FILLET = new FoodIngredient("salmon", SushiContent.Items.RAW_SALMON_FILLET, 30, IIngredientConsumer.WEIGHT, () -> Ingredient.of(BuiltInRegistries.ITEM.get(ItemTags.create(Identifier.fromNamespaceAndPath("c", "raw_fishes/salmon"))).orElseThrow()),
+    public static FoodIngredient SALMON_FILLET = new FoodIngredient("salmon", SushiContent.Items.RAW_SALMON_FILLET, 30, IIngredientConsumer.WEIGHT, items -> Ingredient.of(items.getOrThrow(ItemTags.create(Identifier.fromNamespaceAndPath("c", "raw_fishes/salmon")))),
             new AddIngredientEffect(SushiContent.Effects.SMALL_BITES, 30, 0), 3, 1, DietType.PROTEINS, () -> FoodRenderers.SALMON_FILLET);
-    public static FoodIngredient AVOCADO = new FoodIngredient("avocado", SushiContent.Items.AVOCADO_SLICES, 45, IIngredientConsumer.WEIGHT, () -> Ingredient.of(BuiltInRegistries.ITEM.get(ItemTags.create(Identifier.fromNamespaceAndPath("c", "fruits/avocado"))).orElseThrow()),
+    public static FoodIngredient AVOCADO = new FoodIngredient("avocado", SushiContent.Items.AVOCADO_SLICES, 45, IIngredientConsumer.WEIGHT, items -> Ingredient.of(items.getOrThrow(ItemTags.create(Identifier.fromNamespaceAndPath("c", "fruits/avocado")))),
             new ModifyIngredientEffect(1.20f, 1), 2, 2, DietType.FRUITS, () -> FoodRenderers.AVOCADO);
-    public static FoodIngredient CUCUMBER = new FoodIngredient("cucumber", SushiContent.Items.CUCUMBER_SLICES, 15, IIngredientConsumer.WEIGHT, () -> Ingredient.of(BuiltInRegistries.ITEM.get(ItemTags.create(Identifier.fromNamespaceAndPath("c", "crops/cucumber"))).orElseThrow()),
+    public static FoodIngredient CUCUMBER = new FoodIngredient("cucumber", SushiContent.Items.CUCUMBER_SLICES, 15, IIngredientConsumer.WEIGHT, items -> Ingredient.of(items.getOrThrow(ItemTags.create(Identifier.fromNamespaceAndPath("c", "crops/cucumber")))),
             new ModifyIngredientEffect(1.25f, 0), 2, 2, DietType.VEGETABLES, () -> FoodRenderers.CUCUMBER);
     public static FoodIngredient SESAME = new FoodIngredient("sesame", SushiContent.Items.SESAME_SEED, 6, IIngredientConsumer.WEIGHT, null,
             new ModifyIngredientEffect(2, 0), 1, 1, DietType.GRAINS, null);
-    public static FoodIngredient CRAB = new FoodIngredient("crab", SushiContent.Items.IMITATION_CRAB, 30, IIngredientConsumer.WEIGHT, () -> Ingredient.of(Items.COD),
+    public static FoodIngredient CRAB = new FoodIngredient("crab", SushiContent.Items.IMITATION_CRAB, 30, IIngredientConsumer.WEIGHT, items -> Ingredient.of(Items.COD),
             new AddIngredientEffect(MobEffects.SPEED, 3, 0), 2, 1, DietType.PROTEINS, () -> FoodRenderers.CRAB);
     public static FoodIngredient WAKAME = new FoodIngredient("wakame", () -> Items.SEAGRASS, 1, IIngredientConsumer.STACK, null,
             null, 0, 1, DietType.VEGETABLES, () -> FoodRenderers.WAKAME);
@@ -49,14 +50,14 @@ public class FoodIngredient implements IFoodIngredient {
             new AddIngredientEffect(MobEffects.SLOW_FALLING, 10, 0), 2, 1, DietType.PROTEINS, () -> FoodRenderers.CHICKEN);
     public static FoodIngredient SOY_SAUCE = new FoodIngredient("soy_sauce", SushiContent.Items.SOY_SAUCE, 4, IIngredientConsumer.WEIGHT, null,
             new ModifyIngredientEffect(1, 1), 0, 0, DietType.GRAINS, () -> FoodRenderers.SOY_SAUCE);
-    public static FoodIngredient WASABI = new FoodIngredient("wasabi", SushiContent.Items.WASABI_PASTE, 4, IIngredientConsumer.WEIGHT, () -> Ingredient.of(BuiltInRegistries.ITEM.get(ItemTags.create(Identifier.fromNamespaceAndPath("c", "crops/wasabi_root"))).orElseThrow()),
+    public static FoodIngredient WASABI = new FoodIngredient("wasabi", SushiContent.Items.WASABI_PASTE, 4, IIngredientConsumer.WEIGHT, items -> Ingredient.of(items.getOrThrow(ItemTags.create(Identifier.fromNamespaceAndPath("c", "crops/wasabi_root")))),
             new AddIngredientEffect(MobEffects.FIRE_RESISTANCE, 10, 0), 0, 0, DietType.VEGETABLES, () -> FoodRenderers.WASABI);
 
     private final Supplier<? extends Item> item;
     private final String name;
     private final int defaultAmount;
     private final IIngredientConsumer ingredientConsumer;
-    private final Supplier<Ingredient> ingredientSupplier;
+    private final Function<HolderGetter<Item>, Ingredient> ingredientSupplier;
     private final IIngredientEffect effect;
     private final int hungerValue;
     private final int saturationValue;
@@ -64,7 +65,7 @@ public class FoodIngredient implements IFoodIngredient {
 
     private final Supplier<IFoodIngredientRenderer> renderer;
 
-    public FoodIngredient(String name, Supplier<? extends Item> item, int defaultAmount, IIngredientConsumer ingredientConsumer, Supplier<Ingredient> ingredientSupplier, IIngredientEffect effect, int foodValue, int saturationValue, DietType dietType, Supplier<IFoodIngredientRenderer> renderer) {
+    public FoodIngredient(String name, Supplier<? extends Item> item, int defaultAmount, IIngredientConsumer ingredientConsumer, Function<HolderGetter<Item>, Ingredient> ingredientSupplier, IIngredientEffect effect, int foodValue, int saturationValue, DietType dietType, Supplier<IFoodIngredientRenderer> renderer) {
         this.name = name;
         this.item = item;
         this.defaultAmount = defaultAmount;
@@ -95,8 +96,8 @@ public class FoodIngredient implements IFoodIngredient {
         return ingredientSupplier != null;
     }
 
-    public Supplier<Ingredient> getInput() {
-        return ingredientSupplier;
+    public Ingredient getInput(HolderGetter<Item> items) {
+        return ingredientSupplier.apply(items);
     }
 
     public int getDefaultAmount() {

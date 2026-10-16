@@ -80,7 +80,7 @@ public class FermentationBarrelTile extends ActiveTile<FermentationBarrelTile> {
     public boolean canStart() {
         return RecipeUtil.getRecipes(this.level, (RecipeType<FermentingBarrelRecipe>) SushiContent.RecipeTypes.FERMENTING_BARREL.get()).stream()
                 .anyMatch(fermentingBarrelRecipe -> Ingredient.testOptionalIngredient(fermentingBarrelRecipe.getInput(), this.input.getStackInSlot(0))
-                        && (fermentingBarrelRecipe.fluid.isEmpty() || (fermentingBarrelRecipe.fluid.is(this.fluid.getFluid().getFluid()) && this.fluid.getFluid().getAmount() >= fermentingBarrelRecipe.fluid.getAmount()))
+                        && (fermentingBarrelRecipe.getFluid().isEmpty() || (fermentingBarrelRecipe.getFluid().is(this.fluid.getFluid().getFluid()) && this.fluid.getFluid().getAmount() >= fermentingBarrelRecipe.getFluid().getAmount()))
                         && (canStack(fermentingBarrelRecipe))
                 );
     }
@@ -96,7 +96,7 @@ public class FermentationBarrelTile extends ActiveTile<FermentationBarrelTile> {
     public void onFinish() {
         RecipeUtil.getRecipes(this.level, (RecipeType<FermentingBarrelRecipe>) SushiContent.RecipeTypes.FERMENTING_BARREL.get()).stream()
                 .filter(fermentingBarrelRecipe -> Ingredient.testOptionalIngredient(fermentingBarrelRecipe.getInput(), this.input.getStackInSlot(0))
-                        && (fermentingBarrelRecipe.fluid.isEmpty() || (fermentingBarrelRecipe.fluid.is(this.fluid.getFluid().getFluid()) && this.fluid.getFluid().getAmount() >= fermentingBarrelRecipe.fluid.getAmount()))
+                        && (fermentingBarrelRecipe.getFluid().isEmpty() || (fermentingBarrelRecipe.getFluid().is(this.fluid.getFluid().getFluid()) && this.fluid.getFluid().getAmount() >= fermentingBarrelRecipe.getFluid().getAmount()))
                         && (canStack(fermentingBarrelRecipe))
                 )
                 .findFirst()
@@ -109,16 +109,16 @@ public class FermentationBarrelTile extends ActiveTile<FermentationBarrelTile> {
                         }
                         transaction.commit();
                     }
-                    if (fermentingBarrelRecipe.output.getItem() instanceof AmountItem) {
+                    if (fermentingBarrelRecipe.getOutput().getItem() instanceof AmountItem) {
                         ItemStack outputStack = this.output.getStackInSlot(0);
-                        ItemStack recipeOutput = ((AmountItem) fermentingBarrelRecipe.output.getItem()).random(null, level);
+                        ItemStack recipeOutput = ((AmountItem) fermentingBarrelRecipe.getOutput().getItem()).random(null, level);
                         if (outputStack.isEmpty()) {
                             this.output.setStackInSlot(0, recipeOutput);
                         } else {
                             AmountItem.combineStacks(outputStack, recipeOutput);
                         }
                     } else {
-                        this.output.setStackInSlot(0, fermentingBarrelRecipe.output.copy());
+                        this.output.setStackInSlot(0, fermentingBarrelRecipe.getOutput().copy());
                     }
 
                 });

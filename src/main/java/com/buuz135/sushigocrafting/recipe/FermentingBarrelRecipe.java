@@ -7,9 +7,13 @@ import net.minecraft.core.HolderLookup;
 import net.minecraft.data.recipes.RecipeOutput;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.ItemStackTemplate;
+import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.world.item.crafting.*;
 import net.minecraft.world.level.Level;
 import net.neoforged.neoforge.fluids.FluidStack;
+import net.neoforged.neoforge.fluids.FluidStackTemplate;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,23 +23,22 @@ public class FermentingBarrelRecipe implements Recipe<CraftingInput> {
 
     public static final MapCodec<FermentingBarrelRecipe> CODEC = RecordCodecBuilder.mapCodec(in -> in.group(
             Ingredient.CODEC.optionalFieldOf("input").forGetter(fermentingBarrelRecipe -> fermentingBarrelRecipe.input),
-            FluidStack.CODEC.fieldOf("fluid").forGetter(FermentingBarrelRecipe::getFluid),
-            ItemStack.CODEC.fieldOf("output").forGetter(FermentingBarrelRecipe::getOutput)
+            FluidStackTemplate.CODEC.fieldOf("fluid").forGetter(recipe -> recipe.fluid),
+            ItemStackTemplate.CODEC.fieldOf("output").forGetter(recipe -> recipe.output)
     ).apply(in, (ingredient, fluidStack, itemStack) -> new FermentingBarrelRecipe(ingredient, fluidStack, itemStack)));
-    public static List<FermentingBarrelRecipe> RECIPES = new ArrayList<>();
-    public Optional<Ingredient> input = Optional.empty();
-    public FluidStack fluid = FluidStack.EMPTY;
-    public ItemStack output;
+    public static final StreamCodec<RegistryFriendlyByteBuf, FermentingBarrelRecipe> STREAM_CODEC = StreamCodec.composite(
+            Ingredient.OPTIONAL_CONTENTS_STREAM_CODEC, FermentingBarrelRecipe::getInput,
+            FluidStackTemplate.STREAM_CODEC, recipe -> recipe.fluid,
+            ItemStackTemplate.STREAM_CODEC, recipe -> recipe.output,
+            FermentingBarrelRecipe::new);
+    private final Optional<Ingredient> input;
+    private final FluidStackTemplate fluid;
+    private final ItemStackTemplate output;
 
-    public FermentingBarrelRecipe() {
-
-    }
-
-    public FermentingBarrelRecipe(Optional<Ingredient> input, FluidStack stack, ItemStack output) {
+    public FermentingBarrelRecipe(Optional<Ingredient> input, FluidStackTemplate stack, ItemStackTemplate output) {
         this.input = input;
         this.fluid = stack;
         this.output = output;
-        RECIPES.add(this);
     }
 
     @Override
@@ -83,11 +86,11 @@ public class FermentingBarrelRecipe implements Recipe<CraftingInput> {
     }
 
     public FluidStack getFluid() {
-        return fluid;
+        return fluid.create();
     }
 
     public ItemStack getOutput() {
-        return output;
+        return output.create();
     }
 
     public void save(RecipeOutput output, Identifier id) {

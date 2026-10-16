@@ -32,8 +32,6 @@ import net.minecraft.world.level.block.state.properties.IntegerProperty;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
-import net.neoforged.api.distmarker.Dist;
-import net.neoforged.api.distmarker.OnlyIn;
 import net.neoforged.neoforge.common.IShearable;
 import net.neoforged.neoforge.items.ItemHandlerHelper;
 
@@ -43,13 +41,17 @@ public class AvocadoLeavesBlock extends LeavesBlock implements IShearable, Bonem
     public static final IntegerProperty STAGE = IntegerProperty.create("stage", 0, 2);
 
     public AvocadoLeavesBlock() {
-        super(0.02F, Properties.ofFullCopy(Blocks.OAK_LEAVES).setId(ResourceKey.create(Registries.BLOCK, Identifier.fromNamespaceAndPath("sushigocrafting", "avocado_leaves"))));
+        this(Properties.ofFullCopy(Blocks.OAK_LEAVES).setId(ResourceKey.create(Registries.BLOCK, Identifier.fromNamespaceAndPath("sushigocrafting", "avocado_leaves"))));
+    }
+
+    public AvocadoLeavesBlock(Properties properties) {
+        super(0.02F, properties);
         this.registerDefaultState(this.stateDefinition.any().setValue(DISTANCE, Integer.valueOf(7)).setValue(PERSISTENT, Boolean.valueOf(false)).setValue(STAGE, 0));
     }
 
     @Override
     public com.mojang.serialization.MapCodec<? extends LeavesBlock> codec() {
-        return simpleCodec(properties -> new AvocadoLeavesBlock());
+        return simpleCodec(AvocadoLeavesBlock::new);
     }
 
     @Override
@@ -121,7 +123,6 @@ public class AvocadoLeavesBlock extends LeavesBlock implements IShearable, Bonem
         return super.updateShape(stateIn, worldIn, tickAccess, currentPos, facing, facingPos, facingState, random);
     }
 
-    @OnlyIn(Dist.CLIENT)
     public void animateTick(BlockState stateIn, Level worldIn, BlockPos pos, RandomSource rand) {
         if (worldIn.isRainingAt(pos.above())) {
             if (rand.nextInt(15) == 1) {

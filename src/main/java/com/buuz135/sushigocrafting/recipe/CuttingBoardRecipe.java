@@ -8,6 +8,9 @@ import net.minecraft.core.HolderLookup;
 import net.minecraft.data.recipes.RecipeOutput;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.world.item.crafting.*;
 import net.minecraft.world.level.Level;
 
@@ -17,6 +20,11 @@ public class CuttingBoardRecipe implements Recipe<CraftingInput> {
             Ingredient.CODEC.fieldOf("input").forGetter(CuttingBoardRecipe::getInput),
             Codec.STRING.fieldOf("ingredient").forGetter(CuttingBoardRecipe::getIngredient)
     ).apply(in, CuttingBoardRecipe::new));
+
+    public static final StreamCodec<RegistryFriendlyByteBuf, CuttingBoardRecipe> STREAM_CODEC = StreamCodec.composite(
+            Ingredient.CONTENTS_STREAM_CODEC, CuttingBoardRecipe::getInput,
+            ByteBufCodecs.STRING_UTF8, CuttingBoardRecipe::getIngredient,
+            CuttingBoardRecipe::new);
 
     public Ingredient input;
     public String ingredient;
