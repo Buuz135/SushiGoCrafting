@@ -22,7 +22,7 @@ public class SmallBitesEffect extends MobEffect {
                 .filter(finish -> finish.getItem().has(DataComponents.FOOD) && finish.getEntity().hasEffect(SushiContent.Effects.SMALL_BITES.getDelegate()))
                 .process(finish -> {
                     MobEffectInstance instance = finish.getEntity().getEffect(SushiContent.Effects.SMALL_BITES.getDelegate());
-                    if (finish.getEntity() instanceof ServerPlayer player && finish.getEntity().level().random.nextInt(9) <= instance.getAmplifier() + 1) {
+                    if (finish.getEntity() instanceof ServerPlayer player && finish.getEntity().level().getRandom().nextInt(9) <= instance.getAmplifier() + 1) {
                         ItemStack stack = finish.getResultStack().copy();
                         stack.setCount(1);
                         player.playNotifySound(SoundEvents.PLAYER_LEVELUP, SoundSource.PLAYERS, 0.2f, 1);

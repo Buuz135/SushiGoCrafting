@@ -3,6 +3,9 @@ package com.buuz135.sushigocrafting.block.plant;
 import com.buuz135.sushigocrafting.block.SushiGoCraftingBlock;
 import com.buuz135.sushigocrafting.proxy.SushiContent;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.Identifier;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -43,7 +46,7 @@ public class AvocadoLeavesBlock extends SushiGoCraftingBlock implements IShearab
     public static final IntegerProperty STAGE = IntegerProperty.create("stage", 0, 2);
 
     public AvocadoLeavesBlock() {
-        super(Properties.ofFullCopy(Blocks.OAK_LEAVES));
+        super(Properties.ofFullCopy(Blocks.OAK_LEAVES).setId(ResourceKey.create(Registries.BLOCK, Identifier.fromNamespaceAndPath("sushigocrafting", "avocado_leaves"))));
         this.registerDefaultState(this.stateDefinition.any().setValue(DISTANCE, Integer.valueOf(7)).setValue(PERSISTENT, Boolean.valueOf(false)).setValue(STAGE, 0));
     }
 
@@ -63,7 +66,7 @@ public class AvocadoLeavesBlock extends SushiGoCraftingBlock implements IShearab
     }
 
     private static int getDistance(BlockState neighbor) {
-        if (BuiltInRegistries.BLOCK.getTag(BlockTags.LOGS).get().contains(neighbor.getBlockHolder())) {
+        if (neighbor.is(BlockTags.LOGS)) {
             return 0;
         } else {
             return neighbor.getBlock() instanceof AvocadoLeavesBlock || neighbor.getBlock() instanceof LeavesBlock ? neighbor.getValue(DISTANCE) : 7;

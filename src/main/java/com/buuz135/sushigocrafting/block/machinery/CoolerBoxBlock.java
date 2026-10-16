@@ -8,6 +8,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.NonNullList;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.world.ContainerHelper;
@@ -23,8 +24,12 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.resources.Identifier;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.level.storage.loot.LootParams;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
+import net.minecraft.world.level.storage.TagValueInput;
+import net.minecraft.util.ProblemReporter;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import org.jetbrains.annotations.Nullable;
@@ -39,7 +44,7 @@ public class CoolerBoxBlock extends RotatableBlock<CoolerBoxTile> {
     public static VoxelShape SHAPE_EAST = Block.box(1.5, 0, 0.5, 14.5, 14, 15.5);
 
     public CoolerBoxBlock() {
-        super("cooler_box", Properties.ofFullCopy(Blocks.STONE), CoolerBoxTile.class);
+        super("cooler_box", Properties.ofFullCopy(Blocks.STONE).setId(ResourceKey.create(Registries.BLOCK, Identifier.fromNamespaceAndPath("sushigocrafting", "cooler_box"))), CoolerBoxTile.class);
     }
 
     @Override
@@ -96,7 +101,7 @@ public class CoolerBoxBlock extends RotatableBlock<CoolerBoxTile> {
 
     protected void copyFrom(ItemStack stack, CoolerBoxTile tile) {
         if (stack.has(SushiDataComponent.TILE.get())) {
-            tile.loadAdditional(stack.get(SushiDataComponent.TILE.get()), tile.getLevel().registryAccess());
+            tile.loadAdditional(TagValueInput.create(ProblemReporter.DISCARDING, tile.getLevel().registryAccess(), stack.get(SushiDataComponent.TILE.get())));
             tile.markForUpdate();
         }
     }
@@ -107,37 +112,6 @@ public class CoolerBoxBlock extends RotatableBlock<CoolerBoxTile> {
         BlockEntity entity = level.getBlockEntity(pos);
         if (entity instanceof CoolerBoxTile tile) {
             copyFrom(stack, tile);
-        }
-    }
-
-    @Override
-    public void appendHoverText(ItemStack stack, Item.TooltipContext context, TooltipDisplay display, Consumer<Component> tooltip, TooltipFlag tooltipFlag) {
-        super.appendHoverText(stack, context, display, tooltip, tooltipFlag);
-        if (stack.has(SushiDataComponent.TILE.get())) {
-            var tileData = stack.get(SushiDataComponent.TILE.get());
-
-            if (tileData.contains("input")) {
-                NonNullList<ItemStack> nonnulllist = NonNullList.withSize(27, ItemStack.EMPTY);
-                ContainerHelper.loadAllItems(tileData.getCompoundOrEmpty("input"), nonnulllist, Minecraft.getInstance().level.registryAccess());
-                int i = 0;
-                int j = 0;
-
-                for (ItemStack itemstack : nonnulllist) {
-                    if (!itemstack.isEmpty()) {
-                        ++j;
-                        if (i <= 4) {
-                            ++i;
-                            MutableComponent iformattabletextcomponent = itemstack.getHoverName().copy();
-                            iformattabletextcomponent.append(" x").append(String.valueOf(itemstack.getCount())).withStyle(ChatFormatting.DARK_AQUA);
-                            tooltip.accept(iformattabletextcomponent);
-                        }
-                    }
-                }
-
-                if (j - i > 0) {
-                    tooltip.accept(Component.translatable("container.shulkerBox.more", j - i).withStyle(ChatFormatting.ITALIC, ChatFormatting.DARK_AQUA));
-                }
-            }
         }
     }
 

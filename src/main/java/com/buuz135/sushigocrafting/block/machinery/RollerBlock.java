@@ -3,6 +3,9 @@ package com.buuz135.sushigocrafting.block.machinery;
 import com.buuz135.sushigocrafting.tile.machinery.RollerTile;
 import com.hrznstudio.titanium.block.RotatableBlock;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.Identifier;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.core.Direction;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
@@ -23,7 +26,7 @@ public class RollerBlock extends RotatableBlock<RollerTile> {
     public static VoxelShape SHAPE_EAST = Block.box(1, 0, 2, 15, 0.5, 14);
 
     public RollerBlock() {
-        super("roller", Properties.ofFullCopy(Blocks.OAK_TRAPDOOR), RollerTile.class);
+        super("roller", Properties.ofFullCopy(Blocks.OAK_TRAPDOOR).setId(ResourceKey.create(Registries.BLOCK, Identifier.fromNamespaceAndPath("sushigocrafting", "roller"))), RollerTile.class);
     }
 
     @Override

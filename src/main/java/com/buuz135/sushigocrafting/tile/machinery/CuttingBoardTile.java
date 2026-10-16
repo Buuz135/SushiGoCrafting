@@ -15,7 +15,7 @@ import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.Identifier;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.InteractionHand;
-import net.minecraft.world.ItemInteractionResult;
+import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -43,7 +43,7 @@ public class CuttingBoardTile extends ActiveTile<CuttingBoardTile> {
     }
 
     @Override
-    public ItemInteractionResult onActivated(Player player, InteractionHand hand, Direction facing, double hitX, double hitY, double hitZ) {
+    public InteractionResult onActivated(Player player, InteractionHand hand, Direction facing, double hitX, double hitY, double hitZ) {
         ItemStack stack = player.getItemInHand(hand);
         if (!stack.isEmpty()) {
             if (!this.input.getStackInSlot(0).isEmpty() && TagUtil.hasTag(BuiltInRegistries.ITEM, stack.getItem(), KNIFE)) {
@@ -63,19 +63,19 @@ public class CuttingBoardTile extends ActiveTile<CuttingBoardTile> {
                     click = 0;
                 }
                 syncObject(click);
-                return ItemInteractionResult.SUCCESS;
+                return InteractionResult.SUCCESS;
             } else if (this.input.getStackInSlot(0).isEmpty() && accepts(stack)) {
                 this.input.insertItem(0, stack.copy(), false);
                 stack.setCount(0);
-                return ItemInteractionResult.SUCCESS;
+                return InteractionResult.SUCCESS;
             }
         } else if (player.isShiftKeyDown()) {
             ItemStack inserted = this.input.getStackInSlot(0).copy();
             this.input.setStackInSlot(0, ItemStack.EMPTY);
             ItemHandlerHelper.giveItemToPlayer(player, inserted);
-            return ItemInteractionResult.SUCCESS;
+            return InteractionResult.SUCCESS;
         }
-        return ItemInteractionResult.FAIL;
+        return InteractionResult.FAIL;
     }
 
     @Nonnull

@@ -3,6 +3,9 @@ package com.buuz135.sushigocrafting.block.machinery;
 import com.buuz135.sushigocrafting.tile.machinery.CuttingBoardTile;
 import com.hrznstudio.titanium.block.RotatableBlock;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.Identifier;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.core.Direction;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.BlockGetter;
@@ -21,7 +24,7 @@ public class CuttingBoardBlock extends RotatableBlock<CuttingBoardTile> {
     public static VoxelShape SHAPE_EAST = Block.box(3, 0, 1, 13, 1, 15);
 
     public CuttingBoardBlock() {
-        super("cutting_board", Properties.ofFullCopy(Blocks.OAK_TRAPDOOR), CuttingBoardTile.class);
+        super("cutting_board", Properties.ofFullCopy(Blocks.OAK_TRAPDOOR).setId(ResourceKey.create(Registries.BLOCK, Identifier.fromNamespaceAndPath("sushigocrafting", "cutting_board"))), CuttingBoardTile.class);
     }
 
     @Override

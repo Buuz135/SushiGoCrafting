@@ -53,7 +53,7 @@ public class AmountItem extends SushiItem implements ISpecialCreativeTabItem {
     public void onCraftedBy(ItemStack stack, Player playerIn) {
         super.onCraftedBy(stack, playerIn);
         if (!stack.has(SushiDataComponent.AMOUNT.get()))
-            stack.set(SushiDataComponent.AMOUNT.get(), playerIn.level().random.nextInt(maxAmount - minAmount) + minAmount);
+            stack.set(SushiDataComponent.AMOUNT.get(), playerIn.level().getRandom().nextInt(maxAmount - minAmount) + minAmount);
     }
 
     @Override
@@ -106,7 +106,7 @@ public class AmountItem extends SushiItem implements ISpecialCreativeTabItem {
         if (entity != null && entity.hasEffect(SushiContent.Effects.STEADY_HANDS.getDelegate())) {
             extra += (entity.getEffect(SushiContent.Effects.STEADY_HANDS.getDelegate()).getAmplifier() + 1) * getMinAmount();
         }
-        return withAmount(Math.min(getMaxCombineAmount(), extra + world.random.nextInt(getMaxAmount() - getMinAmount()) + getMinAmount()));
+        return withAmount(Math.min(getMaxCombineAmount(), extra + world.getRandom().nextInt(getMaxAmount() - getMinAmount()) + getMinAmount()));
     }
 
     public void consume(IFoodIngredient ingredient, ItemStack stack, int amountLevel) {
@@ -125,11 +125,11 @@ public class AmountItem extends SushiItem implements ISpecialCreativeTabItem {
     @Override
     public ItemStack finishUsingItem(ItemStack stack, Level worldIn, LivingEntity entityLiving) {
         if (entityLiving instanceof Player) {
-            worldIn.playSound(null, entityLiving.getX(), entityLiving.getY(), entityLiving.getZ(), SoundEvents.GENERIC_EAT, SoundSource.NEUTRAL, 1.0F, 1.0F + (worldIn.random.nextFloat() - worldIn.random.nextFloat()) * 0.4F);
+            worldIn.playSound(null, entityLiving.getX(), entityLiving.getY(), entityLiving.getZ(), SoundEvents.GENERIC_EAT, SoundSource.NEUTRAL, 1.0F, 1.0F + (worldIn.getRandom().nextFloat() - worldIn.getRandom().nextFloat()) * 0.4F);
             FoodProperties food = stack.get(DataComponents.FOOD);
             if (food != null) {
                 ((Player) entityLiving).getFoodData().eat(food.nutrition(), food.saturation());
-                if (!worldIn.isClientSide && worldIn.random.nextFloat() < (foodHurts ? 0.6f : 0.01f)) {
+                if (!worldIn.isClientSide() && worldIn.getRandom().nextFloat() < (foodHurts ? 0.6f : 0.01f)) {
                     entityLiving.addEffect(new MobEffectInstance(MobEffects.POISON, 100, 0));
                 }
             }

@@ -24,7 +24,7 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.Containers;
 import net.minecraft.world.InteractionHand;
-import net.minecraft.world.ItemInteractionResult;
+import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.ItemStack;
@@ -32,7 +32,6 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
-import net.neoforged.neoforge.common.util.INBTSerializable;
 import net.neoforged.neoforge.items.ItemHandlerHelper;
 
 import java.util.ArrayList;
@@ -132,8 +131,8 @@ public class RollerTile extends ActiveTile<RollerTile> {
     }
 
     @Override
-    public ItemInteractionResult onActivated(Player player, InteractionHand hand, Direction facing, double hitX, double hitY, double hitZ) {
-        ItemInteractionResult type = super.onActivated(player, hand, facing, hitX, hitY, hitZ);
+    public InteractionResult onActivated(Player player, InteractionHand hand, Direction facing, double hitX, double hitY, double hitZ) {
+        InteractionResult type = super.onActivated(player, hand, facing, hitX, hitY, hitZ);
         if (!type.result().shouldSwing()) {
             if (!player.hasData(SushiContent.AttachmentTypes.SUSHI_WEIGHT_DISCOVERY)) {
                 player.setData(SushiContent.AttachmentTypes.SUSHI_WEIGHT_DISCOVERY, new SushiWeightDiscoveryCapability());
@@ -143,7 +142,7 @@ public class RollerTile extends ActiveTile<RollerTile> {
                 data.requestUpdate((ServerPlayer) player, new ItemStack(Items.STONE), null);
             }
             openGui(player);
-            return ItemInteractionResult.SUCCESS;
+            return InteractionResult.SUCCESS;
         }
         return type;
     }
@@ -222,7 +221,8 @@ public class RollerTile extends ActiveTile<RollerTile> {
     public void handleButtonMessage(int id, Player playerEntity, CompoundTag compound) {
         super.handleButtonMessage(id, playerEntity, compound);
         if (compound.contains("Type")) {
-            FoodAPI.get().getTypeFromName(compound.getString("Type")).ifPresent(iFoodType -> {
+            String selectedType = compound.getStringOr("Type", "");
+            FoodAPI.get().getTypeFromName(selectedType).ifPresent(iFoodType -> {
                 slots.setSlotPosition(iFoodType.getSlotPosition());
                 for (int i1 = 0; i1 < slots.getSlots(); i1++) {
                     if (i1 < iFoodType.getFoodIngredients().size()) {
@@ -234,7 +234,7 @@ public class RollerTile extends ActiveTile<RollerTile> {
                         ItemHandlerHelper.giveItemToPlayer(playerEntity, slotStack);
                     }
                 }
-                this.selected = compound.getString("Type");
+                this.selected = selectedType;
                 for (int i = 0; i < slots.getSlots(); i++) {
                     slots.setSlotToItemStackRender(i, iFoodType.getSlotStackRender().apply(i));
                 }
@@ -294,7 +294,7 @@ public class RollerTile extends ActiveTile<RollerTile> {
         return spices;
     }
 
-    public class WeightTracker implements INBTSerializable<CompoundTag> {
+    public class WeightTracker {
 
         private List<Integer> weights;
 
@@ -305,14 +305,12 @@ public class RollerTile extends ActiveTile<RollerTile> {
             }
         }
 
-        @Override
         public CompoundTag serializeNBT(HolderLookup.Provider provider) {
             CompoundTag compoundNBT = new CompoundTag();
-            compoundNBT.putIntArray("Weights", weights);
+            compoundNBT.putIntArray("Weights", weights.stream().mapToInt(Integer::intValue).toArray());
             return compoundNBT;
         }
 
-        @Override
         public void deserializeNBT(HolderLookup.Provider provider, CompoundTag nbt) {
             weights = new ArrayList<>();
             for (int i : nbt.getIntArray("Weights").orElseThrow()) {

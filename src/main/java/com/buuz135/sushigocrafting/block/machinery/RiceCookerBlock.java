@@ -3,6 +3,9 @@ package com.buuz135.sushigocrafting.block.machinery;
 import com.buuz135.sushigocrafting.tile.machinery.RiceCookerTile;
 import com.hrznstudio.titanium.block.RotatableBlock;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.Identifier;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.sounds.SoundEvents;
@@ -112,7 +115,7 @@ public class RiceCookerBlock extends RotatableBlock<RiceCookerTile> {
     }).get();
 
     public RiceCookerBlock() {
-        super("rice_cooker", Properties.ofFullCopy(Blocks.IRON_BLOCK), RiceCookerTile.class);
+        super("rice_cooker", Properties.ofFullCopy(Blocks.IRON_BLOCK).setId(ResourceKey.create(Registries.BLOCK, Identifier.fromNamespaceAndPath("sushigocrafting", "rice_cooker"))), RiceCookerTile.class);
     }
 
     @Override

@@ -12,7 +12,7 @@ import com.hrznstudio.titanium.util.RecipeUtil;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.InteractionHand;
-import net.minecraft.world.ItemInteractionResult;
+import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.ItemStack;
@@ -67,11 +67,11 @@ public class FermentationBarrelTile extends ActiveTile<FermentationBarrelTile> {
     }
 
     @Override
-    public ItemInteractionResult onActivated(Player player, InteractionHand hand, Direction facing, double hitX, double hitY, double hitZ) {
-        ItemInteractionResult type = super.onActivated(player, hand, facing, hitX, hitY, hitZ);
+    public InteractionResult onActivated(Player player, InteractionHand hand, Direction facing, double hitX, double hitY, double hitZ) {
+        InteractionResult type = super.onActivated(player, hand, facing, hitX, hitY, hitZ);
         if (!type.result().shouldSwing()) {
             openGui(player);
-            return ItemInteractionResult.SUCCESS;
+            return InteractionResult.SUCCESS;
         }
         return type;
     }

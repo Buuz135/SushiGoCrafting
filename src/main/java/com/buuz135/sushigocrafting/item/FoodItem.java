@@ -146,7 +146,7 @@ public class FoodItem extends SushiItem {
             Info info = new Info(stack, true);
             player.getFoodData().eat((int) info.getHunger(), info.getSaturation());
             info.getEffectInstances().forEach(player::addEffect);
-            worldIn.playSound(null, entity.getX(), entity.getY(), entity.getZ(), SoundEvents.GENERIC_EAT, SoundSource.NEUTRAL, 1.0F, 1.0F + (worldIn.random.nextFloat() - worldIn.random.nextFloat()) * 0.4F);
+            worldIn.playSound(null, entity.getX(), entity.getY(), entity.getZ(), SoundEvents.GENERIC_EAT, SoundSource.NEUTRAL, 1.0F, 1.0F + (worldIn.getRandom().nextFloat() - worldIn.getRandom().nextFloat()) * 0.4F);
             if (!(entity instanceof Player) || !((Player) entity).getAbilities().instabuild) {
                 stack.shrink(1);
             }

@@ -3,6 +3,9 @@ package com.buuz135.sushigocrafting.block.machinery;
 import com.buuz135.sushigocrafting.tile.machinery.FermentationBarrelTile;
 import com.hrznstudio.titanium.block.RotatableBlock;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.Identifier;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.item.Item;
@@ -37,7 +40,7 @@ public class FermentationBarrelBlock extends RotatableBlock<FermentationBarrelTi
 
 
     public FermentationBarrelBlock() {
-        super("fermentation_barrel", Properties.ofFullCopy(Blocks.OAK_WOOD), FermentationBarrelTile.class);
+        super("fermentation_barrel", Properties.ofFullCopy(Blocks.OAK_WOOD).setId(ResourceKey.create(Registries.BLOCK, Identifier.fromNamespaceAndPath("sushigocrafting", "fermentation_barrel"))), FermentationBarrelTile.class);
     }
 
     @Override
@@ -70,9 +73,9 @@ public class FermentationBarrelBlock extends RotatableBlock<FermentationBarrelTi
     public void animateTick(BlockState stateIn, Level worldIn, BlockPos pos, RandomSource rand) {
         super.animateTick(stateIn, worldIn, pos, rand);
         this.getTile(worldIn, pos).filter(riceCookerTile -> riceCookerTile.getBar().getProgress() > 0).ifPresent(riceCookerTile -> {
-            double d0 = (double) pos.getX() + 0.5D - worldIn.random.nextDouble() / 2D + 0.25D;
+            double d0 = (double) pos.getX() + 0.5D - worldIn.getRandom().nextDouble() / 2D + 0.25D;
             double d1 = (double) pos.getY() + 1.01D;
-            double d2 = (double) pos.getZ() + 0.5D - worldIn.random.nextDouble() / 2D + 0.25D;
+            double d2 = (double) pos.getZ() + 0.5D - worldIn.getRandom().nextDouble() / 2D + 0.25D;
 
             worldIn.addParticle(ParticleTypes.BUBBLE_POP, d0, d1, d2, 0.0D, 0.0D, 0.0D);
         });
