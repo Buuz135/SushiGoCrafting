@@ -49,13 +49,17 @@ public class FermentationBarrelCategory implements IRecipeCategory<FermentingBar
     }
 
     @Override
-    public int getWidth() { return 160; }`r`n    public int getHeight() { return 80; }`r`n`r`n    @Override`r`n    public IDrawable getIcon() {
+    public int getWidth() { return 160; }
+    public int getHeight() { return 80; }
+
+    @Override
+    public IDrawable getIcon() {
         return null;
     }
 
     @Override
     public void setRecipe(IRecipeLayoutBuilder builder, FermentingBarrelRecipe recipe, IFocusGroup focuses) {
-        builder.addSlot(RecipeIngredientRole.INPUT, 4, 16).addIngredients(recipe.getInput());
+        recipe.getInput().ifPresent(input -> builder.addSlot(RecipeIngredientRole.INPUT, 4, 16).addIngredients(input));
         builder.addSlot(RecipeIngredientRole.INPUT, 26 + 3, 15 + 3).setFluidRenderer(1000, false, 12, 13).setOverlay(smallTank, 0, 0).addIngredient(NeoForgeTypes.FLUID_STACK, recipe.getFluid());
 
         builder.addSlot(RecipeIngredientRole.OUTPUT, 81, 16).addIngredient(VanillaTypes.ITEM_STACK, recipe.getOutput());

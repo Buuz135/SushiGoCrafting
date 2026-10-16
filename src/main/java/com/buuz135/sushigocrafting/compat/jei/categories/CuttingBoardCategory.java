@@ -42,7 +42,11 @@ public class CuttingBoardCategory implements IRecipeCategory<CuttingBoardRecipe>
     }
 
     @Override
-    public int getWidth() { return 160; }`r`n    public int getHeight() { return 80; }`r`n`r`n    @Override`r`n    public IDrawable getIcon() {
+    public int getWidth() { return 160; }
+    public int getHeight() { return 80; }
+
+    @Override
+    public IDrawable getIcon() {
         return null;
     }
 

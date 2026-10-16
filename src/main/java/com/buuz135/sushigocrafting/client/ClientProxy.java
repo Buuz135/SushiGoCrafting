@@ -20,9 +20,15 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
 import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
 import net.neoforged.neoforge.client.event.EntityRenderersEvent;
+import net.neoforged.neoforge.client.event.ModelEvent;
+import net.neoforged.neoforge.client.model.standalone.SimpleUnbakedStandaloneModel;
+import net.neoforged.neoforge.client.model.standalone.StandaloneModelKey;
+import net.minecraft.client.renderer.block.dispatch.BlockStateModelPart;
 import net.neoforged.neoforge.event.entity.player.ItemTooltipEvent;
 
 public class ClientProxy {
+    public static final StandaloneModelKey<BlockStateModelPart> SALMON_BACK = new StandaloneModelKey<>(() -> "sushigocrafting:salmon_back");
+    public static final StandaloneModelKey<BlockStateModelPart> TUNA_BACK = new StandaloneModelKey<>(() -> "sushigocrafting:tuna_back");
 
     public static void register() {
         EventManager.mod(EntityRenderersEvent.RegisterRenderers.class).process(event -> {
@@ -34,6 +40,10 @@ public class ClientProxy {
         }).subscribe();
         EventManager.mod(EntityRenderersEvent.RegisterLayerDefinitions.class).process(event -> {
             event.registerLayerDefinition(new ModelLayerLocation(Identifier.fromNamespaceAndPath(SushiGoCrafting.MOD_ID, "shrimp"), "main"), ShrimpModel::createBodyLayer);
+        }).subscribe();
+        EventManager.mod(ModelEvent.RegisterStandalone.class).process(event -> {
+            event.register(SALMON_BACK, SimpleUnbakedStandaloneModel.simpleModelWrapper(Identifier.fromNamespaceAndPath(SushiGoCrafting.MOD_ID, "block/salmon_back")));
+            event.register(TUNA_BACK, SimpleUnbakedStandaloneModel.simpleModelWrapper(Identifier.fromNamespaceAndPath(SushiGoCrafting.MOD_ID, "block/tuna_back")));
         }).subscribe();
     }
 
