@@ -6,7 +6,7 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.datafixers.util.Pair;
 import com.mojang.math.Axis;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.client.renderer.SubmitNodeCollector;
 import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
 
@@ -34,7 +34,7 @@ public class StackFoodIngredientRenderer implements IFoodIngredientRenderer {
     }
 
     @Override
-    public Pair<Float, Float> render(PoseStack stack, MultiBufferSource renderTypeBuffer, int weight, int combinedLightIn, int combinedOverlayIn) {
+    public Pair<Float, Float> render(PoseStack stack, SubmitNodeCollector renderTypeBuffer, int weight, int combinedLightIn, int combinedOverlayIn) {
         if (itemStackCache == null) {
             itemStackCache = new ItemStack(itemStack.get());
         }
@@ -44,7 +44,9 @@ public class StackFoodIngredientRenderer implements IFoodIngredientRenderer {
         stack.mulPose(Axis.YP.rotationDegrees(rotationY));
         stack.mulPose(Axis.ZP.rotationDegrees(rotationZ));
         stack.scale(0.5f, 0.5f, 0.5f);
-        Minecraft.getInstance().getItemRenderer().renderStatic(itemStackCache, ItemDisplayContext.GROUND, combinedLightIn, combinedOverlayIn, stack, renderTypeBuffer, Minecraft.getInstance().level, 0);
+        var renderState = new net.minecraft.client.renderer.item.ItemStackRenderState();
+        Minecraft.getInstance().getItemModelResolver().updateForTopItem(renderState, itemStackCache, ItemDisplayContext.GROUND, Minecraft.getInstance().level, null, 0);
+        renderState.submit(stack, renderTypeBuffer, combinedLightIn, combinedOverlayIn, 0);
         stack.popPose();
         return Pair.of(0f, 0f);
     }

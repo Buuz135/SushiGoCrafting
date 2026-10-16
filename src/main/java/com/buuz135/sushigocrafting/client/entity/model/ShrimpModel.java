@@ -2,6 +2,7 @@ package com.buuz135.sushigocrafting.client.entity.model;
 
 
 import com.buuz135.sushigocrafting.entity.ShrimpEntity;
+import com.buuz135.sushigocrafting.client.entity.ShrimpRenderer;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.minecraft.client.model.HierarchicalModel;
@@ -13,7 +14,7 @@ import net.minecraft.client.model.geom.builders.MeshDefinition;
 import net.minecraft.client.model.geom.builders.PartDefinition;
 import net.minecraft.util.Mth;
 
-public class ShrimpModel extends HierarchicalModel<ShrimpEntity> {
+public class ShrimpModel extends HierarchicalModel<ShrimpRenderer.State> {
     private final ModelPart body1;
     private final ModelPart body2;
     private final ModelPart body3;
@@ -79,20 +80,12 @@ public class ShrimpModel extends HierarchicalModel<ShrimpEntity> {
     }
 
     @Override
-    public void setupAnim(ShrimpEntity entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
-        float f = Mth.sin(0.3F * ageInTicks);
+    public void setupAnim(ShrimpRenderer.State entity) {
+        float f = Mth.sin(0.3F * entity.ageInTicks);
         body1.yRot = f * 0.015f;
         body4.xRot = f * 0.2f;
     }
 
-
-    @Override
-    public void renderToBuffer(PoseStack matrixStack, VertexConsumer buffer, int packedLight, int packedOverlay, int color) {
-        body1.render(matrixStack, buffer, packedLight, packedOverlay);
-        body2.render(matrixStack, buffer, packedLight, packedOverlay);
-        body3.render(matrixStack, buffer, packedLight, packedOverlay);
-        body4.render(matrixStack, buffer, packedLight, packedOverlay);
-    }
 
     @Override
     public ModelPart root() {

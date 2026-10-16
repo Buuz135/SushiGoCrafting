@@ -22,9 +22,9 @@ import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.player.PlayerRenderer;
 import net.minecraft.client.resources.PlayerSkin;
 import net.minecraft.client.resources.model.BakedModel;
-import net.minecraft.client.resources.model.ModelResourceLocation;
+import net.minecraft.client.resources.model.ModelIdentifier;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
 import net.neoforged.neoforge.client.event.EntityRenderersEvent;
 import net.neoforged.neoforge.client.event.ModelEvent;
@@ -52,15 +52,15 @@ public class ClientProxy {
             }
         }).subscribe();
         EventManager.mod(EntityRenderersEvent.RegisterLayerDefinitions.class).process(event -> {
-            event.registerLayerDefinition(new ModelLayerLocation(ResourceLocation.fromNamespaceAndPath(SushiGoCrafting.MOD_ID, "shrimp"), "main"), ShrimpModel::createBodyLayer);
+            event.registerLayerDefinition(new ModelLayerLocation(Identifier.fromNamespaceAndPath(SushiGoCrafting.MOD_ID, "shrimp"), "main"), ShrimpModel::createBodyLayer);
         }).subscribe();
         EventManager.mod(ModelEvent.RegisterAdditional.class).process(event -> {
-            event.register(ModelResourceLocation.standalone(ResourceLocation.fromNamespaceAndPath(SushiGoCrafting.MOD_ID, "block/salmon_back")));
-            event.register(ModelResourceLocation.standalone(ResourceLocation.fromNamespaceAndPath(SushiGoCrafting.MOD_ID, "block/tuna_back")));
+            event.register(ModelIdentifier.standalone(Identifier.fromNamespaceAndPath(SushiGoCrafting.MOD_ID, "block/salmon_back")));
+            event.register(ModelIdentifier.standalone(Identifier.fromNamespaceAndPath(SushiGoCrafting.MOD_ID, "block/tuna_back")));
         }).subscribe();
         EventManager.mod(ModelEvent.BakingCompleted.class).process(event -> {
-            SALMON_BACK = event.getModels().get(ModelResourceLocation.standalone(ResourceLocation.fromNamespaceAndPath(SushiGoCrafting.MOD_ID, "block/salmon_back")));
-            TUNA_BACK = event.getModels().get(ModelResourceLocation.standalone(ResourceLocation.fromNamespaceAndPath(SushiGoCrafting.MOD_ID, "block/tuna_back")));
+            SALMON_BACK = event.getModels().get(ModelIdentifier.standalone(Identifier.fromNamespaceAndPath(SushiGoCrafting.MOD_ID, "block/salmon_back")));
+            TUNA_BACK = event.getModels().get(ModelIdentifier.standalone(Identifier.fromNamespaceAndPath(SushiGoCrafting.MOD_ID, "block/tuna_back")));
         }).subscribe();
     }
 

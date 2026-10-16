@@ -18,7 +18,7 @@ import mezz.jei.api.recipe.category.IRecipeCategory;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.ItemStack;
 import org.apache.commons.lang3.tuple.Pair;
@@ -47,7 +47,7 @@ public class RollerCategory implements IRecipeCategory<Recipe> {
 
     @Override
     public IDrawable getBackground() {
-        return guiHelper.createDrawable(ResourceLocation.fromNamespaceAndPath(SushiGoCrafting.MOD_ID, "textures/gui/roller.png"), 8, 17, 160, 79);
+        return guiHelper.createDrawable(Identifier.fromNamespaceAndPath(SushiGoCrafting.MOD_ID, "textures/gui/roller.png"), 8, 17, 160, 79);
     }
 
     @Override

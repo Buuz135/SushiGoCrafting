@@ -15,7 +15,7 @@ import mezz.jei.api.registration.IRecipeCategoryRegistration;
 import mezz.jei.api.registration.IRecipeRegistration;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.block.entity.FurnaceBlockEntity;
@@ -61,7 +61,7 @@ public class JEIModPlugin implements IModPlugin {
     }
 
     @Override
-    public ResourceLocation getPluginUid() {
-        return ResourceLocation.fromNamespaceAndPath(SushiGoCrafting.MOD_ID, "default");
+    public Identifier getPluginUid() {
+        return Identifier.fromNamespaceAndPath(SushiGoCrafting.MOD_ID, "default");
     }
 }

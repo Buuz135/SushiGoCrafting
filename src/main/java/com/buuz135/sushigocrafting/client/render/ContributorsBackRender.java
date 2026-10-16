@@ -37,7 +37,7 @@ import net.minecraft.client.renderer.entity.layers.RenderLayer;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.client.renderer.texture.TextureAtlas;
 import net.minecraft.client.resources.model.BakedModel;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 
 public class ContributorsBackRender extends RenderLayer<AbstractClientPlayer, PlayerModel<AbstractClientPlayer>> {
 
@@ -52,7 +52,7 @@ public class ContributorsBackRender extends RenderLayer<AbstractClientPlayer, Pl
     public void render(PoseStack stack, MultiBufferSource buffer, int p_225628_3_, AbstractClientPlayer entitylivingbaseIn, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch) {
         if (entitylivingbaseIn.isInvisible()) return;
         if (!ClientRewardStorage.REWARD_STORAGE.getRewards().containsKey(entitylivingbaseIn.getUUID())) return;
-        if (!ClientRewardStorage.REWARD_STORAGE.getRewards().get(entitylivingbaseIn.getUUID()).getEnabled().containsKey(ResourceLocation.fromNamespaceAndPath(SushiGoCrafting.MOD_ID, "back")))
+        if (!ClientRewardStorage.REWARD_STORAGE.getRewards().get(entitylivingbaseIn.getUUID()).getEnabled().containsKey(Identifier.fromNamespaceAndPath(SushiGoCrafting.MOD_ID, "back")))
             return;
         stack.pushPose();
         if (entitylivingbaseIn.isCrouching()) {
@@ -64,7 +64,7 @@ public class ContributorsBackRender extends RenderLayer<AbstractClientPlayer, Pl
         RenderSystem.setShaderTexture(0, TextureAtlas.LOCATION_BLOCKS);
         BakedModel selected = null;
 
-        switch (ClientRewardStorage.REWARD_STORAGE.getRewards().get(entitylivingbaseIn.getUUID()).getEnabled().getOrDefault(ResourceLocation.fromNamespaceAndPath(SushiGoCrafting.MOD_ID, "back"), "salmon")) {
+        switch (ClientRewardStorage.REWARD_STORAGE.getRewards().get(entitylivingbaseIn.getUUID()).getEnabled().getOrDefault(Identifier.fromNamespaceAndPath(SushiGoCrafting.MOD_ID, "back"), "salmon")) {
             case "tuna":
                 selected = ClientProxy.TUNA_BACK;
                 break;

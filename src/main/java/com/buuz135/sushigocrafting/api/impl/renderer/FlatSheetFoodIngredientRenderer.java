@@ -3,7 +3,7 @@ package com.buuz135.sushigocrafting.api.impl.renderer;
 import com.buuz135.sushigocrafting.api.IFoodIngredientRenderer;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.datafixers.util.Pair;
-import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.client.renderer.SubmitNodeCollector;
 import net.minecraft.world.phys.AABB;
 
 import java.awt.*;
@@ -19,7 +19,7 @@ public class FlatSheetFoodIngredientRenderer implements IFoodIngredientRenderer 
     }
 
     @Override
-    public Pair<Float, Float> render(PoseStack stack, MultiBufferSource renderTypeBuffer, int weight, int combinedLightIn, int combinedOverlayIn) {
+    public Pair<Float, Float> render(PoseStack stack, SubmitNodeCollector renderTypeBuffer, int weight, int combinedLightIn, int combinedOverlayIn) {
         var paddingX = 0.15f;
         var paddingY = 0.08f;
         var customHeight = height + (weight / 2f) * height;

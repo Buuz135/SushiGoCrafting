@@ -16,7 +16,7 @@ import mezz.jei.api.recipe.RecipeType;
 import mezz.jei.api.recipe.category.IRecipeCategory;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.ItemStack;
 
 public class CuttingBoardCategory implements IRecipeCategory<CuttingBoardRecipe> {
@@ -57,7 +57,7 @@ public class CuttingBoardCategory implements IRecipeCategory<CuttingBoardRecipe>
 
     @Override
     public void draw(CuttingBoardRecipe recipe, IRecipeSlotsView recipeSlotsView, GuiGraphics guiGraphics, double mouseX, double mouseY) {
-        guiGraphics.blit(ResourceLocation.fromNamespaceAndPath(SushiGoCrafting.MOD_ID, "textures/gui/jei.png"), 31, 22, 0, 0, 15, 22);
+        guiGraphics.blit(Identifier.fromNamespaceAndPath(SushiGoCrafting.MOD_ID, "textures/gui/jei.png"), 31, 22, 0, 0, 15, 22);
         float scale = 4;
         //matrixStack.translate(0,0, 100);
         //matrixStack.translate(0,0, -200);
