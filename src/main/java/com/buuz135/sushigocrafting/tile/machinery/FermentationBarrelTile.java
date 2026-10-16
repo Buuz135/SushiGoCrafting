@@ -18,8 +18,9 @@ import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.block.state.BlockState;
-import net.neoforged.neoforge.fluids.capability.IFluidHandler;
-import net.neoforged.neoforge.items.ItemHandlerHelper;
+import net.neoforged.neoforge.transfer.fluid.FluidResource;
+import net.neoforged.neoforge.transfer.transaction.Transaction;
+import net.minecraft.world.item.crafting.Ingredient;
 
 import javax.annotation.Nonnull;
 
@@ -69,7 +70,7 @@ public class FermentationBarrelTile extends ActiveTile<FermentationBarrelTile> {
     @Override
     public InteractionResult onActivated(Player player, InteractionHand hand, Direction facing, double hitX, double hitY, double hitZ) {
         InteractionResult type = super.onActivated(player, hand, facing, hitX, hitY, hitZ);
-        if (!type.result().shouldSwing()) {
+        if (!type.consumesAction()) {
             openGui(player);
             return InteractionResult.SUCCESS;
         }
@@ -78,7 +79,7 @@ public class FermentationBarrelTile extends ActiveTile<FermentationBarrelTile> {
 
     public boolean canStart() {
         return RecipeUtil.getRecipes(this.level, (RecipeType<FermentingBarrelRecipe>) SushiContent.RecipeTypes.FERMENTING_BARREL.get()).stream()
-                .anyMatch(fermentingBarrelRecipe -> fermentingBarrelRecipe.input.test(this.input.getStackInSlot(0))
+                .anyMatch(fermentingBarrelRecipe -> Ingredient.testOptionalIngredient(fermentingBarrelRecipe.getInput(), this.input.getStackInSlot(0))
                         && (fermentingBarrelRecipe.fluid.isEmpty() || (fermentingBarrelRecipe.fluid.is(this.fluid.getFluid().getFluid()) && this.fluid.getFluid().getAmount() >= fermentingBarrelRecipe.fluid.getAmount()))
                         && (canStack(fermentingBarrelRecipe))
                 );
@@ -94,24 +95,30 @@ public class FermentationBarrelTile extends ActiveTile<FermentationBarrelTile> {
 
     public void onFinish() {
         RecipeUtil.getRecipes(this.level, (RecipeType<FermentingBarrelRecipe>) SushiContent.RecipeTypes.FERMENTING_BARREL.get()).stream()
-                .filter(fermentingBarrelRecipe -> fermentingBarrelRecipe.input.test(this.input.getStackInSlot(0))
+                .filter(fermentingBarrelRecipe -> Ingredient.testOptionalIngredient(fermentingBarrelRecipe.getInput(), this.input.getStackInSlot(0))
                         && (fermentingBarrelRecipe.fluid.isEmpty() || (fermentingBarrelRecipe.fluid.is(this.fluid.getFluid().getFluid()) && this.fluid.getFluid().getAmount() >= fermentingBarrelRecipe.fluid.getAmount()))
                         && (canStack(fermentingBarrelRecipe))
                 )
                 .findFirst()
                 .ifPresent(fermentingBarrelRecipe -> {
                     this.input.getStackInSlot(0).shrink(1);
-                    this.fluid.drainForced(fermentingBarrelRecipe.getFluid().getAmount(), IFluidHandler.FluidAction.EXECUTE);
+                    try (Transaction transaction = Transaction.openRoot()) {
+                        int amount = fermentingBarrelRecipe.getFluid().getAmount();
+                        if (this.fluid.extractForced(FluidResource.of(fermentingBarrelRecipe.getFluid()), amount, transaction) != amount) {
+                            throw new IllegalStateException("Fermentation barrel has insufficient fluid");
+                        }
+                        transaction.commit();
+                    }
                     if (fermentingBarrelRecipe.output.getItem() instanceof AmountItem) {
                         ItemStack outputStack = this.output.getStackInSlot(0);
                         ItemStack recipeOutput = ((AmountItem) fermentingBarrelRecipe.output.getItem()).random(null, level);
                         if (outputStack.isEmpty()) {
-                            ItemHandlerHelper.insertItem(this.output, recipeOutput, false);
+                            this.output.setStackInSlot(0, recipeOutput);
                         } else {
                             AmountItem.combineStacks(outputStack, recipeOutput);
                         }
                     } else {
-                        ItemHandlerHelper.insertItem(this.output, fermentingBarrelRecipe.output.copy(), false);
+                        this.output.setStackInSlot(0, fermentingBarrelRecipe.output.copy());
                     }
 
                 });

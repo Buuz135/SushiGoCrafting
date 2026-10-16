@@ -21,7 +21,9 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.Fluids;
-import net.neoforged.neoforge.fluids.capability.IFluidHandler;
+import net.neoforged.neoforge.fluids.FluidStack;
+import net.neoforged.neoforge.transfer.fluid.FluidResource;
+import net.neoforged.neoforge.transfer.transaction.Transaction;
 
 import javax.annotation.Nonnull;
 
@@ -70,7 +72,12 @@ public class RiceCookerTile extends ActiveTile<RiceCookerTile> {
                     for (int i = 0; i < this.input.getSlots(); i++) {
                         this.input.setStackInSlot(i, ItemStack.EMPTY);
                     }
-                    this.water.drainForced(1000, IFluidHandler.FluidAction.EXECUTE);
+                    try (Transaction transaction = Transaction.openRoot()) {
+                        if (this.water.extractForced(FluidResource.of(Fluids.WATER), 1000, transaction) != 1000) {
+                            throw new IllegalStateException("Rice cooker has insufficient water");
+                        }
+                        transaction.commit();
+                    }
                     --this.burnTime;
                     syncObject(this.bar);
                     setChanged();
@@ -80,15 +87,16 @@ public class RiceCookerTile extends ActiveTile<RiceCookerTile> {
                 .setSlotLimit(1)
                 .setInputFilter((stack, integer) -> false)
                 .setOutputFilter((stack, integer) -> true));
-        addTank(this.water = (FluidTankComponent<RiceCookerTile>) new FluidTankComponent<RiceCookerTile>("water", 8000, 68, 27)
-                .setTankAction(FluidTankComponent.Action.FILL)
-                .setTankType(FluidTankComponent.Type.SMALL)
-                .setValidator(fluidStack -> fluidStack.getFluid().isSame(Fluids.WATER))
-        );
+        addTank(this.water = new FluidTankComponent<RiceCookerTile>("water", 8000, 68, 27) {
+            @Override
+            public boolean isFluidValid(FluidStack stack) {
+                return stack.is(Fluids.WATER);
+            }
+        }.setTankAction(FluidTankComponent.Action.FILL).setTankType(FluidTankComponent.Type.SMALL));
         addInventory(this.fuel = new InventoryComponent<RiceCookerTile>("fuel", 69, 67, 1)
                 .setSlotToColorRender(0, DyeColor.RED)
                 .setSlotLimit(64)
-                .setInputFilter((stack, integer) -> stack.getBurnTime(RecipeType.SMELTING) > 0));
+                .setInputFilter((stack, integer) -> stack.getBurnTime(RecipeType.SMELTING, level.fuelValues()) > 0));
     }
 
     @Nonnull
@@ -100,7 +108,7 @@ public class RiceCookerTile extends ActiveTile<RiceCookerTile> {
     @Override
     public InteractionResult onActivated(Player player, InteractionHand hand, Direction facing, double hitX, double hitY, double hitZ) {
         InteractionResult type = super.onActivated(player, hand, facing, hitX, hitY, hitZ);
-        if (!type.result().shouldSwing()) {
+        if (!type.consumesAction()) {
             openGui(player);
             return InteractionResult.SUCCESS;
         }
@@ -109,7 +117,7 @@ public class RiceCookerTile extends ActiveTile<RiceCookerTile> {
 
     public boolean canStart() {
         if (burnTime < 1 && !this.fuel.getStackInSlot(0).isEmpty()) {
-            this.burnTime += this.fuel.getStackInSlot(0).getBurnTime(RecipeType.SMELTING) / 200D;
+            this.burnTime += this.fuel.getStackInSlot(0).getBurnTime(RecipeType.SMELTING, level.fuelValues()) / 200D;
             this.fuel.getStackInSlot(0).shrink(1);
             setChanged();
         }
