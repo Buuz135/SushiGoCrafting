@@ -3,6 +3,7 @@ package com.buuz135.sushigocrafting.datagen;
 import com.buuz135.sushigocrafting.block.plant.CustomCropBlock;
 import com.buuz135.sushigocrafting.proxy.SushiContent;
 import com.google.gson.JsonObject;
+import com.hrznstudio.titanium.block.RotatableBlock;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.data.CachedOutput;
 import net.minecraft.data.DataProvider;
@@ -35,10 +36,10 @@ public class SushiBlockstateProvider implements DataProvider {
         }
         for (Block block : new Block[]{SushiContent.Blocks.RICE_COOKER.get(), SushiContent.Blocks.CUTTING_BOARD.get(), SushiContent.Blocks.ROLLER.get()}) {
             JsonObject variants = new JsonObject();
-            variants.add("facing=north", model(block, "", 0, 180));
-            variants.add("facing=east", model(block, "", 0, 270));
-            variants.add("facing=south", model(block, "", 0, 0));
-            variants.add("facing=west", model(block, "", 0, 90));
+            variants.add(RotatableBlock.FACING_HORIZONTAL.getName() + "=north", model(block, "", 0, 180));
+            variants.add(RotatableBlock.FACING_HORIZONTAL.getName() + "=east", model(block, "", 0, 270));
+            variants.add(RotatableBlock.FACING_HORIZONTAL.getName() + "=south", model(block, "", 0, 0));
+            variants.add(RotatableBlock.FACING_HORIZONTAL.getName() + "=west", model(block, "", 0, 90));
             save(writes, output, block, variants);
         }
         for (Block block : new Block[]{SushiContent.Blocks.AVOCADO_LOG.get(), SushiContent.Blocks.AVOCADO_LEAVES_LOG.get()}) {
