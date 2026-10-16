@@ -6,21 +6,18 @@ import net.minecraft.data.PackOutput;
 
 import java.util.concurrent.CompletableFuture;
 
-/** Generates the checked-in 26.1 resource set. */
+/** Checked-in 26.1 resources are the source for SushiBlockTagsProvider. */
 public final class SushiBlockTagsProvider implements DataProvider {
-    private final SushiStaticResourceProvider delegate;
-
     public SushiBlockTagsProvider(PackOutput output) {
-        this.delegate = new SushiStaticResourceProvider(output, "Sushi Go Crafting SushiBlockTagsProvider");
     }
 
     @Override
     public CompletableFuture<?> run(CachedOutput output) {
-        return delegate.run(output);
+        return CompletableFuture.completedFuture(null);
     }
 
     @Override
     public String getName() {
-        return delegate.getName();
+        return "Sushi Go Crafting SushiBlockTagsProvider";
     }
 }

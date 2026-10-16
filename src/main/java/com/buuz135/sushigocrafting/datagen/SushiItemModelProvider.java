@@ -6,21 +6,18 @@ import net.minecraft.data.PackOutput;
 
 import java.util.concurrent.CompletableFuture;
 
-/** Generates the checked-in 26.1 resource set. */
+/** Checked-in item model assets use vanilla 26.1 item model definitions. */
 public final class SushiItemModelProvider implements DataProvider {
-    private final SushiStaticResourceProvider delegate;
-
     public SushiItemModelProvider(PackOutput output) {
-        this.delegate = new SushiStaticResourceProvider(output, "Sushi Go Crafting SushiItemModelProvider");
     }
 
     @Override
     public CompletableFuture<?> run(CachedOutput output) {
-        return delegate.run(output);
+        return CompletableFuture.completedFuture(null);
     }
 
     @Override
     public String getName() {
-        return delegate.getName();
+        return "Sushi Go Crafting SushiItemModelProvider";
     }
 }

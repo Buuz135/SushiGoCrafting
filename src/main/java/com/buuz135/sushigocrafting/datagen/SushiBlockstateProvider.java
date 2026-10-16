@@ -6,21 +6,18 @@ import net.minecraft.data.PackOutput;
 
 import java.util.concurrent.CompletableFuture;
 
-/** Generates the checked-in 26.1 resource set. */
+/** Checked-in blockstate assets replace the removed 26.1 NeoForge builder API. */
 public final class SushiBlockstateProvider implements DataProvider {
-    private final SushiStaticResourceProvider delegate;
-
     public SushiBlockstateProvider(PackOutput output) {
-        this.delegate = new SushiStaticResourceProvider(output, "Sushi Go Crafting SushiBlockstateProvider");
     }
 
     @Override
     public CompletableFuture<?> run(CachedOutput output) {
-        return delegate.run(output);
+        return CompletableFuture.completedFuture(null);
     }
 
     @Override
     public String getName() {
-        return delegate.getName();
+        return "Sushi Go Crafting SushiBlockstateProvider";
     }
 }
