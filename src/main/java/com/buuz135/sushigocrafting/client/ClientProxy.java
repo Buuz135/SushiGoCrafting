@@ -9,6 +9,7 @@ import com.buuz135.sushigocrafting.api.impl.effect.ModifyIngredientEffect;
 import com.buuz135.sushigocrafting.client.entity.ShrimpRenderer;
 import com.buuz135.sushigocrafting.client.entity.TunaRenderer;
 import com.buuz135.sushigocrafting.client.entity.model.ShrimpModel;
+import com.buuz135.sushigocrafting.client.render.ContributorsBackRender;
 import com.buuz135.sushigocrafting.client.tesr.CuttingBoardRenderer;
 import com.buuz135.sushigocrafting.client.tesr.RollerRenderer;
 import com.buuz135.sushigocrafting.proxy.SushiContent;
@@ -26,6 +27,8 @@ import net.neoforged.neoforge.client.event.RegisterRenderStateModifiersEvent;
 import net.neoforged.neoforge.client.model.standalone.SimpleUnbakedStandaloneModel;
 import net.neoforged.neoforge.client.model.standalone.StandaloneModelKey;
 import net.minecraft.client.renderer.block.dispatch.BlockStateModelPart;
+import net.minecraft.client.renderer.entity.player.AvatarRenderer;
+import net.minecraft.world.entity.player.PlayerModelType;
 import net.neoforged.neoforge.event.entity.player.ItemTooltipEvent;
 
 public class ClientProxy {
@@ -45,6 +48,12 @@ public class ClientProxy {
         }).subscribe();
         EventManager.mod(EntityRenderersEvent.RegisterLayerDefinitions.class).process(event -> {
             event.registerLayerDefinition(new ModelLayerLocation(Identifier.fromNamespaceAndPath(SushiGoCrafting.MOD_ID, "shrimp"), "main"), ShrimpModel::createBodyLayer);
+        }).subscribe();
+        EventManager.mod(EntityRenderersEvent.AddLayers.class).process(event -> {
+            for (PlayerModelType skin : event.getSkins()) {
+                AvatarRenderer<?, ?> renderer = event.getPlayerRenderer(skin);
+                renderer.addLayer(new ContributorsBackRender(renderer));
+            }
         }).subscribe();
         EventManager.mod(ModelEvent.RegisterStandalone.class).process(event -> {
             event.register(SALMON_BACK, SimpleUnbakedStandaloneModel.simpleModelWrapper(Identifier.fromNamespaceAndPath(SushiGoCrafting.MOD_ID, "block/salmon_back")));
