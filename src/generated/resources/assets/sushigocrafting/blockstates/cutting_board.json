@@ -1,17 +1,17 @@
 {
   "variants": {
-    "subfacing=east": {
+    "facing=east": {
       "model": "sushigocrafting:block/cutting_board",
       "y": 270
     },
-    "subfacing=north": {
+    "facing=north": {
       "model": "sushigocrafting:block/cutting_board",
       "y": 180
     },
-    "subfacing=south": {
+    "facing=south": {
       "model": "sushigocrafting:block/cutting_board"
     },
-    "subfacing=west": {
+    "facing=west": {
       "model": "sushigocrafting:block/cutting_board",
       "y": 90
     }

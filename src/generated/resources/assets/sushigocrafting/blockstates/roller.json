@@ -1,17 +1,17 @@
 {
   "variants": {
-    "subfacing=east": {
+    "facing=east": {
       "model": "sushigocrafting:block/roller",
       "y": 270
     },
-    "subfacing=north": {
+    "facing=north": {
       "model": "sushigocrafting:block/roller",
       "y": 180
     },
-    "subfacing=south": {
+    "facing=south": {
       "model": "sushigocrafting:block/roller"
     },
-    "subfacing=west": {
+    "facing=west": {
       "model": "sushigocrafting:block/roller",
       "y": 90
     }

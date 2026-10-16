@@ -4,11 +4,8 @@
     "amount": 250,
     "id": "minecraft:water"
   },
-  "input": {
-    "tag": "c:crops/soy_bean"
-  },
+  "input": "#c:crops/soy_bean",
   "output": {
-    "count": 1,
     "id": "sushigocrafting:soy_sauce"
   }
 }

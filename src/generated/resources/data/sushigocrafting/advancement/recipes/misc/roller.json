@@ -1,10 +1,4 @@
 {
-  "neoforge:conditions": [
-    {
-      "type": "neoforge:item_exists",
-      "item": "sushigocrafting:roller"
-    }
-  ],
   "parent": "minecraft:recipes/root",
   "criteria": {
     "has_item": {
