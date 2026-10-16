@@ -28,37 +28,37 @@ public interface IFoodIngredientRenderer {
 
         renderTypeBuffer.submitCustomGeometry(stack, ROLLER_RENDERER, (pose, buffer) -> {
         var matrix = pose.pose();
-        buffer.addVertex(matrix, x1, y1, z1).setColor(red, green, blue, alpha).setUv(0, (float) pos.maxY).setOverlay(net.minecraft.client.renderer.texture.OverlayTexture.NO_OVERLAY).setLight(net.minecraft.client.renderer.LightTexture.FULL_BRIGHT).setNormal(0, 1, 0);
-        buffer.addVertex(matrix, x1, y2, z1).setColor(red, green, blue, alpha).setUv(0, 0).setOverlay(net.minecraft.client.renderer.texture.OverlayTexture.NO_OVERLAY).setLight(net.minecraft.client.renderer.LightTexture.FULL_BRIGHT).setNormal(0, 1, 0);
-        buffer.addVertex(matrix, x2, y2, z1).setColor(red, green, blue, alpha).setUv(1, 0).setOverlay(net.minecraft.client.renderer.texture.OverlayTexture.NO_OVERLAY).setLight(net.minecraft.client.renderer.LightTexture.FULL_BRIGHT).setNormal(0, 1, 0);
-        buffer.addVertex(matrix, x2, y1, z1).setColor(red, green, blue, alpha).setUv(1, (float) pos.maxY).setOverlay(net.minecraft.client.renderer.texture.OverlayTexture.NO_OVERLAY).setLight(net.minecraft.client.renderer.LightTexture.FULL_BRIGHT).setNormal(0, 1, 0);
+        buffer.addVertex(matrix, x1, y1, z1).setColor(red, green, blue, alpha).setUv(0, (float) pos.maxY).setOverlay(net.minecraft.client.renderer.texture.OverlayTexture.NO_OVERLAY).setLight(net.minecraft.util.LightCoordsUtil.FULL_BRIGHT).setNormal(0, 1, 0);
+        buffer.addVertex(matrix, x1, y2, z1).setColor(red, green, blue, alpha).setUv(0, 0).setOverlay(net.minecraft.client.renderer.texture.OverlayTexture.NO_OVERLAY).setLight(net.minecraft.util.LightCoordsUtil.FULL_BRIGHT).setNormal(0, 1, 0);
+        buffer.addVertex(matrix, x2, y2, z1).setColor(red, green, blue, alpha).setUv(1, 0).setOverlay(net.minecraft.client.renderer.texture.OverlayTexture.NO_OVERLAY).setLight(net.minecraft.util.LightCoordsUtil.FULL_BRIGHT).setNormal(0, 1, 0);
+        buffer.addVertex(matrix, x2, y1, z1).setColor(red, green, blue, alpha).setUv(1, (float) pos.maxY).setOverlay(net.minecraft.client.renderer.texture.OverlayTexture.NO_OVERLAY).setLight(net.minecraft.util.LightCoordsUtil.FULL_BRIGHT).setNormal(0, 1, 0);
 
-        buffer.addVertex(matrix, x1, y1, z2).setColor(red, green, blue, alpha).setUv(0, 1).setOverlay(net.minecraft.client.renderer.texture.OverlayTexture.NO_OVERLAY).setLight(net.minecraft.client.renderer.LightTexture.FULL_BRIGHT).setNormal(0, 1, 0);
-        buffer.addVertex(matrix, x2, y1, z2).setColor(red, green, blue, alpha).setUv(0, 0).setOverlay(net.minecraft.client.renderer.texture.OverlayTexture.NO_OVERLAY).setLight(net.minecraft.client.renderer.LightTexture.FULL_BRIGHT).setNormal(0, 1, 0);
-        buffer.addVertex(matrix, x2, y2, z2).setColor(red, green, blue, alpha).setUv((float) pos.maxY, 0).setOverlay(net.minecraft.client.renderer.texture.OverlayTexture.NO_OVERLAY).setLight(net.minecraft.client.renderer.LightTexture.FULL_BRIGHT).setNormal(0, 1, 0);
-        buffer.addVertex(matrix, x1, y2, z2).setColor(red, green, blue, alpha).setUv((float) pos.maxY, 1).setOverlay(net.minecraft.client.renderer.texture.OverlayTexture.NO_OVERLAY).setLight(net.minecraft.client.renderer.LightTexture.FULL_BRIGHT).setNormal(0, 1, 0);
-
-
-        buffer.addVertex(matrix, x1, y1, z1).setColor(red, green, blue, alpha).setUv(0, 1).setOverlay(net.minecraft.client.renderer.texture.OverlayTexture.NO_OVERLAY).setLight(net.minecraft.client.renderer.LightTexture.FULL_BRIGHT).setNormal(0, 1, 0);
-        buffer.addVertex(matrix, x2, y1, z1).setColor(red, green, blue, alpha).setUv(0, 0).setOverlay(net.minecraft.client.renderer.texture.OverlayTexture.NO_OVERLAY).setLight(net.minecraft.client.renderer.LightTexture.FULL_BRIGHT).setNormal(0, 1, 0);
-        buffer.addVertex(matrix, x2, y1, z2).setColor(red, green, blue, alpha).setUv(1, 0).setOverlay(net.minecraft.client.renderer.texture.OverlayTexture.NO_OVERLAY).setLight(net.minecraft.client.renderer.LightTexture.FULL_BRIGHT).setNormal(0, 1, 0);
-        buffer.addVertex(matrix, x1, y1, z2).setColor(red, green, blue, alpha).setUv(0, 0).setOverlay(net.minecraft.client.renderer.texture.OverlayTexture.NO_OVERLAY).setLight(net.minecraft.client.renderer.LightTexture.FULL_BRIGHT).setNormal(0, 1, 0);
-
-        buffer.addVertex(matrix, x1, y2, z1).setColor(red, green, blue, alpha).setUv(0, (float) pos.maxZ).setOverlay(net.minecraft.client.renderer.texture.OverlayTexture.NO_OVERLAY).setLight(net.minecraft.client.renderer.LightTexture.FULL_BRIGHT).setNormal(0, 1, 0);
-        buffer.addVertex(matrix, x1, y2, z2).setColor(red, green, blue, alpha).setUv(0, (float) pos.minZ).setOverlay(net.minecraft.client.renderer.texture.OverlayTexture.NO_OVERLAY).setLight(net.minecraft.client.renderer.LightTexture.FULL_BRIGHT).setNormal(0, 1, 0);
-        buffer.addVertex(matrix, x2, y2, z2).setColor(red, green, blue, alpha).setUv(1, (float) pos.minZ).setOverlay(net.minecraft.client.renderer.texture.OverlayTexture.NO_OVERLAY).setLight(net.minecraft.client.renderer.LightTexture.FULL_BRIGHT).setNormal(0, 1, 0);
-        buffer.addVertex(matrix, x2, y2, z1).setColor(red, green, blue, alpha).setUv(1, (float) pos.maxZ).setOverlay(net.minecraft.client.renderer.texture.OverlayTexture.NO_OVERLAY).setLight(net.minecraft.client.renderer.LightTexture.FULL_BRIGHT).setNormal(0, 1, 0);
+        buffer.addVertex(matrix, x1, y1, z2).setColor(red, green, blue, alpha).setUv(0, 1).setOverlay(net.minecraft.client.renderer.texture.OverlayTexture.NO_OVERLAY).setLight(net.minecraft.util.LightCoordsUtil.FULL_BRIGHT).setNormal(0, 1, 0);
+        buffer.addVertex(matrix, x2, y1, z2).setColor(red, green, blue, alpha).setUv(0, 0).setOverlay(net.minecraft.client.renderer.texture.OverlayTexture.NO_OVERLAY).setLight(net.minecraft.util.LightCoordsUtil.FULL_BRIGHT).setNormal(0, 1, 0);
+        buffer.addVertex(matrix, x2, y2, z2).setColor(red, green, blue, alpha).setUv((float) pos.maxY, 0).setOverlay(net.minecraft.client.renderer.texture.OverlayTexture.NO_OVERLAY).setLight(net.minecraft.util.LightCoordsUtil.FULL_BRIGHT).setNormal(0, 1, 0);
+        buffer.addVertex(matrix, x1, y2, z2).setColor(red, green, blue, alpha).setUv((float) pos.maxY, 1).setOverlay(net.minecraft.client.renderer.texture.OverlayTexture.NO_OVERLAY).setLight(net.minecraft.util.LightCoordsUtil.FULL_BRIGHT).setNormal(0, 1, 0);
 
 
-        buffer.addVertex(matrix, x1, y1, z1).setColor(red, green, blue, alpha).setUv(0, (float) pos.maxZ).setOverlay(net.minecraft.client.renderer.texture.OverlayTexture.NO_OVERLAY).setLight(net.minecraft.client.renderer.LightTexture.FULL_BRIGHT).setNormal(0, 1, 0);
-        buffer.addVertex(matrix, x1, y1, z2).setColor(red, green, blue, alpha).setUv(0, (float) pos.minZ).setOverlay(net.minecraft.client.renderer.texture.OverlayTexture.NO_OVERLAY).setLight(net.minecraft.client.renderer.LightTexture.FULL_BRIGHT).setNormal(0, 1, 0);
-        buffer.addVertex(matrix, x1, y2, z2).setColor(red, green, blue, alpha).setUv((float) pos.maxY, (float) pos.minZ).setOverlay(net.minecraft.client.renderer.texture.OverlayTexture.NO_OVERLAY).setLight(net.minecraft.client.renderer.LightTexture.FULL_BRIGHT).setNormal(0, 1, 0);
-        buffer.addVertex(matrix, x1, y2, z1).setColor(red, green, blue, alpha).setUv((float) pos.maxY, (float) pos.maxZ).setOverlay(net.minecraft.client.renderer.texture.OverlayTexture.NO_OVERLAY).setLight(net.minecraft.client.renderer.LightTexture.FULL_BRIGHT).setNormal(0, 1, 0);
+        buffer.addVertex(matrix, x1, y1, z1).setColor(red, green, blue, alpha).setUv(0, 1).setOverlay(net.minecraft.client.renderer.texture.OverlayTexture.NO_OVERLAY).setLight(net.minecraft.util.LightCoordsUtil.FULL_BRIGHT).setNormal(0, 1, 0);
+        buffer.addVertex(matrix, x2, y1, z1).setColor(red, green, blue, alpha).setUv(0, 0).setOverlay(net.minecraft.client.renderer.texture.OverlayTexture.NO_OVERLAY).setLight(net.minecraft.util.LightCoordsUtil.FULL_BRIGHT).setNormal(0, 1, 0);
+        buffer.addVertex(matrix, x2, y1, z2).setColor(red, green, blue, alpha).setUv(1, 0).setOverlay(net.minecraft.client.renderer.texture.OverlayTexture.NO_OVERLAY).setLight(net.minecraft.util.LightCoordsUtil.FULL_BRIGHT).setNormal(0, 1, 0);
+        buffer.addVertex(matrix, x1, y1, z2).setColor(red, green, blue, alpha).setUv(0, 0).setOverlay(net.minecraft.client.renderer.texture.OverlayTexture.NO_OVERLAY).setLight(net.minecraft.util.LightCoordsUtil.FULL_BRIGHT).setNormal(0, 1, 0);
 
-        buffer.addVertex(matrix, x2, y1, z1).setColor(red, green, blue, alpha).setUv((float) pos.maxY, (float) pos.maxZ).setOverlay(net.minecraft.client.renderer.texture.OverlayTexture.NO_OVERLAY).setLight(net.minecraft.client.renderer.LightTexture.FULL_BRIGHT).setNormal(0, 1, 0);
-        buffer.addVertex(matrix, x2, y2, z1).setColor(red, green, blue, alpha).setUv(0, (float) pos.maxZ).setOverlay(net.minecraft.client.renderer.texture.OverlayTexture.NO_OVERLAY).setLight(net.minecraft.client.renderer.LightTexture.FULL_BRIGHT).setNormal(0, 1, 0);
-        buffer.addVertex(matrix, x2, y2, z2).setColor(red, green, blue, alpha).setUv(0, (float) pos.minZ).setOverlay(net.minecraft.client.renderer.texture.OverlayTexture.NO_OVERLAY).setLight(net.minecraft.client.renderer.LightTexture.FULL_BRIGHT).setNormal(0, 1, 0);
-        buffer.addVertex(matrix, x2, y1, z2).setColor(red, green, blue, alpha).setUv((float) pos.maxY, (float) pos.minZ).setOverlay(net.minecraft.client.renderer.texture.OverlayTexture.NO_OVERLAY).setLight(net.minecraft.client.renderer.LightTexture.FULL_BRIGHT).setNormal(0, 1, 0);
+        buffer.addVertex(matrix, x1, y2, z1).setColor(red, green, blue, alpha).setUv(0, (float) pos.maxZ).setOverlay(net.minecraft.client.renderer.texture.OverlayTexture.NO_OVERLAY).setLight(net.minecraft.util.LightCoordsUtil.FULL_BRIGHT).setNormal(0, 1, 0);
+        buffer.addVertex(matrix, x1, y2, z2).setColor(red, green, blue, alpha).setUv(0, (float) pos.minZ).setOverlay(net.minecraft.client.renderer.texture.OverlayTexture.NO_OVERLAY).setLight(net.minecraft.util.LightCoordsUtil.FULL_BRIGHT).setNormal(0, 1, 0);
+        buffer.addVertex(matrix, x2, y2, z2).setColor(red, green, blue, alpha).setUv(1, (float) pos.minZ).setOverlay(net.minecraft.client.renderer.texture.OverlayTexture.NO_OVERLAY).setLight(net.minecraft.util.LightCoordsUtil.FULL_BRIGHT).setNormal(0, 1, 0);
+        buffer.addVertex(matrix, x2, y2, z1).setColor(red, green, blue, alpha).setUv(1, (float) pos.maxZ).setOverlay(net.minecraft.client.renderer.texture.OverlayTexture.NO_OVERLAY).setLight(net.minecraft.util.LightCoordsUtil.FULL_BRIGHT).setNormal(0, 1, 0);
+
+
+        buffer.addVertex(matrix, x1, y1, z1).setColor(red, green, blue, alpha).setUv(0, (float) pos.maxZ).setOverlay(net.minecraft.client.renderer.texture.OverlayTexture.NO_OVERLAY).setLight(net.minecraft.util.LightCoordsUtil.FULL_BRIGHT).setNormal(0, 1, 0);
+        buffer.addVertex(matrix, x1, y1, z2).setColor(red, green, blue, alpha).setUv(0, (float) pos.minZ).setOverlay(net.minecraft.client.renderer.texture.OverlayTexture.NO_OVERLAY).setLight(net.minecraft.util.LightCoordsUtil.FULL_BRIGHT).setNormal(0, 1, 0);
+        buffer.addVertex(matrix, x1, y2, z2).setColor(red, green, blue, alpha).setUv((float) pos.maxY, (float) pos.minZ).setOverlay(net.minecraft.client.renderer.texture.OverlayTexture.NO_OVERLAY).setLight(net.minecraft.util.LightCoordsUtil.FULL_BRIGHT).setNormal(0, 1, 0);
+        buffer.addVertex(matrix, x1, y2, z1).setColor(red, green, blue, alpha).setUv((float) pos.maxY, (float) pos.maxZ).setOverlay(net.minecraft.client.renderer.texture.OverlayTexture.NO_OVERLAY).setLight(net.minecraft.util.LightCoordsUtil.FULL_BRIGHT).setNormal(0, 1, 0);
+
+        buffer.addVertex(matrix, x2, y1, z1).setColor(red, green, blue, alpha).setUv((float) pos.maxY, (float) pos.maxZ).setOverlay(net.minecraft.client.renderer.texture.OverlayTexture.NO_OVERLAY).setLight(net.minecraft.util.LightCoordsUtil.FULL_BRIGHT).setNormal(0, 1, 0);
+        buffer.addVertex(matrix, x2, y2, z1).setColor(red, green, blue, alpha).setUv(0, (float) pos.maxZ).setOverlay(net.minecraft.client.renderer.texture.OverlayTexture.NO_OVERLAY).setLight(net.minecraft.util.LightCoordsUtil.FULL_BRIGHT).setNormal(0, 1, 0);
+        buffer.addVertex(matrix, x2, y2, z2).setColor(red, green, blue, alpha).setUv(0, (float) pos.minZ).setOverlay(net.minecraft.client.renderer.texture.OverlayTexture.NO_OVERLAY).setLight(net.minecraft.util.LightCoordsUtil.FULL_BRIGHT).setNormal(0, 1, 0);
+        buffer.addVertex(matrix, x2, y1, z2).setColor(red, green, blue, alpha).setUv((float) pos.maxY, (float) pos.minZ).setOverlay(net.minecraft.client.renderer.texture.OverlayTexture.NO_OVERLAY).setLight(net.minecraft.util.LightCoordsUtil.FULL_BRIGHT).setNormal(0, 1, 0);
         });
 
     }
