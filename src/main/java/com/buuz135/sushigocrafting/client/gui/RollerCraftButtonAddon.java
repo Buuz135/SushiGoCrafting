@@ -44,7 +44,7 @@ public class RollerCraftButtonAddon extends BasicButtonAddon {
         if (asset != null) {
             AssetUtil.drawAsset(guiGraphics, screen, asset, guiX + getPosX() - 1, guiY + getPosY() - 1);
         }
-        guiGraphics.renderItemDecorations(Minecraft.getInstance().font, new ItemStack(SushiContent.Items.ROLLER.get()), guiX + getPosX(), guiY + getPosY() - 4);
+        guiGraphics.itemDecorations(Minecraft.getInstance().font, new ItemStack(SushiContent.Items.ROLLER.get()), guiX + getPosX(), guiY + getPosY() - 4);
     }
 
     @Override

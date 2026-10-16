@@ -41,7 +41,7 @@ public class JEIModPlugin implements IModPlugin {
         registry.addRecipeCategories(this.rollerCategory = new RollerCategory(registry.getJeiHelpers().getGuiHelper()));
         registry.addRecipeCategories(this.riceCookerCategory = new RiceCookerCategory(registry.getJeiHelpers().getGuiHelper()));
         registry.addRecipeCategories(this.fermentationBarrelCategory = new FermentationBarrelCategory(registry.getJeiHelpers().getGuiHelper()));
-        FUELS = BuiltInRegistries.ITEM.stream().filter(item -> FurnaceBlockEntity.isFuel(new ItemStack(item))).map(ItemStack::new).collect(Collectors.toList());
+        FUELS = BuiltInRegistries.ITEM.stream().filter(item -> Minecraft.getInstance().level.fuelValues().fuelValue(new ItemStack(item)) > 0).map(ItemStack::new).collect(Collectors.toList());
     }
 
     @Override

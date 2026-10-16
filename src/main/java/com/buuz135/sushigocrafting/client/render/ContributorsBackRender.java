@@ -8,6 +8,8 @@ import net.minecraft.client.renderer.entity.layers.RenderLayer;
 import net.minecraft.client.renderer.entity.state.AvatarRenderState;
 import net.minecraft.client.renderer.rendertype.RenderTypes;
 import java.util.List;
+import net.minecraft.world.entity.Pose;
+import com.mojang.math.Axis;
 
 public class ContributorsBackRender extends RenderLayer<AvatarRenderState, PlayerModel> {
     public ContributorsBackRender(RenderLayerParent<AvatarRenderState, PlayerModel> parent) {
@@ -24,6 +26,16 @@ public class ContributorsBackRender extends RenderLayer<AvatarRenderState, Playe
         if (!rewards.getEnabled().containsKey(backKey)) return;
         var back = rewards.getEnabled().get(backKey);
         var model = "tuna".equals(back) ? com.buuz135.sushigocrafting.client.ClientProxy.TUNA_BACK_MODEL : com.buuz135.sushigocrafting.client.ClientProxy.SALMON_BACK_MODEL;
-        if (model != null) collector.submitBlockModel(pose, RenderTypes.cutoutMovingBlock(), List.of(model), new int[0], light, 0, 0);
+        if (model != null) {
+            pose.pushPose();
+            if (state.hasPose(Pose.CROUCHING)) {
+                pose.translate(0D, 0.2D, 0D);
+                pose.mulPose(Axis.XP.rotationDegrees((float) (90F / Math.PI)));
+            }
+            pose.mulPose(Axis.XP.rotationDegrees(180));
+            pose.translate(-0.53, -0.55, -0.37);
+            collector.submitBlockModel(pose, RenderTypes.cutoutMovingBlock(), List.of(model), new int[0], light, 0, 0);
+            pose.popPose();
+        }
     }
 }

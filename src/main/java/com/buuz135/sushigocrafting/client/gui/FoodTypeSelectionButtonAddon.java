@@ -58,7 +58,7 @@ public class FoodTypeSelectionButtonAddon extends BasicButtonAddon {
     public void drawForegroundLayer(GuiGraphicsExtractor guiGraphics, Screen screen, IAssetProvider provider, int guiX, int guiY, int mouseX, int mouseY, float partialTicks) {
         super.drawForegroundLayer(guiGraphics, screen, provider, guiX, guiY, mouseX, mouseY, partialTicks);
         var item = FoodHelper.REGISTERED.get(getButton().getType().getName()).get(0).get();
-        guiGraphics.renderItem(new ItemStack(item), getPosX(), getPosY());
+        guiGraphics.item(new ItemStack(item), getPosX(), getPosY());
     }
 
     @Override

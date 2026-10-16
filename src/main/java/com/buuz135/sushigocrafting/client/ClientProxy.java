@@ -16,6 +16,7 @@ import com.buuz135.sushigocrafting.proxy.SushiContent;
 import com.hrznstudio.titanium.event.handler.EventManager;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.geom.ModelLayerLocation;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
@@ -51,7 +52,7 @@ public class ClientProxy {
         }).subscribe();
         EventManager.mod(EntityRenderersEvent.AddLayers.class).process(event -> {
             for (PlayerModelType skin : event.getSkins()) {
-                AvatarRenderer<?, ?> renderer = event.getPlayerRenderer(skin);
+                AvatarRenderer renderer = event.getPlayerRenderer(skin);
                 renderer.addLayer(new ContributorsBackRender(renderer));
             }
         }).subscribe();
@@ -76,7 +77,7 @@ public class ClientProxy {
             IFoodIngredient ingredient = FoodAPI.get().getIngredientFromItem(event.getItemStack().getItem());
             if (!ingredient.isEmpty() && ingredient.getEffect() != null) {
                 event.getToolTip().add(Component.literal(""));
-                if (Screen.hasShiftDown()) {
+                if (Minecraft.getInstance().options.keyShift.isDown()) {
                     IIngredientEffect effect = ingredient.getEffect();
                     if (effect instanceof AddIngredientEffect) {
                         event.getToolTip().add(Component.literal(ChatFormatting.DARK_AQUA + "Adds Food Effect:"));
