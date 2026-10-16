@@ -16,7 +16,7 @@ public class TunaRenderer extends MobRenderer<TunaEntity, LivingEntityRenderStat
     private static final Identifier TUNA_LOCATION = Identifier.fromNamespaceAndPath(SushiGoCrafting.MOD_ID, "textures/entity/tuna.png");
 
     public TunaRenderer(EntityRendererProvider.Context renderManagerIn) {
-        super(renderManagerIn, new CodModel<>(renderManagerIn.bakeLayer(ModelLayers.COD)), 0.3F);
+        super(renderManagerIn, new CodModel(renderManagerIn.bakeLayer(ModelLayers.COD)), 0.3F);
     }
 
     @Override

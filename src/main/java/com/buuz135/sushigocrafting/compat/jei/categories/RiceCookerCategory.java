@@ -24,6 +24,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.world.level.material.Fluids;
 import net.neoforged.neoforge.fluids.FluidStack;
 import org.apache.commons.lang3.tuple.Pair;
@@ -65,7 +66,7 @@ public class RiceCookerCategory implements IRecipeCategory<RiceCookerCategory.Ri
 
     @Override
     public void setRecipe(IRecipeLayoutBuilder builder, RiceCookerRecipe recipe, IFocusGroup focuses) {
-        builder.addSlot(RecipeIngredientRole.INPUT, 4, 3).addIngredients(Ingredient.of(RiceCookerTile.RICE));
+        builder.addSlot(RecipeIngredientRole.INPUT, 4, 3).addIngredients(Ingredient.of(BuiltInRegistries.ITEM.getOrThrow(RiceCookerTile.RICE)));
         builder.addSlot(RecipeIngredientRole.INPUT, 30, 37).addIngredients(VanillaTypes.ITEM_STACK, JEIModPlugin.FUELS);
         builder.addSlot(RecipeIngredientRole.INPUT, 6, 30).setFluidRenderer(2000, false, 12, 13).setOverlay(smallTank, 0, 0).addIngredient(NeoForgeTypes.FLUID_STACK, new FluidStack(Fluids.WATER, 1000));
 

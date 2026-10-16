@@ -59,13 +59,13 @@ public class CuttingBoardCategory implements IRecipeCategory<CuttingBoardRecipe>
 
     @Override
     public void draw(CuttingBoardRecipe recipe, IRecipeSlotsView recipeSlotsView, GuiGraphicsExtractor guiGraphics, double mouseX, double mouseY) {
-        guiGraphics.blit(Identifier.fromNamespaceAndPath(SushiGoCrafting.MOD_ID, "textures/gui/jei.png"), 31, 22, 0, 0, 15, 22);
+        guiGraphics.blit(Identifier.fromNamespaceAndPath(SushiGoCrafting.MOD_ID, "textures/gui/jei.png"), 31, 22, 0, 0, 15, 22, 0f, 0f, 1f, 1f);
         float scale = 4;
         //matrixStack.translate(0,0, 100);
         //matrixStack.translate(0,0, -200);
-        guiGraphics.pose().scale(scale, scale, scale);
+        guiGraphics.pose().scale(scale, scale);
         ItemStackUtil.renderItemIntoGUI(guiGraphics, new ItemStack(SushiContent.Blocks.CUTTING_BOARD.get()), 2, 4);
-        guiGraphics.pose().scale(1 / scale, 1 / scale, 1 / scale);
+        guiGraphics.pose().scale(1 / scale, 1 / scale);
         //matrixStack.translate(0,0, 200);
     }
 
