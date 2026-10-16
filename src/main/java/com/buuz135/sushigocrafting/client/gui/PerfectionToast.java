@@ -2,7 +2,7 @@ package com.buuz135.sushigocrafting.client.gui;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.components.toasts.Toast;
 import net.minecraft.client.gui.components.toasts.ToastComponent;
 import net.minecraft.network.chat.Component;
@@ -27,7 +27,7 @@ public class PerfectionToast implements Toast {
     }
 
     @Override
-    public Visibility render(GuiGraphics guiGraphics, ToastComponent p_230444_2_, long p_230444_3_) {
+    public Visibility render(GuiGraphicsExtractor guiGraphics, ToastComponent p_230444_2_, long p_230444_3_) {
         RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1f);
         //p_230444_2_.render(guiGraphics);
         guiGraphics.blitSprite(Identifier.withDefaultNamespace("toast/tutorial"), 0, 0, this.width(), this.height());

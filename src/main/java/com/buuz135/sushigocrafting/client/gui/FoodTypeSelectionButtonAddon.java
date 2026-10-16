@@ -11,7 +11,7 @@ import com.hrznstudio.titanium.network.locator.ILocatable;
 import com.hrznstudio.titanium.network.messages.ButtonClickNetworkMessage;
 import com.hrznstudio.titanium.util.AssetUtil;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.client.resources.sounds.SimpleSoundInstance;
@@ -42,7 +42,7 @@ public class FoodTypeSelectionButtonAddon extends BasicButtonAddon {
     }
 
     @Override
-    public void drawBackgroundLayer(GuiGraphics guiGraphics, Screen screen, IAssetProvider provider, int guiX, int guiY, int mouseX, int mouseY, float partialTicks) {
+    public void drawBackgroundLayer(GuiGraphicsExtractor guiGraphics, Screen screen, IAssetProvider provider, int guiX, int guiY, int mouseX, int mouseY, float partialTicks) {
         super.drawBackgroundLayer(guiGraphics, screen, provider, guiX, guiY, mouseX, mouseY, partialTicks);
         IAsset asset = provider.getAsset(SushiAssetTypes.ROLLER_TYPE_BG);
         if (asset != null) {
@@ -55,7 +55,7 @@ public class FoodTypeSelectionButtonAddon extends BasicButtonAddon {
     }
 
     @Override
-    public void drawForegroundLayer(GuiGraphics guiGraphics, Screen screen, IAssetProvider provider, int guiX, int guiY, int mouseX, int mouseY, float partialTicks) {
+    public void drawForegroundLayer(GuiGraphicsExtractor guiGraphics, Screen screen, IAssetProvider provider, int guiX, int guiY, int mouseX, int mouseY, float partialTicks) {
         super.drawForegroundLayer(guiGraphics, screen, provider, guiX, guiY, mouseX, mouseY, partialTicks);
         var item = FoodHelper.REGISTERED.get(getButton().getType().getName()).get(0).get();
         guiGraphics.renderItem(new ItemStack(item), getPosX(), getPosY());

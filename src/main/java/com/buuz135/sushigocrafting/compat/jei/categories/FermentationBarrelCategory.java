@@ -15,10 +15,10 @@ import mezz.jei.api.helpers.IGuiHelper;
 import mezz.jei.api.neoforge.NeoForgeTypes;
 import mezz.jei.api.recipe.IFocusGroup;
 import mezz.jei.api.recipe.RecipeIngredientRole;
-import mezz.jei.api.recipe.RecipeType;
+import mezz.jei.api.recipe.types.IRecipeType;
 import mezz.jei.api.recipe.category.IRecipeCategory;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.ItemStack;
@@ -36,7 +36,7 @@ public class FermentationBarrelCategory implements IRecipeCategory<FermentingBar
     }
 
     @Override
-    public RecipeType<FermentingBarrelRecipe> getRecipeType() {
+    public IRecipeType<FermentingBarrelRecipe> getRecipeType() {
         return SushiRecipeTypes.FERMENTING_BARREL;
     }
 
@@ -44,14 +44,12 @@ public class FermentationBarrelCategory implements IRecipeCategory<FermentingBar
     public Component getTitle() {
         return Component.translatable(SushiContent.Blocks.FERMENTATION_BARREL.get().getDescriptionId());
     }
-
-    @Override
     public IDrawable getBackground() {
         return guiHelper.createBlankDrawable(101, 47);
     }
 
     @Override
-    public IDrawable getIcon() {
+    public int getWidth() { return 160; }`r`n    public int getHeight() { return 80; }`r`n`r`n    @Override`r`n    public IDrawable getIcon() {
         return null;
     }
 
@@ -64,7 +62,7 @@ public class FermentationBarrelCategory implements IRecipeCategory<FermentingBar
     }
 
     @Override
-    public void draw(FermentingBarrelRecipe recipe, IRecipeSlotsView recipeSlotsView, GuiGraphics stack, double mouseX, double mouseY) {
+    public void draw(FermentingBarrelRecipe recipe, IRecipeSlotsView recipeSlotsView, GuiGraphicsExtractor stack, double mouseX, double mouseY) {
         SlotsScreenAddon.drawAsset(stack, Minecraft.getInstance().screen, DefaultAssetProvider.DEFAULT_PROVIDER, 4, 16, 0, 0, 1, integer -> Pair.of(0, 0), integer -> ItemStack.EMPTY, true, integer -> new Color(DyeColor.BLUE.getFireworkColor()), integer -> true, 1);
         AssetUtil.drawAsset(stack, Minecraft.getInstance().screen, DefaultAssetProvider.DEFAULT_PROVIDER.getAsset(AssetTypes.TANK_SMALL), 26, 15);
         AssetUtil.drawAsset(stack, Minecraft.getInstance().screen, IAssetProvider.getAsset(DefaultAssetProvider.DEFAULT_PROVIDER, AssetTypes.PROGRESS_BAR_BACKGROUND_ARROW_HORIZONTAL), 51, 16);

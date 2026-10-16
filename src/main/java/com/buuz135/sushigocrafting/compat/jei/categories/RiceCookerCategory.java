@@ -16,10 +16,10 @@ import mezz.jei.api.helpers.IGuiHelper;
 import mezz.jei.api.neoforge.NeoForgeTypes;
 import mezz.jei.api.recipe.IFocusGroup;
 import mezz.jei.api.recipe.RecipeIngredientRole;
-import mezz.jei.api.recipe.RecipeType;
+import mezz.jei.api.recipe.types.IRecipeType;
 import mezz.jei.api.recipe.category.IRecipeCategory;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.ItemStack;
@@ -46,17 +46,15 @@ public class RiceCookerCategory implements IRecipeCategory<RiceCookerCategory.Ri
     }
 
     @Override
-    public RecipeType<RiceCookerRecipe> getRecipeType() {
+    public IRecipeType<RiceCookerRecipe> getRecipeType() {
         return SushiRecipeTypes.RICE_COOKER;
     }
-
-    @Override
     public IDrawable getBackground() {
         return guiHelper.createBlankDrawable(80, 56);
     }
 
     @Override
-    public IDrawable getIcon() {
+    public int getWidth() { return 160; }`r`n    public int getHeight() { return 80; }`r`n`r`n    @Override`r`n    public IDrawable getIcon() {
         return null;
     }
 
@@ -71,7 +69,7 @@ public class RiceCookerCategory implements IRecipeCategory<RiceCookerCategory.Ri
     }
 
     @Override
-    public void draw(RiceCookerRecipe recipe, IRecipeSlotsView recipeSlotsView, GuiGraphics guiGraphics, double mouseX, double mouseY) {
+    public void draw(RiceCookerRecipe recipe, IRecipeSlotsView recipeSlotsView, GuiGraphicsExtractor guiGraphics, double mouseX, double mouseY) {
         SlotsScreenAddon.drawAsset(guiGraphics, Minecraft.getInstance().screen, DefaultAssetProvider.DEFAULT_PROVIDER, 4, 3, 0, 0, 1, integer -> Pair.of(0, 0), integer -> ItemStack.EMPTY, true, integer -> new Color(DyeColor.BLUE.getFireworkColor()), integer -> true, 1);
         AssetUtil.drawAsset(guiGraphics, Minecraft.getInstance().screen, DefaultAssetProvider.DEFAULT_PROVIDER.getAsset(AssetTypes.TANK_SMALL), 3, 27);
         AssetUtil.drawAsset(guiGraphics, Minecraft.getInstance().screen, IAssetProvider.getAsset(DefaultAssetProvider.DEFAULT_PROVIDER, AssetTypes.PROGRESS_BAR_BACKGROUND_ARROW_HORIZONTAL), 30, 16);

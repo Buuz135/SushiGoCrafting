@@ -12,9 +12,9 @@ import mezz.jei.api.gui.ingredient.IRecipeSlotsView;
 import mezz.jei.api.helpers.IGuiHelper;
 import mezz.jei.api.recipe.IFocusGroup;
 import mezz.jei.api.recipe.RecipeIngredientRole;
-import mezz.jei.api.recipe.RecipeType;
+import mezz.jei.api.recipe.types.IRecipeType;
 import mezz.jei.api.recipe.category.IRecipeCategory;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.ItemStack;
@@ -29,7 +29,7 @@ public class CuttingBoardCategory implements IRecipeCategory<CuttingBoardRecipe>
 
 
     @Override
-    public RecipeType<CuttingBoardRecipe> getRecipeType() {
+    public IRecipeType<CuttingBoardRecipe> getRecipeType() {
         return SushiRecipeTypes.CUTTING_BOARD;
     }
 
@@ -37,14 +37,12 @@ public class CuttingBoardCategory implements IRecipeCategory<CuttingBoardRecipe>
     public Component getTitle() {
         return Component.translatable(SushiContent.Blocks.CUTTING_BOARD.get().getDescriptionId());
     }
-
-    @Override
     public IDrawable getBackground() {
         return guiHelper.createBlankDrawable(80, 80);
     }
 
     @Override
-    public IDrawable getIcon() {
+    public int getWidth() { return 160; }`r`n    public int getHeight() { return 80; }`r`n`r`n    @Override`r`n    public IDrawable getIcon() {
         return null;
     }
 
@@ -56,7 +54,7 @@ public class CuttingBoardCategory implements IRecipeCategory<CuttingBoardRecipe>
 
 
     @Override
-    public void draw(CuttingBoardRecipe recipe, IRecipeSlotsView recipeSlotsView, GuiGraphics guiGraphics, double mouseX, double mouseY) {
+    public void draw(CuttingBoardRecipe recipe, IRecipeSlotsView recipeSlotsView, GuiGraphicsExtractor guiGraphics, double mouseX, double mouseY) {
         guiGraphics.blit(Identifier.fromNamespaceAndPath(SushiGoCrafting.MOD_ID, "textures/gui/jei.png"), 31, 22, 0, 0, 15, 22);
         float scale = 4;
         //matrixStack.translate(0,0, 100);
