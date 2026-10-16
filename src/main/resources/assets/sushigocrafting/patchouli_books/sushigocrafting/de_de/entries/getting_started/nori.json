@@ -1,0 +1,21 @@
+{
+  "name": "Nori",
+  "icon": "sushigocrafting:nori_sheets",
+  "category": "sushigocrafting:getting_started",
+  "sortnum": 2,
+  "read_by_default": false,
+  "pages": [
+    {
+      "type": "text",
+      "text": "Um Nori-Blätter zu erhalten, musst du etwas Kelp in den Ozeanen finden und daraus einen getrockneten Kelp-Block herstellen. $(br2)Wenn du einen getrockneten Kelp-Block (muss als Item fallengelassen werden) zwischen einem Eisenblock mit einem Kolben zerdrückst, erhältst du einige Nori-Blätter."
+    },
+    {
+      "type": "image",
+      "images": [
+        "sushigocrafting:textures/gui/book/nori.png"
+      ],
+      "title": "Nori Piston Crafting",
+      "text": ""
+    }
+  ]
+}

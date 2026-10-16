@@ -1,0 +1,13 @@
+{
+  "name": "Thunfisch und Garnele",
+  "icon": "sushigocrafting:raw_tuna",
+  "category": "sushigocrafting:world",
+  "sortnum": 3,
+  "read_by_default": false,
+  "pages": [
+    {
+      "type": "text",
+      "text": "Du kannst diese niedlichen Kreaturen im Ozean finden. $(br2)Bring einen Sattel mit, wer weiß, was du damit machen kannst."
+    }
+  ]
+}

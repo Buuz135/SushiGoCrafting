@@ -17,10 +17,10 @@ public class CraftTweakerPlugin implements FeaturePluginInstance {
     @Override
     public void execute(PluginPhase phase) {
         if (phase == PluginPhase.COMMON_SETUP) {
-            CtCommands.get().registerCommand("sushigocrafting_food_ingredients", Component.literal("Lists all Sushi Go Crafting Food Ingredients"), builder -> {
+            CtCommands.get().registerCommand("sushigocrafting_food_ingredients", Component.translatable("text.sushigocrafting.list_ingredients"), builder -> {
                 builder.executes(context -> {
                     ServerPlayer player = context.getSource().getPlayerOrException();
-                    CraftTweakerAPI.getLogger(SushiGoCrafting.MOD_ID).info("List of all known Food Ingredients: ");
+                    CraftTweakerAPI.getLogger(SushiGoCrafting.MOD_ID).info(Component.translatable("text.sushigocrafting.list_of_ingredients") + ":");
                     FoodAPI.get().getFoodIngredient().forEach(iFoodIngredient -> {
                         CraftTweakerAPI.getLogger(SushiGoCrafting.MOD_ID).info("- {}", iFoodIngredient.getName());
                     });

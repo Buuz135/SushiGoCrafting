@@ -36,20 +36,20 @@ public class SushiItemTagsProvider extends ItemTagsProvider {
         tag(ItemTags.SAPLINGS).add(SushiContent.Blocks.AVOCADO_SAPLING.get().asItem());
         for (CustomCropBlock block : new CustomCropBlock[]{SushiContent.Blocks.RICE_CROP.get(), SushiContent.Blocks.CUCUMBER_CROP.get(), SushiContent.Blocks.SOY_CROP.get(), SushiContent.Blocks.WASABI_CROP.get(), SushiContent.Blocks.SESAME_CROP.get()}) {
             tag(Tags.Items.SEEDS).add(block.getBaseSeedId().asItem());
-            tag(ItemTags.create(Identifier.fromNamespaceAndPath("c", "seeds/" + BuiltInRegistries.ITEM.getKey(block.getBaseSeedId().asItem()).getPath()))).add(block.getBaseSeedId().asItem());
+            tag(ItemTags.create(ResourceLocation.fromNamespaceAndPath("c", "seeds/" + getNameFor(BuiltInRegistries.ITEM.getKey(block.getBaseSeedId().asItem()).getPath())))).add(block.getBaseSeedId().asItem());
         }
         for (Item item : new Item[]{SushiContent.Items.RICE.get(), SushiContent.Items.CUCUMBER.get(), SushiContent.Items.SOY_BEAN.get(), SushiContent.Items.WASABI_ROOT.get(), SushiContent.Items.SESAME_SEED.get()}) {
             tag(Tags.Items.CROPS).add(item);
-            tag(ItemTags.create(Identifier.fromNamespaceAndPath("c", "crops/" + BuiltInRegistries.ITEM.getKey(item).getPath()))).add(item.asItem());
+            tag(ItemTags.create(ResourceLocation.fromNamespaceAndPath("c", "crops/" + getNameFor(BuiltInRegistries.ITEM.getKey(item).getPath())))).add(item.asItem());
         }
         tag(ItemTags.FISHES).add(SushiContent.Items.RAW_TUNA.get()).add(SushiContent.Items.SHRIMP.get());
         tag(ItemTags.create(Identifier.fromNamespaceAndPath("c", "raw_fishes"))).add(Items.SALMON).add(SushiContent.Items.SHRIMP.get()).add(SushiContent.Items.RAW_TUNA.get());
         for (Item item : new Item[]{Items.SALMON, SushiContent.Items.SHRIMP.get(), SushiContent.Items.RAW_TUNA.get()}) {
             tag(ItemTags.create(Identifier.fromNamespaceAndPath("c", "raw_fishes/" + (item.equals(SushiContent.Items.RAW_TUNA.get()) ? "tuna" : BuiltInRegistries.ITEM.getKey(item).getPath())))).add(item.asItem());
         }
-        tag(ItemTags.create(Identifier.fromNamespaceAndPath("c", "fruits"))).add(SushiContent.Items.AVOCADO.get());
-        tag(ItemTags.create(Identifier.fromNamespaceAndPath("c", "fruits/avocado"))).add(SushiContent.Items.AVOCADO.get());
-        tag(ItemTags.create(Identifier.fromNamespaceAndPath("c", "tools/knife"))).add(SushiContent.Items.KNIFE_CLEAVER.get());
+        tag(ItemTags.create(ResourceLocation.fromNamespaceAndPath("c", "fruits"))).add(SushiContent.Items.AVOCADO.get());
+        tag(ItemTags.create(ResourceLocation.fromNamespaceAndPath("c", "fruits/avocado"))).add(SushiContent.Items.AVOCADO.get());
+        tag(ItemTags.create(ResourceLocation.fromNamespaceAndPath("c", "tools/knives"))).add(SushiContent.Items.KNIFE_CLEAVER.get());
         for (Map.Entry<String, List<DeferredHolder<Item, Item>>> stringListEntry : FoodHelper.REGISTERED.entrySet()) {
             for (DeferredHolder<Item, Item> foodItem : stringListEntry.getValue()) {
                 for (IFoodIngredient foodIngredient : ((FoodItem) foodItem.get()).getIngredientList()) {
@@ -59,5 +59,10 @@ public class SushiItemTagsProvider extends ItemTagsProvider {
                 }
             }
         }
+    }
+
+    public String getNameFor(String name){
+        if (name.equals("soy_bean")) return "soybean";
+        return name.replaceAll("_seeds", "");
     }
 }

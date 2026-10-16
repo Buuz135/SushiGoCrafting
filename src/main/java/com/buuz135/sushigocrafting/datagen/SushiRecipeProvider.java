@@ -80,25 +80,9 @@ public class SushiRecipeProvider extends RecipeProvider {
                 recipe.save(consumer, Identifier.fromNamespaceAndPath(SushiGoCrafting.MOD_ID, "cutting_board/" + value.getName()));
             }
         }
-        new FermentingBarrelRecipe(Optional.empty(), new FluidStackTemplate(NeoForgeMod.MILK.get(), 250), new ItemStackTemplate(SushiContent.Items.CHEESE.get()))
-                .save(consumer, Identifier.fromNamespaceAndPath(SushiGoCrafting.MOD_ID, "fermenting_barrel/cheese"));
-        new FermentingBarrelRecipe(Optional.of(Ingredient.of(registries.lookupOrThrow(net.minecraft.core.registries.Registries.ITEM).getOrThrow(ItemTags.create(Identifier.fromNamespaceAndPath("c", "crops/soy_bean"))))), new FluidStackTemplate(Fluids.WATER, 250), new ItemStackTemplate(SushiContent.Items.SOY_SAUCE.get()))
-                .save(consumer, Identifier.fromNamespaceAndPath(SushiGoCrafting.MOD_ID, "fermenting_barrel/soy"));
-    }
-
-    public static class Runner extends RecipeProvider.Runner {
-        public Runner(PackOutput output, CompletableFuture<HolderLookup.Provider> registries) {
-            super(output, registries);
-        }
-
-        @Override
-        protected RecipeProvider createRecipeProvider(HolderLookup.Provider registries, RecipeOutput output) {
-            return new SushiRecipeProvider(registries, output);
-        }
-
-        @Override
-        public String getName() {
-            return "Sushi Go Crafting Recipes";
-        }
+        new FermentingBarrelRecipe(Ingredient.EMPTY, new FluidStack(NeoForgeMod.MILK.get(), 250), new ItemStack(SushiContent.Items.CHEESE.get()))
+                .save(consumer, ResourceLocation.fromNamespaceAndPath(SushiGoCrafting.MOD_ID, "fermenting_barrel/cheese"));
+        new FermentingBarrelRecipe(Ingredient.of(ItemTags.create(ResourceLocation.fromNamespaceAndPath("c", "crops/soybean"))), new FluidStack(Fluids.WATER, 250), new ItemStack(SushiContent.Items.SOY_SAUCE.get()))
+                .save(consumer, ResourceLocation.fromNamespaceAndPath(SushiGoCrafting.MOD_ID, "fermenting_barrel/soy"));
     }
 }

@@ -1,4 +1,4 @@
-// 1.21.1	2024-08-18T12:21:49.0269776	Recipes
+// 1.21.1	2025-02-21T19:20:50.990903	Recipes
 8fff490c5fceea462c49e78825a875f056806b53 data/sushigocrafting/advancement/recipes/misc/cleaver_knife.json
 3238afe7aa465cee947537c3be1b9159d6d18565 data/sushigocrafting/advancement/recipes/misc/cooler_box.json
 4e6a929b062bf0fbde279758d01e3f1e4654c66d data/sushigocrafting/advancement/recipes/misc/cutting_board.json
@@ -17,7 +17,7 @@ fc5f62768bff161814b2d148849f2cd274aec878 data/sushigocrafting/recipe/cutting_boa
 7843defc81a4eee93e004ced1ff37dc3d5d05fb1 data/sushigocrafting/recipe/cutting_board/wasabi.json
 881d02b4ef05eb9067d12a3a5d6bb322bfac0977 data/sushigocrafting/recipe/fermentation_barrel.json
 bff6526c0d95f46a0a35da7480be3ee58ac2180a data/sushigocrafting/recipe/fermenting_barrel/cheese.json
-a154d2564f93e435b963bfccbddd39b5476f671a data/sushigocrafting/recipe/fermenting_barrel/soy.json
+303ea6f3330382721da19ae197d34b791651ba2d data/sushigocrafting/recipe/fermenting_barrel/soy.json
 f12abbef8731d32253d33b9fc8f0344538eb7a29 data/sushigocrafting/recipe/rice_cooker.json
 b1d97d4f7fa05924768c1f707c7f8b4706b852bf data/sushigocrafting/recipe/roller.json
 61c3eff00315e4195c89b9a2f460bd0f7b966eb3 data/sushigocrafting/recipe/seaweed_on_a_stick.json

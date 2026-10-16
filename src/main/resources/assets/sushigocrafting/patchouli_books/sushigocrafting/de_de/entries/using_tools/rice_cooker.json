@@ -1,0 +1,17 @@
+{
+  "name": "Reiskocher",
+  "icon": "sushigocrafting:rice_cooker",
+  "category": "sushigocrafting:using_tools",
+  "sortnum": 2,
+  "read_by_default": false,
+  "pages": [
+    {
+      "type": "text",
+      "text": "Eine Maschine, die Reis perfekt nach $(6)Uncle Roger$() Standards kocht. Zum Kochen benötigst du Reis, Wasser und etwas Brennstoff. $(br2)Du musst dir keine Sorgen um die Gewichtung im Ausgabefach machen, gekochter Reis wird automatisch kombiniert."
+    },
+    {
+      "type": "crafting",
+      "recipe": "sushigocrafting:rice_cooker"
+    }
+  ]
+}

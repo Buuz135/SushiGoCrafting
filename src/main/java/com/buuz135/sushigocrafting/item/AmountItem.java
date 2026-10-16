@@ -4,6 +4,7 @@ import com.buuz135.sushigocrafting.api.IFoodIngredient;
 import com.buuz135.sushigocrafting.api.impl.FoodAPI;
 import com.buuz135.sushigocrafting.proxy.SushiContent;
 import com.hrznstudio.titanium.api.ISpecialCreativeTabItem;
+import com.mojang.datafixers.util.Pair;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
 import net.minecraft.sounds.SoundSource;
@@ -72,10 +73,10 @@ public class AmountItem extends SushiItem implements ISpecialCreativeTabItem {
     }
 
     @Override
-    public void appendHoverText(ItemStack stack, TooltipContext context, TooltipDisplay display, Consumer<Component> tooltipComponents, TooltipFlag tooltipFlag) {
-        super.appendHoverText(stack, context, display, tooltipComponents, tooltipFlag);
-        if (stack.has(SushiDataComponent.AMOUNT.get())) {
-            tooltipComponents.accept(Component.literal(ChatFormatting.GRAY + "Amount: " + stack.get(SushiDataComponent.AMOUNT.get()) + "/" + maxCombineAmount + " gr.")); //TODO Localize
+    public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltipComponents, TooltipFlag tooltipFlag) {
+        super.appendHoverText(stack, context, tooltipComponents, tooltipFlag);
+        if (stack.has(SushiDataComponent.AMOUNT)) {
+            tooltipComponents.add(Component.literal("" + ChatFormatting.GRAY +Component.translatable("text.sushigocrafting.amount").getString() + " "  + stack.get(SushiDataComponent.AMOUNT) + "/" + maxCombineAmount + " gr.")); //TODO Localize
         }
     }
 
