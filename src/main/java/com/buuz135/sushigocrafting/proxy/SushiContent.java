@@ -10,6 +10,7 @@ import com.buuz135.sushigocrafting.cap.SushiWeightDiscoveryCapability;
 import com.buuz135.sushigocrafting.entity.ShrimpEntity;
 import com.buuz135.sushigocrafting.entity.TunaEntity;
 import com.buuz135.sushigocrafting.item.AmountItem;
+import com.buuz135.sushigocrafting.item.CoolerBoxItem;
 import com.buuz135.sushigocrafting.item.SushiItem;
 import com.buuz135.sushigocrafting.loot.ItemAmountLootModifier;
 import com.buuz135.sushigocrafting.loot.SeedsLootModifier;
@@ -104,7 +105,7 @@ public class SushiContent {
 
     public static DeferredHolder<Item, BlockItem> blockItem(String id, Supplier<? extends Block> sup, Item.Properties properties) {
         return Items.REGISTRY.register(id, () -> {
-            var blockItem = new BlockItem(sup.get(), properties.setId(ResourceKey.create(Registries.ITEM, Identifier.fromNamespaceAndPath(MOD_ID, id))));
+            var blockItem = new CoolerBoxItem(sup.get(), properties.setId(ResourceKey.create(Registries.ITEM, Identifier.fromNamespaceAndPath(MOD_ID, id))));
             SushiGoCrafting.TAB.getTabList().add(blockItem);
             return blockItem;
         });

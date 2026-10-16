@@ -34,7 +34,7 @@ public class ContributorsBackRender extends RenderLayer<AvatarRenderState, Playe
             }
             pose.mulPose(Axis.XP.rotationDegrees(180));
             pose.translate(-0.53, -0.55, -0.37);
-            collector.submitBlockModel(pose, RenderTypes.cutoutMovingBlock(), List.of(model), new int[0], light, 0, 0);
+            collector.submitBlockModel(pose, RenderTypes.cutoutMovingBlock(), List.of(model), new int[0], light, net.minecraft.client.renderer.texture.OverlayTexture.NO_OVERLAY, 0);
             pose.popPose();
         }
     }

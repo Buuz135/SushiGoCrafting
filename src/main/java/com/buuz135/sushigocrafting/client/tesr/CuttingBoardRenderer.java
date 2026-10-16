@@ -67,7 +67,7 @@ public class CuttingBoardRenderer implements BlockEntityRenderer<CuttingBoardTil
             matrix.mulPose(Axis.XP.rotationDegrees(90));
             matrix.scale(0.5f, 0.5f, 0.5f);
 
-            state.item.submit(matrix, bufferIn, state.lightCoords, 0, 0);
+            state.item.submit(matrix, bufferIn, state.lightCoords, net.minecraft.client.renderer.texture.OverlayTexture.NO_OVERLAY, 0);
             matrix.popPose();
         }
     }

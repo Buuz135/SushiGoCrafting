@@ -1,11 +1,9 @@
 package com.buuz135.sushigocrafting.item;
 
 import net.minecraft.ChatFormatting;
-import net.minecraft.client.Minecraft;
-import net.minecraft.core.NonNullList;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
-import net.minecraft.world.ContainerHelper;
+import net.neoforged.neoforge.transfer.item.ItemStacksResourceHandler;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -26,18 +24,19 @@ public class CoolerBoxItem extends BlockItem {
     @Override
     public void appendHoverText(ItemStack stack, Item.TooltipContext context, TooltipDisplay display, Consumer<Component> tooltip, TooltipFlag tooltipFlag) {
         super.appendHoverText(stack, context, display, tooltip, tooltipFlag);
-        if (!stack.has(SushiDataComponent.TILE.get()) || Minecraft.getInstance().level == null) {
+        if (!stack.has(SushiDataComponent.TILE.get()) || context.registries() == null) {
             return;
         }
         var tileData = stack.get(SushiDataComponent.TILE.get());
         if (!tileData.contains("input")) {
             return;
         }
-        NonNullList<ItemStack> contents = NonNullList.withSize(27, ItemStack.EMPTY);
-        ContainerHelper.loadAllItems(TagValueInput.create(ProblemReporter.DISCARDING, Minecraft.getInstance().level.registryAccess(), tileData.getCompoundOrEmpty("input")), contents);
+        ItemStacksResourceHandler contents = new ItemStacksResourceHandler(20);
+        contents.deserialize(TagValueInput.create(ProblemReporter.DISCARDING, context.registries(), tileData.getCompound("input").orElseThrow()));
         int shown = 0;
         int total = 0;
-        for (ItemStack itemStack : contents) {
+        for (int slot = 0; slot < contents.size(); slot++) {
+            ItemStack itemStack = contents.getResource(slot).toStack(contents.getAmountAsInt(slot));
             if (!itemStack.isEmpty()) {
                 ++total;
                 if (shown < 5) {

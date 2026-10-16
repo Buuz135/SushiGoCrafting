@@ -62,7 +62,7 @@ public class RollerRenderer implements BlockEntityRenderer<RollerTile, RollerRen
                 break;
         }
         for (var entry : state.entries) {
-            var offset = entry.renderer.render(matrix, bufferIn, entry.weight, state.lightCoords, 0);
+            var offset = entry.renderer.render(matrix, bufferIn, entry.weight, state.lightCoords, net.minecraft.client.renderer.texture.OverlayTexture.NO_OVERLAY);
             matrix.translate(0, offset.getSecond(), offset.getFirst());
         }
 

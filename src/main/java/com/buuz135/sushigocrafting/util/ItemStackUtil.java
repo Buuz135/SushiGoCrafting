@@ -9,6 +9,6 @@ public class ItemStackUtil {
 
     @OnlyIn(Dist.CLIENT)
     public static void renderItemIntoGUI(GuiGraphicsExtractor guiGraphics, ItemStack stack, int x, int y) {
-        guiGraphics.renderItem(stack, x, y);
+        guiGraphics.item(stack, x, y);
     }
 }

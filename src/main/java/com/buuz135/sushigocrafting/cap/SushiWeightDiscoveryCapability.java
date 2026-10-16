@@ -57,7 +57,7 @@ public class SushiWeightDiscoveryCapability implements ISushiWeightDiscovery {
     public void deserialize(ValueInput input) {
         this.discoveryLevels.clear();
         input.read(MapCodec.assumeMapUnsafe(CompoundTag.CODEC)).ifPresent(nbt -> {
-            for (String name : nbt.getAllKeys()) this.discoveryLevels.put(name, nbt.getIntOr(name, 0));
+            for (String name : nbt.keySet()) this.discoveryLevels.put(name, nbt.getIntOr(name, 0));
         });
     }
 

@@ -101,7 +101,7 @@ public class CoolerBoxBlock extends RotatableBlock<CoolerBoxTile> {
 
     protected void copyFrom(ItemStack stack, CoolerBoxTile tile) {
         if (stack.has(SushiDataComponent.TILE.get())) {
-            tile.loadAdditional(TagValueInput.create(ProblemReporter.DISCARDING, tile.getLevel().registryAccess(), stack.get(SushiDataComponent.TILE.get())));
+            tile.loadCustomOnly(TagValueInput.create(ProblemReporter.DISCARDING, tile.getLevel().registryAccess(), stack.get(SushiDataComponent.TILE.get())));
             tile.markForUpdate();
         }
     }

@@ -6,6 +6,7 @@ import com.hrznstudio.titanium.event.handler.EventManager;
 import com.hrznstudio.titanium.plugin.FeaturePluginInstance;
 import com.hrznstudio.titanium.plugin.PluginPhase;
 import net.minecraft.resources.Identifier;
+import vazkii.patchouli.api.PatchouliAPI;
 import net.neoforged.neoforge.event.BuildCreativeModeTabContentsEvent;
 
 @FeaturePlugin(value = "patchouli", type = FeaturePlugin.FeaturePluginType.MOD)
