@@ -208,7 +208,7 @@ public class RollerTile extends ActiveTile<RollerTile> {
                             Containers.dropItemStack(this.level, this.worldPosition.getX(), this.getBlockPos().getY(), this.getBlockPos().getZ(), stack);
                         }
                         if (player instanceof ServerPlayer && !discovery.get().isEmpty()) {
-                            player.getData(SushiContent.AttachmentTypes.SUSHI_WEIGHT_DISCOVERY).requestUpdate((ServerPlayer) player, discovery.get(), null);
+                            player.getData(SushiContent.AttachmentTypes.SUSHI_WEIGHT_DISCOVERY).requestUpdate((ServerPlayer) player, discovery.get());
                         }
                         markForUpdate();
                     }

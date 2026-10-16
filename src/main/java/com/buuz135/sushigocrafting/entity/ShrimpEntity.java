@@ -13,7 +13,7 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.*;
-import net.minecraft.world.entity.animal.AbstractSchoolingFish;
+import net.minecraft.world.entity.animal.fish.AbstractSchoolingFish;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.vehicle.DismountHelper;
 import net.minecraft.world.item.ItemStack;
@@ -24,7 +24,7 @@ import net.minecraft.world.phys.Vec3;
 
 import javax.annotation.Nullable;
 
-public class ShrimpEntity extends AbstractSchoolingFish implements ItemSteerable, Saddleable {
+public class ShrimpEntity extends AbstractSchoolingFish implements ItemSteerable {
 
     private static final EntityDataAccessor<Boolean> SADDLED = SynchedEntityData.defineId(ShrimpEntity.class, EntityDataSerializers.BOOLEAN);
     private static final EntityDataAccessor<Integer> BOOST_TIME = SynchedEntityData.defineId(ShrimpEntity.class, EntityDataSerializers.INT);
@@ -52,12 +52,10 @@ public class ShrimpEntity extends AbstractSchoolingFish implements ItemSteerable
         return SoundEvents.COD_FLOP;
     }
 
-    @Override
     public boolean isSaddleable() {
         return this.isAlive();
     }
 
-    @Override
     public void equipSaddle(ItemStack itemStack, @org.jetbrains.annotations.Nullable SoundSource soundSource) {
         this.steering.setSaddle(true);
         if (soundSource != null) {
