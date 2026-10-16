@@ -1,6 +1,5 @@
 package com.buuz135.sushigocrafting.block.plant;
 
-import com.buuz135.sushigocrafting.block.SushiGoCraftingBlock;
 import com.buuz135.sushigocrafting.proxy.SushiContent;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.registries.Registries;
@@ -13,7 +12,7 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
-import net.minecraft.world.ItemInteractionResult;
+import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.BlockPlaceContext;
@@ -38,16 +37,23 @@ import net.neoforged.api.distmarker.OnlyIn;
 import net.neoforged.neoforge.common.IShearable;
 import net.neoforged.neoforge.items.ItemHandlerHelper;
 
-import java.util.Random;
-
-public class AvocadoLeavesBlock extends SushiGoCraftingBlock implements IShearable, BonemealableBlock {
+public class AvocadoLeavesBlock extends LeavesBlock implements IShearable, BonemealableBlock {
     public static final IntegerProperty DISTANCE = BlockStateProperties.DISTANCE;
     public static final BooleanProperty PERSISTENT = BlockStateProperties.PERSISTENT;
     public static final IntegerProperty STAGE = IntegerProperty.create("stage", 0, 2);
 
     public AvocadoLeavesBlock() {
-        super(Properties.ofFullCopy(Blocks.OAK_LEAVES).setId(ResourceKey.create(Registries.BLOCK, Identifier.fromNamespaceAndPath("sushigocrafting", "avocado_leaves"))));
+        super(0.02F, Properties.ofFullCopy(Blocks.OAK_LEAVES).setId(ResourceKey.create(Registries.BLOCK, Identifier.fromNamespaceAndPath("sushigocrafting", "avocado_leaves"))));
         this.registerDefaultState(this.stateDefinition.any().setValue(DISTANCE, Integer.valueOf(7)).setValue(PERSISTENT, Boolean.valueOf(false)).setValue(STAGE, 0));
+    }
+
+    @Override
+    protected com.mojang.serialization.MapCodec<? extends LeavesBlock> codec() {
+        return simpleCodec(properties -> new AvocadoLeavesBlock());
+    }
+
+    @Override
+    protected void spawnFallingLeavesParticle(Level level, BlockPos pos, RandomSource random) {
     }
 
     private static BlockState updateDistance(BlockState state, LevelAccessor worldIn, BlockPos pos) {
@@ -102,21 +108,21 @@ public class AvocadoLeavesBlock extends SushiGoCraftingBlock implements IShearab
     }
 
     @Override
-    public int getLightBlock(BlockState state, BlockGetter worldIn, BlockPos pos) {
+    protected int getLightDampening(BlockState state) {
         return 1;
     }
 
     @Override
-    public BlockState updateShape(BlockState stateIn, Direction facing, BlockState facingState, LevelAccessor worldIn, BlockPos currentPos, BlockPos facingPos) {
+    protected BlockState updateShape(BlockState stateIn, LevelReader worldIn, net.minecraft.world.level.ScheduledTickAccess tickAccess, BlockPos currentPos, Direction facing, BlockPos facingPos, BlockState facingState, RandomSource random) {
         int i = getDistance(facingState) + 1;
         if (i != 1 || stateIn.getValue(DISTANCE) != i) {
-            worldIn.scheduleTick(currentPos, this, 1);
+            tickAccess.scheduleTick(currentPos, this, 1);
         }
         return stateIn;
     }
 
     @OnlyIn(Dist.CLIENT)
-    public void animateTick(BlockState stateIn, Level worldIn, BlockPos pos, Random rand) {
+    public void animateTick(BlockState stateIn, Level worldIn, BlockPos pos, RandomSource rand) {
         if (worldIn.isRainingAt(pos.above())) {
             if (rand.nextInt(15) == 1) {
                 BlockPos blockpos = pos.below();
@@ -142,11 +148,11 @@ public class AvocadoLeavesBlock extends SushiGoCraftingBlock implements IShearab
     }
 
     @Override
-    protected ItemInteractionResult useItemOn(ItemStack stack, BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hitResult) {
+    protected InteractionResult useItemOn(ItemStack stack, BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hitResult) {
         if (state.getValue(STAGE) == 2) {
             ItemHandlerHelper.giveItemToPlayer(player, new ItemStack(SushiContent.Items.AVOCADO.get()));
             level.setBlockAndUpdate(pos, state.setValue(STAGE, 1));
-            return ItemInteractionResult.SUCCESS;
+            return InteractionResult.SUCCESS;
         }
         return super.useItemOn(stack, state, level, pos, player, hand, hitResult);
     }

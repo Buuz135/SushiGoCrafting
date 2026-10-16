@@ -2,7 +2,7 @@ package com.buuz135.sushigocrafting.block.plant;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.tags.FluidTags;
-import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
@@ -29,7 +29,7 @@ public class WaterCropBlock extends CustomCropBlock implements LiquidBlockContai
     }
 
     @Override
-    public boolean canPlaceLiquid(@org.jetbrains.annotations.Nullable Player player, BlockGetter blockGetter, BlockPos blockPos, BlockState blockState, Fluid fluid) {
+    public boolean canPlaceLiquid(LivingEntity player, BlockGetter blockGetter, BlockPos blockPos, BlockState blockState, Fluid fluid) {
         return false;
     }
 

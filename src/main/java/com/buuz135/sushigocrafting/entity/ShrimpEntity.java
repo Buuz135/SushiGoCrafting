@@ -3,7 +3,6 @@ package com.buuz135.sushigocrafting.entity;
 import com.buuz135.sushigocrafting.proxy.SushiContent;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
@@ -26,10 +25,9 @@ import javax.annotation.Nullable;
 
 public class ShrimpEntity extends AbstractSchoolingFish implements ItemSteerable {
 
-    private static final EntityDataAccessor<Boolean> SADDLED = SynchedEntityData.defineId(ShrimpEntity.class, EntityDataSerializers.BOOLEAN);
     private static final EntityDataAccessor<Integer> BOOST_TIME = SynchedEntityData.defineId(ShrimpEntity.class, EntityDataSerializers.INT);
 
-    private final ItemBasedSteering steering = new ItemBasedSteering(this.entityData, BOOST_TIME, SADDLED);
+    private final ItemBasedSteering steering = new ItemBasedSteering(this.entityData, BOOST_TIME);
 
     public ShrimpEntity(EntityType<? extends AbstractSchoolingFish> type, Level worldIn) {
         super(type, worldIn);
@@ -38,7 +36,6 @@ public class ShrimpEntity extends AbstractSchoolingFish implements ItemSteerable
     @Override
     protected void defineSynchedData(SynchedEntityData.Builder builder) {
         super.defineSynchedData(builder);
-        builder.define(SADDLED, false);
         builder.define(BOOST_TIME, 0);
     }
 
@@ -52,24 +49,13 @@ public class ShrimpEntity extends AbstractSchoolingFish implements ItemSteerable
         return SoundEvents.COD_FLOP;
     }
 
-    public boolean isSaddleable() {
-        return this.isAlive();
-    }
-
-    public void equipSaddle(ItemStack itemStack, @org.jetbrains.annotations.Nullable SoundSource soundSource) {
-        this.steering.setSaddle(true);
-        if (soundSource != null) {
-            this.level().playSound(null, this, SoundEvents.PIG_SADDLE, soundSource, 0.5F, 1.0F);
-        }
-    }
-
     @Override
     public InteractionResult mobInteract(Player playerIn, InteractionHand hand) {
         if (this.isSaddled() && !this.isVehicle() && !playerIn.isSecondaryUseActive()) {
-            if (!this.level().isClientSide) {
+            if (!this.level().isClientSide()) {
                 playerIn.startRiding(this);
             }
-            return InteractionResult.sidedSuccess(this.level().isClientSide);
+            return InteractionResult.sidedSuccess(this.level().isClientSide());
         } else {
             InteractionResult actionresulttype = super.mobInteract(playerIn, hand);
             if (!actionresulttype.consumesAction()) {
@@ -87,33 +73,29 @@ public class ShrimpEntity extends AbstractSchoolingFish implements ItemSteerable
     }
 
     public void onSyncedDataUpdated(EntityDataAccessor<?> key) {
-        if (BOOST_TIME.equals(key) && this.level().isClientSide) {
+        if (BOOST_TIME.equals(key) && this.level().isClientSide()) {
             this.steering.onSynced();
         }
 
         super.onSyncedDataUpdated(key);
     }
 
-    public void addAdditionalSaveData(CompoundTag compound) {
-        super.addAdditionalSaveData(compound);
-        this.steering.addAdditionalSaveData(compound);
+    protected void addAdditionalSaveData(net.minecraft.world.level.storage.ValueOutput output) {
+        super.addAdditionalSaveData(output);
     }
 
-    public void readAdditionalSaveData(CompoundTag compound) {
-        super.readAdditionalSaveData(compound);
-        this.steering.readAdditionalSaveData(compound);
-    }
-
-    protected void dropEquipment() {
-        super.dropEquipment();
-        if (this.isSaddled()) {
-            this.spawnAtLocation(Items.SADDLE);
-        }
+    protected void readAdditionalSaveData(net.minecraft.world.level.storage.ValueInput input) {
+        super.readAdditionalSaveData(input);
     }
 
     @Override
     public boolean isSaddled() {
-        return this.steering.hasSaddle();
+        return this.hasItemInSlot(EquipmentSlot.SADDLE);
+    }
+
+    @Override
+    public boolean canUseSlot(EquipmentSlot slot) {
+        return slot == EquipmentSlot.SADDLE || super.canUseSlot(slot);
     }
 
     @Override
