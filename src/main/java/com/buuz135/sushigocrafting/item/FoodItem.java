@@ -186,7 +186,7 @@ public class FoodItem extends SushiItem {
                 List<IFoodIngredient> foodIngredients = new ArrayList<>(foodItem.getIngredientList());
                 if (stack.has(SushiDataComponent.FOOD_SPICES.get())) {
                     CompoundTag compoundNBT = stack.get(SushiDataComponent.FOOD_SPICES.get());
-                    for (String name : compoundNBT.getAllKeys()) {
+                    for (String name : compoundNBT.keySet()) {
                         IFoodIngredient foodIngredient = FoodAPI.get().getIngredientFromName(name);
                         if (!foodIngredient.isEmpty()) foodIngredients.add(foodIngredient);
                     }

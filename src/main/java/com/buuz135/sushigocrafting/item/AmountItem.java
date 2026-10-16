@@ -128,7 +128,7 @@ public class AmountItem extends SushiItem implements ISpecialCreativeTabItem {
             worldIn.playSound(null, entityLiving.getX(), entityLiving.getY(), entityLiving.getZ(), SoundEvents.GENERIC_EAT, SoundSource.NEUTRAL, 1.0F, 1.0F + (worldIn.getRandom().nextFloat() - worldIn.getRandom().nextFloat()) * 0.4F);
             FoodProperties food = stack.get(DataComponents.FOOD);
             if (food != null) {
-                ((Player) entityLiving).getFoodData().eat(food.nutrition(), food.saturation());
+                ((Player) entityLiving).getFoodData().eat(food);
                 if (!worldIn.isClientSide() && worldIn.getRandom().nextFloat() < (foodHurts ? 0.6f : 0.01f)) {
                     entityLiving.addEffect(new MobEffectInstance(MobEffects.POISON, 100, 0));
                 }
