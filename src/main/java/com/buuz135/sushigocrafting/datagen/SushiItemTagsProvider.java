@@ -11,15 +11,12 @@ import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.data.PackOutput;
 import net.minecraft.data.tags.ItemTagsProvider;
 import net.minecraft.resources.Identifier;
-import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Block;
 import net.neoforged.neoforge.common.Tags;
-import net.neoforged.neoforge.common.data.ExistingFileHelper;
 import net.neoforged.neoforge.registries.DeferredHolder;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 import java.util.Locale;
@@ -29,15 +26,14 @@ import java.util.concurrent.CompletableFuture;
 
 public class SushiItemTagsProvider extends ItemTagsProvider {
 
-    public SushiItemTagsProvider(PackOutput packOutput, CompletableFuture<HolderLookup.Provider> completableFuture, CompletableFuture<TagLookup<Block>> lookupCompletableFuture, @Nullable ExistingFileHelper existingFileHelper) {
-        super(packOutput, completableFuture, lookupCompletableFuture, SushiGoCrafting.MOD_ID, existingFileHelper);
+    public SushiItemTagsProvider(PackOutput packOutput, CompletableFuture<HolderLookup.Provider> completableFuture) {
+        super(packOutput, completableFuture, SushiGoCrafting.MOD_ID);
     }
 
     @Override
     public void addTags(HolderLookup.Provider provider) {
-        //super.registerTags();
-        this.copy(BlockTags.LOGS, ItemTags.LOGS);
-        this.copy(BlockTags.SAPLINGS, ItemTags.SAPLINGS);
+        tag(ItemTags.LOGS).add(SushiContent.Blocks.AVOCADO_LOG.get().asItem(), SushiContent.Blocks.AVOCADO_LEAVES_LOG.get().asItem());
+        tag(ItemTags.SAPLINGS).add(SushiContent.Blocks.AVOCADO_SAPLING.get().asItem());
         for (CustomCropBlock block : new CustomCropBlock[]{SushiContent.Blocks.RICE_CROP.get(), SushiContent.Blocks.CUCUMBER_CROP.get(), SushiContent.Blocks.SOY_CROP.get(), SushiContent.Blocks.WASABI_CROP.get(), SushiContent.Blocks.SESAME_CROP.get()}) {
             tag(Tags.Items.SEEDS).add(block.getBaseSeedId().asItem());
             tag(ItemTags.create(Identifier.fromNamespaceAndPath("c", "seeds/" + BuiltInRegistries.ITEM.getKey(block.getBaseSeedId().asItem()).getPath()))).add(block.getBaseSeedId().asItem());

@@ -2,7 +2,7 @@ package com.buuz135.sushigocrafting.datagen;
 
 import com.buuz135.sushigocrafting.proxy.SushiContent;
 import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.data.DataGenerator;
+import net.minecraft.data.PackOutput;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.item.BlockItem;
 import net.neoforged.neoforge.common.data.LanguageProvider;
@@ -11,8 +11,8 @@ import org.apache.commons.lang3.text.WordUtils;
 
 public class SushiLangProvider extends LanguageProvider {
 
-    public SushiLangProvider(DataGenerator gen, String modid, String locale) {
-        super(gen.getPackOutput(), modid, locale);
+    public SushiLangProvider(PackOutput output, String modid, String locale) {
+        super(output, modid, locale);
     }
 
     @Override

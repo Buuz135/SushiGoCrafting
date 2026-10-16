@@ -10,7 +10,7 @@ import com.buuz135.sushigocrafting.recipe.FermentingBarrelRecipe;
 import com.hrznstudio.titanium.recipe.generator.TitaniumShapedRecipeBuilder;
 import com.hrznstudio.titanium.recipe.generator.TitaniumShapelessRecipeBuilder;
 import net.minecraft.core.HolderLookup;
-import net.minecraft.data.DataGenerator;
+import net.minecraft.data.PackOutput;
 import net.minecraft.data.recipes.RecipeOutput;
 import net.minecraft.data.recipes.RecipeProvider;
 import net.minecraft.resources.Identifier;
@@ -25,15 +25,17 @@ import net.neoforged.neoforge.common.Tags;
 import net.neoforged.neoforge.fluids.FluidStack;
 
 import java.util.concurrent.CompletableFuture;
+import java.util.Optional;
 
 public class SushiRecipeProvider extends RecipeProvider {
 
-    public SushiRecipeProvider(DataGenerator generatorIn, CompletableFuture<HolderLookup.Provider> lookupProvider) {
-        super(generatorIn.getPackOutput(), lookupProvider);
+    protected SushiRecipeProvider(HolderLookup.Provider registries, RecipeOutput output) {
+        super(registries, output);
     }
 
     @Override
-    public void buildRecipes(RecipeOutput consumer) {
+    protected void buildRecipes() {
+        RecipeOutput consumer = output;
         TitaniumShapedRecipeBuilder.shapedRecipe(SushiContent.Items.KNIFE_CLEAVER.get())
                 .pattern(" II").pattern("II ").pattern("S  ")
                 .define('I', Tags.Items.INGOTS_IRON)
@@ -79,9 +81,25 @@ public class SushiRecipeProvider extends RecipeProvider {
                 recipe.save(consumer, Identifier.fromNamespaceAndPath(SushiGoCrafting.MOD_ID, "cutting_board/" + value.getName()));
             }
         }
-        new FermentingBarrelRecipe(Ingredient.EMPTY, new FluidStack(NeoForgeMod.MILK.get(), 250), new ItemStack(SushiContent.Items.CHEESE.get()))
+        new FermentingBarrelRecipe(Optional.empty(), new FluidStack(NeoForgeMod.MILK.get(), 250), new ItemStack(SushiContent.Items.CHEESE.get()))
                 .save(consumer, Identifier.fromNamespaceAndPath(SushiGoCrafting.MOD_ID, "fermenting_barrel/cheese"));
-        new FermentingBarrelRecipe(Ingredient.of(ItemTags.create(Identifier.fromNamespaceAndPath("c", "crops/soy_bean"))), new FluidStack(Fluids.WATER, 250), new ItemStack(SushiContent.Items.SOY_SAUCE.get()))
+        new FermentingBarrelRecipe(Optional.of(Ingredient.of(ItemTags.create(Identifier.fromNamespaceAndPath("c", "crops/soy_bean")))), new FluidStack(Fluids.WATER, 250), new ItemStack(SushiContent.Items.SOY_SAUCE.get()))
                 .save(consumer, Identifier.fromNamespaceAndPath(SushiGoCrafting.MOD_ID, "fermenting_barrel/soy"));
+    }
+
+    public static class Runner extends RecipeProvider.Runner {
+        public Runner(PackOutput output, CompletableFuture<HolderLookup.Provider> registries) {
+            super(output, registries);
+        }
+
+        @Override
+        protected RecipeProvider createRecipeProvider(HolderLookup.Provider registries, RecipeOutput output) {
+            return new SushiRecipeProvider(registries, output);
+        }
+
+        @Override
+        public String getName() {
+            return "Sushi Go Crafting Recipes";
+        }
     }
 }

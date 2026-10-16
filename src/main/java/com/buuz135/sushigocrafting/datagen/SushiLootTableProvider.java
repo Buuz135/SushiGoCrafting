@@ -5,7 +5,7 @@ import com.buuz135.sushigocrafting.proxy.SushiContent;
 import net.minecraft.advancements.critereon.StatePropertiesPredicate;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.WritableRegistry;
-import net.minecraft.data.DataGenerator;
+import net.minecraft.data.PackOutput;
 import net.minecraft.data.loot.BlockLootSubProvider;
 import net.minecraft.data.loot.EntityLootSubProvider;
 import net.minecraft.data.loot.LootTableProvider;
@@ -37,13 +37,10 @@ import java.util.stream.Stream;
 
 public class SushiLootTableProvider extends LootTableProvider {
 
-    public SushiLootTableProvider(DataGenerator gen, CompletableFuture<HolderLookup.Provider> registries) {
-        super(gen.getPackOutput(), new HashSet<>(), new ArrayList<>(), registries);
-    }
-
-    @Override
-    public List<SubProviderEntry> getTables() {
-        return Arrays.asList(new SubProviderEntry(SushiBlockLootTables::new, LootContextParamSets.BLOCK), new SubProviderEntry(SushiEntityLootTables::new, LootContextParamSets.ENTITY));
+    public SushiLootTableProvider(PackOutput output, CompletableFuture<HolderLookup.Provider> registries) {
+        super(output, new HashSet<>(), Arrays.asList(
+                new SubProviderEntry(SushiBlockLootTables::new, LootContextParamSets.BLOCK),
+                new SubProviderEntry(SushiEntityLootTables::new, LootContextParamSets.ENTITY)), registries);
     }
 
     @Override
