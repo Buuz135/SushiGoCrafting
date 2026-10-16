@@ -21,6 +21,8 @@ import net.minecraft.resources.Identifier;
 import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
 import net.neoforged.neoforge.client.event.EntityRenderersEvent;
 import net.neoforged.neoforge.client.event.ModelEvent;
+import net.neoforged.neoforge.client.renderstate.AvatarRenderStateModifier;
+import net.neoforged.neoforge.client.event.RegisterRenderStateModifiersEvent;
 import net.neoforged.neoforge.client.model.standalone.SimpleUnbakedStandaloneModel;
 import net.neoforged.neoforge.client.model.standalone.StandaloneModelKey;
 import net.minecraft.client.renderer.block.dispatch.BlockStateModelPart;
@@ -29,6 +31,9 @@ import net.neoforged.neoforge.event.entity.player.ItemTooltipEvent;
 public class ClientProxy {
     public static final StandaloneModelKey<BlockStateModelPart> SALMON_BACK = new StandaloneModelKey<>(() -> "sushigocrafting:salmon_back");
     public static final StandaloneModelKey<BlockStateModelPart> TUNA_BACK = new StandaloneModelKey<>(() -> "sushigocrafting:tuna_back");
+    public static BlockStateModelPart SALMON_BACK_MODEL;
+    public static BlockStateModelPart TUNA_BACK_MODEL;
+    public static final net.minecraft.util.context.ContextKey<java.util.UUID> BACK_OWNER = new net.minecraft.util.context.ContextKey<>(Identifier.fromNamespaceAndPath(SushiGoCrafting.MOD_ID, "back_owner"));
 
     public static void register() {
         EventManager.mod(EntityRenderersEvent.RegisterRenderers.class).process(event -> {
@@ -45,6 +50,16 @@ public class ClientProxy {
             event.register(SALMON_BACK, SimpleUnbakedStandaloneModel.simpleModelWrapper(Identifier.fromNamespaceAndPath(SushiGoCrafting.MOD_ID, "block/salmon_back")));
             event.register(TUNA_BACK, SimpleUnbakedStandaloneModel.simpleModelWrapper(Identifier.fromNamespaceAndPath(SushiGoCrafting.MOD_ID, "block/tuna_back")));
         }).subscribe();
+        EventManager.mod(ModelEvent.BakingCompleted.class).process(event -> {
+            SALMON_BACK_MODEL = event.getModelManager().getStandaloneModel(SALMON_BACK);
+            TUNA_BACK_MODEL = event.getModelManager().getStandaloneModel(TUNA_BACK);
+        }).subscribe();
+        EventManager.mod(RegisterRenderStateModifiersEvent.class).process(event -> event.registerAvatarEntityModifier(new AvatarRenderStateModifier() {
+            @Override
+            public <T extends net.minecraft.world.entity.Avatar & net.minecraft.client.entity.ClientAvatarEntity> void accept(T avatar, net.minecraft.client.renderer.entity.state.AvatarRenderState state) {
+                state.setRenderData(BACK_OWNER, avatar.getUUID());
+            }
+        })).subscribe();
     }
 
     public void fmlClient(FMLClientSetupEvent fml) {

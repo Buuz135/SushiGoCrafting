@@ -5,7 +5,7 @@ import com.buuz135.sushigocrafting.entity.ShrimpEntity;
 import com.buuz135.sushigocrafting.client.entity.ShrimpRenderer;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
-import net.minecraft.client.model.HierarchicalModel;
+import net.minecraft.client.model.EntityModel;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.PartPose;
 import net.minecraft.client.model.geom.builders.CubeListBuilder;
@@ -14,7 +14,7 @@ import net.minecraft.client.model.geom.builders.MeshDefinition;
 import net.minecraft.client.model.geom.builders.PartDefinition;
 import net.minecraft.util.Mth;
 
-public class ShrimpModel extends HierarchicalModel<ShrimpRenderer.State> {
+public class ShrimpModel extends EntityModel<ShrimpRenderer.State> {
     private final ModelPart body1;
     private final ModelPart body2;
     private final ModelPart body3;
@@ -22,6 +22,7 @@ public class ShrimpModel extends HierarchicalModel<ShrimpRenderer.State> {
     private final ModelPart root;
 
     public ShrimpModel(ModelPart root) {
+        super(root);
         this.root = root;
         this.body1 = root.getChild("body1");
         this.body2 = root.getChild("body2");
@@ -86,11 +87,6 @@ public class ShrimpModel extends HierarchicalModel<ShrimpRenderer.State> {
         body4.xRot = f * 0.2f;
     }
 
-
-    @Override
-    public ModelPart root() {
-        return root;
-    }
 
     public void setRotationAngle(ModelPart modelRenderer, float x, float y, float z) {
         modelRenderer.xRot = x;

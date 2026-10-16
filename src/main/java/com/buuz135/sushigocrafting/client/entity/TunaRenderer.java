@@ -12,8 +12,7 @@ import net.minecraft.client.renderer.entity.state.LivingEntityRenderState;
 import net.minecraft.resources.Identifier;
 import net.minecraft.util.Mth;
 
-public class TunaRenderer extends MobRenderer<TunaEntity, TunaRenderer.State, CodModel<TunaRenderer.State>> {
-    public static final class State extends LivingEntityRenderState { }
+public class TunaRenderer extends MobRenderer<TunaEntity, LivingEntityRenderState, CodModel> {
     private static final Identifier TUNA_LOCATION = Identifier.fromNamespaceAndPath(SushiGoCrafting.MOD_ID, "textures/entity/tuna.png");
 
     public TunaRenderer(EntityRendererProvider.Context renderManagerIn) {
@@ -21,12 +20,12 @@ public class TunaRenderer extends MobRenderer<TunaEntity, TunaRenderer.State, Co
     }
 
     @Override
-    public Identifier getTextureLocation(State entity) {
+    public Identifier getTextureLocation(LivingEntityRenderState entity) {
         return TUNA_LOCATION;
     }
 
     @Override
-    protected void setupRotations(State entity, PoseStack matrixStackIn, float bob, float yBodyRot) {
+    protected void setupRotations(LivingEntityRenderState entity, PoseStack matrixStackIn, float bob, float yBodyRot) {
         super.setupRotations(entity, matrixStackIn, bob, yBodyRot);
         float f = Mth.sin(0.3F * bob);
         matrixStackIn.mulPose(Axis.XP.rotationDegrees(f));
@@ -36,8 +35,8 @@ public class TunaRenderer extends MobRenderer<TunaEntity, TunaRenderer.State, Co
         }
     }
 
-    @Override public State createRenderState() { return new State(); }
-    @Override public void extractRenderState(TunaEntity entity, State state, float partialTick) {
+    @Override public LivingEntityRenderState createRenderState() { return new LivingEntityRenderState(); }
+    @Override public void extractRenderState(TunaEntity entity, LivingEntityRenderState state, float partialTick) {
         super.extractRenderState(entity, state, partialTick);
         state.isInWater = entity.isInWater();
     }
