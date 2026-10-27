@@ -43,7 +43,7 @@ public class RiceCookerCategory implements IRecipeCategory<RiceCookerCategory.Ri
 
     @Override
     public Component getTitle() {
-        return Component.translatable(SushiContent.Blocks.RICE_COOKER.get().getDescriptionId());
+        return Component.translatable(SushiContent.Blocks.RICE_COOKER.get().asItem().getDescriptionId());
     }
 
     @Override
@@ -55,8 +55,8 @@ public class RiceCookerCategory implements IRecipeCategory<RiceCookerCategory.Ri
     }
 
     @Override
-    public int getWidth() { return 160; }
-    public int getHeight() { return 80; }
+    public int getWidth() { return 85; }
+    public int getHeight() { return 56; }
 
     @Override
     public IDrawable getIcon() {

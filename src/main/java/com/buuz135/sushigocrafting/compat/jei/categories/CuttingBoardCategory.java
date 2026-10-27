@@ -35,14 +35,14 @@ public class CuttingBoardCategory implements IRecipeCategory<CuttingBoardRecipe>
 
     @Override
     public Component getTitle() {
-        return Component.translatable(SushiContent.Blocks.CUTTING_BOARD.get().getDescriptionId());
+        return Component.translatable(SushiContent.Blocks.CUTTING_BOARD.get().asItem().getDescriptionId());
     }
     public IDrawable getBackground() {
         return guiHelper.createBlankDrawable(80, 80);
     }
 
     @Override
-    public int getWidth() { return 160; }
+    public int getWidth() { return 80; }
     public int getHeight() { return 80; }
 
     @Override
@@ -59,7 +59,7 @@ public class CuttingBoardCategory implements IRecipeCategory<CuttingBoardRecipe>
 
     @Override
     public void draw(CuttingBoardRecipe recipe, IRecipeSlotsView recipeSlotsView, GuiGraphicsExtractor guiGraphics, double mouseX, double mouseY) {
-        guiGraphics.blit(net.minecraft.client.renderer.RenderPipelines.GUI_TEXTURED, Identifier.fromNamespaceAndPath(SushiGoCrafting.MOD_ID, "textures/gui/jei.png"), 31, 22, 0f, 0f, 15, 22, 15, 22);
+        guiGraphics.blit(net.minecraft.client.renderer.RenderPipelines.GUI_TEXTURED, Identifier.fromNamespaceAndPath(SushiGoCrafting.MOD_ID, "textures/gui/jei.png"), 31, 22, 0f, 0f, 15, 22, 256, 256);
         float scale = 4;
         //matrixStack.translate(0,0, 100);
         //matrixStack.translate(0,0, -200);

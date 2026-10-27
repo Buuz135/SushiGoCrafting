@@ -42,15 +42,16 @@ public class RollerCategory implements IRecipeCategory<Recipe> {
 
     @Override
     public Component getTitle() {
-        return Component.translatable(SushiContent.Blocks.ROLLER.get().getDescriptionId());
+        return Component.translatable(SushiContent.Blocks.ROLLER.get().asItem().getDescriptionId());
     }
+
     public IDrawable getBackground() {
         return guiHelper.createDrawable(Identifier.fromNamespaceAndPath(SushiGoCrafting.MOD_ID, "textures/gui/roller.png"), 8, 17, 160, 79);
     }
 
     @Override
     public int getWidth() { return 160; }
-    public int getHeight() { return 80; }
+    public int getHeight() { return 79; }
 
     @Override
     public IDrawable getIcon() {

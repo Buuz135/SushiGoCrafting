@@ -4,7 +4,7 @@
     "amount": 250,
     "id": "minecraft:water"
   },
-  "input": "#c:crops/soy_bean",
+  "input": "#c:crops/soybean",
   "output": {
     "id": "sushigocrafting:soy_sauce"
   }

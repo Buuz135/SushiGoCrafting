@@ -42,15 +42,15 @@ public class FermentationBarrelCategory implements IRecipeCategory<FermentingBar
 
     @Override
     public Component getTitle() {
-        return Component.translatable(SushiContent.Blocks.FERMENTATION_BARREL.get().getDescriptionId());
+        return Component.translatable(SushiContent.Blocks.FERMENTATION_BARREL.get().asItem().getDescriptionId());
     }
     public IDrawable getBackground() {
         return guiHelper.createBlankDrawable(101, 47);
     }
 
     @Override
-    public int getWidth() { return 160; }
-    public int getHeight() { return 80; }
+    public int getWidth() { return 101; }
+    public int getHeight() { return 47; }
 
     @Override
     public IDrawable getIcon() {

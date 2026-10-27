@@ -85,7 +85,7 @@ public class SushiRecipeProvider extends RecipeProvider {
 
         new FermentingBarrelRecipe(Optional.empty(), new FluidStackTemplate(NeoForgeMod.MILK.get(), 250), new ItemStackTemplate(SushiContent.Items.CHEESE.get()))
                 .save(consumer, Identifier.fromNamespaceAndPath(SushiGoCrafting.MOD_ID, "fermenting_barrel/cheese"));
-        new FermentingBarrelRecipe(Optional.of(Ingredient.of(registries.lookupOrThrow(net.minecraft.core.registries.Registries.ITEM).getOrThrow(ItemTags.create(Identifier.fromNamespaceAndPath("c", "crops/soy_bean"))))), new FluidStackTemplate(Fluids.WATER, 250), new ItemStackTemplate(SushiContent.Items.SOY_SAUCE.get()))
+        new FermentingBarrelRecipe(Optional.of(Ingredient.of(registries.lookupOrThrow(net.minecraft.core.registries.Registries.ITEM).getOrThrow(ItemTags.create(Identifier.fromNamespaceAndPath("c", "crops/soybean"))))), new FluidStackTemplate(Fluids.WATER, 250), new ItemStackTemplate(SushiContent.Items.SOY_SAUCE.get()))
                 .save(consumer, Identifier.fromNamespaceAndPath(SushiGoCrafting.MOD_ID, "fermenting_barrel/soy"));
     }
 

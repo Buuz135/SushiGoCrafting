@@ -16,7 +16,9 @@ import mezz.jei.api.registration.IRecipeRegistration;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.Identifier;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.RecipeHolder;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.block.entity.FurnaceBlockEntity;
 import net.neoforged.neoforge.registries.DeferredHolder;
@@ -47,9 +49,13 @@ public class JEIModPlugin implements IModPlugin {
     @Override
     public void registerRecipes(IRecipeRegistration registration) {
         registration.addRecipes(SushiRecipeTypes.RICE_COOKER, List.of(new RiceCookerCategory.RiceCookerRecipe()));
-        registration.addRecipes(SushiRecipeTypes.CUTTING_BOARD, RecipeUtil.getRecipes(Minecraft.getInstance().level, (RecipeType<CuttingBoardRecipe>) SushiContent.RecipeTypes.CUTTING_BOARD.get()));
         registration.addRecipes(SushiRecipeTypes.ROLLER, FoodHelper.REGISTERED.values().stream().flatMap(Collection::stream).map(DeferredHolder::get).map(item -> (FoodItem) item).map(RollerCategory.Recipe::new).collect(Collectors.toList()));
-        registration.addRecipes(SushiRecipeTypes.FERMENTING_BARREL, RecipeUtil.getRecipes(Minecraft.getInstance().level, (RecipeType<FermentingBarrelRecipe>) SushiContent.RecipeTypes.FERMENTING_BARREL.get()));
+        MinecraftServer server = Minecraft.getInstance().getSingleplayerServer();
+        if (server != null) {
+            registration.addRecipes(SushiRecipeTypes.FERMENTING_BARREL, server.getRecipeManager().recipeMap().byType(SushiContent.RecipeTypes.FERMENTING_BARREL.get()).stream().map(RecipeHolder::value).toList());
+            registration.addRecipes(SushiRecipeTypes.CUTTING_BOARD, server.getRecipeManager().recipeMap().byType(SushiContent.RecipeTypes.CUTTING_BOARD.get()).stream().map(RecipeHolder::value).toList());
+
+        }
     }
 
     @Override

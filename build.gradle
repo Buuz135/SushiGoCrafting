@@ -73,7 +73,7 @@ dependencies {
     compileOnly "mezz.jei:jei-${minecraft_version}-common-api:${jei_version}"
     compileOnly "mezz.jei:jei-${minecraft_version}-neoforge-api:${jei_version}"
     runtimeOnly "mezz.jei:jei-${minecraft_version}-neoforge:${jei_version}"
-    implementation 'com.hrznstudio:titanium:26.1.2-4.0.14'
+    implementation 'com.hrznstudio:titanium:26.1.2-4.0.16'
     compileOnly "maven.modrinth:jade:${jade_version}"
     runtimeOnly "maven.modrinth:jade:${jade_version}"
     compileOnly 'curse.maven:patchouli-306770:8404543'
