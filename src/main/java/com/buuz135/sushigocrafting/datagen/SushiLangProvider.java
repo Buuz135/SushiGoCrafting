@@ -35,7 +35,7 @@ public class SushiLangProvider extends LanguageProvider {
         add("text.sushigocrafting.increase_level_by", "Increases Level By");
         add("text.sushigocrafting.multiply_time_by", "Multiplies Time By");
         add("text.sushigocrafting.weight", "Weight");
-        add("text.sushigocrafting.consumes", "Consomes");
+        add("text.sushigocrafting.consumes", "Consumes");
         add("text.sushigocrafting.left_click_increase", "Left Click to Increase");
         add("text.sushigocrafting.right_click_decrease", "Right Click to Decrease");
         add("text.sushigocrafting.list_ingredients", "Lists all Sushi Go Crafting Food Ingredients");
@@ -50,9 +50,11 @@ public class SushiLangProvider extends LanguageProvider {
         add("text.sushigocrafting.button", "Button");
         SushiContent.Items.REGISTRY.getEntries().stream().map(DeferredHolder::get).filter(item -> item instanceof BlockItem).map(item -> (BlockItem) item).forEach(blockItem -> {
             add(blockItem, WordUtils.capitalize(BuiltInRegistries.ITEM.getKey(blockItem).getPath().replaceAll("_", " ")));
+            System.out.println(WordUtils.capitalize(BuiltInRegistries.ITEM.getKey(blockItem).getPath().replaceAll("_", " ")));
         });
         SushiContent.Items.REGISTRY.getEntries().stream().map(DeferredHolder::get).filter(item -> !(item instanceof BlockItem)).forEach(item -> {
             add(item, WordUtils.capitalize(BuiltInRegistries.ITEM.getKey(item).getPath().replaceAll("_", " ")));
+            System.out.println(WordUtils.capitalize(BuiltInRegistries.ITEM.getKey(item).getPath().replaceAll("_", " ")));
         });
         SushiContent.Effects.REGISTRY.getEntries().stream().map(DeferredHolder::get).forEach(effect -> {
             add(effect, WordUtils.capitalize(BuiltInRegistries.MOB_EFFECT.getKey(effect).getPath().replaceAll("_", " ")));
