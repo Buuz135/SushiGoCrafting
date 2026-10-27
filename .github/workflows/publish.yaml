@@ -37,10 +37,10 @@ jobs:
           loaders: neoforge
           environment: client | server
           game-versions: |
-            1.21.1
-          java: 21
+            26.1.2
+          java: 25
           name: ""
-          changelog: "https://github.com/Buuz135/SushiGoCrafting/blob/1.21/CHANGELOG.md"
+          changelog: "https://github.com/Buuz135/SushiGoCrafting/blob/26.1/CHANGELOG.md"
           dependencies: |
             titanium | depends
             patchouli | optional
