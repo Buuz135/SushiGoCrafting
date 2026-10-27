@@ -74,7 +74,7 @@ ordering = "NONE"
 side = "BOTH"
 [[dependencies.sushigocrafting]] #optional
 modId = "titanium" #mandatory
-mandatory = true #mandatory
-versionRange = "[3.2.8,)" #mandatory
+type = "required" #mandatory
+versionRange = "[4.0.12,)" #mandatory
 ordering = "NONE"
 side = "BOTH"

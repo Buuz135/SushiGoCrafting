@@ -1,7 +1,5 @@
 {
   "type": "sushigocrafting:cutting_board",
   "ingredient": "avocado",
-  "input": {
-    "tag": "c:fruits/avocado"
-  }
+  "input": "#c:fruits/avocado"
 }

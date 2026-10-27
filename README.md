@@ -1,25 +1,45 @@
-![](https://imgur.com/3M4MYl6.png)
+<p align="center">
+  <img src="https://imgur.com/3M4MYl6.png" alt="Sushi Go Crafting" width="720">
+</p>
 
-Sushi Go Crafting is a food mod where you make sushi with a small discovery minigame to get the perfect food and get
-amazing food effects. It adds different types of Sushi to suit your needs with different combination of ingredients.
+# Sushi Go Crafting
 
-![](https://imgur.com/rrSbKsY.png)
+Sushi Go Crafting is a Minecraft food mod built around discovering sushi recipes
+and combining ingredient effects into powerful food bonuses.
 
-Each ingredient has a different effect or modifier effect and they get all combined when making a Sushi Roll so when you
-eat you will recieve more than food/saturation.
+![Sushi Go Crafting in-game preview](https://imgur.com/rrSbKsY.png)
 
-![](https://imgur.com/eINWJxs.png)
+## Features
 
-Current Types Of Sushi:
-* Maki
-* Gunkan
-* California
-* Nigiri
-* Onigiri
-* Temaki
+- Discover the right combination of ingredients through a small crafting minigame.
+- Combine ingredient effects and modifiers when preparing a sushi roll.
+- Craft Maki, Gunkan, California, Nigiri, Onigiri, and Temaki.
+- Find avocado trees and seaweed through added world generation.
+- Encounter tuna and shrimp in the ocean.
 
-This mod adds worldgen for Avocado Trees and Seaweed, also adds Tuna and Shrimp into the ocean.
+## Dependencies
 
-![](https://cdn.discordapp.com/attachments/739852904810151996/822582950066520084/unknown.png)
+The mod depends on [Titanium](https://www.curseforge.com/minecraft/mc-mods/titanium).
+[JEI](https://www.curseforge.com/minecraft/mc-mods/jei) and
+[Patchouli](https://www.curseforge.com/minecraft/mc-mods/patchouli) are recommended
+for a better in-game experience.
 
-(It depends on Titanium, and requires JEI and Pathouli for a better experience)
+## Compatibility
+
+- Minecraft 26.1.2
+- NeoForge 26.1.2
+- Current project version: `0.6.3`
+
+## Development
+
+Minecraft 26.1.2 requires Java 25. Build the project with the included Gradle wrapper:
+
+```powershell
+.\gradlew.bat build -x test
+```
+
+## License
+
+Sushi Go Crafting is released under the [MIT License](LICENSE).
+
+![Sushi Go Crafting gameplay](https://imgur.com/eINWJxs.png)

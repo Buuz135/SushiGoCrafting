@@ -12,7 +12,7 @@ import com.hrznstudio.titanium.network.messages.ButtonClickNetworkMessage;
 import com.hrznstudio.titanium.util.AssetUtil;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.client.resources.sounds.SimpleSoundInstance;
@@ -34,7 +34,7 @@ public class RollerCraftButtonAddon extends BasicButtonAddon {
     }
 
     @Override
-    public void drawBackgroundLayer(GuiGraphics guiGraphics, Screen screen, IAssetProvider provider, int guiX, int guiY, int mouseX, int mouseY, float partialTicks) {
+    public void drawBackgroundLayer(GuiGraphicsExtractor guiGraphics, Screen screen, IAssetProvider provider, int guiX, int guiY, int mouseX, int mouseY, float partialTicks) {
         super.drawBackgroundLayer(guiGraphics, screen, provider, guiX, guiY, mouseX, mouseY, partialTicks);
         IAsset asset = provider.getAsset(SushiAssetTypes.ROLLER_TYPE_BG);
         if (asset != null) {
@@ -44,14 +44,14 @@ public class RollerCraftButtonAddon extends BasicButtonAddon {
         if (asset != null) {
             AssetUtil.drawAsset(guiGraphics, screen, asset, guiX + getPosX() - 1, guiY + getPosY() - 1);
         }
-        guiGraphics.renderItemDecorations(Minecraft.getInstance().font, new ItemStack(SushiContent.Items.ROLLER.get()), guiX + getPosX(), guiY + getPosY() - 4);
+        guiGraphics.itemDecorations(Minecraft.getInstance().font, new ItemStack(SushiContent.Items.ROLLER.get()), guiX + getPosX(), guiY + getPosY() - 4);
     }
 
     @Override
     public boolean mouseClicked(double mouseX, double mouseY, int button) {
         Screen screen = Minecraft.getInstance().screen;
         if (screen instanceof AbstractContainerScreen && ((AbstractContainerScreen) screen).getMenu() instanceof ILocatable locatable) {
-            if (!isMouseOver(mouseX - ((AbstractContainerScreen<?>) screen).getGuiLeft(), mouseY - ((AbstractContainerScreen<?>) screen).getGuiTop()))
+            if (!isMouseOver(mouseX, mouseY))
                 return false;
             Minecraft.getInstance().getSoundManager().play(new SimpleSoundInstance(SoundEvents.UI_BUTTON_CLICK.value(), SoundSource.PLAYERS, 0.2F, 1.0F, Minecraft.getInstance().level.getRandom(), Minecraft.getInstance().player.blockPosition()));
             CompoundTag nbt = new CompoundTag();

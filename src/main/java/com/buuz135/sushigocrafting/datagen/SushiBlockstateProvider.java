@@ -1,97 +1,76 @@
 package com.buuz135.sushigocrafting.datagen;
 
-import com.buuz135.sushigocrafting.block.plant.AvocadoLeavesBlock;
 import com.buuz135.sushigocrafting.block.plant.CustomCropBlock;
 import com.buuz135.sushigocrafting.proxy.SushiContent;
+import com.google.gson.JsonObject;
 import com.hrznstudio.titanium.block.RotatableBlock;
-import net.minecraft.core.Direction;
 import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.data.DataGenerator;
+import net.minecraft.data.CachedOutput;
+import net.minecraft.data.DataProvider;
+import net.minecraft.data.PackOutput;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.CropBlock;
-import net.minecraft.world.level.block.RotatedPillarBlock;
-import net.neoforged.neoforge.client.model.generators.BlockStateProvider;
-import net.neoforged.neoforge.client.model.generators.ConfiguredModel;
-import net.neoforged.neoforge.client.model.generators.ModelFile;
-import net.neoforged.neoforge.common.data.ExistingFileHelper;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.CompletableFuture;
 
-public class SushiBlockstateProvider extends BlockStateProvider {
+public class SushiBlockstateProvider implements DataProvider {
+    private final PackOutput.PathProvider states;
 
-    public SushiBlockstateProvider(DataGenerator gen, String modid, ExistingFileHelper exFileHelper) {
-        super(gen.getPackOutput(), modid, exFileHelper);
+    public SushiBlockstateProvider(PackOutput output) {
+        states = output.createPathProvider(PackOutput.Target.RESOURCE_PACK, "blockstates");
     }
 
     @Override
-    protected void registerStatesAndModels() {
-        crop(SushiContent.Blocks.CUCUMBER_CROP.get());
-        crop(SushiContent.Blocks.RICE_CROP.get());
-        crop(SushiContent.Blocks.WASABI_CROP.get());
-        crop(SushiContent.Blocks.SOY_CROP.get());
-        crop(SushiContent.Blocks.SESAME_CROP.get());
-        //simpleBlockUn(SushiContent.Blocks.SEAWEED.get());
-        //simpleBlockUn(SushiContent.Blocks.SEAWEED_PLANT.get());
-        simpleBlockUn(SushiContent.Blocks.AVOCADO_SAPLING.get());
-        horizontalBlock(SushiContent.Blocks.RICE_COOKER.get());
-        logBlockRot(SushiContent.Blocks.AVOCADO_LOG.get());
-        logBlockRot(SushiContent.Blocks.AVOCADO_LEAVES_LOG.get());
-        getVariantBuilder(SushiContent.Blocks.AVOCADO_LEAVES.get())
-                .partialState()
-                .with(AvocadoLeavesBlock.STAGE, 0).addModels(
-                        ConfiguredModel.builder().modelFile(new ModelFile.UncheckedModelFile(modLoc("block/" + BuiltInRegistries.BLOCK.getKey(SushiContent.Blocks.AVOCADO_LEAVES.get()).getPath() + "_0"))).build())
-                .partialState().with(AvocadoLeavesBlock.STAGE, 1).addModels(
-                        ConfiguredModel.builder().modelFile(new ModelFile.UncheckedModelFile(modLoc("block/" + BuiltInRegistries.BLOCK.getKey(SushiContent.Blocks.AVOCADO_LEAVES.get()).getPath() + "_1"))).build())
-                .partialState().with(AvocadoLeavesBlock.STAGE, 2).addModels(
-                        ConfiguredModel.builder().modelFile(new ModelFile.UncheckedModelFile(modLoc("block/" + BuiltInRegistries.BLOCK.getKey(SushiContent.Blocks.AVOCADO_LEAVES.get()).getPath() + "_2"))).build());
-        horizontalBlock(SushiContent.Blocks.CUTTING_BOARD.get());
-        horizontalBlock(SushiContent.Blocks.ROLLER.get());
-        simpleBlockUn(SushiContent.Blocks.FERMENTATION_BARREL.get());
+    public CompletableFuture<?> run(CachedOutput output) {
+        List<CompletableFuture<?>> writes = new ArrayList<>();
+        for (CustomCropBlock crop : new CustomCropBlock[]{SushiContent.Blocks.RICE_CROP.get(), SushiContent.Blocks.CUCUMBER_CROP.get(), SushiContent.Blocks.WASABI_CROP.get(), SushiContent.Blocks.SOY_CROP.get(), SushiContent.Blocks.SESAME_CROP.get()}) {
+            JsonObject variants = new JsonObject();
+            for (int age : CustomCropBlock.AGE.getPossibleValues()) variants.add("age=" + age, model(crop, "_" + age, 0, 0));
+            save(writes, output, crop, variants);
+        }
+        for (Block block : new Block[]{SushiContent.Blocks.AVOCADO_SAPLING.get(), SushiContent.Blocks.FERMENTATION_BARREL.get()}) {
+            JsonObject variants = new JsonObject();
+            variants.add("", model(block, "", 0, 0));
+            save(writes, output, block, variants);
+        }
+        for (Block block : new Block[]{SushiContent.Blocks.RICE_COOKER.get(), SushiContent.Blocks.CUTTING_BOARD.get(), SushiContent.Blocks.ROLLER.get()}) {
+            JsonObject variants = new JsonObject();
+            variants.add(RotatableBlock.FACING_HORIZONTAL.getName() + "=north", model(block, "", 0, 180));
+            variants.add(RotatableBlock.FACING_HORIZONTAL.getName() + "=east", model(block, "", 0, 270));
+            variants.add(RotatableBlock.FACING_HORIZONTAL.getName() + "=south", model(block, "", 0, 0));
+            variants.add(RotatableBlock.FACING_HORIZONTAL.getName() + "=west", model(block, "", 0, 90));
+            save(writes, output, block, variants);
+        }
+        for (Block block : new Block[]{SushiContent.Blocks.AVOCADO_LOG.get(), SushiContent.Blocks.AVOCADO_LEAVES_LOG.get()}) {
+            JsonObject variants = new JsonObject();
+            variants.add("axis=y", model(block, "", 0, 0));
+            variants.add("axis=z", model(block, "", 90, 0));
+            variants.add("axis=x", model(block, "", 90, 90));
+            save(writes, output, block, variants);
+        }
+        JsonObject leaves = new JsonObject();
+        for (int stage = 0; stage < 3; stage++) leaves.add("stage=" + stage, model(SushiContent.Blocks.AVOCADO_LEAVES.get(), "_" + stage, 0, 0));
+        save(writes, output, SushiContent.Blocks.AVOCADO_LEAVES.get(), leaves);
+        return CompletableFuture.allOf(writes.toArray(CompletableFuture[]::new));
     }
 
-    private void crop(CropBlock block) {
-        getVariantBuilder(block).forAllStates(blockState -> {
-            int age = blockState.getValue(CustomCropBlock.AGE);
-            return ConfiguredModel.builder().modelFile(new ModelFile.UncheckedModelFile(modLoc("block/" + BuiltInRegistries.BLOCK.getKey(block).getPath() + "_" + age))).build();
-        });
+    private JsonObject model(Block block, String suffix, int x, int y) {
+        JsonObject model = new JsonObject();
+        model.addProperty("model", BuiltInRegistries.BLOCK.getKey(block).withPrefix("block/").withSuffix(suffix).toString());
+        if (x != 0) model.addProperty("x", x);
+        if (y != 0) model.addProperty("y", y);
+        return model;
     }
 
-    private void simpleBlockUn(Block block) {
-        simpleBlock(block, new ModelFile.UncheckedModelFile(modLoc("block/" + BuiltInRegistries.BLOCK.getKey(block).getPath())));
+    private void save(List<CompletableFuture<?>> writes, CachedOutput output, Block block, JsonObject variants) {
+        JsonObject state = new JsonObject();
+        state.add("variants", variants);
+        writes.add(DataProvider.saveStable(output, state, states.json(BuiltInRegistries.BLOCK.getKey(block))));
     }
 
-    private void horizontalBlock(Block block) {
-        ModelFile file = new ModelFile.UncheckedModelFile(modLoc("block/" + BuiltInRegistries.BLOCK.getKey(block).getPath()));
-        getVariantBuilder(block)
-                .forAllStates(state -> ConfiguredModel.builder()
-                        .modelFile(file)
-                        .rotationY(((int) state.getValue(RotatableBlock.FACING_HORIZONTAL).toYRot()) % 360)
-                        .build()
-                );
+    @Override
+    public String getName() {
+        return "Sushi blockstates";
     }
-
-    private void logBlockRot(Block block) {
-        ModelFile file = new ModelFile.UncheckedModelFile(modLoc("block/" + BuiltInRegistries.BLOCK.getKey(block).getPath()));
-        getVariantBuilder(block)
-                .forAllStates(state -> {
-                            Direction.Axis axis = state.getValue(RotatedPillarBlock.AXIS);
-                            if (axis == Direction.Axis.Y) {
-                                return ConfiguredModel.builder()
-                                        .modelFile(file)
-                                        .build();
-                            }
-                            if (axis == Direction.Axis.Z) {
-                                return ConfiguredModel.builder()
-                                        .modelFile(file)
-                                        .rotationX(90)
-                                        .build();
-                            }
-                            return ConfiguredModel.builder()
-                                    .modelFile(file)
-                                    .rotationX(90)
-                                    .rotationY(90)
-                                    .build();
-                        }
-                );
-    }
-
 }

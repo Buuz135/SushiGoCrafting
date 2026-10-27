@@ -21,7 +21,7 @@ public class FermentingBarrelManager implements IRecipeManager<FermentingBarrelR
     @ZenCodeType.Method
     public void addRecipe(String name, IIngredient input, IFluidStack stack, IItemStack output) {
         name = fixRecipeName(name);
-        CraftTweakerAPI.apply(new ActionAddRecipe<>(this, new RecipeHolder<>(ResourceLocation.fromNamespaceAndPath("crafttweaker", name), new FermentingBarrelRecipe(input.asVanillaIngredient(), stack.getInternal(), output.getInternal()))));
+        CraftTweakerAPI.apply(new ActionAddRecipe<>(this, new RecipeHolder<>(Identifier.fromNamespaceAndPath("crafttweaker", name), new FermentingBarrelRecipe(input.asVanillaIngredient(), stack.getInternal(), output.getInternal()))));
     }
 
     @Override

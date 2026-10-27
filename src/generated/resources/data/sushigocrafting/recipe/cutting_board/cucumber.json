@@ -1,7 +1,5 @@
 {
   "type": "sushigocrafting:cutting_board",
   "ingredient": "cucumber",
-  "input": {
-    "tag": "c:crops/cucumber"
-  }
+  "input": "#c:crops/cucumber"
 }

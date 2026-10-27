@@ -9,7 +9,7 @@ import com.hrznstudio.titanium.component.inventory.InventoryComponent;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.InteractionHand;
-import net.minecraft.world.ItemInteractionResult;
+import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
@@ -32,11 +32,11 @@ public class CoolerBoxTile extends ActiveTile<CoolerBoxTile> {
     }
 
     @Override
-    public ItemInteractionResult onActivated(Player player, InteractionHand hand, Direction facing, double hitX, double hitY, double hitZ) {
-        ItemInteractionResult type = super.onActivated(player, hand, facing, hitX, hitY, hitZ);
-        if (!type.result().shouldSwing()) {
+    public InteractionResult onActivated(Player player, InteractionHand hand, Direction facing, double hitX, double hitY, double hitZ) {
+        InteractionResult type = super.onActivated(player, hand, facing, hitX, hitY, hitZ);
+        if (!type.consumesAction()) {
             openGui(player);
-            return ItemInteractionResult.SUCCESS;
+            return InteractionResult.SUCCESS;
         }
         return type;
     }

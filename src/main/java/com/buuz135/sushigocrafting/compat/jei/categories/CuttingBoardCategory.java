@@ -12,11 +12,11 @@ import mezz.jei.api.gui.ingredient.IRecipeSlotsView;
 import mezz.jei.api.helpers.IGuiHelper;
 import mezz.jei.api.recipe.IFocusGroup;
 import mezz.jei.api.recipe.RecipeIngredientRole;
-import mezz.jei.api.recipe.RecipeType;
+import mezz.jei.api.recipe.types.IRecipeType;
 import mezz.jei.api.recipe.category.IRecipeCategory;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.ItemStack;
 
 public class CuttingBoardCategory implements IRecipeCategory<CuttingBoardRecipe> {
@@ -29,19 +29,21 @@ public class CuttingBoardCategory implements IRecipeCategory<CuttingBoardRecipe>
 
 
     @Override
-    public RecipeType<CuttingBoardRecipe> getRecipeType() {
+    public IRecipeType<CuttingBoardRecipe> getRecipeType() {
         return SushiRecipeTypes.CUTTING_BOARD;
     }
 
     @Override
     public Component getTitle() {
-        return Component.translatable(SushiContent.Blocks.CUTTING_BOARD.get().getDescriptionId());
+        return Component.translatable(SushiContent.Blocks.CUTTING_BOARD.get().asItem().getDescriptionId());
     }
-
-    @Override
     public IDrawable getBackground() {
         return guiHelper.createBlankDrawable(80, 80);
     }
+
+    @Override
+    public int getWidth() { return 80; }
+    public int getHeight() { return 80; }
 
     @Override
     public IDrawable getIcon() {
@@ -56,14 +58,14 @@ public class CuttingBoardCategory implements IRecipeCategory<CuttingBoardRecipe>
 
 
     @Override
-    public void draw(CuttingBoardRecipe recipe, IRecipeSlotsView recipeSlotsView, GuiGraphics guiGraphics, double mouseX, double mouseY) {
-        guiGraphics.blit(ResourceLocation.fromNamespaceAndPath(SushiGoCrafting.MOD_ID, "textures/gui/jei.png"), 31, 22, 0, 0, 15, 22);
+    public void draw(CuttingBoardRecipe recipe, IRecipeSlotsView recipeSlotsView, GuiGraphicsExtractor guiGraphics, double mouseX, double mouseY) {
+        guiGraphics.blit(net.minecraft.client.renderer.RenderPipelines.GUI_TEXTURED, Identifier.fromNamespaceAndPath(SushiGoCrafting.MOD_ID, "textures/gui/jei.png"), 31, 22, 0f, 0f, 15, 22, 256, 256);
         float scale = 4;
         //matrixStack.translate(0,0, 100);
         //matrixStack.translate(0,0, -200);
-        guiGraphics.pose().scale(scale, scale, scale);
-        ItemStackUtil.renderItemIntoGUI(guiGraphics.pose(), new ItemStack(SushiContent.Blocks.CUTTING_BOARD.get()), 2, 4);
-        guiGraphics.pose().scale(1 / scale, 1 / scale, 1 / scale);
+        guiGraphics.pose().scale(scale, scale);
+        ItemStackUtil.renderItemIntoGUI(guiGraphics, new ItemStack(SushiContent.Blocks.CUTTING_BOARD.get()), 2, 4);
+        guiGraphics.pose().scale(1 / scale, 1 / scale);
         //matrixStack.translate(0,0, 200);
     }
 

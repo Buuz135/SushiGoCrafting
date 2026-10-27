@@ -9,8 +9,6 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
-import net.neoforged.api.distmarker.Dist;
-import net.neoforged.api.distmarker.OnlyIn;
 import net.neoforged.neoforge.network.handling.IPayloadContext;
 
 
@@ -29,17 +27,21 @@ public class CapabilitySyncMessage extends Message {
     }
 
     @Override
-    protected void handleMessage(IPayloadContext context) {
+    protected void handleServerMessage(IPayloadContext context) {
+        throw new UnsupportedOperationException("Capability sync is client-bound");
+    }
+
+    @Override
+    public void handleClientMessage(IPayloadContext context) {
         context.enqueueWork(this::handle);
     }
 
-    @OnlyIn(Dist.CLIENT)
     public void handle() {
         var data = Minecraft.getInstance().player.getData(SushiContent.AttachmentTypes.SUSHI_WEIGHT_DISCOVERY);
-        data.deserializeNBT(null, capability);
+        data.deserialize(net.minecraft.world.level.storage.TagValueInput.create(net.minecraft.util.ProblemReporter.DISCARDING, Minecraft.getInstance().level.registryAccess(), capability));
         if (!itemStack.isEmpty() && !itemStack.getItem().equals(Items.STONE)) {
             PerfectionToast toast = new PerfectionToast(itemStack, Component.literal(ChatFormatting.DARK_AQUA + "" + Component.translatable("text.sushigocrafting.discovered_a").getString()), Component.literal(ChatFormatting.DARK_AQUA + "" + Component.translatable("text.sushigocrafting.perfect_weight").getString()), false);
-            Minecraft.getInstance().getToasts().addToast(toast);
+            Minecraft.getInstance().getToastManager().addToast(toast);
             new Thread(() -> {
                 try {
                     Thread.sleep(5 * 1000);

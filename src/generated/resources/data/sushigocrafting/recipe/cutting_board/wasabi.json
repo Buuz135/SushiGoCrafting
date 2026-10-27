@@ -1,7 +1,5 @@
 {
   "type": "sushigocrafting:cutting_board",
   "ingredient": "wasabi",
-  "input": {
-    "tag": "c:crops/wasabi_root"
-  }
+  "input": "#c:crops/wasabi_root"
 }

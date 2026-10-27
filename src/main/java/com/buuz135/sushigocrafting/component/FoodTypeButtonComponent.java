@@ -3,7 +3,6 @@ package com.buuz135.sushigocrafting.component;
 import com.buuz135.sushigocrafting.api.IFoodType;
 import com.buuz135.sushigocrafting.client.gui.FoodTypeSelectionButtonAddon;
 import com.hrznstudio.titanium.api.IFactory;
-import com.hrznstudio.titanium.api.client.IScreenAddon;
 import com.hrznstudio.titanium.component.button.ButtonComponent;
 import com.hrznstudio.titanium.component.inventory.InventoryComponent;
 
@@ -26,8 +25,8 @@ public abstract class FoodTypeButtonComponent extends ButtonComponent {
     }
 
     @Override
-    public List<IFactory<? extends IScreenAddon>> getScreenAddons() {
-        return Collections.singletonList(() -> new FoodTypeSelectionButtonAddon(this, getSelected()));
+    public List<IFactory<?>> getScreenAddons() {
+        return Collections.<IFactory<?>>singletonList(() -> new FoodTypeSelectionButtonAddon(this, getSelected()));
     }
 
     public Supplier<InventoryComponent> getComponent() {

@@ -16,14 +16,15 @@ import mezz.jei.api.helpers.IGuiHelper;
 import mezz.jei.api.neoforge.NeoForgeTypes;
 import mezz.jei.api.recipe.IFocusGroup;
 import mezz.jei.api.recipe.RecipeIngredientRole;
-import mezz.jei.api.recipe.RecipeType;
+import mezz.jei.api.recipe.types.IRecipeType;
 import mezz.jei.api.recipe.category.IRecipeCategory;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.world.level.material.Fluids;
 import net.neoforged.neoforge.fluids.FluidStack;
 import org.apache.commons.lang3.tuple.Pair;
@@ -42,18 +43,20 @@ public class RiceCookerCategory implements IRecipeCategory<RiceCookerCategory.Ri
 
     @Override
     public Component getTitle() {
-        return Component.translatable(SushiContent.Blocks.RICE_COOKER.get().getDescriptionId());
+        return Component.translatable(SushiContent.Blocks.RICE_COOKER.get().asItem().getDescriptionId());
     }
 
     @Override
-    public RecipeType<RiceCookerRecipe> getRecipeType() {
+    public IRecipeType<RiceCookerRecipe> getRecipeType() {
         return SushiRecipeTypes.RICE_COOKER;
     }
-
-    @Override
     public IDrawable getBackground() {
         return guiHelper.createBlankDrawable(80, 56);
     }
+
+    @Override
+    public int getWidth() { return 85; }
+    public int getHeight() { return 56; }
 
     @Override
     public IDrawable getIcon() {
@@ -63,7 +66,7 @@ public class RiceCookerCategory implements IRecipeCategory<RiceCookerCategory.Ri
 
     @Override
     public void setRecipe(IRecipeLayoutBuilder builder, RiceCookerRecipe recipe, IFocusGroup focuses) {
-        builder.addSlot(RecipeIngredientRole.INPUT, 4, 3).addIngredients(Ingredient.of(RiceCookerTile.RICE));
+        builder.addSlot(RecipeIngredientRole.INPUT, 4, 3).addIngredients(Ingredient.of(BuiltInRegistries.ITEM.getOrThrow(RiceCookerTile.RICE)));
         builder.addSlot(RecipeIngredientRole.INPUT, 30, 37).addIngredients(VanillaTypes.ITEM_STACK, JEIModPlugin.FUELS);
         builder.addSlot(RecipeIngredientRole.INPUT, 6, 30).setFluidRenderer(2000, false, 12, 13).setOverlay(smallTank, 0, 0).addIngredient(NeoForgeTypes.FLUID_STACK, new FluidStack(Fluids.WATER, 1000));
 
@@ -71,7 +74,7 @@ public class RiceCookerCategory implements IRecipeCategory<RiceCookerCategory.Ri
     }
 
     @Override
-    public void draw(RiceCookerRecipe recipe, IRecipeSlotsView recipeSlotsView, GuiGraphics guiGraphics, double mouseX, double mouseY) {
+    public void draw(RiceCookerRecipe recipe, IRecipeSlotsView recipeSlotsView, GuiGraphicsExtractor guiGraphics, double mouseX, double mouseY) {
         SlotsScreenAddon.drawAsset(guiGraphics, Minecraft.getInstance().screen, DefaultAssetProvider.DEFAULT_PROVIDER, 4, 3, 0, 0, 1, integer -> Pair.of(0, 0), integer -> ItemStack.EMPTY, true, integer -> new Color(DyeColor.BLUE.getFireworkColor()), integer -> true, 1);
         AssetUtil.drawAsset(guiGraphics, Minecraft.getInstance().screen, DefaultAssetProvider.DEFAULT_PROVIDER.getAsset(AssetTypes.TANK_SMALL), 3, 27);
         AssetUtil.drawAsset(guiGraphics, Minecraft.getInstance().screen, IAssetProvider.getAsset(DefaultAssetProvider.DEFAULT_PROVIDER, AssetTypes.PROGRESS_BAR_BACKGROUND_ARROW_HORIZONTAL), 30, 16);

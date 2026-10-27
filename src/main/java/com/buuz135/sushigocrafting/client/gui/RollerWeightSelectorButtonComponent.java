@@ -16,7 +16,7 @@ import com.hrznstudio.titanium.network.messages.ButtonClickNetworkMessage;
 import com.hrznstudio.titanium.util.AssetUtil;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.client.resources.sounds.SimpleSoundInstance;
@@ -41,14 +41,14 @@ public abstract class RollerWeightSelectorButtonComponent extends BasicScreenAdd
         this.slot = slot;
     }
 
-    public static void drawBackground(GuiGraphics matrixStack, Screen screen, IAssetProvider iAssetProvider, int guiX, int guiY, int posX, int posY) {
+    public static void drawBackground(GuiGraphicsExtractor matrixStack, Screen screen, IAssetProvider iAssetProvider, int guiX, int guiY, int posX, int posY) {
         IAsset asset = iAssetProvider.getAsset(SushiAssetTypes.ROLLER_WEIGHT_PICKER_BG);
         if (asset != null) {
             AssetUtil.drawAsset(matrixStack, screen, asset, guiX + posX, guiY + posY);
         }
     }
 
-    public static void drawForeground(GuiGraphics matrixStack, Screen screen, IAssetProvider iAssetProvider, int guiX, int guiY, int posX, int posY, int weight, int ySize, String type, int slot) {
+    public static void drawForeground(GuiGraphicsExtractor matrixStack, Screen screen, IAssetProvider iAssetProvider, int guiX, int guiY, int posX, int posY, int weight, int ySize, String type, int slot) {
         IAsset asset = iAssetProvider.getAsset(SushiAssetTypes.ROLLER_WEIGHT_PICKER_POINTER);
         if (asset != null && weight != Integer.MIN_VALUE) {
             AssetUtil.drawAsset(matrixStack, screen, asset, posX, posY + (4 - weight) * (ySize / 4) - 1);
@@ -62,12 +62,12 @@ public abstract class RollerWeightSelectorButtonComponent extends BasicScreenAdd
     }
 
     @Override
-    public void drawBackgroundLayer(GuiGraphics guiGraphics, Screen screen, IAssetProvider iAssetProvider, int guiX, int guiY, int mouseX, int mouseY, float v) {
+    public void drawBackgroundLayer(GuiGraphicsExtractor guiGraphics, Screen screen, IAssetProvider iAssetProvider, int guiX, int guiY, int mouseX, int mouseY, float v) {
         drawBackground(guiGraphics, screen, iAssetProvider, guiX, guiY, getPosX(), getPosY());
     }
 
     @Override
-    public void drawForegroundLayer(GuiGraphics guiGraphics, Screen screen, IAssetProvider iAssetProvider, int guiX, int guiY, int mouseX, int mouseY, float v) {
+    public void drawForegroundLayer(GuiGraphicsExtractor guiGraphics, Screen screen, IAssetProvider iAssetProvider, int guiX, int guiY, int mouseX, int mouseY, float v) {
         drawForeground(guiGraphics, screen, iAssetProvider, guiX, guiY, getPosX(), getPosY(), getWeight(), getYSize(), getType(), slot);
     }
 
@@ -95,7 +95,7 @@ public abstract class RollerWeightSelectorButtonComponent extends BasicScreenAdd
     public boolean mouseClicked(double mouseX, double mouseY, int button) {
         Screen screen = Minecraft.getInstance().screen;
         if (screen instanceof AbstractContainerScreen && ((AbstractContainerScreen) screen).getMenu() instanceof ILocatable locatable) {
-            if (!isMouseOver(mouseX - ((AbstractContainerScreen<?>) screen).getGuiLeft(), mouseY - ((AbstractContainerScreen<?>) screen).getGuiTop()))
+            if (!isMouseOver(mouseX , mouseY))
                 return false;
             Minecraft.getInstance().getSoundManager().play(new SimpleSoundInstance(SoundEvents.WOOD_FALL, SoundSource.PLAYERS, 0.5F, 1.0F, Minecraft.getInstance().level.getRandom(), Minecraft.getInstance().player.blockPosition()));
             CompoundTag nbt = new CompoundTag();
@@ -105,11 +105,6 @@ public abstract class RollerWeightSelectorButtonComponent extends BasicScreenAdd
             return true;
         }
         return super.mouseClicked(mouseX, mouseY, button);
-    }
-
-    @Override
-    public boolean isMouseOver(double mouseX, double mouseY) {
-        return mouseX >= this.getPosX() && mouseX <= this.getPosX() + getXSize() && mouseY >= this.getPosY() && mouseY <= this.getPosY() + getYSize();
     }
 
     @Override

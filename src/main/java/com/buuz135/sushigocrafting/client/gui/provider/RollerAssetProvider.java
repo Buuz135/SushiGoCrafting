@@ -6,14 +6,14 @@ import com.hrznstudio.titanium.api.client.IAsset;
 import com.hrznstudio.titanium.api.client.IAssetType;
 import com.hrznstudio.titanium.api.client.assets.types.IBackgroundAsset;
 import com.hrznstudio.titanium.client.screen.asset.IAssetProvider;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 
 import javax.annotation.Nullable;
 import java.awt.*;
 
 public class RollerAssetProvider implements IAssetProvider {
 
-    private static final ResourceLocation TEXTURE = ResourceLocation.fromNamespaceAndPath(SushiGoCrafting.MOD_ID, "textures/gui/roller.png");
+    private static final Identifier TEXTURE = Identifier.fromNamespaceAndPath(SushiGoCrafting.MOD_ID, "textures/gui/roller.png");
     public static RollerAssetProvider INSTANCE = new RollerAssetProvider();
     private final IAsset SLOT = new IAsset() {
         @Override
@@ -21,7 +21,7 @@ public class RollerAssetProvider implements IAssetProvider {
             return new Rectangle(1, 185, 18, 18);
         }
 
-        public ResourceLocation getResourceLocation() {
+        public Identifier getIdentifier() {
             return TEXTURE;
         }
     };
@@ -31,7 +31,7 @@ public class RollerAssetProvider implements IAssetProvider {
             return new Rectangle(1, 223, 4, 18);
         }
 
-        public ResourceLocation getResourceLocation() {
+        public Identifier getIdentifier() {
             return TEXTURE;
         }
     };
@@ -41,7 +41,7 @@ public class RollerAssetProvider implements IAssetProvider {
             return new Rectangle(5, 223, 4, 3);
         }
 
-        public ResourceLocation getResourceLocation() {
+        public Identifier getIdentifier() {
             return TEXTURE;
         }
     };
@@ -51,7 +51,7 @@ public class RollerAssetProvider implements IAssetProvider {
             return new Rectangle(9, 223, 2, 1);
         }
 
-        public ResourceLocation getResourceLocation() {
+        public Identifier getIdentifier() {
             return TEXTURE;
         }
     };
@@ -71,7 +71,7 @@ public class RollerAssetProvider implements IAssetProvider {
             return new Rectangle(0, 0, 176, 184);
         }
 
-        public ResourceLocation getResourceLocation() {
+        public Identifier getIdentifier() {
             return TEXTURE;
         }
     };
@@ -81,7 +81,7 @@ public class RollerAssetProvider implements IAssetProvider {
             return new Rectangle(1, 204, 18, 18);
         }
 
-        public ResourceLocation getResourceLocation() {
+        public Identifier getIdentifier() {
             return TEXTURE;
         }
     };
@@ -91,7 +91,7 @@ public class RollerAssetProvider implements IAssetProvider {
             return new Rectangle(20, 204, 18, 18);
         }
 
-        public ResourceLocation getResourceLocation() {
+        public Identifier getIdentifier() {
             return TEXTURE;
         }
     };

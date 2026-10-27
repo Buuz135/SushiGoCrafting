@@ -5,12 +5,9 @@ import com.hrznstudio.titanium.annotation.plugin.FeaturePlugin;
 import com.hrznstudio.titanium.event.handler.EventManager;
 import com.hrznstudio.titanium.plugin.FeaturePluginInstance;
 import com.hrznstudio.titanium.plugin.PluginPhase;
-import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.item.ItemStack;
-import net.neoforged.neoforge.event.BuildCreativeModeTabContentsEvent;
+import net.minecraft.resources.Identifier;
 import vazkii.patchouli.api.PatchouliAPI;
-import vazkii.patchouli.common.item.PatchouliDataComponents;
+import net.neoforged.neoforge.event.BuildCreativeModeTabContentsEvent;
 
 @FeaturePlugin(value = "patchouli", type = FeaturePlugin.FeaturePluginType.MOD)
 public class PatchouliPlugin implements FeaturePluginInstance {
@@ -20,9 +17,8 @@ public class PatchouliPlugin implements FeaturePluginInstance {
     public void execute(PluginPhase phase) {
         if (phase == PluginPhase.CONSTRUCTION) {
             EventManager.mod(BuildCreativeModeTabContentsEvent.class).process(buildCreativeModeTabContentsEvent -> {
-                if (SushiGoCrafting.TAB.getResourceLocation().equals(buildCreativeModeTabContentsEvent.getTabKey().location())) {
-                    var item = new ItemStack(BuiltInRegistries.ITEM.get(ResourceLocation.fromNamespaceAndPath("patchouli", "guide_book")));
-                    item.set(PatchouliDataComponents.BOOK, ResourceLocation.fromNamespaceAndPath("sushigocrafting", "sushigocrafting"));
+                if (SushiGoCrafting.TAB.getIdentifier().equals(buildCreativeModeTabContentsEvent.getTabKey().identifier())) {
+                    var item = PatchouliAPI.get().getBookStack(Identifier.fromNamespaceAndPath(SushiGoCrafting.MOD_ID, "sushigocrafting"));
                     buildCreativeModeTabContentsEvent.accept(item);
                 }
             }).subscribe();

@@ -2,7 +2,7 @@ package com.buuz135.sushigocrafting.datagen;
 
 import com.buuz135.sushigocrafting.proxy.SushiContent;
 import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.data.DataGenerator;
+import net.minecraft.data.PackOutput;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.item.BlockItem;
 import net.neoforged.neoforge.common.data.LanguageProvider;
@@ -11,8 +11,8 @@ import org.apache.commons.lang3.text.WordUtils;
 
 public class SushiLangProvider extends LanguageProvider {
 
-    public SushiLangProvider(DataGenerator gen, String modid, String locale) {
-        super(gen.getPackOutput(), modid, locale);
+    public SushiLangProvider(PackOutput output, String modid, String locale) {
+        super(output, modid, locale);
     }
 
     @Override
@@ -35,7 +35,7 @@ public class SushiLangProvider extends LanguageProvider {
         add("text.sushigocrafting.increase_level_by", "Increases Level By");
         add("text.sushigocrafting.multiply_time_by", "Multiplies Time By");
         add("text.sushigocrafting.weight", "Weight");
-        add("text.sushigocrafting.consumes", "Consomes");
+        add("text.sushigocrafting.consumes", "Consumes");
         add("text.sushigocrafting.left_click_increase", "Left Click to Increase");
         add("text.sushigocrafting.right_click_decrease", "Right Click to Decrease");
         add("text.sushigocrafting.list_ingredients", "Lists all Sushi Go Crafting Food Ingredients");

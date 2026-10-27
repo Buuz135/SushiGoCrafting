@@ -16,24 +16,28 @@ import com.buuz135.sushigocrafting.proxy.SushiContent;
 import com.hrznstudio.titanium.event.handler.EventManager;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.geom.ModelLayerLocation;
-import net.minecraft.client.renderer.ItemBlockRenderTypes;
-import net.minecraft.client.renderer.RenderType;
-import net.minecraft.client.renderer.entity.player.PlayerRenderer;
-import net.minecraft.client.resources.PlayerSkin;
-import net.minecraft.client.resources.model.BakedModel;
-import net.minecraft.client.resources.model.ModelResourceLocation;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
 import net.neoforged.neoforge.client.event.EntityRenderersEvent;
 import net.neoforged.neoforge.client.event.ModelEvent;
+import net.neoforged.neoforge.client.renderstate.AvatarRenderStateModifier;
+import net.neoforged.neoforge.client.renderstate.RegisterRenderStateModifiersEvent;
+import net.neoforged.neoforge.client.model.standalone.SimpleUnbakedStandaloneModel;
+import net.neoforged.neoforge.client.model.standalone.StandaloneModelKey;
+import net.minecraft.client.renderer.block.dispatch.BlockStateModelPart;
+import net.minecraft.client.renderer.entity.player.AvatarRenderer;
+import net.minecraft.world.entity.player.PlayerModelType;
 import net.neoforged.neoforge.event.entity.player.ItemTooltipEvent;
 
 public class ClientProxy {
-
-    public static BakedModel SALMON_BACK;
-    public static BakedModel TUNA_BACK;
+    public static final StandaloneModelKey<BlockStateModelPart> SALMON_BACK = new StandaloneModelKey<>(() -> "sushigocrafting:salmon_back");
+    public static final StandaloneModelKey<BlockStateModelPart> TUNA_BACK = new StandaloneModelKey<>(() -> "sushigocrafting:tuna_back");
+    public static BlockStateModelPart SALMON_BACK_MODEL;
+    public static BlockStateModelPart TUNA_BACK_MODEL;
+    public static final net.minecraft.util.context.ContextKey<java.util.UUID> BACK_OWNER = new net.minecraft.util.context.ContextKey<>(Identifier.fromNamespaceAndPath(SushiGoCrafting.MOD_ID, "back_owner"));
 
     public static void register() {
         EventManager.mod(EntityRenderersEvent.RegisterRenderers.class).process(event -> {
@@ -43,43 +47,37 @@ public class ClientProxy {
             event.registerBlockEntityRenderer(SushiContent.TileEntities.ROLLER.get(), p_173571_ -> new RollerRenderer());
 
         }).subscribe();
+        EventManager.mod(EntityRenderersEvent.RegisterLayerDefinitions.class).process(event -> {
+            event.registerLayerDefinition(new ModelLayerLocation(Identifier.fromNamespaceAndPath(SushiGoCrafting.MOD_ID, "shrimp"), "main"), ShrimpModel::createBodyLayer);
+        }).subscribe();
         EventManager.mod(EntityRenderersEvent.AddLayers.class).process(event -> {
-            for (PlayerSkin.Model skin : event.getSkins()) {
-                var renderer = event.getSkin(skin);
-                if (renderer instanceof PlayerRenderer playerRenderer) {
-                    playerRenderer.addLayer(new ContributorsBackRender(playerRenderer));
-                }
+            for (PlayerModelType skin : event.getSkins()) {
+                AvatarRenderer renderer = event.getPlayerRenderer(skin);
+                renderer.addLayer(new ContributorsBackRender(renderer));
             }
         }).subscribe();
-        EventManager.mod(EntityRenderersEvent.RegisterLayerDefinitions.class).process(event -> {
-            event.registerLayerDefinition(new ModelLayerLocation(ResourceLocation.fromNamespaceAndPath(SushiGoCrafting.MOD_ID, "shrimp"), "main"), ShrimpModel::createBodyLayer);
-        }).subscribe();
-        EventManager.mod(ModelEvent.RegisterAdditional.class).process(event -> {
-            event.register(ModelResourceLocation.standalone(ResourceLocation.fromNamespaceAndPath(SushiGoCrafting.MOD_ID, "block/salmon_back")));
-            event.register(ModelResourceLocation.standalone(ResourceLocation.fromNamespaceAndPath(SushiGoCrafting.MOD_ID, "block/tuna_back")));
+        EventManager.mod(ModelEvent.RegisterStandalone.class).process(event -> {
+            event.register(SALMON_BACK, SimpleUnbakedStandaloneModel.simpleModelWrapper(Identifier.fromNamespaceAndPath(SushiGoCrafting.MOD_ID, "block/salmon_back")));
+            event.register(TUNA_BACK, SimpleUnbakedStandaloneModel.simpleModelWrapper(Identifier.fromNamespaceAndPath(SushiGoCrafting.MOD_ID, "block/tuna_back")));
         }).subscribe();
         EventManager.mod(ModelEvent.BakingCompleted.class).process(event -> {
-            SALMON_BACK = event.getModels().get(ModelResourceLocation.standalone(ResourceLocation.fromNamespaceAndPath(SushiGoCrafting.MOD_ID, "block/salmon_back")));
-            TUNA_BACK = event.getModels().get(ModelResourceLocation.standalone(ResourceLocation.fromNamespaceAndPath(SushiGoCrafting.MOD_ID, "block/tuna_back")));
+            SALMON_BACK_MODEL = event.getModelManager().getStandaloneModel(SALMON_BACK);
+            TUNA_BACK_MODEL = event.getModelManager().getStandaloneModel(TUNA_BACK);
         }).subscribe();
+        EventManager.mod(RegisterRenderStateModifiersEvent.class).process(event -> event.registerAvatarEntityModifier(new AvatarRenderStateModifier() {
+            @Override
+            public <T extends net.minecraft.world.entity.Avatar & net.minecraft.client.entity.ClientAvatarEntity> void accept(T avatar, net.minecraft.client.renderer.entity.state.AvatarRenderState state) {
+                state.setRenderData(BACK_OWNER, avatar.getUUID());
+            }
+        })).subscribe();
     }
 
     public void fmlClient(FMLClientSetupEvent fml) {
-        ItemBlockRenderTypes.setRenderLayer(SushiContent.Blocks.RICE_CROP.get(), RenderType.cutout());
-        ItemBlockRenderTypes.setRenderLayer(SushiContent.Blocks.CUCUMBER_CROP.get(), RenderType.cutout());
-        ItemBlockRenderTypes.setRenderLayer(SushiContent.Blocks.SOY_CROP.get(), RenderType.cutout());
-        ItemBlockRenderTypes.setRenderLayer(SushiContent.Blocks.WASABI_CROP.get(), RenderType.cutout());
-        ItemBlockRenderTypes.setRenderLayer(SushiContent.Blocks.AVOCADO_LEAVES_LOG.get(), RenderType.cutout());
-        ItemBlockRenderTypes.setRenderLayer(SushiContent.Blocks.AVOCADO_LEAVES.get(), RenderType.cutout());
-        ItemBlockRenderTypes.setRenderLayer(SushiContent.Blocks.AVOCADO_SAPLING.get(), RenderType.cutout());
-        //ItemBlockRenderTypes.setRenderLayer(SushiContent.Blocks.SEAWEED.get(), RenderType.cutout());
-        //ItemBlockRenderTypes.setRenderLayer(SushiContent.Blocks.SEAWEED_PLANT.get(), RenderType.cutout());
-        ItemBlockRenderTypes.setRenderLayer(SushiContent.Blocks.SESAME_CROP.get(), RenderType.cutout());
         EventManager.forge(ItemTooltipEvent.class).process(event -> {
             IFoodIngredient ingredient = FoodAPI.get().getIngredientFromItem(event.getItemStack().getItem());
             if (!ingredient.isEmpty() && ingredient.getEffect() != null) {
                 event.getToolTip().add(Component.literal(""));
-                if (Screen.hasShiftDown()) {
+                if (Minecraft.getInstance().hasShiftDown()) {
                     IIngredientEffect effect = ingredient.getEffect();
                     if (effect instanceof AddIngredientEffect) {
                         event.getToolTip().add(Component.literal("" + ChatFormatting.DARK_AQUA + Component.translatable("text.sushigocrafting.add_food_effect").getString() + ":"));
