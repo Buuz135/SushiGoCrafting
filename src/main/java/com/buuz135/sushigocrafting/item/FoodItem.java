@@ -100,16 +100,16 @@ public class FoodItem extends SushiItem {
     }
 
     @Override
-    public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltip, TooltipFlag tooltipFlag) {
-        super.appendHoverText(stack, context, tooltip, tooltipFlag);
-        tooltip.add(Component.literal("" + ChatFormatting.GRAY + Component.translatable("itemGroup.ingredients").getString() + ": "));
+    public void appendHoverText(ItemStack stack, TooltipContext context, TooltipDisplay display, Consumer<Component> tooltipComponents, TooltipFlag tooltipFlag) {
+        super.appendHoverText(stack, context, display, tooltipComponents, tooltipFlag);
+        tooltipComponents.accept(Component.literal("" + ChatFormatting.GRAY + Component.translatable("itemGroup.ingredients").getString() + ": "));
         for (int i = 0; i < ingredientList.size(); i++) {
             if (!ingredientList.get(i).isEmpty()) {
                 String line = ChatFormatting.GRAY + " - " + Component.translatable(ingredientList.get(i).getItem().getDescriptionId()).getString();
                 if (stack.has(SushiDataComponent.FOOD_WEIGHTS.get())) {
                     line += " " + getWeightText(stack.get(SushiDataComponent.FOOD_WEIGHTS.get()).get(i));
                 }
-                tooltip.accept(Component.literal(line));
+                tooltipComponents.accept(Component.literal(line));
             }
         }
         if (stack.has(SushiDataComponent.FOOD_SPICES.get())) {
@@ -117,26 +117,26 @@ public class FoodItem extends SushiItem {
             for (String name : compoundNBT.keySet()) {
                 IFoodIngredient foodIngredient = FoodAPI.get().getIngredientFromName(name);
                 if (!foodIngredient.isEmpty())
-                    tooltip.accept(Component.literal(ChatFormatting.GRAY + " - " + Component.translatable(foodIngredient.getItem().getDescriptionId()).getString()));
+                    tooltipComponents.accept(Component.literal(ChatFormatting.GRAY + " - " + Component.translatable(foodIngredient.getItem().getDescriptionId()).getString()));
             }
         }
         boolean hasShift = Minecraft.getInstance().hasShiftDown();
         boolean hasAlt = Minecraft.getInstance().hasAltDown();
         //hasShift = hasAlt = true;
         Info info = new Info(stack, hasShift);
-        getTagsFrom(info.getNegative(), info.getPositive()).forEach(tooltip);
-        tooltip.accept(Component.literal(""));
+        getTagsFrom(info.getNegative(), info.getPositive()).forEach(tooltipComponents);
+        tooltipComponents.accept(Component.literal(""));
         if (hasShift) {
             if (info.getEffectInstances().size() > 0) {
-                tooltip.add(Component.literal("" + ChatFormatting.DARK_AQUA + Component.translatable("text.sushigocrafting.effects").getString() + ":"));
+                tooltipComponents.accept(Component.literal("" + ChatFormatting.DARK_AQUA + Component.translatable("text.sushigocrafting.effects").getString() + ":"));
                 if (hasAlt) {
-                    tooltip.add(Component.literal(ChatFormatting.YELLOW + " - " + ChatFormatting.GOLD + Component.translatable("text.sushigocrafting.hunger").getString() + ": " + ChatFormatting.WHITE + (int) info.getHunger()));
-                    tooltip.add(Component.literal(ChatFormatting.YELLOW + " - " + ChatFormatting.GOLD + Component.translatable("text.sushigocrafting.saturation").getString() + ": " + ChatFormatting.WHITE + info.getSaturation()));
+                    tooltipComponents.accept(Component.literal(ChatFormatting.YELLOW + " - " + ChatFormatting.GOLD + Component.translatable("text.sushigocrafting.hunger").getString() + ": " + ChatFormatting.WHITE + (int) info.getHunger()));
+                    tooltipComponents.accept(Component.literal(ChatFormatting.YELLOW + " - " + ChatFormatting.GOLD + Component.translatable("text.sushigocrafting.saturation").getString() + ": " + ChatFormatting.WHITE + info.getSaturation()));
                 }
-                info.getEffectInstances().forEach(effectInstance -> tooltip.accept(Component.literal(ChatFormatting.YELLOW + " - " + ChatFormatting.GOLD + Component.translatable(effectInstance.getDescriptionId()).getString() + ChatFormatting.DARK_AQUA + " (" + ChatFormatting.WHITE + effectInstance.getDuration() / 20 + ChatFormatting.YELLOW + "s" + ChatFormatting.DARK_AQUA + ", " + ChatFormatting.YELLOW + "Level " + ChatFormatting.WHITE + (effectInstance.getAmplifier() + 1) + ChatFormatting.DARK_AQUA + ")")));
+                info.getEffectInstances().forEach(effectInstance -> tooltipComponents.accept(Component.literal(ChatFormatting.YELLOW + " - " + ChatFormatting.GOLD + Component.translatable(effectInstance.getDescriptionId()).getString() + ChatFormatting.DARK_AQUA + " (" + ChatFormatting.WHITE + effectInstance.getDuration() / 20 + ChatFormatting.YELLOW + "s" + ChatFormatting.DARK_AQUA + ", " + ChatFormatting.YELLOW + "Level " + ChatFormatting.WHITE + (effectInstance.getAmplifier() + 1) + ChatFormatting.DARK_AQUA + ")")));
             }
         } else {
-            tooltip.add(Component.literal(ChatFormatting.YELLOW + "" + Component.translatable("text.sushigocrafting.hold").getString() + ChatFormatting.GOLD + " " + ChatFormatting.ITALIC + "<" + Component.translatable("key.keyboard.left.shift").getString() + ">" + ChatFormatting.RESET + ChatFormatting.YELLOW + Component.translatable("text.sushigocrafting.sushi_effect").getString()));
+            tooltipComponents.accept(Component.literal(ChatFormatting.YELLOW + "" + Component.translatable("text.sushigocrafting.hold").getString() + ChatFormatting.GOLD + " " + ChatFormatting.ITALIC + "<" + Component.translatable("key.keyboard.left.shift").getString() + ">" + ChatFormatting.RESET + ChatFormatting.YELLOW + Component.translatable("text.sushigocrafting.sushi_effect").getString()));
         }
     }
 

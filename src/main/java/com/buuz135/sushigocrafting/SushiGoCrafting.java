@@ -117,7 +117,7 @@ public class SushiGoCrafting extends ModuleController {
             LOGGER.catching(e);
         }
         //EventManager.forge(ItemTooltipEvent.class).process(itemTooltipEvent -> {
-        //    itemTooltipEvent.getToolTip().addAll(itemTooltipEvent.getItemStack().getItem().getTags().stream().map(resourceLocation -> new StringTextComponent(resourceLocation.toString())).collect(Collectors.toList()));
+        //    itemTooltipEvent.getToolTip().addAll(itemTooltipEvent.getItemStack().getItem().getTags().stream().map(resourceLocation -> new StringTextComponent(Identifier.toString())).collect(Collectors.toList()));
         //}).subscribe();
         EventManager.mod(RegisterSpawnPlacementsEvent.class).process(event -> {
             event.register(SushiContent.EntityTypes.SHRIMP.get(), SpawnPlacementTypes.IN_WATER, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, AbstractFish::checkMobSpawnRules, RegisterSpawnPlacementsEvent.Operation.OR);

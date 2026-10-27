@@ -117,10 +117,11 @@ public class RiceCookerTile extends ActiveTile<RiceCookerTile> {
 
     public boolean canStart() {
         if (burnTime < 1 && !this.fuel.getStackInSlot(0).isEmpty()) {
-            this.burnTime += this.fuel.getStackInSlot(0).getBurnTime(RecipeType.SMELTING) / 200D;
+            this.burnTime += this.fuel.getStackInSlot(0).getBurnTime(RecipeType.SMELTING, level.fuelValues()) / 200D;
             var stack = this.fuel.getStackInSlot(0);
-            if (stack.hasCraftingRemainingItem()) {
-                this.fuel.setStackInSlot(0, stack.getCraftingRemainingItem());
+            var remainder = stack.getCraftingRemainder();
+            if (remainder != null) {
+                this.fuel.setStackInSlot(0, remainder.create());
             } else {
                 this.fuel.getStackInSlot(0).shrink(1);
             }

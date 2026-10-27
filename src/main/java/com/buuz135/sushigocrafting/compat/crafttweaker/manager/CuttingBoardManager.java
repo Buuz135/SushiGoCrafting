@@ -19,7 +19,7 @@ public class CuttingBoardManager implements IRecipeManager<CuttingBoardRecipe> {
     @ZenCodeType.Method
     public void addRecipe(String name, IIngredient input, String foodOutput) {
         name = fixRecipeName(name);
-        CraftTweakerAPI.apply(new ActionAddRecipe<>(this, new RecipeHolder<>(ResourceLocation.fromNamespaceAndPath("crafttweaker", name), new CuttingBoardRecipe(input.asVanillaIngredient(), foodOutput))));
+        CraftTweakerAPI.apply(new ActionAddRecipe<>(this, new RecipeHolder<>(Identifier.fromNamespaceAndPath("crafttweaker", name), new CuttingBoardRecipe(input.asVanillaIngredient(), foodOutput))));
     }
 
     @Override
