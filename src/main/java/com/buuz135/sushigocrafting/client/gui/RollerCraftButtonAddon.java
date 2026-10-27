@@ -51,7 +51,7 @@ public class RollerCraftButtonAddon extends BasicButtonAddon {
     public boolean mouseClicked(double mouseX, double mouseY, int button) {
         Screen screen = Minecraft.getInstance().screen;
         if (screen instanceof AbstractContainerScreen && ((AbstractContainerScreen) screen).getMenu() instanceof ILocatable locatable) {
-            if (!isMouseOver(mouseX - ((AbstractContainerScreen<?>) screen).getGuiLeft(), mouseY - ((AbstractContainerScreen<?>) screen).getGuiTop()))
+            if (!isMouseOver(mouseX, mouseY))
                 return false;
             Minecraft.getInstance().getSoundManager().play(new SimpleSoundInstance(SoundEvents.UI_BUTTON_CLICK.value(), SoundSource.PLAYERS, 0.2F, 1.0F, Minecraft.getInstance().level.getRandom(), Minecraft.getInstance().player.blockPosition()));
             CompoundTag nbt = new CompoundTag();

@@ -95,7 +95,7 @@ public abstract class RollerWeightSelectorButtonComponent extends BasicScreenAdd
     public boolean mouseClicked(double mouseX, double mouseY, int button) {
         Screen screen = Minecraft.getInstance().screen;
         if (screen instanceof AbstractContainerScreen && ((AbstractContainerScreen) screen).getMenu() instanceof ILocatable locatable) {
-            if (!isMouseOver(mouseX - ((AbstractContainerScreen<?>) screen).getGuiLeft(), mouseY - ((AbstractContainerScreen<?>) screen).getGuiTop()))
+            if (!isMouseOver(mouseX , mouseY))
                 return false;
             Minecraft.getInstance().getSoundManager().play(new SimpleSoundInstance(SoundEvents.WOOD_FALL, SoundSource.PLAYERS, 0.5F, 1.0F, Minecraft.getInstance().level.getRandom(), Minecraft.getInstance().player.blockPosition()));
             CompoundTag nbt = new CompoundTag();
@@ -105,11 +105,6 @@ public abstract class RollerWeightSelectorButtonComponent extends BasicScreenAdd
             return true;
         }
         return super.mouseClicked(mouseX, mouseY, button);
-    }
-
-    @Override
-    public boolean isMouseOver(double mouseX, double mouseY) {
-        return mouseX >= this.getPosX() && mouseX <= this.getPosX() + getXSize() && mouseY >= this.getPosY() && mouseY <= this.getPosY() + getYSize();
     }
 
     @Override
