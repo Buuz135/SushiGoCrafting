@@ -15,8 +15,10 @@ import mezz.jei.api.registration.IRecipeCategoryRegistration;
 import mezz.jei.api.registration.IRecipeRegistration;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.RecipeHolder;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.block.entity.FurnaceBlockEntity;
 import net.neoforged.neoforge.registries.DeferredHolder;
@@ -41,15 +43,19 @@ public class JEIModPlugin implements IModPlugin {
         registry.addRecipeCategories(this.rollerCategory = new RollerCategory(registry.getJeiHelpers().getGuiHelper()));
         registry.addRecipeCategories(this.riceCookerCategory = new RiceCookerCategory(registry.getJeiHelpers().getGuiHelper()));
         registry.addRecipeCategories(this.fermentationBarrelCategory = new FermentationBarrelCategory(registry.getJeiHelpers().getGuiHelper()));
-        FUELS = BuiltInRegistries.ITEM.stream().filter(item -> FurnaceBlockEntity.isFuel(new ItemStack(item))).map(ItemStack::new).collect(Collectors.toList());
+        FUELS = BuiltInRegistries.ITEM.stream().filter(item -> Minecraft.getInstance().level.fuelValues().burnDuration(new ItemStack(item)) > 0).map(ItemStack::new).collect(Collectors.toList());
     }
 
     @Override
     public void registerRecipes(IRecipeRegistration registration) {
         registration.addRecipes(SushiRecipeTypes.RICE_COOKER, List.of(new RiceCookerCategory.RiceCookerRecipe()));
-        registration.addRecipes(SushiRecipeTypes.CUTTING_BOARD, RecipeUtil.getRecipes(Minecraft.getInstance().level, (RecipeType<CuttingBoardRecipe>) SushiContent.RecipeTypes.CUTTING_BOARD.get()));
         registration.addRecipes(SushiRecipeTypes.ROLLER, FoodHelper.REGISTERED.values().stream().flatMap(Collection::stream).map(DeferredHolder::get).map(item -> (FoodItem) item).map(RollerCategory.Recipe::new).collect(Collectors.toList()));
-        registration.addRecipes(SushiRecipeTypes.FERMENTING_BARREL, RecipeUtil.getRecipes(Minecraft.getInstance().level, (RecipeType<FermentingBarrelRecipe>) SushiContent.RecipeTypes.FERMENTING_BARREL.get()));
+        MinecraftServer server = Minecraft.getInstance().getSingleplayerServer();
+        if (server != null) {
+            registration.addRecipes(SushiRecipeTypes.FERMENTING_BARREL, server.getRecipeManager().recipeMap().byType(SushiContent.RecipeTypes.FERMENTING_BARREL.get()).stream().map(RecipeHolder::value).toList());
+            registration.addRecipes(SushiRecipeTypes.CUTTING_BOARD, server.getRecipeManager().recipeMap().byType(SushiContent.RecipeTypes.CUTTING_BOARD.get()).stream().map(RecipeHolder::value).toList());
+
+        }
     }
 
     @Override
@@ -61,7 +67,7 @@ public class JEIModPlugin implements IModPlugin {
     }
 
     @Override
-    public ResourceLocation getPluginUid() {
-        return ResourceLocation.fromNamespaceAndPath(SushiGoCrafting.MOD_ID, "default");
+    public Identifier getPluginUid() {
+        return Identifier.fromNamespaceAndPath(SushiGoCrafting.MOD_ID, "default");
     }
 }

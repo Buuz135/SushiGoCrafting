@@ -24,15 +24,12 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.Containers;
 import net.minecraft.world.InteractionHand;
-import net.minecraft.world.ItemInteractionResult;
+import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.state.BlockState;
-import net.neoforged.api.distmarker.Dist;
-import net.neoforged.api.distmarker.OnlyIn;
-import net.neoforged.neoforge.common.util.INBTSerializable;
 import net.neoforged.neoforge.items.ItemHandlerHelper;
 
 import java.util.ArrayList;
@@ -98,7 +95,6 @@ public class RollerTile extends ActiveTile<RollerTile> {
         });
     }
 
-    @OnlyIn(Dist.CLIENT)
     @Override
     public void initClient() {
         super.initClient();
@@ -132,18 +128,18 @@ public class RollerTile extends ActiveTile<RollerTile> {
     }
 
     @Override
-    public ItemInteractionResult onActivated(Player player, InteractionHand hand, Direction facing, double hitX, double hitY, double hitZ) {
-        ItemInteractionResult type = super.onActivated(player, hand, facing, hitX, hitY, hitZ);
-        if (!type.result().shouldSwing()) {
+    public InteractionResult onActivated(Player player, InteractionHand hand, Direction facing, double hitX, double hitY, double hitZ) {
+        InteractionResult type = super.onActivated(player, hand, facing, hitX, hitY, hitZ);
+        if (!type.consumesAction()) {
             if (!player.hasData(SushiContent.AttachmentTypes.SUSHI_WEIGHT_DISCOVERY)) {
                 player.setData(SushiContent.AttachmentTypes.SUSHI_WEIGHT_DISCOVERY, new SushiWeightDiscoveryCapability());
             }
             var data = player.getData(SushiContent.AttachmentTypes.SUSHI_WEIGHT_DISCOVERY);
             if (player instanceof ServerPlayer) {
-                data.requestUpdate((ServerPlayer) player, new ItemStack(Items.STONE), null);
+                data.requestUpdate((ServerPlayer) player, new ItemStack(Items.STONE));
             }
             openGui(player);
-            return ItemInteractionResult.SUCCESS;
+            return InteractionResult.SUCCESS;
         }
         return type;
     }
@@ -194,7 +190,7 @@ public class RollerTile extends ActiveTile<RollerTile> {
                                     }
                                 }
                             }
-                            stack.set(SushiDataComponent.FOOD_WEIGHTS, weightValues);
+                            stack.set(SushiDataComponent.FOOD_WEIGHTS.get(), weightValues);
                             CompoundTag spicesNBT = new CompoundTag();
                             for (int i = 0; i < spices.getSlots(); i++) {
                                 if (!spices.getStackInSlot(i).isEmpty()) {
@@ -205,11 +201,11 @@ public class RollerTile extends ActiveTile<RollerTile> {
                                     }
                                 }
                             }
-                            stack.set(SushiDataComponent.FOOD_SPICES, spicesNBT);
+                            stack.set(SushiDataComponent.FOOD_SPICES.get(), spicesNBT);
                             Containers.dropItemStack(this.level, this.worldPosition.getX(), this.getBlockPos().getY(), this.getBlockPos().getZ(), stack);
                         }
                         if (player instanceof ServerPlayer && !discovery.get().isEmpty()) {
-                            player.getData(SushiContent.AttachmentTypes.SUSHI_WEIGHT_DISCOVERY).requestUpdate((ServerPlayer) player, discovery.get(), null);
+                            player.getData(SushiContent.AttachmentTypes.SUSHI_WEIGHT_DISCOVERY).requestUpdate((ServerPlayer) player, discovery.get());
                         }
                         markForUpdate();
                     }
@@ -222,7 +218,8 @@ public class RollerTile extends ActiveTile<RollerTile> {
     public void handleButtonMessage(int id, Player playerEntity, CompoundTag compound) {
         super.handleButtonMessage(id, playerEntity, compound);
         if (compound.contains("Type")) {
-            FoodAPI.get().getTypeFromName(compound.getString("Type")).ifPresent(iFoodType -> {
+            String selectedType = compound.getStringOr("Type", "");
+            FoodAPI.get().getTypeFromName(selectedType).ifPresent(iFoodType -> {
                 slots.setSlotPosition(iFoodType.getSlotPosition());
                 for (int i1 = 0; i1 < slots.getSlots(); i1++) {
                     if (i1 < iFoodType.getFoodIngredients().size()) {
@@ -234,7 +231,8 @@ public class RollerTile extends ActiveTile<RollerTile> {
                         ItemHandlerHelper.giveItemToPlayer(playerEntity, slotStack);
                     }
                 }
-                this.selected = compound.getString("Type");
+                this.selected = selectedType;
+                syncObject(this.selected);
                 for (int i = 0; i < slots.getSlots(); i++) {
                     slots.setSlotToItemStackRender(i, iFoodType.getSlotStackRender().apply(i));
                 }
@@ -250,8 +248,8 @@ public class RollerTile extends ActiveTile<RollerTile> {
             });
         }
         if (id == 100) {
-            int weight = compound.getInt("WeightSlot");
-            int button = compound.getInt("Button");
+            int weight = compound.getIntOr("WeightSlot", 0);
+            int button = compound.getIntOr("Button", 0);
             if (button == 0) {
                 weightTracker.weights.set(weight, Math.min(4, weightTracker.weights.get(weight) + 1));
             }
@@ -263,7 +261,7 @@ public class RollerTile extends ActiveTile<RollerTile> {
         if (id == 101) {
             int amount = 1;
             if (compound.contains("Button")) {
-                amount = compound.getInt("Button") == 1 ? 64 : 1;
+                amount = compound.getIntOr("Button", 0) == 1 ? 64 : 1;
             }
             for (int i = 0; i < amount; i++) {
                 this.craftProgress = 4;
@@ -294,7 +292,7 @@ public class RollerTile extends ActiveTile<RollerTile> {
         return spices;
     }
 
-    public class WeightTracker implements INBTSerializable<CompoundTag> {
+    public class WeightTracker implements com.hrznstudio.titanium.nbthandler.INBTSerializable<CompoundTag> {
 
         private List<Integer> weights;
 
@@ -305,17 +303,15 @@ public class RollerTile extends ActiveTile<RollerTile> {
             }
         }
 
-        @Override
         public CompoundTag serializeNBT(HolderLookup.Provider provider) {
             CompoundTag compoundNBT = new CompoundTag();
-            compoundNBT.putIntArray("Weights", weights);
+            compoundNBT.putIntArray("Weights", weights.stream().mapToInt(Integer::intValue).toArray());
             return compoundNBT;
         }
 
-        @Override
         public void deserializeNBT(HolderLookup.Provider provider, CompoundTag nbt) {
             weights = new ArrayList<>();
-            for (int i : nbt.getIntArray("Weights")) {
+            for (int i : nbt.getIntArray("Weights").orElseThrow()) {
                 weights.add(i);
             }
         }

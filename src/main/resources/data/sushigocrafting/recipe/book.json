@@ -7,15 +7,9 @@
   ],
   "type": "minecraft:crafting_shapeless",
   "ingredients": [
-    {
-      "item": "minecraft:book"
-    },
-    {
-      "item": "minecraft:kelp"
-    },
-    {
-      "item": "minecraft:kelp"
-    }
+    "minecraft:book",
+    "minecraft:kelp",
+    "minecraft:kelp"
   ],
   "result": {
     "id": "patchouli:guide_book",

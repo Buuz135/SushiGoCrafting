@@ -16,7 +16,7 @@ public class SushiDataMapProvider extends DataMapProvider {
     }
 
     @Override
-    protected void gather() {
+    protected void gather(HolderLookup.Provider provider) {
         builder(NeoForgeDataMaps.COMPOSTABLES)
                 .add(SushiContent.Items.RICE_SEEDS.getId(), new Compostable(0.3f), false)
                 .add(SushiContent.Items.CUCUMBER_SEEDS.getId(), new Compostable(0.3f), false)

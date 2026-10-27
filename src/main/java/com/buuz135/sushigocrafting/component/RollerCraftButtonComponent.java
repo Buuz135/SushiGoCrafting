@@ -2,7 +2,6 @@ package com.buuz135.sushigocrafting.component;
 
 import com.buuz135.sushigocrafting.client.gui.RollerCraftButtonAddon;
 import com.hrznstudio.titanium.api.IFactory;
-import com.hrznstudio.titanium.api.client.IScreenAddon;
 import com.hrznstudio.titanium.component.button.ButtonComponent;
 
 import java.util.Collections;
@@ -15,8 +14,8 @@ public class RollerCraftButtonComponent extends ButtonComponent {
     }
 
     @Override
-    public List<IFactory<? extends IScreenAddon>> getScreenAddons() {
-        return Collections.singletonList(() -> new RollerCraftButtonAddon(this));
+    public List<IFactory<?>> getScreenAddons() {
+        return Collections.<IFactory<?>>singletonList(() -> new RollerCraftButtonAddon(this));
     }
 
 }

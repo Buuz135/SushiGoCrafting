@@ -1,3 +1,7 @@
+# 0.6.7
+
+* Port to 26.1.2 - TheOnlyTazz
+
 # 0.6.6
 
 * Fix translation and typo correction - #62 loulou2444 closes #60

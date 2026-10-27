@@ -19,8 +19,8 @@ public class ItemAmountLootModifier extends LootModifier {
             inst -> codecStart(inst)
                     .apply(inst, ItemAmountLootModifier::new));
 
-    public ItemAmountLootModifier(LootItemCondition[] conditionsIn) {
-        super(conditionsIn);
+    public ItemAmountLootModifier(LootItemCondition[] conditionsIn, int priority) {
+        super(conditionsIn, priority);
     }
 
     @Nonnull

@@ -1,22 +1,10 @@
 {
-  "neoforge:conditions": [
-    {
-      "type": "neoforge:item_exists",
-      "item": "sushigocrafting:cooler_box"
-    }
-  ],
   "type": "minecraft:crafting_shaped",
   "category": "misc",
   "key": {
-    "F": {
-      "tag": "c:chests"
-    },
-    "G": {
-      "item": "minecraft:iron_trapdoor"
-    },
-    "I": {
-      "item": "minecraft:snow_block"
-    }
+    "F": "#c:chests",
+    "G": "minecraft:iron_trapdoor",
+    "I": "minecraft:snow_block"
   },
   "pattern": [
     "IGI",
@@ -24,7 +12,6 @@
     "III"
   ],
   "result": {
-    "count": 1,
     "id": "sushigocrafting:cooler_box"
   }
 }

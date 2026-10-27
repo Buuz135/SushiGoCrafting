@@ -15,10 +15,10 @@ import mezz.jei.api.helpers.IGuiHelper;
 import mezz.jei.api.neoforge.NeoForgeTypes;
 import mezz.jei.api.recipe.IFocusGroup;
 import mezz.jei.api.recipe.RecipeIngredientRole;
-import mezz.jei.api.recipe.RecipeType;
+import mezz.jei.api.recipe.types.IRecipeType;
 import mezz.jei.api.recipe.category.IRecipeCategory;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.ItemStack;
@@ -36,19 +36,21 @@ public class FermentationBarrelCategory implements IRecipeCategory<FermentingBar
     }
 
     @Override
-    public RecipeType<FermentingBarrelRecipe> getRecipeType() {
+    public IRecipeType<FermentingBarrelRecipe> getRecipeType() {
         return SushiRecipeTypes.FERMENTING_BARREL;
     }
 
     @Override
     public Component getTitle() {
-        return Component.translatable(SushiContent.Blocks.FERMENTATION_BARREL.get().getDescriptionId());
+        return Component.translatable(SushiContent.Blocks.FERMENTATION_BARREL.get().asItem().getDescriptionId());
     }
-
-    @Override
     public IDrawable getBackground() {
         return guiHelper.createBlankDrawable(101, 47);
     }
+
+    @Override
+    public int getWidth() { return 101; }
+    public int getHeight() { return 47; }
 
     @Override
     public IDrawable getIcon() {
@@ -57,14 +59,14 @@ public class FermentationBarrelCategory implements IRecipeCategory<FermentingBar
 
     @Override
     public void setRecipe(IRecipeLayoutBuilder builder, FermentingBarrelRecipe recipe, IFocusGroup focuses) {
-        builder.addSlot(RecipeIngredientRole.INPUT, 4, 16).addIngredients(recipe.getInput());
+        recipe.getInput().ifPresent(input -> builder.addSlot(RecipeIngredientRole.INPUT, 4, 16).addIngredients(input));
         builder.addSlot(RecipeIngredientRole.INPUT, 26 + 3, 15 + 3).setFluidRenderer(1000, false, 12, 13).setOverlay(smallTank, 0, 0).addIngredient(NeoForgeTypes.FLUID_STACK, recipe.getFluid());
 
         builder.addSlot(RecipeIngredientRole.OUTPUT, 81, 16).addIngredient(VanillaTypes.ITEM_STACK, recipe.getOutput());
     }
 
     @Override
-    public void draw(FermentingBarrelRecipe recipe, IRecipeSlotsView recipeSlotsView, GuiGraphics stack, double mouseX, double mouseY) {
+    public void draw(FermentingBarrelRecipe recipe, IRecipeSlotsView recipeSlotsView, GuiGraphicsExtractor stack, double mouseX, double mouseY) {
         SlotsScreenAddon.drawAsset(stack, Minecraft.getInstance().screen, DefaultAssetProvider.DEFAULT_PROVIDER, 4, 16, 0, 0, 1, integer -> Pair.of(0, 0), integer -> ItemStack.EMPTY, true, integer -> new Color(DyeColor.BLUE.getFireworkColor()), integer -> true, 1);
         AssetUtil.drawAsset(stack, Minecraft.getInstance().screen, DefaultAssetProvider.DEFAULT_PROVIDER.getAsset(AssetTypes.TANK_SMALL), 26, 15);
         AssetUtil.drawAsset(stack, Minecraft.getInstance().screen, IAssetProvider.getAsset(DefaultAssetProvider.DEFAULT_PROVIDER, AssetTypes.PROGRESS_BAR_BACKGROUND_ARROW_HORIZONTAL), 51, 16);

@@ -10,10 +10,10 @@ import com.hrznstudio.titanium.component.progress.ProgressBarComponent;
 import com.hrznstudio.titanium.util.TagUtil;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.InteractionHand;
-import net.minecraft.world.ItemInteractionResult;
+import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.Item;
@@ -21,13 +21,15 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.Fluids;
-import net.neoforged.neoforge.fluids.capability.IFluidHandler;
+import net.neoforged.neoforge.fluids.FluidStack;
+import net.neoforged.neoforge.transfer.fluid.FluidResource;
+import net.neoforged.neoforge.transfer.transaction.Transaction;
 
 import javax.annotation.Nonnull;
 
 public class RiceCookerTile extends ActiveTile<RiceCookerTile> {
 
-    public static TagKey<Item> RICE = TagUtil.getItemTag(ResourceLocation.fromNamespaceAndPath("c", "crops/rice"));
+    public static TagKey<Item> RICE = TagUtil.getItemTag(Identifier.fromNamespaceAndPath("c", "crops/rice"));
 
     @Save
     private final InventoryComponent<RiceCookerTile> input;
@@ -70,7 +72,12 @@ public class RiceCookerTile extends ActiveTile<RiceCookerTile> {
                     for (int i = 0; i < this.input.getSlots(); i++) {
                         this.input.setStackInSlot(i, ItemStack.EMPTY);
                     }
-                    this.water.drainForced(1000, IFluidHandler.FluidAction.EXECUTE);
+                    try (Transaction transaction = Transaction.openRoot()) {
+                        if (this.water.extractForced(FluidResource.of(Fluids.WATER), 1000, transaction) != 1000) {
+                            throw new IllegalStateException("Rice cooker has insufficient water");
+                        }
+                        transaction.commit();
+                    }
                     --this.burnTime;
                     syncObject(this.bar);
                     setChanged();
@@ -80,15 +87,16 @@ public class RiceCookerTile extends ActiveTile<RiceCookerTile> {
                 .setSlotLimit(1)
                 .setInputFilter((stack, integer) -> false)
                 .setOutputFilter((stack, integer) -> true));
-        addTank(this.water = (FluidTankComponent<RiceCookerTile>) new FluidTankComponent<RiceCookerTile>("water", 8000, 68, 27)
-                .setTankAction(FluidTankComponent.Action.FILL)
-                .setTankType(FluidTankComponent.Type.SMALL)
-                .setValidator(fluidStack -> fluidStack.getFluid().isSame(Fluids.WATER))
-        );
+        addTank(this.water = new FluidTankComponent<RiceCookerTile>("water", 8000, 68, 27) {
+            @Override
+            public boolean isFluidValid(FluidStack stack) {
+                return stack.is(Fluids.WATER);
+            }
+        }.setTankAction(FluidTankComponent.Action.FILL).setTankType(FluidTankComponent.Type.SMALL));
         addInventory(this.fuel = new InventoryComponent<RiceCookerTile>("fuel", 69, 67, 1)
                 .setSlotToColorRender(0, DyeColor.RED)
                 .setSlotLimit(64)
-                .setInputFilter((stack, integer) -> stack.getBurnTime(RecipeType.SMELTING) > 0));
+                .setInputFilter((stack, integer) -> stack.getBurnTime(RecipeType.SMELTING, level.fuelValues()) > 0));
     }
 
     @Nonnull
@@ -98,21 +106,22 @@ public class RiceCookerTile extends ActiveTile<RiceCookerTile> {
     }
 
     @Override
-    public ItemInteractionResult onActivated(Player player, InteractionHand hand, Direction facing, double hitX, double hitY, double hitZ) {
-        ItemInteractionResult type = super.onActivated(player, hand, facing, hitX, hitY, hitZ);
-        if (!type.result().shouldSwing()) {
+    public InteractionResult onActivated(Player player, InteractionHand hand, Direction facing, double hitX, double hitY, double hitZ) {
+        InteractionResult type = super.onActivated(player, hand, facing, hitX, hitY, hitZ);
+        if (!type.consumesAction()) {
             openGui(player);
-            return ItemInteractionResult.SUCCESS;
+            return InteractionResult.SUCCESS;
         }
         return type;
     }
 
     public boolean canStart() {
         if (burnTime < 1 && !this.fuel.getStackInSlot(0).isEmpty()) {
-            this.burnTime += this.fuel.getStackInSlot(0).getBurnTime(RecipeType.SMELTING) / 200D;
+            this.burnTime += this.fuel.getStackInSlot(0).getBurnTime(RecipeType.SMELTING, level.fuelValues()) / 200D;
             var stack = this.fuel.getStackInSlot(0);
-            if (stack.hasCraftingRemainingItem()) {
-                this.fuel.setStackInSlot(0, stack.getCraftingRemainingItem());
+            var remainder = stack.getCraftingRemainder();
+            if (remainder != null) {
+                this.fuel.setStackInSlot(0, remainder.create());
             } else {
                 this.fuel.getStackInSlot(0).shrink(1);
             }

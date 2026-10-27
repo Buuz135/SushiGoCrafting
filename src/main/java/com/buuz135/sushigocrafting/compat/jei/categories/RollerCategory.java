@@ -13,12 +13,12 @@ import mezz.jei.api.gui.ingredient.IRecipeSlotsView;
 import mezz.jei.api.helpers.IGuiHelper;
 import mezz.jei.api.recipe.IFocusGroup;
 import mezz.jei.api.recipe.RecipeIngredientRole;
-import mezz.jei.api.recipe.RecipeType;
+import mezz.jei.api.recipe.types.IRecipeType;
 import mezz.jei.api.recipe.category.IRecipeCategory;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.ItemStack;
 import org.apache.commons.lang3.tuple.Pair;
@@ -36,19 +36,22 @@ public class RollerCategory implements IRecipeCategory<Recipe> {
     }
 
     @Override
-    public RecipeType<Recipe> getRecipeType() {
+    public IRecipeType<Recipe> getRecipeType() {
         return SushiRecipeTypes.ROLLER;
     }
 
     @Override
     public Component getTitle() {
-        return Component.translatable(SushiContent.Blocks.ROLLER.get().getDescriptionId());
+        return Component.translatable(SushiContent.Blocks.ROLLER.get().asItem().getDescriptionId());
+    }
+
+    public IDrawable getBackground() {
+        return guiHelper.createDrawable(Identifier.fromNamespaceAndPath(SushiGoCrafting.MOD_ID, "textures/gui/roller.png"), 8, 17, 160, 79);
     }
 
     @Override
-    public IDrawable getBackground() {
-        return guiHelper.createDrawable(ResourceLocation.fromNamespaceAndPath(SushiGoCrafting.MOD_ID, "textures/gui/roller.png"), 8, 17, 160, 79);
-    }
+    public int getWidth() { return 160; }
+    public int getHeight() { return 79; }
 
     @Override
     public IDrawable getIcon() {
@@ -67,7 +70,7 @@ public class RollerCategory implements IRecipeCategory<Recipe> {
 
 
     @Override
-    public void draw(Recipe recipe, IRecipeSlotsView recipeSlotsView, GuiGraphics guiGraphics, double mouseX, double mouseY) {
+    public void draw(Recipe recipe, IRecipeSlotsView recipeSlotsView, GuiGraphicsExtractor guiGraphics, double mouseX, double mouseY) {
         SlotsScreenAddon.drawAsset(guiGraphics, Minecraft.getInstance().screen, RollerAssetProvider.INSTANCE, 5, 3, 0, 0, 1, integer -> Pair.of(0, 0), integer -> ItemStack.EMPTY, true, integer -> new Color(DyeColor.ORANGE.getFireworkColor()), integer -> true, 1);
         SlotsScreenAddon.drawAsset(guiGraphics, Minecraft.getInstance().screen, RollerAssetProvider.INSTANCE, -7, -17, 0, 0, recipe.stack.getIngredientList().size(), recipe.stack.getType().getSlotPosition(), integer -> ItemStack.EMPTY, true, integer -> new Color(DyeColor.LIGHT_BLUE.getFireworkColor()), integer -> true, 1);
         for (int i = 0; i < recipe.stack.getIngredientList().size(); i++) {

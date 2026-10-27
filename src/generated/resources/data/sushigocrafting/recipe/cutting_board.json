@@ -1,19 +1,9 @@
 {
-  "neoforge:conditions": [
-    {
-      "type": "neoforge:item_exists",
-      "item": "sushigocrafting:cutting_board"
-    }
-  ],
   "type": "minecraft:crafting_shaped",
   "category": "misc",
   "key": {
-    "B": {
-      "tag": "minecraft:logs"
-    },
-    "S": {
-      "tag": "minecraft:slabs"
-    }
+    "B": "#minecraft:logs",
+    "S": "#minecraft:slabs"
   },
   "pattern": [
     "   ",
@@ -21,7 +11,6 @@
     "BBB"
   ],
   "result": {
-    "count": 1,
     "id": "sushigocrafting:cutting_board"
   }
 }
